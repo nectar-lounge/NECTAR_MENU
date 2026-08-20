@@ -220,9 +220,12 @@ function renderMenu(query = "") {
                 </div>`;
     } else if (currentTab === 'contacts') {
         html = `<div class="info-block">
-                    <h3>Контакты</h3>
-                    <p>Телефон: <a href="tel:+77000000000">+7 (700) 000-00-00</a></p>
-                    <p style="margin-top: 15px;"><a href="#" target="_blank">📍 Мы в 2GIS</a></p>
+                   <p>Мы всегда рады видеть вас в Nectar</p>
+                <div class="contact-links">
+                    <a href="tel:+77064273269" class="contact-item">📞 +7 (706) 427-32-69</a>
+                    <a href="https://go.2gis.com/CEheE" target="_blank" class="contact-item">📍 Наш адрес в 2GIS</a>
+                    <a href="https://www.instagram.com/nectar.lounge.almaty" target="_blank" class="contact-item">📸 Наш Instagram</a>
+                </div>
                 </div>`;
     } else {
         const categories = SECTIONS[currentTab];
