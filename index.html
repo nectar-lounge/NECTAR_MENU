@@ -1,59 +1,1547 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>NECTAR · Меню</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f8f4ea">
+<meta name="description" content="NECTAR — Lounge · Bar · Kitchen · Алматы">
+<title>NECTAR — Lounge · Bar · Kitchen</title>
+
+<style>
+*{box-sizing:border-box}
+
+:root{
+  --cream:#f8f4ea;
+  --paper:#fcfaf4;
+  --green:#31563f;
+  --green2:#496b54;
+  --orange:#c8754f;
+  --peach:#e9a06e;
+  --text:#303832;
+  --muted:#858b83;
+  --line:#dcded5;
+  --gold:#b9915b;
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  margin:0;
+  background:var(--cream);
+  color:var(--text);
+  font-family:Georgia,"Times New Roman",serif;
+  -webkit-font-smoothing:antialiased;
+}
+
+button,input{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.app{
+  width:min(1100px,100%);
+  margin:auto;
+  padding:0 20px 50px;
+}
+
+/* HEADER */
+
+.header{
+  position:relative;
+  text-align:center;
+  padding:28px 0 8px;
+}
+
+.brand{
+  color:var(--green);
+  font-size:clamp(43px,8vw,72px);
+  letter-spacing:.13em;
+  line-height:1;
+  margin-left:.13em;
+}
+
+.subtitle{
+  margin-top:9px;
+  color:var(--orange);
+  font:700 9px Arial,sans-serif;
+  letter-spacing:.32em;
+}
+
+.language{
+  position:absolute;
+  right:0;
+  top:28px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.35);
+  color:var(--green);
+  border-radius:30px;
+  padding:8px 12px;
+  font:700 10px Arial,sans-serif;
+}
+
+/* HERO */
+
+.hero{
+  text-align:center;
+  padding:22px 0 25px;
+}
+
+.fruit{
+  width:185px;
+  max-width:55vw;
+  height:auto;
+  display:block;
+  margin:auto;
+}
+
+.hero-note{
+  margin-top:4px;
+  color:var(--green);
+  font:700 8px Arial,sans-serif;
+  letter-spacing:.27em;
+}
+
+.divider{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:0 0 27px;
+}
+
+.divider:before,
+.divider:after{
+  content:"";
+  height:1px;
+  background:var(--gold);
+  flex:1;
+}
+
+.diamond{
+  width:6px;
+  height:6px;
+  background:var(--gold);
+  transform:rotate(45deg);
+}
+
+/* MAIN NAV */
+
+.main-nav{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  border-block:1px solid var(--line);
+}
+
+.main-nav button{
+  border:0;
+  background:transparent;
+  min-height:72px;
+  padding:10px;
+  color:var(--green);
+  font:700 10px Arial,sans-serif;
+  letter-spacing:.08em;
+  transition:.2s;
+}
+
+.main-nav button+button{
+  border-left:1px solid var(--line);
+}
+
+.main-nav button:hover{
+  background:#fffdf8;
+}
+
+/* CONTENT */
+
+.content{
+  padding:38px 0 20px;
+}
+
+.page-title{
+  color:var(--green);
+  font-size:38px;
+  font-weight:400;
+  margin:0 0 25px;
+}
+
+.page-subtitle{
+  color:var(--muted);
+  font-size:15px;
+  line-height:1.7;
+  max-width:700px;
+  margin:-12px 0 28px;
+}
+
+.back{
+  float:right;
+  border:0;
+  background:none;
+  color:var(--green);
+  font:700 10px Arial,sans-serif;
+  letter-spacing:.08em;
+  padding:8px 0;
+}
+
+/* SEARCH */
+
+.search{
+  width:100%;
+  border:0;
+  border-bottom:1px solid var(--line);
+  background:transparent;
+  outline:none;
+  color:var(--text);
+  padding:12px 3px;
+  margin-bottom:25px;
+  font-size:16px;
+}
+
+.search::placeholder{
+  color:#a0a49d;
+}
+
+/* CATEGORY */
+
+.categories{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:13px;
+}
+
+.category{
+  position:relative;
+  text-align:left;
+  min-height:82px;
+  padding:21px 22px;
+  border:1px solid var(--line);
+  background:var(--paper);
+  color:var(--green);
+  font-size:20px;
+  transition:.2s;
+}
+
+.category:after{
+  content:"◆";
+  position:absolute;
+  right:19px;
+  top:50%;
+  transform:translateY(-50%) scale(.45);
+  color:var(--gold);
+}
+
+.category:hover{
+  border-color:#c5c9bd;
+  transform:translateY(-1px);
+}
+
+/* DISHES */
+
+.dishes{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  column-gap:55px;
+}
+
+.dish{
+  border-bottom:1px solid var(--line);
+  padding:16px 0;
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  align-items:flex-start;
+  transition:.15s;
+}
+
+.dish:hover{
+  padding-left:4px;
+}
+
+.dish-name{
+  font-size:16px;
+  line-height:1.42;
+}
+
+.dish-note{
+  display:block;
+  margin-top:4px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.45;
+}
+
+.price{
+  flex-shrink:0;
+  color:var(--green);
+  font-size:15px;
+  white-space:nowrap;
+}
+
+/* INFO */
+
+.info-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+}
+
+.info-card{
+  border-top:1px solid var(--gold);
+  padding:20px 4px 12px;
+}
+
+.info-card h3{
+  color:var(--green);
+  font-size:24px;
+  font-weight:400;
+  margin:0 0 10px;
+}
+
+.info-card p{
+  margin:0;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.65;
+}
+
+/* CONTACTS */
+
+.contacts{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+}
+
+.contact{
+  display:block;
+  text-decoration:none;
+  border:1px solid var(--line);
+  background:var(--paper);
+  padding:22px;
+  color:var(--green);
+}
+
+.contact small{
+  display:block;
+  color:var(--orange);
+  font:700 9px Arial,sans-serif;
+  letter-spacing:.16em;
+  margin-bottom:9px;
+}
+
+.contact strong{
+  font-size:18px;
+  font-weight:400;
+}
+
+/* EMPTY / FUTURE */
+
+.future{
+  border:1px dashed var(--line);
+  padding:28px;
+  text-align:center;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.7;
+}
+
+/* MODALS */
+
+dialog{
+  border:0;
+  padding:0;
+  background:transparent;
+  max-width:calc(100% - 30px);
+}
+
+dialog::backdrop{
+  background:rgba(36,53,43,.34);
+  backdrop-filter:blur(4px);
+}
+
+.modal-box{
+  width:min(520px,100%);
+  background:var(--paper);
+  border:1px solid var(--line);
+  padding:30px;
+}
+
+.modal-close{
+  float:right;
+  border:0;
+  background:none;
+  color:var(--muted);
+  font-size:26px;
+  line-height:1;
+}
+
+.modal-title{
+  color:var(--green);
+  font-size:28px;
+  font-weight:400;
+  margin:0 0 7px;
+  padding-right:30px;
+}
+
+.modal-price{
+  color:var(--green);
+  font-size:18px;
+  margin-bottom:22px;
+}
+
+.meta{
+  border-top:1px solid var(--line);
+}
+
+.meta-row{
+  padding:14px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.meta-label{
+  display:block;
+  color:var(--orange);
+  font:700 9px Arial,sans-serif;
+  letter-spacing:.16em;
+  margin-bottom:6px;
+}
+
+.meta-value{
+  font-size:15px;
+  line-height:1.6;
+  color:var(--text);
+}
+
+.language-list{
+  display:grid;
+  gap:9px;
+  margin-top:20px;
+}
+
+.language-list button{
+  padding:13px;
+  border:1px solid var(--line);
+  background:transparent;
+  color:var(--green);
+  font:700 11px Arial,sans-serif;
+}
+
+.language-list button:hover{
+  background:#f4f0e5;
+}
+
+/* FOOTER */
+
+.footer{
+  text-align:center;
+  padding:35px 0 10px;
+  color:#a0a49d;
+  font:8px Arial,sans-serif;
+  letter-spacing:.2em;
+}
+
+/* MOBILE */
+
+@media(max-width:720px){
+
+  .app{
+    padding:0 15px 35px;
+  }
+
+  .header{
+    padding-top:22px;
+  }
+
+  .language{
+    top:22px;
+  }
+
+  .main-nav{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .main-nav button:nth-child(3),
+  .main-nav button:nth-child(5){
+    border-left:0;
+    border-top:1px solid var(--line);
+  }
+
+  .main-nav button:nth-child(4){
+    border-top:1px solid var(--line);
+  }
+
+  .main-nav button:last-child{
+    grid-column:1/-1;
+  }
+
+  .categories,
+  .dishes,
+  .info-grid,
+  .contacts{
+    grid-template-columns:1fr;
+  }
+
+  .page-title{
+    font-size:31px;
+  }
+
+  .dish-name{
+    font-size:15px;
+  }
+
+  .modal-box{
+    padding:23px;
+  }
+}
+</style>
 </head>
+
 <body>
-    <div class="menu-wrapper">
-        <!-- Шапка -->
-        <header class="header">
-            <div class="header-top">
-                <span class="brand">NECTAR</span>
-                <span class="brand-sub">LOUNGE · BAR · KITCHEN</span>
-            </div>
-            <div class="divider"></div>
-            <div class="header-bottom">
-                <span class="city">Алматы</span>
-                <span class="year">2026</span>
-            </div>
-        </header>
 
-        <!-- Секции меню -->
-        <main class="menu-content" id="menuContent">
-            <!-- Категории будут вставлены JS -->
-        </main>
+<div class="app">
 
-        <!-- Футер с контактами -->
-        <footer class="footer">
-            <div class="divider"></div>
-            <div class="contacts">
-                <a href="tel:+77064273269" class="contact-link">📞 +7 706 427 32 69</a>
-                <a href="https://go.2gis.com/C8OUZ" target="_blank" class="contact-link">📍 Мы на карте</a>
-            </div>
-        </footer>
+<header class="header">
+
+  <button class="language" id="languageButton">RU</button>
+
+  <div class="brand">NECTAR</div>
+
+  <div class="subtitle">
+    LOUNGE · BAR · KITCHEN
+  </div>
+
+</header>
+
+<section class="hero">
+
+  <!-- Лёгкая SVG-иллюстрация нектарина -->
+  <svg class="fruit" viewBox="0 0 420 280"
+       xmlns="http://www.w3.org/2000/svg"
+       aria-label="NECTAR">
+
+    <defs>
+      <linearGradient id="fruitA" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#f5bd88"/>
+        <stop offset="1" stop-color="#d86d49"/>
+      </linearGradient>
+    </defs>
+
+    <g stroke-linecap="round" stroke-linejoin="round">
+
+      <path d="M145 90C185 42 245 32 292 49"
+            fill="none"
+            stroke="#31563f"
+            stroke-width="7"/>
+
+      <path d="M192 63C157 25 110 27 78 60
+               C114 81 153 85 192 63Z"
+            fill="#718c6b"
+            stroke="#31563f"
+            stroke-width="4"/>
+
+      <path d="M245 51C271 14 317 16 344 45
+               C316 70 282 73 245 51Z"
+            fill="#789471"
+            stroke="#31563f"
+            stroke-width="4"/>
+
+      <ellipse cx="137" cy="158"
+               rx="67" ry="78"
+               fill="url(#fruitA)"
+               stroke="#c25f45"
+               stroke-width="5"/>
+
+      <path d="M96 122C121 105 147 105 170 122"
+            fill="none"
+            stroke="#ffd4ad"
+            stroke-width="8"
+            opacity=".65"/>
+
+      <ellipse cx="283" cy="158"
+               rx="68" ry="78"
+               fill="url(#fruitA)"
+               stroke="#c25f45"
+               stroke-width="5"/>
+
+      <path d="M281 127C300 140 307 157 300 175"
+            fill="none"
+            stroke="#8b5c48"
+            stroke-width="5"/>
+
+    </g>
+  </svg>
+
+  <div class="hero-note">
+    ALMATY · MEET · TALK · ENJOY
+  </div>
+
+</section>
+
+<div class="divider">
+  <span class="diamond"></span>
+</div>
+
+<nav class="main-nav">
+
+  <button id="menuButton"></button>
+  <button id="drinksButton"></button>
+  <button id="aboutButton"></button>
+  <button id="guestButton"></button>
+  <button id="contactsButton"></button>
+
+</nav>
+
+<main class="content" id="content"></main>
+
+<footer class="footer">
+  NECTAR · ALMATY
+</footer>
+
+</div>
+
+
+<!-- LANGUAGE -->
+
+<dialog id="languageModal">
+
+  <div class="modal-box">
+
+    <button class="modal-close"
+            id="closeLanguage">×</button>
+
+    <h2 class="modal-title"
+        id="languageTitle">
+      ВЫБЕРИТЕ ЯЗЫК
+    </h2>
+
+    <div class="language-list">
+
+      <button data-language="ru">
+        РУССКИЙ
+      </button>
+
+      <button data-language="kk">
+        ҚАЗАҚША
+      </button>
+
+      <button data-language="en">
+        ENGLISH
+      </button>
+
     </div>
 
-    <!-- Модалка для деталей блюда -->
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <button class="modal-close" id="modalClose">✕</button>
-            <h2 class="modal-title" id="modalTitle">Название</h2>
-            <div class="modal-price" id="modalPrice">0 ₸</div>
-            <div class="modal-detail">
-                <span class="modal-label">Выход</span>
-                <span class="modal-value" id="modalOutput">—</span>
+  </div>
+
+</dialog>
+
+
+<!-- DISH -->
+
+<dialog id="dishModal">
+
+  <div class="modal-box">
+
+    <button class="modal-close"
+            id="closeDish">×</button>
+
+    <h2 class="modal-title"
+        id="dishTitle"></h2>
+
+    <div class="modal-price"
+         id="dishPrice"></div>
+
+    <div class="meta">
+
+      <div class="meta-row">
+
+        <span class="meta-label"
+              id="yieldLabel">
+          ВЫХОД
+        </span>
+
+        <div class="meta-value"
+             id="dishYield">—</div>
+
+      </div>
+
+      <div class="meta-row">
+
+        <span class="meta-label"
+              id="compositionLabel">
+          СОСТАВ
+        </span>
+
+        <div class="meta-value"
+             id="dishComposition">—</div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</dialog>
+
+
+<script>
+
+/* =========================================================
+   NECTAR MENU DATA
+   Формат:
+   Русский | English | Қазақша | Цена
+========================================================= */
+
+const MENU = {
+
+food: [
+
+{
+ru:"Холодные закуски",
+en:"Cold Appetizers",
+kk:"Суық тіскебасарлар",
+
+items:[
+
+["Мясное плато","Meat Platter","Ет ассортиі",4990],
+["Домашние соленья","Homemade Pickles","Үй тұздалмалары",2890],
+["Овощная нарезка","Fresh Vegetable Platter","Көкөніс ассортиі",2890],
+["Рыбное ассорти","Fish Assortment","Балық ассортиі",5590],
+["Капрезе","Caprese","Капрезе",2790],
+["Сырное плато","Cheese Platter","Ірімшік ассортиі",4990]
+
+]},
+
+{
+ru:"Салаты",
+en:"Salads",
+kk:"Салаттар",
+
+items:[
+
+["Свежий овощной салат","Fresh Vegetable Salad","Балғын көкөніс салаты",1990],
+["Аччик-чучук","Achich-Chuchuk","Аччик-чучук",1790],
+["Цезарь с курицей","Chicken Caesar Salad","Тауық еті қосылған «Цезарь» салаты",2590],
+["Хрустящие баклажаны","Crispy Eggplant","Қытырлақ баялды",2790],
+["Греческий салат","Greek Salad","Грек салаты",2490],
+["Теплый салат с кониной","Warm Horse Meat Salad","Жылқы еті қосылған жылы салат",2990],
+["Салат с креветками и рукколой","Shrimp & Arugula Salad","Асшаяндар мен руккола қосылған салат",3990]
+
+]},
+
+{
+ru:"Горячие закуски",
+en:"Hot Appetizers",
+kk:"Ыстық тіскебасарлар",
+
+items:[
+
+["Креветки темпура","Tempura Shrimp","Темпура асшаяндары",3290],
+["Клаб-сэндвич с курицей","Chicken Club Sandwich","Тауық еті қосылған клаб-сэндвич",3190],
+["Кесадилья с курицей","Chicken Quesadilla","Тауық еті қосылған кесадилья",2990],
+["Чебуреки","Chebureki","Чебурек",2590],
+["Наггетсы куриные","Chicken Nuggets","Тауық наггеттері",1690]
+
+]},
+
+{
+ru:"Снэки",
+en:"Snacks",
+kk:"Снэктер",
+
+items:[
+
+[
+"Большой сет закусок",
+"Large Snack Platter",
+"Үлкен тіскебасарлар жинағы",
+6990,
+"Креветки, гренки, чечил, фри, сосиски, луковые кольца",
+"Shrimp, croutons, chechil, fries, sausages, onion rings",
+"Асшаяндар, гренки, чечил, фри, шұжықшалар, пияз сақиналары"
+],
+
+["Креветки пивные","Beer Shrimp","Сыраға арналған асшаяндар",3990],
+["Фисташки","Pistachios","Пісте",1590],
+["Чесночные гренки","Garlic Croutons","Сарымсақты гренки",1590],
+["Чечил копченый","Smoked Chechil","Ысталған чечил",1390],
+["Арахис","Peanuts","Жержаңғақ",1390]
+
+]},
+
+{
+ru:"Супы",
+en:"Soups",
+kk:"Сорпалар",
+
+items:[
+
+[
+"Окрошка с мясом",
+"Meat Okroshka",
+"Ет қосылған окрошка",
+2390,
+"(сезонная)",
+"(seasonal)",
+"(маусымдық)"
+],
+
+["Куриный суп с лапшой","Chicken Noodle Soup","Кеспе қосылған тауық сорпасы",1590],
+["Солянка мясная","Meat Solyanka","Етті солянка",3590],
+["Том Ям","Tom Yum","Том Ям",3590],
+["Рамен с говядиной","Beef Ramen","Сиыр еті қосылған рамен",3590],
+["Рамен с курицей","Chicken Ramen","Тауық еті қосылған рамен",3290],
+["Чечевичный крем-суп","Lentil Cream Soup","Жасымық крем-сорпасы",1990],
+["Шорпа","Shorpa","Шорпа",3290],
+["Пельмени","Pelmeni","Пельмень",1990,"с бульоном / без","with / without broth","сорпамен / сорпасыз"]
+
+]},
+
+{
+ru:"Пицца и выпечка",
+en:"Pizza & Bakery",
+kk:"Пицца және нан өнімдері",
+
+items:[
+
+["Пицца Пепперони","Pepperoni Pizza","Пепперони пиццасы",3090],
+["Пицца Маргарита","Margherita Pizza","Маргарита пиццасы",2590],
+["Пицца с курицей и грибами","Chicken & Mushroom Pizza","Тауық еті мен саңырауқұлақ қосылған пицца",3090],
+["Пицца Болоньезе","Bolognese Pizza","Болоньезе пиццасы",2990],
+["Мексиканская пицца с халапеньо","Mexican Pizza with Jalapeño","Халапеньо қосылған мексикалық пицца",3590],
+["Хачапури по-мегрельски","Megrelian Khachapuri","Мегрелше хачапури",2790],
+["Хлебная корзина","Bread Basket","Нан себеті",890],
+["Лепешка","Flatbread","Таба нан",590]
+
+]},
+
+{
+ru:"Паста",
+en:"Pasta",
+kk:"Паста",
+
+items:[
+
+[
+"Фарфалле с морепродуктами",
+"Farfalle with Seafood",
+"Теңіз өнімдері қосылған фарфалле",
+4990,
+"креветки, мидии, кальмары",
+"shrimp, mussels, squid",
+"асшаяндар, мидиялар, кальмарлар"
+],
+
+["Карбонара","Carbonara","Карбонара",3590],
+["Болоньезе","Bolognese","Болоньезе",3290],
+["Фетучини с курицей и грибами","Fettuccine with Chicken & Mushrooms","Тауық еті мен саңырауқұлақ қосылған фетучини",2990]
+
+]},
+
+{
+ru:"Горячие блюда",
+en:"Main Courses",
+kk:"Ыстық тағамдар",
+
+items:[
+
+["Куырдак","Quyrdaq","Қуырдақ",4090],
+["Плов","Pilaf","Палау",3090],
+["Бургер с курицей","Chicken Burger","Тауық бургері",3290],
+["Бургер с говядиной","Beef Burger","Сиыр етінен жасалған бургер",3590],
+["Бургер, грибной стаут","Mushroom Stout Burger","Саңырауқұлақты стаут-бургер",4390],
+["Колбаски говяжьи / бараньи","Beef / Lamb Sausages","Сиыр / қой етінен жасалған шұжықшалар",3390],
+["Колбаски куриные","Chicken Sausages","Тауық шұжықшалары",2990],
+["Говядина по-тайски с рисом","Thai-Style Beef with Rice","Тайша дайындалған сиыр еті, күрішпен",3290],
+["Бефстроганов с пюре","Beef Stroganoff with Mashed Potatoes","Картоп езбесі қосылған бефстроганов",3290],
+["Куриная грудка в сырно-сливочном соусе","Chicken Breast in Creamy Cheese Sauce","Ірімшік-кілегейлі тұздықтағы тауықтың төс еті",3290],
+["Картофель по-домашнему с мясом","Home-Style Potatoes with Meat","Ет қосылған үйше дайындалған картоп",3990]
+
+]},
+
+{
+ru:"Шашлык на мангале",
+en:"Charcoal Grill",
+kk:"Мангалда дайындалған тағамдар",
+
+items:[
+
+["Антрекот","Entrecôte","Антрекот",3990],
+["Баранина","Lamb","Қой еті",3190],
+["Люля-кебаб","Lula Kebab","Люля-кебаб",3190],
+["Куриное филе","Chicken Fillet","Тауық филесі",2990],
+["Куриные крылышки","Chicken Wings","Тауық қанаттары",2890],
+["Утка","Duck","Үйрек еті",2790],
+["Куриные окорочка","Chicken Leg Quarters","Тауықтың сирақтары",2590],
+["Овощи гриль на шпажке","Grilled Vegetables on a Skewer","Шампурдағы гриль көкөністері",1990],
+["Шампиньоны на мангале","Charcoal-Grilled Champignons","Мангалда дайындалған шампиньондар",1790]
+
+]},
+
+{
+ru:"Гарниры",
+en:"Side Dishes",
+kk:"Гарнирлер",
+
+items:[
+
+["Овощи гриль","Grilled Vegetables","Гриль көкөністері",1990],
+["Брокколи","Broccoli","Брокколи",1790],
+["Картофельные дольки","Potato Wedges","Картоп тілімдері",1390],
+["Картофель фри","French Fries","Картоп фри",1190],
+["Рис","Rice","Күріш",790]
+
+]},
+
+{
+ru:"Соусы",
+en:"Sauces",
+kk:"Тұздықтар",
+
+items:[
+
+["Сырный","Cheese Sauce","Ірімшік тұздығы",590],
+["Красный","Red Sauce","Қызыл тұздық",590],
+["Белый","White Sauce","Ақ тұздық",590],
+["Кетчуп","Ketchup","Кетчуп",590],
+["Тартар","Tartar Sauce","Тартар тұздығы",590]
+
+]},
+
+{
+ru:"Десерты",
+en:"Desserts",
+kk:"Десерттер",
+
+items:[
+
+["Восточные сладости","Eastern Sweets","Шығыс тәттілері",5490],
+["Пирожное в ассортименте","Assorted Cake","Ассорти бәліштер",2590]
+
+]},
+
+{
+ru:"Безалкогольные напитки",
+en:"Non-Alcoholic Drinks",
+kk:"Алкогольсіз сусындар",
+
+items:[
+
+[
+"Фирменные лимонады",
+"Signature Lemonades",
+"Фирмалық лимонадтар",
+2990,
+"Вишня – Виноград; Киви – Грейпфрут – Жасмин; Маракуйя – Ананас; Нектар",
+"Cherry – Grape; Kiwi – Grapefruit – Jasmine; Passion Fruit – Pineapple; Nectar",
+"Шие – Жүзім; Киви – Грейпфрут – Жасмин; Маракуйя – Ананас; Nectar"
+],
+
+[
+"Авторский чай",
+"Signature Tea",
+"Авторлық шай",
+2590,
+"Алматинский, Ташкентский, Малина-Лайм, Персик-жасмин",
+"Almaty, Tashkent, Raspberry-Lime, Peach-Jasmine",
+"Алматылық, Ташкенттік, Таңқурай-Лайм, Шабдалы-Жасмин"
+],
+
+["Пепси","Pepsi","Pepsi",1790],
+
+[
+"Листовой чай",
+"Loose-Leaf Tea",
+"Жапырақты шай",
+1590,
+"Ассам, Сенча, Жасмин, Эрл Грей, Ройбуш, Султан",
+"Assam, Sencha, Jasmine, Earl Grey, Rooibos, Sultan",
+"Ассам, Сенча, Жасмин, Эрл Грей, Ройбуш, Сұлтан"
+]
+
+]}
+
+],
+
+drinks:[
+
+{
+ru:"Вино",
+en:"Wine",
+kk:"Шарап",
+
+items:[
+["Blanc de Blancs Tete de Cheval","Blanc de Blancs Tete de Cheval","Blanc de Blancs Tete de Cheval",14990,"Игристое белое · бутылка","Sparkling white wine · bottle","Ақ жарқыраған шарап · бөтелке"]
+]},
+
+{
+ru:"Водка",
+en:"Vodka",
+kk:"Арақ",
+
+items:[
+["Koskenkorva","Koskenkorva","Koskenkorva",2090,"50 г","50 g","50 г"],
+["Mont Blanc","Mont Blanc","Mont Blanc",2690,"50 г","50 g","50 г"],
+["Архангельская Северная","Arkhangelskaya Severnaya","Архангельская Северная",1790,"50 г","50 g","50 г"],
+["Белуга Нобл","Beluga Noble","Beluga Noble",2690,"50 г","50 g","50 г"]
+]},
+
+{
+ru:"Пиво бутылочное",
+en:"Bottled Beer",
+kk:"Бөтелкедегі сыра",
+
+items:[
+["Ayinger, Brauweisse","Ayinger, Brauweisse","Ayinger, Brauweisse",2990,"Нефильтрованное","Unfiltered","Сүзілмеген"],
+["Ayinger, Lager","Ayinger, Lager","Ayinger, Lager",2990,"Фильтрованное","Filtered","Сүзілген"],
+["Gubernija Brown Ale","Gubernija Brown Ale","Gubernija Brown Ale",1990,"Тёмное","Dark","Қара сыра"],
+["Gubernija Ekstra Lager","Gubernija Ekstra Lager","Gubernija Ekstra Lager",1990,"Фильтрованное","Filtered","Сүзілген"]
+]},
+
+{
+ru:"Пиво разливное",
+en:"Draft Beer",
+kk:"Құйма сыра",
+
+items:[
+["Holsten Pilsener","Holsten Pilsener","Holsten Pilsener",1890,"Светлое фильтрованное","Light, filtered","Ашық түсті, сүзілген"],
+["Kronenbourg Blanc","Kronenbourg Blanc","Kronenbourg Blanc",2290,"Нефильтрованное","Unfiltered","Сүзілмеген"]
+]},
+
+{
+ru:"Коктейли",
+en:"Cocktails",
+kk:"Коктейльдер",
+
+items:[],
+future:true
+
+}
+
+]
+
+};
+
+
+/* =========================================================
+   TRANSLATION
+========================================================= */
+
+const TEXT={
+
+ru:{
+menu:"МЕНЮ",
+drinks:"НАПИТКИ",
+about:"О NECTAR",
+guest:"УГОЛОК ПОТРЕБИТЕЛЯ",
+contacts:"КОНТАКТЫ",
+back:"НАЗАД",
+search:"Поиск по меню",
+yield:"ВЫХОД",
+composition:"СОСТАВ",
+choose:"ВЫБЕРИТЕ ЯЗЫК",
+soon:"Этот раздел будет дополнен позже.",
+call:"ПОЗВОНИТЬ",
+map:"ОТКРЫТЬ В 2GIS",
+aboutStory:"История",
+aboutConcept:"Концепция",
+aboutVenue:"О заведении",
+aboutGallery:"Галерея",
+guestAllergens:"Аллергены",
+guestRules:"Правила посещения",
+guestPayment:"Оплата",
+guestDetails:"Реквизиты",
+emptyCocktails:"Коктейльная карта находится в разработке."
+},
+
+kk:{
+menu:"МӘЗІР",
+drinks:"СУСЫНДАР",
+about:"NECTAR ТУРАЛЫ",
+guest:"ТҰТЫНУШЫ БҰРЫШЫ",
+contacts:"БАЙЛАНЫС",
+back:"АРТҚА",
+search:"Мәзірден іздеу",
+yield:"ШЫҒЫМЫ",
+composition:"ҚҰРАМЫ",
+choose:"ТІЛДІ ТАҢДАҢЫЗ",
+soon:"Бұл бөлім кейінірек толықтырылады.",
+call:"ҚОҢЫРАУ ШАЛУ",
+map:"2GIS-ТЕ АШУ",
+aboutStory:"Тарихы",
+aboutConcept:"Тұжырымдама",
+aboutVenue:"Мекеме туралы",
+aboutGallery:"Галерея",
+guestAllergens:"Аллергендер",
+guestRules:"Келу ережелері",
+guestPayment:"Төлем",
+guestDetails:"Деректемелер",
+emptyCocktails:"Коктейльдер картасы әзірленуде."
+},
+
+en:{
+menu:"MENU",
+drinks:"DRINKS",
+about:"ABOUT NECTAR",
+guest:"CONSUMER INFORMATION",
+contacts:"CONTACTS",
+back:"BACK",
+search:"Search the menu",
+yield:"PORTION",
+composition:"INGREDIENTS",
+choose:"CHOOSE A LANGUAGE",
+soon:"This section will be added later.",
+call:"CALL",
+map:"OPEN IN 2GIS",
+aboutStory:"Our Story",
+aboutConcept:"Concept",
+aboutVenue:"About the Venue",
+aboutGallery:"Gallery",
+guestAllergens:"Allergens",
+guestRules:"House Rules",
+guestPayment:"Payment",
+guestDetails:"Details",
+emptyCocktails:"The cocktail menu is currently in development."
+}
+
+};
+
+
+/* =========================================================
+   APP
+========================================================= */
+
+let language=localStorage.getItem("nectar-language")||"ru";
+
+const $=id=>document.getElementById(id);
+
+function tr(key){
+  return TEXT[language][key]||TEXT.ru[key]||key;
+}
+
+function itemName(item){
+  return item[language==="ru"?0:language==="en"?1:2];
+}
+
+function itemNote(item){
+  const index=language==="ru"?4:language==="en"?5:6;
+  return item[index]||"";
+}
+
+function money(value){
+  return Number(value).toLocaleString("ru-RU")+" ₸";
+}
+
+function updateInterface(){
+
+  $("menuButton").textContent=tr("menu");
+  $("drinksButton").textContent=tr("drinks");
+  $("aboutButton").textContent=tr("about");
+  $("guestButton").textContent=tr("guest");
+  $("contactsButton").textContent=tr("contacts");
+
+  $("languageButton").textContent=
+    language==="kk"?"KZ":language.toUpperCase();
+
+  $("languageTitle").textContent=tr("choose");
+  $("yieldLabel").textContent=tr("yield");
+  $("compositionLabel").textContent=tr("composition");
+
+  renderHome();
+}
+
+
+/* HOME */
+
+function renderHome(){
+
+  $("content").innerHTML="";
+
+}
+
+
+/* CATEGORIES */
+
+function showCategories(type){
+
+  const list=MENU[type];
+
+  $("content").innerHTML=`
+
+    <button class="back"
+            onclick="renderHome()">
+      ← ${tr("back")}
+    </button>
+
+    <h1 class="page-title">
+      ${type==="food"?tr("menu"):tr("drinks")}
+    </h1>
+
+    <input
+      class="search"
+      id="search"
+      placeholder="${tr("search")}"
+      autocomplete="off"
+    >
+
+    <div class="categories" id="categories">
+
+      ${list
+        .filter(section=>!section.future||section.items.length)
+        .map((section,index)=>`
+
+          <button
+            class="category"
+            onclick="showSection('${type}',${index})">
+
+            ${section[language==="ru"?"ru":language==="en"?"en":"kk"]}
+
+          </button>
+
+        `).join("")}
+
+    </div>
+  `;
+
+  $("search").addEventListener("input",function(){
+
+    const q=this.value.trim().toLowerCase();
+
+    if(!q){
+      document.querySelectorAll(".category")
+        .forEach(x=>x.style.display="block");
+      return;
+    }
+
+    document.querySelectorAll(".category")
+      .forEach((button,index)=>{
+
+        const section=list[index];
+
+        const names=section.items
+          .map(item=>itemName(item))
+          .join(" ")
+          .toLowerCase();
+
+        const title=
+          section[language==="ru"?"ru":language==="en"?"en":"kk"]
+          .toLowerCase();
+
+        button.style.display=
+          names.includes(q)||title.includes(q)
+          ?"block":"none";
+      });
+
+  });
+
+}
+
+
+/* SECTION */
+
+function showSection(type,index){
+
+  const section=MENU[type][index];
+
+  if(section.future){
+
+    $("content").innerHTML=`
+
+      <button class="back"
+              onclick="showCategories('${type}')">
+        ← ${tr("back")}
+      </button>
+
+      <h1 class="page-title">
+        ${section[language==="ru"?"ru":language==="en"?"en":"kk"]}
+      </h1>
+
+      <div class="future">
+        ${tr("emptyCocktails")}
+      </div>
+    `;
+
+    return;
+  }
+
+  $("content").innerHTML=`
+
+    <button class="back"
+            onclick="showCategories('${type}')">
+      ← ${tr("back")}
+    </button>
+
+    <h1 class="page-title">
+      ${section[language==="ru"?"ru":language==="en"?"en":"kk"]}
+    </h1>
+
+    <div class="dishes">
+
+      ${section.items.map((item,index)=>`
+
+        <div
+          class="dish"
+          onclick="openDish('${type}',${index},${JSON.stringify(item).replace(/"/g,'&quot;')})">
+
+          <div>
+
+            <div class="dish-name">
+              ${itemName(item)}
             </div>
-            <div class="modal-detail">
-                <span class="modal-label">Состав</span>
-                <span class="modal-value" id="modalComposition">—</span>
-            </div>
+
+            ${
+              itemNote(item)
+              ?
+              `<span class="dish-note">${itemNote(item)}</span>`
+              :""
+            }
+
+          </div>
+
+          <div class="price">
+            ${money(item[3])}
+          </div>
+
         </div>
+
+      `).join("")}
+
+    </div>
+  `;
+}
+
+
+/* DISH */
+
+function openDish(type,index,itemString){
+
+  const item=typeof itemString==="string"
+    ?JSON.parse(itemString.replace(/&quot;/g,'"'))
+    :itemString;
+
+  $("dishTitle").textContent=itemName(item);
+
+  $("dishPrice").textContent=money(item[3]);
+
+  $("dishYield").textContent="—";
+
+  $("dishComposition").textContent="—";
+
+  $("dishModal").showModal();
+
+}
+
+
+/* ABOUT */
+
+function showAbout(){
+
+  const cards=[
+
+    ["aboutStory","История / история NECTAR"],
+    ["aboutConcept","Концепция"],
+    ["aboutVenue","О заведении"],
+    ["aboutGallery","Фотографии"]
+
+  ];
+
+  $("content").innerHTML=`
+
+    <button class="back"
+            onclick="renderHome()">
+      ← ${tr("back")}
+    </button>
+
+    <h1 class="page-title">
+      ${tr("about")}
+    </h1>
+
+    <p class="page-subtitle">
+      ${tr("soon")}
+    </p>
+
+    <div class="info-grid">
+
+      ${cards.map(card=>`
+
+        <article class="info-card">
+
+          <h3>${tr(card[0])}</h3>
+
+          <p>${tr("soon")}</p>
+
+        </article>
+
+      `).join("")}
+
+    </div>
+  `;
+
+}
+
+
+/* CONSUMER */
+
+function showGuest(){
+
+  const cards=[
+    "guestAllergens",
+    "guestRules",
+    "guestPayment",
+    "guestDetails"
+  ];
+
+  $("content").innerHTML=`
+
+    <button class="back"
+            onclick="renderHome()">
+      ← ${tr("back")}
+    </button>
+
+    <h1 class="page-title">
+      ${tr("guest")}
+    </h1>
+
+    <p class="page-subtitle">
+      ${tr("soon")}
+    </p>
+
+    <div class="info-grid">
+
+      ${cards.map(key=>`
+
+        <article class="info-card">
+
+          <h3>${tr(key)}</h3>
+
+          <p>${tr("soon")}</p>
+
+        </article>
+
+      `).join("")}
+
+    </div>
+  `;
+
+}
+
+
+/* CONTACTS */
+
+function showContacts(){
+
+  $("content").innerHTML=`
+
+    <button class="back"
+            onclick="renderHome()">
+      ← ${tr("back")}
+    </button>
+
+    <h1 class="page-title">
+      ${tr("contacts")}
+    </h1>
+
+    <div class="contacts">
+
+      <a
+        class="contact"
+        href="tel:+77064273269">
+
+        <small>${tr("call")}</small>
+
+        <strong>
+          +7 706 427 32 69
+        </strong>
+
+      </a>
+
+      <a
+        class="contact"
+        href="https://go.2gis.com/C8OUZ"
+        target="_blank"
+        rel="noopener">
+
+        <small>2GIS</small>
+
+        <strong>
+          ${tr("map")}
+        </strong>
+
+      </a>
+
     </div>
 
-    <script src="menu.js"></script>
-    <script src="app.js"></script>
+  `;
+
+}
+
+
+/* LANGUAGE */
+
+$("languageButton").onclick=()=>{
+  $("languageModal").showModal();
+};
+
+$("closeLanguage").onclick=()=>{
+  $("languageModal").close();
+};
+
+document.querySelectorAll("[data-language]")
+.forEach(button=>{
+
+  button.onclick=()=>{
+
+    language=button.dataset.language;
+
+    localStorage.setItem(
+      "nectar-language",
+      language
+    );
+
+    $("languageModal").close();
+
+    updateInterface();
+
+  };
+
+});
+
+
+/* DISH MODAL */
+
+$("closeDish").onclick=()=>{
+  $("dishModal").close();
+};
+
+
+/* NAV */
+
+$("menuButton").onclick=()=>{
+  showCategories("food");
+};
+
+$("drinksButton").onclick=()=>{
+  showCategories("drinks");
+};
+
+$("aboutButton").onclick=()=>{
+  showAbout();
+};
+
+$("guestButton").onclick=()=>{
+  showGuest();
+};
+
+$("contactsButton").onclick=()=>{
+  showContacts();
+};
+
+
+/* START */
+
+updateInterface();
+
+</script>
+
 </body>
 </html>
