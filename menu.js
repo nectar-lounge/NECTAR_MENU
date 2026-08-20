@@ -242,4 +242,4 @@ const DRINKS_DATA = {
         ]
     },
 
-};
+}
