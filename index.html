@@ -1,69 +1,148 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#173b2c">
-  <meta name="description" content="NECTAR — Lounge · Bar · Kitchen. Электронное меню.">
-  <title>NECTAR · Lounge · Bar · Kitchen</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>NECTAR · Lounge · Bar · Kitchen</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="hero">
-    <div class="fruit fruit-a">🍑</div>
-    <div class="leaf leaf-a"></div><div class="leaf leaf-b"></div><div class="leaf leaf-c"></div>
-    <div class="brand">NECTAR</div>
-    <div class="tagline">LOUNGE · BAR · KITCHEN</div>
-    <div class="gold-line"></div>
-    <p class="intro">Меню</p>
-  </header>
 
-  <main>
-    <nav class="category-bar" id="categoryBar" aria-label="Разделы меню"></nav>
+    <!-- ===== HEADER ===== -->
+    <header class="header" id="header">
+        <div class="header-inner">
+            <div class="logo">
+                <span class="logo-nectar">NECTAR</span>
+                <span class="logo-sub">LOUNGE · BAR · KITCHEN</span>
+            </div>
+            <div class="lang-switcher" id="langSwitcher">
+                <button class="lang-btn active" data-lang="ru">RU</button>
+                <button class="lang-btn" data-lang="kz">KZ</button>
+                <button class="lang-btn" data-lang="en">EN</button>
+            </div>
+        </div>
+    </header>
 
-    <div class="toolbar">
-      <label class="search">
-        <span>⌕</span>
-        <input id="searchInput" type="search" placeholder="Найти блюдо..." autocomplete="off">
-      </label>
-      <button class="all-btn" id="allBtn">Все блюда</button>
-    </div>
+    <!-- ===== MAIN CONTENT ===== -->
+    <main id="app">
 
-    <section id="menuRoot"></section>
-  </main>
+        <!-- === HOME === -->
+        <section class="page active" id="page-home">
+            <div class="home-wrap">
+                <div class="home-icon">
+                    <img src="assets/nectar.svg" alt="NECTAR" width="80" height="80">
+                </div>
+                <h1 class="home-title">NECTAR</h1>
+                <p class="home-sub">LOUNGE · BAR · KITCHEN</p>
+                <p class="home-desc" data-i18n="home_welcome">Добро пожаловать в NECTAR — место для встреч, уюта и хорошего вечера в Алматы.</p>
+                <button class="btn-primary home-btn" data-action="menu">Меню</button>
+            </div>
+        </section>
 
-  <footer>
-    <div class="footer-brand">NECTAR</div>
-    <div>LOUNGE · BAR · KITCHEN</div>
-    <div class="footer-actions">
-      <a href="#" id="telegramLink">Telegram</a>
-      <a href="#" id="mapLink">Мы на карте</a>
-      <a href="#" id="phoneLink">Позвонить</a>
-    </div>
-    <p>Пожалуйста, сообщите официанту об имеющихся аллергиях.</p>
-    <p>Все цены указаны в тенге.</p>
-  </footer>
+        <!-- === MENU === -->
+        <section class="page" id="page-menu">
+            <div class="menu-header">
+                <button class="back-btn" data-back>←</button>
+                <h2 data-i18n="nav_menu">Меню</h2>
+                <div class="search-wrap">
+                    <input type="text" id="menuSearch" placeholder="Поиск..." data-i18n-placeholder="search_placeholder">
+                </div>
+            </div>
+            <div class="menu-categories" id="menuCategories"></div>
+            <div class="menu-items" id="menuItems"></div>
+            <div class="menu-detail" id="menuDetail" style="display:none;">
+                <button class="back-btn" data-back-detail>←</button>
+                <div id="detailContent"></div>
+            </div>
+        </section>
 
-  <div class="modal" id="modal" aria-hidden="true">
-    <div class="modal-backdrop" data-close></div>
-    <article class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <button class="close" data-close aria-label="Закрыть">×</button>
-      <div class="modal-category" id="modalCategory"></div>
-      <h2 id="modalTitle"></h2>
-      <div class="modal-price" id="modalPrice"></div>
-      <div class="detail" id="weightRow"><span>Выход</span><strong id="modalWeight"></strong></div>
-      <div class="detail-block" id="compositionRow">
-        <div class="detail-label">Состав</div>
-        <div id="modalComposition"></div>
-      </div>
-      <div class="detail-note" id="modalNote"></div>
-    </article>
-  </div>
+        <!-- === DRINKS === -->
+        <section class="page" id="page-drinks">
+            <div class="menu-header">
+                <button class="back-btn" data-back>←</button>
+                <h2 data-i18n="nav_drinks">Напитки</h2>
+                <div class="search-wrap">
+                    <input type="text" id="drinkSearch" placeholder="Поиск..." data-i18n-placeholder="search_placeholder">
+                </div>
+            </div>
+            <div class="menu-categories" id="drinkCategories"></div>
+            <div class="menu-items" id="drinkItems"></div>
+            <div class="menu-detail" id="drinkDetail" style="display:none;">
+                <button class="back-btn" data-back-detail>←</button>
+                <div id="drinkDetailContent"></div>
+            </div>
+        </section>
 
-  <script src="menu.js"></script>
-  <script src="app.js"></script>
+        <!-- === ABOUT === -->
+        <section class="page" id="page-about">
+            <div class="menu-header">
+                <button class="back-btn" data-back>←</button>
+                <h2 data-i18n="nav_about">О NECTAR</h2>
+            </div>
+            <div class="about-placeholder">
+                <p data-i18n="about_soon">Скоро здесь появится информация о заведении, нашей истории и концепции.</p>
+                <p style="color:#888;font-size:0.9rem;margin-top:0.5rem;">🌿</p>
+            </div>
+        </section>
+
+        <!-- === INFO === -->
+        <section class="page" id="page-info">
+            <div class="menu-header">
+                <button class="back-btn" data-back>←</button>
+                <h2 data-i18n="nav_info">Информация для гостей</h2>
+            </div>
+            <div class="about-placeholder">
+                <p data-i18n="info_soon">Информация для гостей будет добавлена позже.</p>
+                <p style="color:#888;font-size:0.9rem;margin-top:0.5rem;">📋</p>
+            </div>
+        </section>
+
+        <!-- === CONTACTS === -->
+        <section class="page" id="page-contacts">
+            <div class="menu-header">
+                <button class="back-btn" data-back>←</button>
+                <h2 data-i18n="nav_contacts">Контакты</h2>
+            </div>
+            <div class="contacts-wrap">
+                <div class="contact-item">
+                    <span class="contact-label">📞</span>
+                    <span class="contact-value">+7 706 427 32 69</span>
+                </div>
+                <a href="tel:+77064273269" class="btn-primary contact-btn" data-i18n="contact_call">Позвонить</a>
+                <div class="contact-item" style="margin-top:1.5rem;">
+                    <span class="contact-label">📍</span>
+                    <span class="contact-value">Алматы, Казахстан</span>
+                </div>
+                <a href="https://go.2gis.com/C8OUZ" target="_blank" rel="noopener" class="btn-primary contact-btn" data-i18n="contact_2gis">Открыть в 2GIS</a>
+            </div>
+        </section>
+
+        <!-- === BOTTOM NAV === -->
+        <nav class="bottom-nav" id="bottomNav">
+            <button class="nav-item active" data-page="page-home">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label" data-i18n="nav_home">Главная</span>
+            </button>
+            <button class="nav-item" data-page="page-menu">
+                <span class="nav-icon">🍽️</span>
+                <span class="nav-label" data-i18n="nav_menu">Меню</span>
+            </button>
+            <button class="nav-item" data-page="page-drinks">
+                <span class="nav-icon">🍷</span>
+                <span class="nav-label" data-i18n="nav_drinks">Напитки</span>
+            </button>
+            <button class="nav-item" data-page="page-about">
+                <span class="nav-icon">🌿</span>
+                <span class="nav-label" data-i18n="nav_about">О нас</span>
+            </button>
+            <button class="nav-item" data-page="page-contacts">
+                <span class="nav-icon">✉️</span>
+                <span class="nav-label" data-i18n="nav_contacts">Контакты</span>
+            </button>
+        </nav>
+    </main>
+
+    <script src="menu.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
