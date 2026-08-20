@@ -2,49 +2,66 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NECTAR | Lounge Bar Kitchen</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nectar — Меню</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
     <header class="header">
         <div class="logo-container">
-            <div class="logo-icon">🍑</div>
-            <div class="logo">NECTAR</div>
-            <div class="subtitle">LOUNGE BAR KITCHEN</div>
+            <h1 class="logo">NECTAR</h1>
+            <span class="subtitle">LOUNGE & BAR</span>
         </div>
+
         <div class="lang-switcher">
-            <button class="lang-btn active" data-lang="ru">RU</button>
-            <button class="lang-btn" data-lang="kz">KZ</button>
-            <button class="lang-btn" data-lang="en">EN</button>
+            <button class="lang-btn active" data-lang="ru" onclick="changeLanguage('ru')">RU</button>
+            <button class="lang-btn" data-lang="kz" onclick="changeLanguage('kz')">KZ</button>
+            <button class="lang-btn" data-lang="en" onclick="changeLanguage('en')">EN</button>
         </div>
     </header>
 
     <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Поиск по меню..." autocomplete="off">
+        <input type="text" id="searchInput" placeholder="Поиск блюд и напитков..." oninput="handleSearch(event)">
     </div>
 
-    <nav class="category-nav">
-        <button class="nav-btn active" data-target="food">Еда</button>
-        <button class="nav-btn" data-target="soft">Напитки</button>
-        <button class="nav-btn" data-target="bar">Бар</button>
-        <button class="nav-btn" data-target="info">Инфо</button>
-        <button class="nav-btn" data-target="contacts">Контакты</button>
+    <nav class="category-nav" id="categoryNav">
+        <!-- Генерируется динамически в app.js -->
     </nav>
 
     <main id="app-content">
-        <!-- Сюда JS загрузит меню -->
+        <!-- Контент меню -->
     </main>
 
+    <!-- Модальное окно для состава и граммовки (HORECA стандарт) -->
+    <div id="itemModal" class="modal-overlay" onclick="closeModalOnOutside(event)">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <h3 id="modalTitle">Название блюда</h3>
+            <div class="modal-info-group">
+                <span class="modal-label" id="labelComposition">Состав:</span>
+                <p id="modalComposition" class="modal-text">—</p>
+            </div>
+            <div class="modal-info-group">
+                <span class="modal-label" id="labelOutput">Выход:</span>
+                <p id="modalOutput" class="modal-text">—</p>
+            </div>
+            <div class="modal-price" id="modalPrice">0 ₸</div>
+        </div>
+    </div>
+
     <footer class="footer">
-        <p class="allergy-warning" data-i18n="allergy">ПРОСИМ СООБЩИТЬ ОФИЦИАНТУ ОБ ИМЕЮЩИХСЯ АЛЛЕРГИЯХ</p>
-        <p class="currency-warning" data-i18n="currency">ВСЕ ЦЕНЫ УКАЗАНЫ В ТЕНГЕ</p>
+        <p class="allergy-warning" id="footerAllergy">Пожалуйста, предупреждайте официанта об имеющихся аллергиях.</p>
+        <p class="currency-warning">Цены указаны в тенге (₸)</p>
     </footer>
 
-    <!-- Сначала грузим данные из твоего файла menu.js -->
+    <!-- Подключаем скрипты -->
     <script src="menu.js"></script>
-    <!-- Затем логику из app.js -->
     <script src="app.js"></script>
 </body>
 </html>
