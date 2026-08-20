@@ -2,496 +2,819 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f8f4ea">
-<meta name="description" content="NECTAR — Lounge · Bar · Kitchen · Алматы">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f7f3ea">
+<meta name="description" content="NECTAR — Lounge · Bar · Kitchen">
 <title>NECTAR — Lounge · Bar · Kitchen</title>
 
 <style>
-*{box-sizing:border-box}
+/* =========================================================
+   NECTAR
+   Editorial restaurant menu
+   No external libraries / fonts / CDN
+   ========================================================= */
 
-:root{
-  --cream:#f8f4ea;
-  --paper:#fcfaf4;
-  --green:#31563f;
-  --green2:#496b54;
-  --orange:#c8754f;
-  --peach:#e9a06e;
-  --text:#303832;
-  --muted:#858b83;
-  --line:#dcded5;
-  --gold:#b9915b;
+:root {
+  --cream: #f7f3ea;
+  --cream-light: #fbf9f3;
+  --cream-deep: #eee8da;
+
+  --green: #344a38;
+  --green-soft: #49624b;
+
+  --nectarine: #e58a52;
+  --peach: #f2d2bc;
+
+  --ink: #29312b;
+  --muted: #858980;
+  --line: rgba(52, 74, 56, .18);
+  --line-strong: rgba(52, 74, 56, .32);
+
+  --radius: 18px;
+
+  --serif:
+    Georgia,
+    "Times New Roman",
+    Times,
+    serif;
+
+  --sans:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
 }
 
-html{scroll-behavior:smooth}
-
-body{
-  margin:0;
-  background:var(--cream);
-  color:var(--text);
-  font-family:Georgia,"Times New Roman",serif;
-  -webkit-font-smoothing:antialiased;
+* {
+  box-sizing: border-box;
 }
 
-button,input{
-  font:inherit;
+html {
+  scroll-behavior: smooth;
+  background: var(--cream);
 }
 
-button{
-  cursor:pointer;
+body {
+  margin: 0;
+  min-width: 320px;
+  background:
+    radial-gradient(
+      circle at 88% 7%,
+      rgba(229, 138, 82, .075),
+      transparent 22rem
+    ),
+    var(--cream);
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-.app{
-  width:min(1100px,100%);
-  margin:auto;
-  padding:0 20px 50px;
+button,
+input {
+  font: inherit;
 }
 
-/* HEADER */
-
-.header{
-  position:relative;
-  text-align:center;
-  padding:28px 0 8px;
+button {
+  border: 0;
 }
 
-.brand{
-  color:var(--green);
-  font-size:clamp(43px,8vw,72px);
-  letter-spacing:.13em;
-  line-height:1;
-  margin-left:.13em;
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
-.subtitle{
-  margin-top:9px;
-  color:var(--orange);
-  font:700 9px Arial,sans-serif;
-  letter-spacing:.32em;
+::selection {
+  background: var(--peach);
+  color: var(--green);
 }
 
-.language{
-  position:absolute;
-  right:0;
-  top:28px;
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.35);
-  color:var(--green);
-  border-radius:30px;
-  padding:8px 12px;
-  font:700 10px Arial,sans-serif;
+/* =========================================================
+   APP
+   ========================================================= */
+
+.app {
+  width: min(100%, 760px);
+  margin: 0 auto;
+  padding:
+    max(28px, env(safe-area-inset-top))
+    22px
+    calc(36px + env(safe-area-inset-bottom));
 }
 
-/* HERO */
+/* =========================================================
+   HEADER
+   ========================================================= */
 
-.hero{
-  text-align:center;
-  padding:22px 0 25px;
+.site-header {
+  position: relative;
+  padding: 24px 0 34px;
 }
 
-.fruit{
-  width:185px;
-  max-width:55vw;
-  height:auto;
-  display:block;
-  margin:auto;
+.brand {
+  position: relative;
+  display: inline-block;
 }
 
-.hero-note{
-  margin-top:4px;
-  color:var(--green);
-  font:700 8px Arial,sans-serif;
-  letter-spacing:.27em;
+.brand-name {
+  margin: 0;
+  color: var(--green);
+  font-family: var(--serif);
+  font-size: clamp(3.2rem, 15vw, 6rem);
+  font-weight: 400;
+  letter-spacing: -.065em;
+  line-height: .82;
 }
 
-.divider{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin:0 0 27px;
+.brand-subtitle {
+  margin-top: 13px;
+  color: var(--green-soft);
+  font-family: var(--sans);
+  font-size: .63rem;
+  font-weight: 600;
+  letter-spacing: .25em;
+  line-height: 1.5;
+  text-transform: uppercase;
 }
 
-.divider:before,
-.divider:after{
-  content:"";
-  height:1px;
-  background:var(--gold);
-  flex:1;
+/*
+   Very light botanical line.
+   It is intentionally not a "peach picture".
+   It is a brand detail.
+*/
+.botanical {
+  position: absolute;
+  top: 4px;
+  right: 2px;
+  width: 88px;
+  height: 104px;
+  opacity: .78;
+  pointer-events: none;
 }
 
-.diamond{
-  width:6px;
-  height:6px;
-  background:var(--gold);
-  transform:rotate(45deg);
+.botanical path,
+.botanical ellipse {
+  fill: none;
+  stroke: var(--green-soft);
+  stroke-width: 1.15;
+  stroke-linecap: round;
 }
 
-/* MAIN NAV */
-
-.main-nav{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  border-block:1px solid var(--line);
+.botanical .fruit {
+  fill: rgba(229, 138, 82, .08);
+  stroke: var(--nectarine);
 }
 
-.main-nav button{
-  border:0;
-  background:transparent;
-  min-height:72px;
-  padding:10px;
-  color:var(--green);
-  font:700 10px Arial,sans-serif;
-  letter-spacing:.08em;
-  transition:.2s;
+.botanical .stem {
+  stroke: var(--green);
 }
 
-.main-nav button+button{
-  border-left:1px solid var(--line);
+.language-switcher {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 31px;
 }
 
-.main-nav button:hover{
-  background:#fffdf8;
+.language-button {
+  min-width: 44px;
+  min-height: 38px;
+  padding: 8px 10px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  transition:
+    background .2s ease,
+    color .2s ease,
+    border-color .2s ease;
 }
 
-/* CONTENT */
-
-.content{
-  padding:38px 0 20px;
+.language-button:hover,
+.language-button:focus-visible {
+  outline: none;
+  color: var(--green);
+  border-color: var(--line);
 }
 
-.page-title{
-  color:var(--green);
-  font-size:38px;
-  font-weight:400;
-  margin:0 0 25px;
+.language-button.active {
+  background: var(--green);
+  color: var(--cream);
 }
 
-.page-subtitle{
-  color:var(--muted);
-  font-size:15px;
-  line-height:1.7;
-  max-width:700px;
-  margin:-12px 0 28px;
+/* =========================================================
+   DECORATIVE RULE
+   ========================================================= */
+
+.editorial-rule {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin: 5px 0 37px;
+  color: var(--muted);
+  font-size: .58rem;
+  font-weight: 700;
+  letter-spacing: .24em;
+  text-transform: uppercase;
 }
 
-.back{
-  float:right;
-  border:0;
-  background:none;
-  color:var(--green);
-  font:700 10px Arial,sans-serif;
-  letter-spacing:.08em;
-  padding:8px 0;
+.editorial-rule::before,
+.editorial-rule::after {
+  content: "";
+  height: 1px;
+  background: var(--line);
 }
 
-/* SEARCH */
-
-.search{
-  width:100%;
-  border:0;
-  border-bottom:1px solid var(--line);
-  background:transparent;
-  outline:none;
-  color:var(--text);
-  padding:12px 3px;
-  margin-bottom:25px;
-  font-size:16px;
+.editorial-rule::before {
+  width: 20px;
 }
 
-.search::placeholder{
-  color:#a0a49d;
+.editorial-rule::after {
+  flex: 1;
 }
 
-/* CATEGORY */
+/* =========================================================
+   SECTION HEADERS
+   ========================================================= */
 
-.categories{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:13px;
+.menu-group {
+  margin-bottom: 54px;
 }
 
-.category{
-  position:relative;
-  text-align:left;
-  min-height:82px;
-  padding:21px 22px;
-  border:1px solid var(--line);
-  background:var(--paper);
-  color:var(--green);
-  font-size:20px;
-  transition:.2s;
+.section-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 15px;
 }
 
-.category:after{
-  content:"◆";
-  position:absolute;
-  right:19px;
-  top:50%;
-  transform:translateY(-50%) scale(.45);
-  color:var(--gold);
+.section-heading h2 {
+  margin: 0;
+  color: var(--green);
+  font-family: var(--serif);
+  font-size: 2rem;
+  font-weight: 400;
+  letter-spacing: -.035em;
 }
 
-.category:hover{
-  border-color:#c5c9bd;
-  transform:translateY(-1px);
+.section-heading span {
+  color: var(--muted);
+  font-size: .58rem;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
 }
 
-/* DISHES */
+/* =========================================================
+   CATEGORY LIST
+   ========================================================= */
 
-.dishes{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  column-gap:55px;
+.category-list {
+  border-top: 1px solid var(--line-strong);
 }
 
-.dish{
-  border-bottom:1px solid var(--line);
-  padding:16px 0;
-  display:flex;
-  justify-content:space-between;
-  gap:20px;
-  align-items:flex-start;
-  transition:.15s;
+.category-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 35px 1fr 24px;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 69px;
+  padding: 12px 2px;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    padding .2s ease,
+    color .2s ease;
 }
 
-.dish:hover{
-  padding-left:4px;
+.category-item:hover,
+.category-item:focus-visible {
+  outline: none;
+  padding-left: 7px;
+  padding-right: 7px;
+  color: var(--green);
 }
 
-.dish-name{
-  font-size:16px;
-  line-height:1.42;
+.category-number {
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: .65rem;
+  font-weight: 700;
+  letter-spacing: .08em;
 }
 
-.dish-note{
-  display:block;
-  margin-top:4px;
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.45;
+.category-name {
+  font-family: var(--serif);
+  font-size: 1.22rem;
+  font-weight: 400;
+  letter-spacing: -.015em;
 }
 
-.price{
-  flex-shrink:0;
-  color:var(--green);
-  font-size:15px;
-  white-space:nowrap;
+.category-arrow {
+  color: var(--green-soft);
+  font-size: 1rem;
+  text-align: right;
 }
 
-/* INFO */
+/* =========================================================
+   SUBCATEGORY PAGE
+   ========================================================= */
 
-.info-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:18px;
+.view {
+  display: none;
 }
 
-.info-card{
-  border-top:1px solid var(--gold);
-  padding:20px 4px 12px;
+.view.active {
+  display: block;
 }
 
-.info-card h3{
-  color:var(--green);
-  font-size:24px;
-  font-weight:400;
-  margin:0 0 10px;
+.page-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin: 6px 0 30px;
 }
 
-.info-card p{
-  margin:0;
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.65;
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 7px 0;
+  background: transparent;
+  color: var(--green);
+  cursor: pointer;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
 }
 
-/* CONTACTS */
-
-.contacts{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:15px;
+.back-button:hover,
+.back-button:focus-visible {
+  outline: none;
+  opacity: .7;
 }
 
-.contact{
-  display:block;
-  text-decoration:none;
-  border:1px solid var(--line);
-  background:var(--paper);
-  padding:22px;
-  color:var(--green);
+.page-number {
+  color: var(--muted);
+  font-size: .6rem;
+  font-weight: 700;
+  letter-spacing: .18em;
 }
 
-.contact small{
-  display:block;
-  color:var(--orange);
-  font:700 9px Arial,sans-serif;
-  letter-spacing:.16em;
-  margin-bottom:9px;
+.page-title {
+  margin: 0 0 28px;
+  color: var(--green);
+  font-family: var(--serif);
+  font-size: clamp(2.3rem, 10vw, 4rem);
+  font-weight: 400;
+  letter-spacing: -.055em;
+  line-height: .95;
 }
 
-.contact strong{
-  font-size:18px;
-  font-weight:400;
+/* =========================================================
+   ITEMS
+   ========================================================= */
+
+.item-list {
+  border-top: 1px solid var(--line-strong);
 }
 
-/* EMPTY / FUTURE */
-
-.future{
-  border:1px dashed var(--line);
-  padding:28px;
-  text-align:center;
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.7;
+.menu-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 18px;
+  width: 100%;
+  min-height: 78px;
+  padding: 18px 2px;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    padding .2s ease,
+    background .2s ease;
 }
 
-/* MODALS */
-
-dialog{
-  border:0;
-  padding:0;
-  background:transparent;
-  max-width:calc(100% - 30px);
+.menu-item:hover,
+.menu-item:focus-visible {
+  outline: none;
+  padding-left: 7px;
+  padding-right: 7px;
+  background: rgba(255,255,255,.28);
 }
 
-dialog::backdrop{
-  background:rgba(36,53,43,.34);
-  backdrop-filter:blur(4px);
+.item-name {
+  display: block;
+  font-family: var(--serif);
+  font-size: 1.08rem;
+  font-weight: 400;
+  line-height: 1.25;
 }
 
-.modal-box{
-  width:min(520px,100%);
-  background:var(--paper);
-  border:1px solid var(--line);
-  padding:30px;
+.item-note {
+  display: block;
+  max-width: 470px;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: .76rem;
+  line-height: 1.45;
 }
 
-.modal-close{
-  float:right;
-  border:0;
-  background:none;
-  color:var(--muted);
-  font-size:26px;
-  line-height:1;
+.item-price {
+  align-self: start;
+  padding-top: 2px;
+  color: var(--green);
+  font-size: .78rem;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
-.modal-title{
-  color:var(--green);
-  font-size:28px;
-  font-weight:400;
-  margin:0 0 7px;
-  padding-right:30px;
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+.search-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 58px;
+  margin: 7px 0 50px;
+  padding: 0 2px;
+  border-top: 1px solid var(--line-strong);
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  color: var(--green);
+  cursor: pointer;
+  text-align: left;
 }
 
-.modal-price{
-  color:var(--green);
-  font-size:18px;
-  margin-bottom:22px;
+.search-trigger span:first-child {
+  font-size: .69rem;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
 }
 
-.meta{
-  border-top:1px solid var(--line);
+.search-icon {
+  font-size: 1.1rem;
 }
 
-.meta-row{
-  padding:14px 0;
-  border-bottom:1px solid var(--line);
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.footer {
+  margin-top: 65px;
+  padding-top: 31px;
+  border-top: 1px solid var(--line-strong);
 }
 
-.meta-label{
-  display:block;
-  color:var(--orange);
-  font:700 9px Arial,sans-serif;
-  letter-spacing:.16em;
-  margin-bottom:6px;
+.footer-section {
+  margin-bottom: 40px;
 }
 
-.meta-value{
-  font-size:15px;
-  line-height:1.6;
-  color:var(--text);
+.footer-title {
+  margin: 0 0 17px;
+  color: var(--green);
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-weight: 400;
 }
 
-.language-list{
-  display:grid;
-  gap:9px;
-  margin-top:20px;
+.footer-links {
+  display: grid;
+  border-top: 1px solid var(--line);
 }
 
-.language-list button{
-  padding:13px;
-  border:1px solid var(--line);
-  background:transparent;
-  color:var(--green);
-  font:700 11px Arial,sans-serif;
+.footer-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 54px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  font-size: .8rem;
 }
 
-.language-list button:hover{
-  background:#f4f0e5;
+.footer-link span:last-child {
+  color: var(--muted);
 }
 
-/* FOOTER */
-
-.footer{
-  text-align:center;
-  padding:35px 0 10px;
-  color:#a0a49d;
-  font:8px Arial,sans-serif;
-  letter-spacing:.2em;
+.contact-actions {
+  display: grid;
+  gap: 9px;
 }
 
-/* MOBILE */
+.contact-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 54px;
+  padding: 0 16px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  color: var(--green);
+  background: rgba(255,255,255,.18);
+  font-size: .74rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  transition:
+    background .2s ease,
+    color .2s ease,
+    transform .2s ease;
+}
 
-@media(max-width:720px){
+.contact-button:hover,
+.contact-button:focus-visible {
+  outline: none;
+  background: var(--green);
+  color: var(--cream);
+}
 
-  .app{
-    padding:0 15px 35px;
+.footer-brand {
+  margin-top: 52px;
+  color: var(--green);
+  font-family: var(--serif);
+  font-size: 2.8rem;
+  font-weight: 400;
+  letter-spacing: -.06em;
+}
+
+.footer-small {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: .58rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   MODAL / BOTTOM SHEET
+   ========================================================= */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+  background: rgba(31, 40, 33, .26);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+}
+
+.overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sheet {
+  width: min(100%, 760px);
+  max-height: min(88vh, 760px);
+  overflow-y: auto;
+  padding:
+    11px 22px
+    calc(28px + env(safe-area-inset-bottom));
+  border-radius: 24px 24px 0 0;
+  background: var(--cream-light);
+  box-shadow: 0 -20px 60px rgba(40,50,42,.13);
+  transform: translateY(100%);
+  transition: transform .32s cubic-bezier(.22,.8,.25,1);
+}
+
+.overlay.open .sheet {
+  transform: translateY(0);
+}
+
+.sheet-handle {
+  width: 42px;
+  height: 3px;
+  margin: 0 auto 18px;
+  border-radius: 999px;
+  background: var(--line-strong);
+}
+
+.sheet-close-row {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.close-button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--green);
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.close-button:hover,
+.close-button:focus-visible {
+  outline: none;
+  background: var(--cream-deep);
+}
+
+.sheet-photo {
+  display: none;
+  width: 100%;
+  max-height: 360px;
+  margin: 3px 0 25px;
+  border-radius: 15px;
+  object-fit: cover;
+  aspect-ratio: 4 / 3;
+}
+
+.sheet.has-photo .sheet-photo {
+  display: block;
+}
+
+.sheet-category {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: .58rem;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+.sheet-title {
+  margin: 8px 0 7px;
+  color: var(--green);
+  font-family: var(--serif);
+  font-size: clamp(2rem, 9vw, 3.3rem);
+  font-weight: 400;
+  letter-spacing: -.05em;
+  line-height: .98;
+}
+
+.sheet-price {
+  color: var(--nectarine);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.sheet-info {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 22px;
+  margin-top: 34px;
+}
+
+.info-block {
+  padding-top: 17px;
+  border-top: 1px solid var(--line);
+}
+
+.info-label {
+  color: var(--muted);
+  font-size: .57rem;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+.info-value {
+  margin-top: 8px;
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+/* =========================================================
+   SEARCH SHEET
+   ========================================================= */
+
+.search-sheet {
+  width: min(100%, 760px);
+}
+
+.search-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 9px 0 25px;
+  padding: 0 0 10px;
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.search-input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 1.65rem;
+}
+
+.search-input::placeholder {
+  color: var(--muted);
+}
+
+.search-results {
+  border-top: 1px solid var(--line);
+}
+
+.search-result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  min-height: 64px;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+}
+
+.search-result-name {
+  font-family: var(--serif);
+  font-size: 1rem;
+}
+
+.search-result-category {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: .58rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.search-result-price {
+  color: var(--green);
+  font-size: .75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (min-width: 700px) {
+  .app {
+    padding-left: 42px;
+    padding-right: 42px;
   }
 
-  .header{
-    padding-top:22px;
+  .site-header {
+    padding-top: 42px;
   }
 
-  .language{
-    top:22px;
+  .category-name {
+    font-size: 1.32rem;
   }
 
-  .main-nav{
-    grid-template-columns:1fr 1fr;
+  .menu-item {
+    min-height: 86px;
   }
 
-  .main-nav button:nth-child(3),
-  .main-nav button:nth-child(5){
-    border-left:0;
-    border-top:1px solid var(--line);
+  .item-name {
+    font-size: 1.18rem;
   }
 
-  .main-nav button:nth-child(4){
-    border-top:1px solid var(--line);
+  .sheet {
+    padding-left: 42px;
+    padding-right: 42px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 
-  .main-nav button:last-child{
-    grid-column:1/-1;
-  }
-
-  .categories,
-  .dishes,
-  .info-grid,
-  .contacts{
-    grid-template-columns:1fr;
-  }
-
-  .page-title{
-    font-size:31px;
-  }
-
-  .dish-name{
-    font-size:15px;
-  }
-
-  .modal-box{
-    padding:23px;
+  *,
+  *::before,
+  *::after {
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
   }
 }
 </style>
@@ -501,1045 +824,1425 @@ dialog::backdrop{
 
 <div class="app">
 
-<header class="header">
+  <!-- =====================================================
+       HOME VIEW
+       ===================================================== -->
 
-  <button class="language" id="languageButton">RU</button>
+  <main id="homeView" class="view active">
 
-  <div class="brand">NECTAR</div>
+    <header class="site-header">
 
-  <div class="subtitle">
-    LOUNGE · BAR · KITCHEN
-  </div>
+      <div class="brand">
+        <h1 class="brand-name">NECTAR</h1>
 
-</header>
+        <div class="brand-subtitle">
+          LOUNGE · BAR · KITCHEN
+        </div>
 
-<section class="hero">
+        <!-- Lightweight inline SVG botanical mark -->
+        <svg
+          class="botanical"
+          viewBox="0 0 90 105"
+          aria-hidden="true"
+        >
+          <path
+            d="M21 88 C30 67 38 48 54 28 C62 18 69 12 76 8"
+            class="stem"
+          />
 
-  <!-- Лёгкая SVG-иллюстрация нектарина -->
-  <svg class="fruit" viewBox="0 0 420 280"
-       xmlns="http://www.w3.org/2000/svg"
-       aria-label="NECTAR">
+          <ellipse
+            cx="54"
+            cy="30"
+            rx="10"
+            ry="4"
+            transform="rotate(-38 54 30)"
+          />
 
-    <defs>
-      <linearGradient id="fruitA" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="#f5bd88"/>
-        <stop offset="1" stop-color="#d86d49"/>
-      </linearGradient>
-    </defs>
+          <ellipse
+            cx="66"
+            cy="19"
+            rx="9"
+            ry="3.5"
+            transform="rotate(-26 66 19)"
+          />
 
-    <g stroke-linecap="round" stroke-linejoin="round">
+          <ellipse
+            class="fruit"
+            cx="38"
+            cy="56"
+            rx="13"
+            ry="11"
+            transform="rotate(-25 38 56)"
+          />
 
-      <path d="M145 90C185 42 245 32 292 49"
-            fill="none"
-            stroke="#31563f"
-            stroke-width="7"/>
+          <path
+            d="M31 51 C35 47 40 46 44 48"
+            class="fruit"
+          />
+        </svg>
+      </div>
 
-      <path d="M192 63C157 25 110 27 78 60
-               C114 81 153 85 192 63Z"
-            fill="#718c6b"
-            stroke="#31563f"
-            stroke-width="4"/>
+      <div class="language-switcher" aria-label="Language">
+        <button class="language-button active" data-lang="ru">RU</button>
+        <button class="language-button" data-lang="kz">KZ</button>
+        <button class="language-button" data-lang="en">EN</button>
+      </div>
 
-      <path d="M245 51C271 14 317 16 344 45
-               C316 70 282 73 245 51Z"
-            fill="#789471"
-            stroke="#31563f"
-            stroke-width="4"/>
+    </header>
 
-      <ellipse cx="137" cy="158"
-               rx="67" ry="78"
-               fill="url(#fruitA)"
-               stroke="#c25f45"
-               stroke-width="5"/>
+    <div class="editorial-rule">
+      <span data-i18n="choose">выберите раздел</span>
+    </div>
 
-      <path d="M96 122C121 105 147 105 170 122"
-            fill="none"
-            stroke="#ffd4ad"
-            stroke-width="8"
-            opacity=".65"/>
+    <!-- FOOD -->
+    <section class="menu-group">
 
-      <ellipse cx="283" cy="158"
-               rx="68" ry="78"
-               fill="url(#fruitA)"
-               stroke="#c25f45"
-               stroke-width="5"/>
+      <div class="section-heading">
+        <h2 data-i18n="food">Еда</h2>
+        <span>01</span>
+      </div>
 
-      <path d="M281 127C300 140 307 157 300 175"
-            fill="none"
-            stroke="#8b5c48"
-            stroke-width="5"/>
+      <div id="foodCategories" class="category-list"></div>
 
-    </g>
-  </svg>
+    </section>
 
-  <div class="hero-note">
-    ALMATY · MEET · TALK · ENJOY
-  </div>
+    <!-- DRINKS -->
+    <section class="menu-group">
 
-</section>
+      <div class="section-heading">
+        <h2 data-i18n="drinks">Напитки</h2>
+        <span>02</span>
+      </div>
 
-<div class="divider">
-  <span class="diamond"></span>
-</div>
+      <div class="category-list">
 
-<nav class="main-nav">
+        <button
+          class="category-item"
+          data-action="openCategory"
+          data-category="nonAlcoholic"
+        >
+          <span class="category-number">01</span>
+          <span class="category-name" data-i18n="nonAlcoholic">
+            Безалкогольные
+          </span>
+          <span class="category-arrow">→</span>
+        </button>
 
-  <button id="menuButton"></button>
-  <button id="drinksButton"></button>
-  <button id="aboutButton"></button>
-  <button id="guestButton"></button>
-  <button id="contactsButton"></button>
+        <!-- Cocktail section intentionally hidden until content exists -->
+      </div>
 
-</nav>
+    </section>
 
-<main class="content" id="content"></main>
+    <!-- SEARCH -->
+    <button class="search-trigger" id="searchTrigger">
+      <span data-i18n="search">Поиск по меню</span>
+      <span class="search-icon">⌕</span>
+    </button>
 
-<footer class="footer">
-  NECTAR · ALMATY
-</footer>
+    <!-- FOOTER -->
+    <footer class="footer">
 
-</div>
+      <section class="footer-section">
+
+        <h2 class="footer-title" data-i18n="guestInfo">
+          Информация для гостей
+        </h2>
+
+        <div class="footer-links">
+
+          <div class="footer-link">
+            <span data-i18n="consumerCorner">
+              Уголок потребителя
+            </span>
+            <span>01</span>
+          </div>
+
+          <div class="footer-link">
+            <span data-i18n="allergens">
+              Аллергены
+            </span>
+            <span>02</span>
+          </div>
+
+          <div class="footer-link">
+            <span data-i18n="rules">
+              Правила посещения
+            </span>
+            <span>03</span>
+          </div>
+
+          <div class="footer-link">
+            <span data-i18n="payment">
+              Оплата
+            </span>
+            <span>04</span>
+          </div>
+
+          <div class="footer-link">
+            <span data-i18n="details">
+              Реквизиты
+            </span>
+            <span>05</span>
+          </div>
+
+        </div>
+
+      </section>
+
+      <section class="footer-section">
+
+        <h2 class="footer-title" data-i18n="contacts">
+          Контакты
+        </h2>
+
+        <div class="contact-actions">
+
+          <a
+            class="contact-button"
+            href="tel:+77064273269"
+          >
+            <span data-i18n="call">Позвонить</span>
+            <span>+7 706 427 32 69</span>
+          </a>
+
+          <a
+            class="contact-button"
+            href="https://go.2gis.com/C8OUZ"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span data-i18n="map">Открыть в 2GIS</span>
+            <span>↗</span>
+          </a>
+
+        </div>
+
+      </section>
+
+      <div class="footer-brand">NECTAR</div>
+
+      <div class="footer-small">
+        Lounge · Bar · Kitchen
+      </div>
+
+    </footer>
+
+  </main>
 
 
-<!-- LANGUAGE -->
+  <!-- =====================================================
+       CATEGORY VIEW
+       ===================================================== -->
 
-<dialog id="languageModal">
+  <main id="categoryView" class="view">
 
-  <div class="modal-box">
+    <div class="page-top">
 
-    <button class="modal-close"
-            id="closeLanguage">×</button>
-
-    <h2 class="modal-title"
-        id="languageTitle">
-      ВЫБЕРИТЕ ЯЗЫК
-    </h2>
-
-    <div class="language-list">
-
-      <button data-language="ru">
-        РУССКИЙ
+      <button
+        class="back-button"
+        id="backToHome"
+      >
+        ← <span data-i18n="back">Назад</span>
       </button>
 
-      <button data-language="kk">
-        ҚАЗАҚША
-      </button>
-
-      <button data-language="en">
-        ENGLISH
-      </button>
+      <span
+        class="page-number"
+        id="pageNumber"
+      ></span>
 
     </div>
 
-  </div>
+    <h1
+      class="page-title"
+      id="categoryTitle"
+    ></h1>
 
-</dialog>
+    <div
+      id="itemList"
+      class="item-list"
+    ></div>
+
+  </main>
+
+</div>
 
 
-<!-- DISH -->
+<!-- =========================================================
+     DISH DETAIL SHEET
+     ========================================================= -->
 
-<dialog id="dishModal">
+<div
+  class="overlay"
+  id="dishOverlay"
+  aria-hidden="true"
+>
 
-  <div class="modal-box">
+  <section
+    class="sheet"
+    id="dishSheet"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Блюдо"
+  >
 
-    <button class="modal-close"
-            id="closeDish">×</button>
+    <div class="sheet-handle"></div>
 
-    <h2 class="modal-title"
-        id="dishTitle"></h2>
+    <div class="sheet-close-row">
+      <button
+        class="close-button"
+        data-close="dish"
+        aria-label="Закрыть"
+      >
+        ×
+      </button>
+    </div>
 
-    <div class="modal-price"
-         id="dishPrice"></div>
+    <!-- Future photo goes here -->
+    <img
+      class="sheet-photo"
+      id="sheetPhoto"
+      src=""
+      alt=""
+      loading="lazy"
+    >
 
-    <div class="meta">
+    <div
+      class="sheet-category"
+      id="sheetCategory"
+    ></div>
 
-      <div class="meta-row">
+    <h2
+      class="sheet-title"
+      id="sheetTitle"
+    ></h2>
 
-        <span class="meta-label"
-              id="yieldLabel">
-          ВЫХОД
-        </span>
+    <div
+      class="sheet-price"
+      id="sheetPrice"
+    ></div>
 
-        <div class="meta-value"
-             id="dishYield">—</div>
+    <div class="sheet-info">
+
+      <div class="info-block">
+
+        <div
+          class="info-label"
+          data-i18n="yield"
+        >
+          Выход
+        </div>
+
+        <div
+          class="info-value"
+          id="sheetYield"
+        >
+          —
+        </div>
 
       </div>
 
-      <div class="meta-row">
+      <div class="info-block">
 
-        <span class="meta-label"
-              id="compositionLabel">
-          СОСТАВ
-        </span>
+        <div
+          class="info-label"
+          data-i18n="composition"
+        >
+          Состав
+        </div>
 
-        <div class="meta-value"
-             id="dishComposition">—</div>
+        <div
+          class="info-value"
+          id="sheetComposition"
+        >
+          —
+        </div>
 
       </div>
 
     </div>
 
-  </div>
+  </section>
 
-</dialog>
+</div>
+
+
+<!-- =========================================================
+     SEARCH SHEET
+     ========================================================= -->
+
+<div
+  class="overlay"
+  id="searchOverlay"
+  aria-hidden="true"
+>
+
+  <section class="sheet search-sheet">
+
+    <div class="sheet-handle"></div>
+
+    <div class="sheet-close-row">
+      <button
+        class="close-button"
+        data-close="search"
+        aria-label="Закрыть"
+      >
+        ×
+      </button>
+    </div>
+
+    <div class="search-input-wrap">
+
+      <span>⌕</span>
+
+      <input
+        class="search-input"
+        id="searchInput"
+        type="search"
+        autocomplete="off"
+        placeholder="Найти блюдо"
+        data-placeholder-ru="Найти блюдо"
+        data-placeholder-kz="Тағамды іздеу"
+        data-placeholder-en="Search dishes"
+      >
+
+    </div>
+
+    <div
+      class="search-results"
+      id="searchResults"
+    ></div>
+
+  </section>
+
+</div>
 
 
 <script>
-
 /* =========================================================
-   NECTAR MENU DATA
-   Формат:
-   Русский | English | Қазақша | Цена
-========================================================= */
+   NECTAR DATA
+   ========================================================= */
 
 const MENU = {
 
-food: [
-
-{
-ru:"Холодные закуски",
-en:"Cold Appetizers",
-kk:"Суық тіскебасарлар",
-
-items:[
-
-["Мясное плато","Meat Platter","Ет ассортиі",4990],
-["Домашние соленья","Homemade Pickles","Үй тұздалмалары",2890],
-["Овощная нарезка","Fresh Vegetable Platter","Көкөніс ассортиі",2890],
-["Рыбное ассорти","Fish Assortment","Балық ассортиі",5590],
-["Капрезе","Caprese","Капрезе",2790],
-["Сырное плато","Cheese Platter","Ірімшік ассортиі",4990]
-
-]},
-
-{
-ru:"Салаты",
-en:"Salads",
-kk:"Салаттар",
-
-items:[
-
-["Свежий овощной салат","Fresh Vegetable Salad","Балғын көкөніс салаты",1990],
-["Аччик-чучук","Achich-Chuchuk","Аччик-чучук",1790],
-["Цезарь с курицей","Chicken Caesar Salad","Тауық еті қосылған «Цезарь» салаты",2590],
-["Хрустящие баклажаны","Crispy Eggplant","Қытырлақ баялды",2790],
-["Греческий салат","Greek Salad","Грек салаты",2490],
-["Теплый салат с кониной","Warm Horse Meat Salad","Жылқы еті қосылған жылы салат",2990],
-["Салат с креветками и рукколой","Shrimp & Arugula Salad","Асшаяндар мен руккола қосылған салат",3990]
-
-]},
-
-{
-ru:"Горячие закуски",
-en:"Hot Appetizers",
-kk:"Ыстық тіскебасарлар",
-
-items:[
-
-["Креветки темпура","Tempura Shrimp","Темпура асшаяндары",3290],
-["Клаб-сэндвич с курицей","Chicken Club Sandwich","Тауық еті қосылған клаб-сэндвич",3190],
-["Кесадилья с курицей","Chicken Quesadilla","Тауық еті қосылған кесадилья",2990],
-["Чебуреки","Chebureki","Чебурек",2590],
-["Наггетсы куриные","Chicken Nuggets","Тауық наггеттері",1690]
-
-]},
-
-{
-ru:"Снэки",
-en:"Snacks",
-kk:"Снэктер",
-
-items:[
-
-[
-"Большой сет закусок",
-"Large Snack Platter",
-"Үлкен тіскебасарлар жинағы",
-6990,
-"Креветки, гренки, чечил, фри, сосиски, луковые кольца",
-"Shrimp, croutons, chechil, fries, sausages, onion rings",
-"Асшаяндар, гренки, чечил, фри, шұжықшалар, пияз сақиналары"
-],
-
-["Креветки пивные","Beer Shrimp","Сыраға арналған асшаяндар",3990],
-["Фисташки","Pistachios","Пісте",1590],
-["Чесночные гренки","Garlic Croutons","Сарымсақты гренки",1590],
-["Чечил копченый","Smoked Chechil","Ысталған чечил",1390],
-["Арахис","Peanuts","Жержаңғақ",1390]
-
-]},
-
-{
-ru:"Супы",
-en:"Soups",
-kk:"Сорпалар",
-
-items:[
-
-[
-"Окрошка с мясом",
-"Meat Okroshka",
-"Ет қосылған окрошка",
-2390,
-"(сезонная)",
-"(seasonal)",
-"(маусымдық)"
-],
-
-["Куриный суп с лапшой","Chicken Noodle Soup","Кеспе қосылған тауық сорпасы",1590],
-["Солянка мясная","Meat Solyanka","Етті солянка",3590],
-["Том Ям","Tom Yum","Том Ям",3590],
-["Рамен с говядиной","Beef Ramen","Сиыр еті қосылған рамен",3590],
-["Рамен с курицей","Chicken Ramen","Тауық еті қосылған рамен",3290],
-["Чечевичный крем-суп","Lentil Cream Soup","Жасымық крем-сорпасы",1990],
-["Шорпа","Shorpa","Шорпа",3290],
-["Пельмени","Pelmeni","Пельмень",1990,"с бульоном / без","with / without broth","сорпамен / сорпасыз"]
-
-]},
-
-{
-ru:"Пицца и выпечка",
-en:"Pizza & Bakery",
-kk:"Пицца және нан өнімдері",
-
-items:[
-
-["Пицца Пепперони","Pepperoni Pizza","Пепперони пиццасы",3090],
-["Пицца Маргарита","Margherita Pizza","Маргарита пиццасы",2590],
-["Пицца с курицей и грибами","Chicken & Mushroom Pizza","Тауық еті мен саңырауқұлақ қосылған пицца",3090],
-["Пицца Болоньезе","Bolognese Pizza","Болоньезе пиццасы",2990],
-["Мексиканская пицца с халапеньо","Mexican Pizza with Jalapeño","Халапеньо қосылған мексикалық пицца",3590],
-["Хачапури по-мегрельски","Megrelian Khachapuri","Мегрелше хачапури",2790],
-["Хлебная корзина","Bread Basket","Нан себеті",890],
-["Лепешка","Flatbread","Таба нан",590]
-
-]},
-
-{
-ru:"Паста",
-en:"Pasta",
-kk:"Паста",
-
-items:[
-
-[
-"Фарфалле с морепродуктами",
-"Farfalle with Seafood",
-"Теңіз өнімдері қосылған фарфалле",
-4990,
-"креветки, мидии, кальмары",
-"shrimp, mussels, squid",
-"асшаяндар, мидиялар, кальмарлар"
-],
-
-["Карбонара","Carbonara","Карбонара",3590],
-["Болоньезе","Bolognese","Болоньезе",3290],
-["Фетучини с курицей и грибами","Fettuccine with Chicken & Mushrooms","Тауық еті мен саңырауқұлақ қосылған фетучини",2990]
-
-]},
-
-{
-ru:"Горячие блюда",
-en:"Main Courses",
-kk:"Ыстық тағамдар",
-
-items:[
-
-["Куырдак","Quyrdaq","Қуырдақ",4090],
-["Плов","Pilaf","Палау",3090],
-["Бургер с курицей","Chicken Burger","Тауық бургері",3290],
-["Бургер с говядиной","Beef Burger","Сиыр етінен жасалған бургер",3590],
-["Бургер, грибной стаут","Mushroom Stout Burger","Саңырауқұлақты стаут-бургер",4390],
-["Колбаски говяжьи / бараньи","Beef / Lamb Sausages","Сиыр / қой етінен жасалған шұжықшалар",3390],
-["Колбаски куриные","Chicken Sausages","Тауық шұжықшалары",2990],
-["Говядина по-тайски с рисом","Thai-Style Beef with Rice","Тайша дайындалған сиыр еті, күрішпен",3290],
-["Бефстроганов с пюре","Beef Stroganoff with Mashed Potatoes","Картоп езбесі қосылған бефстроганов",3290],
-["Куриная грудка в сырно-сливочном соусе","Chicken Breast in Creamy Cheese Sauce","Ірімшік-кілегейлі тұздықтағы тауықтың төс еті",3290],
-["Картофель по-домашнему с мясом","Home-Style Potatoes with Meat","Ет қосылған үйше дайындалған картоп",3990]
-
-]},
-
-{
-ru:"Шашлык на мангале",
-en:"Charcoal Grill",
-kk:"Мангалда дайындалған тағамдар",
-
-items:[
-
-["Антрекот","Entrecôte","Антрекот",3990],
-["Баранина","Lamb","Қой еті",3190],
-["Люля-кебаб","Lula Kebab","Люля-кебаб",3190],
-["Куриное филе","Chicken Fillet","Тауық филесі",2990],
-["Куриные крылышки","Chicken Wings","Тауық қанаттары",2890],
-["Утка","Duck","Үйрек еті",2790],
-["Куриные окорочка","Chicken Leg Quarters","Тауықтың сирақтары",2590],
-["Овощи гриль на шпажке","Grilled Vegetables on a Skewer","Шампурдағы гриль көкөністері",1990],
-["Шампиньоны на мангале","Charcoal-Grilled Champignons","Мангалда дайындалған шампиньондар",1790]
-
-]},
-
-{
-ru:"Гарниры",
-en:"Side Dishes",
-kk:"Гарнирлер",
-
-items:[
-
-["Овощи гриль","Grilled Vegetables","Гриль көкөністері",1990],
-["Брокколи","Broccoli","Брокколи",1790],
-["Картофельные дольки","Potato Wedges","Картоп тілімдері",1390],
-["Картофель фри","French Fries","Картоп фри",1190],
-["Рис","Rice","Күріш",790]
-
-]},
-
-{
-ru:"Соусы",
-en:"Sauces",
-kk:"Тұздықтар",
-
-items:[
-
-["Сырный","Cheese Sauce","Ірімшік тұздығы",590],
-["Красный","Red Sauce","Қызыл тұздық",590],
-["Белый","White Sauce","Ақ тұздық",590],
-["Кетчуп","Ketchup","Кетчуп",590],
-["Тартар","Tartar Sauce","Тартар тұздығы",590]
-
-]},
-
-{
-ru:"Десерты",
-en:"Desserts",
-kk:"Десерттер",
-
-items:[
-
-["Восточные сладости","Eastern Sweets","Шығыс тәттілері",5490],
-["Пирожное в ассортименте","Assorted Cake","Ассорти бәліштер",2590]
-
-]},
-
-{
-ru:"Безалкогольные напитки",
-en:"Non-Alcoholic Drinks",
-kk:"Алкогольсіз сусындар",
-
-items:[
-
-[
-"Фирменные лимонады",
-"Signature Lemonades",
-"Фирмалық лимонадтар",
-2990,
-"Вишня – Виноград; Киви – Грейпфрут – Жасмин; Маракуйя – Ананас; Нектар",
-"Cherry – Grape; Kiwi – Grapefruit – Jasmine; Passion Fruit – Pineapple; Nectar",
-"Шие – Жүзім; Киви – Грейпфрут – Жасмин; Маракуйя – Ананас; Nectar"
-],
-
-[
-"Авторский чай",
-"Signature Tea",
-"Авторлық шай",
-2590,
-"Алматинский, Ташкентский, Малина-Лайм, Персик-жасмин",
-"Almaty, Tashkent, Raspberry-Lime, Peach-Jasmine",
-"Алматылық, Ташкенттік, Таңқурай-Лайм, Шабдалы-Жасмин"
-],
-
-["Пепси","Pepsi","Pepsi",1790],
-
-[
-"Листовой чай",
-"Loose-Leaf Tea",
-"Жапырақты шай",
-1590,
-"Ассам, Сенча, Жасмин, Эрл Грей, Ройбуш, Султан",
-"Assam, Sencha, Jasmine, Earl Grey, Rooibos, Sultan",
-"Ассам, Сенча, Жасмин, Эрл Грей, Ройбуш, Сұлтан"
-]
-
-]}
-
-],
-
-drinks:[
-
-{
-ru:"Вино",
-en:"Wine",
-kk:"Шарап",
-
-items:[
-["Blanc de Blancs Tete de Cheval","Blanc de Blancs Tete de Cheval","Blanc de Blancs Tete de Cheval",14990,"Игристое белое · бутылка","Sparkling white wine · bottle","Ақ жарқыраған шарап · бөтелке"]
-]},
-
-{
-ru:"Водка",
-en:"Vodka",
-kk:"Арақ",
-
-items:[
-["Koskenkorva","Koskenkorva","Koskenkorva",2090,"50 г","50 g","50 г"],
-["Mont Blanc","Mont Blanc","Mont Blanc",2690,"50 г","50 g","50 г"],
-["Архангельская Северная","Arkhangelskaya Severnaya","Архангельская Северная",1790,"50 г","50 g","50 г"],
-["Белуга Нобл","Beluga Noble","Beluga Noble",2690,"50 г","50 g","50 г"]
-]},
-
-{
-ru:"Пиво бутылочное",
-en:"Bottled Beer",
-kk:"Бөтелкедегі сыра",
-
-items:[
-["Ayinger, Brauweisse","Ayinger, Brauweisse","Ayinger, Brauweisse",2990,"Нефильтрованное","Unfiltered","Сүзілмеген"],
-["Ayinger, Lager","Ayinger, Lager","Ayinger, Lager",2990,"Фильтрованное","Filtered","Сүзілген"],
-["Gubernija Brown Ale","Gubernija Brown Ale","Gubernija Brown Ale",1990,"Тёмное","Dark","Қара сыра"],
-["Gubernija Ekstra Lager","Gubernija Ekstra Lager","Gubernija Ekstra Lager",1990,"Фильтрованное","Filtered","Сүзілген"]
-]},
-
-{
-ru:"Пиво разливное",
-en:"Draft Beer",
-kk:"Құйма сыра",
-
-items:[
-["Holsten Pilsener","Holsten Pilsener","Holsten Pilsener",1890,"Светлое фильтрованное","Light, filtered","Ашық түсті, сүзілген"],
-["Kronenbourg Blanc","Kronenbourg Blanc","Kronenbourg Blanc",2290,"Нефильтрованное","Unfiltered","Сүзілмеген"]
-]},
-
-{
-ru:"Коктейли",
-en:"Cocktails",
-kk:"Коктейльдер",
-
-items:[],
-future:true
-
-}
-
-]
-
-};
-
-
-/* =========================================================
-   TRANSLATION
-========================================================= */
-
-const TEXT={
-
-ru:{
-menu:"МЕНЮ",
-drinks:"НАПИТКИ",
-about:"О NECTAR",
-guest:"УГОЛОК ПОТРЕБИТЕЛЯ",
-contacts:"КОНТАКТЫ",
-back:"НАЗАД",
-search:"Поиск по меню",
-yield:"ВЫХОД",
-composition:"СОСТАВ",
-choose:"ВЫБЕРИТЕ ЯЗЫК",
-soon:"Этот раздел будет дополнен позже.",
-call:"ПОЗВОНИТЬ",
-map:"ОТКРЫТЬ В 2GIS",
-aboutStory:"История",
-aboutConcept:"Концепция",
-aboutVenue:"О заведении",
-aboutGallery:"Галерея",
-guestAllergens:"Аллергены",
-guestRules:"Правила посещения",
-guestPayment:"Оплата",
-guestDetails:"Реквизиты",
-emptyCocktails:"Коктейльная карта находится в разработке."
-},
-
-kk:{
-menu:"МӘЗІР",
-drinks:"СУСЫНДАР",
-about:"NECTAR ТУРАЛЫ",
-guest:"ТҰТЫНУШЫ БҰРЫШЫ",
-contacts:"БАЙЛАНЫС",
-back:"АРТҚА",
-search:"Мәзірден іздеу",
-yield:"ШЫҒЫМЫ",
-composition:"ҚҰРАМЫ",
-choose:"ТІЛДІ ТАҢДАҢЫЗ",
-soon:"Бұл бөлім кейінірек толықтырылады.",
-call:"ҚОҢЫРАУ ШАЛУ",
-map:"2GIS-ТЕ АШУ",
-aboutStory:"Тарихы",
-aboutConcept:"Тұжырымдама",
-aboutVenue:"Мекеме туралы",
-aboutGallery:"Галерея",
-guestAllergens:"Аллергендер",
-guestRules:"Келу ережелері",
-guestPayment:"Төлем",
-guestDetails:"Деректемелер",
-emptyCocktails:"Коктейльдер картасы әзірленуде."
-},
-
-en:{
-menu:"MENU",
-drinks:"DRINKS",
-about:"ABOUT NECTAR",
-guest:"CONSUMER INFORMATION",
-contacts:"CONTACTS",
-back:"BACK",
-search:"Search the menu",
-yield:"PORTION",
-composition:"INGREDIENTS",
-choose:"CHOOSE A LANGUAGE",
-soon:"This section will be added later.",
-call:"CALL",
-map:"OPEN IN 2GIS",
-aboutStory:"Our Story",
-aboutConcept:"Concept",
-aboutVenue:"About the Venue",
-aboutGallery:"Gallery",
-guestAllergens:"Allergens",
-guestRules:"House Rules",
-guestPayment:"Payment",
-guestDetails:"Details",
-emptyCocktails:"The cocktail menu is currently in development."
-}
-
-};
-
-
-/* =========================================================
-   APP
-========================================================= */
-
-let language=localStorage.getItem("nectar-language")||"ru";
-
-const $=id=>document.getElementById(id);
-
-function tr(key){
-  return TEXT[language][key]||TEXT.ru[key]||key;
-}
-
-function itemName(item){
-  return item[language==="ru"?0:language==="en"?1:2];
-}
-
-function itemNote(item){
-  const index=language==="ru"?4:language==="en"?5:6;
-  return item[index]||"";
-}
-
-function money(value){
-  return Number(value).toLocaleString("ru-RU")+" ₸";
-}
-
-function updateInterface(){
-
-  $("menuButton").textContent=tr("menu");
-  $("drinksButton").textContent=tr("drinks");
-  $("aboutButton").textContent=tr("about");
-  $("guestButton").textContent=tr("guest");
-  $("contactsButton").textContent=tr("contacts");
-
-  $("languageButton").textContent=
-    language==="kk"?"KZ":language.toUpperCase();
-
-  $("languageTitle").textContent=tr("choose");
-  $("yieldLabel").textContent=tr("yield");
-  $("compositionLabel").textContent=tr("composition");
-
-  renderHome();
-}
-
-
-/* HOME */
-
-function renderHome(){
-
-  $("content").innerHTML="";
-
-}
-
-
-/* CATEGORIES */
-
-function showCategories(type){
-
-  const list=MENU[type];
-
-  $("content").innerHTML=`
-
-    <button class="back"
-            onclick="renderHome()">
-      ← ${tr("back")}
-    </button>
-
-    <h1 class="page-title">
-      ${type==="food"?tr("menu"):tr("drinks")}
-    </h1>
-
-    <input
-      class="search"
-      id="search"
-      placeholder="${tr("search")}"
-      autocomplete="off"
-    >
-
-    <div class="categories" id="categories">
-
-      ${list
-        .filter(section=>!section.future||section.items.length)
-        .map((section,index)=>`
-
-          <button
-            class="category"
-            onclick="showSection('${type}',${index})">
-
-            ${section[language==="ru"?"ru":language==="en"?"en":"kk"]}
-
-          </button>
-
-        `).join("")}
-
-    </div>
-  `;
-
-  $("search").addEventListener("input",function(){
-
-    const q=this.value.trim().toLowerCase();
-
-    if(!q){
-      document.querySelectorAll(".category")
-        .forEach(x=>x.style.display="block");
-      return;
+  food: [
+
+    {
+      id: "cold",
+      number: "01",
+      names: {
+        ru: "Холодные закуски",
+        kz: "Салқын тіскебасарлар",
+        en: "Cold starters"
+      },
+      items: [
+        ["Мясное плато", 4990],
+        ["Домашние соленья", 2890],
+        ["Овощная нарезка", 2890],
+        ["Рыбное ассорти", 5590],
+        ["Капрезе", 2790],
+        ["Сырное плато", 4990]
+      ]
+    },
+
+    {
+      id: "salads",
+      number: "02",
+      names: {
+        ru: "Салаты",
+        kz: "Салаттар",
+        en: "Salads"
+      },
+      items: [
+        ["Свежий овощной салат", 1990],
+        ["Аччик-чучук", 1790],
+        ["Цезарь с курицей", 2590],
+        ["Хрустящие баклажаны", 2790],
+        ["Греческий салат", 2490],
+        ["Теплый салат с кониной", 2990],
+        ["Салат с креветками и рукколой", 3990]
+      ]
+    },
+
+    {
+      id: "hot",
+      number: "03",
+      names: {
+        ru: "Горячие закуски",
+        kz: "Ыстық тіскебасарлар",
+        en: "Hot starters"
+      },
+      items: [
+        ["Креветки темпура", 3290],
+        ["Клаб-сэндвич с курицей", 3190],
+        ["Кесадилья с курицей", 2990],
+        ["Чебуреки", 2590],
+        ["Наггетсы куриные", 1690]
+      ]
+    },
+
+    {
+      id: "snacks",
+      number: "04",
+      names: {
+        ru: "Снэки",
+        kz: "Снэктер",
+        en: "Snacks"
+      },
+      items: [
+        [
+          "Большой сет закусок",
+          6990,
+          "Креветки, гренки, чечил, фри, сосиски, луковые кольца"
+        ],
+        ["Креветки пивные", 3990],
+        ["Фисташки", 1590],
+        ["Чесночные гренки", 1590],
+        ["Чечил копченый", 1390],
+        ["Арахис", 1390]
+      ]
+    },
+
+    {
+      id: "soups",
+      number: "05",
+      names: {
+        ru: "Супы",
+        kz: "Сорпалар",
+        en: "Soups"
+      },
+      items: [
+        ["Окрошка с мясом (сезонная)", 2390],
+        ["Куриный суп с лапшой", 1590],
+        ["Солянка мясная", 3590],
+        ["Том Ям", 3590],
+        ["Рамен с говядиной", 3590],
+        ["Рамен с курицей", 3290],
+        ["Чечевичный крем-суп", 1990],
+        ["Шорпа", 3290],
+        ["Пельмени (с бульоном / без)", 1990]
+      ]
+    },
+
+    {
+      id: "pizza",
+      number: "06",
+      names: {
+        ru: "Пицца и выпечка",
+        kz: "Пицца және нан өнімдері",
+        en: "Pizza & bakery"
+      },
+      items: [
+        ["Пицца Пепперони", 3090],
+        ["Пицца Маргарита", 2590],
+        ["Пицца с курицей и грибами", 3090],
+        ["Пицца Болоньезе", 2990],
+        ["Мексиканская пицца с халапеньо", 3590],
+        ["Хачапури по-мегрельски", 2790],
+        ["Хлебная корзина", 890],
+        ["Лепешка", 590]
+      ]
+    },
+
+    {
+      id: "pasta",
+      number: "07",
+      names: {
+        ru: "Паста",
+        kz: "Паста",
+        en: "Pasta"
+      },
+      items: [
+        [
+          "Фарфалле с морепродуктами",
+          4990,
+          "Креветки, мидии, кальмары"
+        ],
+        ["Карбонара", 3590],
+        ["Болоньезе", 3290],
+        ["Фетучини с курицей и грибами", 2990]
+      ]
+    },
+
+    {
+      id: "mains",
+      number: "08",
+      names: {
+        ru: "Горячие блюда",
+        kz: "Ыстық тағамдар",
+        en: "Main courses"
+      },
+      items: [
+        ["Куырдак", 4090],
+        ["Плов", 3090],
+        ["Бургер с курицей", 3290],
+        ["Бургер с говядиной", 3590],
+        ["Бургер, грибной стаут", 4390],
+        ["Колбаски говяжьи / бараньи", 3390],
+        ["Колбаски куриные", 2990],
+        ["Говядина по-тайски с рисом", 3290],
+        ["Бефстроганов с пюре", 3290],
+        ["Куриная грудка в сырно-сливочном соусе", 3290],
+        ["Картофель по-домашнему с мясом", 3990]
+      ]
+    },
+
+    {
+      id: "grill",
+      number: "09",
+      names: {
+        ru: "Шашлык на мангале",
+        kz: "Мангалдағы кәуап",
+        en: "Grill"
+      },
+      items: [
+        ["Антрекот", 3990],
+        ["Баранина", 3190],
+        ["Люля-кебаб", 3190],
+        ["Куриное филе", 2990],
+        ["Куриные крылышки", 2890],
+        ["Утка", 2790],
+        ["Куриные окорочка", 2590],
+        ["Овощи гриль на шпажке", 1990],
+        ["Шампиньоны на мангале", 1790]
+      ]
+    },
+
+    {
+      id: "sides",
+      number: "10",
+      names: {
+        ru: "Гарниры",
+        kz: "Гарнирлер",
+        en: "Side dishes"
+      },
+      items: [
+        ["Овощи гриль", 1990],
+        ["Брокколи", 1790],
+        ["Картофельные дольки", 1390],
+        ["Картофель фри", 1190],
+        ["Рис", 790]
+      ]
+    },
+
+    {
+      id: "sauces",
+      number: "11",
+      names: {
+        ru: "Соусы",
+        kz: "Тұздықтар",
+        en: "Sauces"
+      },
+      items: [
+        ["Сырный", 590],
+        ["Красный", 590],
+        ["Белый", 590],
+        ["Кетчуп", 590],
+        ["Тартар", 590]
+      ]
+    },
+
+    {
+      id: "desserts",
+      number: "12",
+      names: {
+        ru: "Десерты",
+        kz: "Десерттер",
+        en: "Desserts"
+      },
+      items: [
+        ["Восточные сладости", 5490],
+        ["Пирожное в ассортименте", 2590]
+      ]
     }
 
-    document.querySelectorAll(".category")
-      .forEach((button,index)=>{
+  ],
 
-        const section=list[index];
+  nonAlcoholic: {
+    id: "nonAlcoholic",
+    number: "01",
+    names: {
+      ru: "Безалкогольные",
+      kz: "Алкогольсіз сусындар",
+      en: "Non-alcoholic"
+    },
+    items: [
 
-        const names=section.items
-          .map(item=>itemName(item))
-          .join(" ")
-          .toLowerCase();
+      [
+        "Фирменные лимонады",
+        2990,
+        "Вишня – Виноград, Киви – Грейпфрут – Жасмин, Маракуйя – Ананас, Нектар"
+      ],
 
-        const title=
-          section[language==="ru"?"ru":language==="en"?"en":"kk"]
-          .toLowerCase();
+      [
+        "Авторский чай",
+        2590,
+        "Алматинский, Ташкентский, Малина-Лайм, Персик-жасмин"
+      ],
 
-        button.style.display=
-          names.includes(q)||title.includes(q)
-          ?"block":"none";
+      [
+        "Пепси",
+        1790
+      ],
+
+      [
+        "Листовой чай",
+        1590,
+        "Ассам, Сенча, Жасмин, Эрл Грей, Ройбуш, Султан"
+      ]
+
+    ]
+  }
+
+};
+
+
+/* =========================================================
+   TRANSLATIONS
+   ========================================================= */
+
+const UI = {
+
+  ru: {
+    choose: "выберите раздел",
+    food: "Еда",
+    drinks: "Напитки",
+    nonAlcoholic: "Безалкогольные",
+    search: "Поиск по меню",
+    guestInfo: "Информация для гостей",
+    consumerCorner: "Уголок потребителя",
+    allergens: "Аллергены",
+    rules: "Правила посещения",
+    payment: "Оплата",
+    details: "Реквизиты",
+    contacts: "Контакты",
+    call: "Позвонить",
+    map: "Открыть в 2GIS",
+    back: "Назад",
+    yield: "Выход",
+    composition: "Состав",
+    searchPlaceholder: "Найти блюдо"
+  },
+
+  kz: {
+    choose: "бөлімді таңдаңыз",
+    food: "Тағамдар",
+    drinks: "Сусындар",
+    nonAlcoholic: "Алкогольсіз сусындар",
+    search: "Мәзірден іздеу",
+    guestInfo: "Қонақтарға ақпарат",
+    consumerCorner: "Тұтынушы бұрышы",
+    allergens: "Аллергендер",
+    rules: "Келу ережелері",
+    payment: "Төлем",
+    details: "Реквизиттер",
+    contacts: "Байланыс",
+    call: "Қоңырау шалу",
+    map: "2GIS ашу",
+    back: "Артқа",
+    yield: "Шығымы",
+    composition: "Құрамы",
+    searchPlaceholder: "Тағамды іздеу"
+  },
+
+  en: {
+    choose: "choose a section",
+    food: "Food",
+    drinks: "Drinks",
+    nonAlcoholic: "Non-alcoholic",
+    search: "Search menu",
+    guestInfo: "Guest information",
+    consumerCorner: "Consumer information",
+    allergens: "Allergens",
+    rules: "House rules",
+    payment: "Payment",
+    details: "Business details",
+    contacts: "Contacts",
+    call: "Call",
+    map: "Open in 2GIS",
+    back: "Back",
+    yield: "Serving",
+    composition: "Ingredients",
+    searchPlaceholder: "Search dishes"
+  }
+
+};
+
+
+/* =========================================================
+   STATE
+   ========================================================= */
+
+let currentLanguage =
+  localStorage.getItem("nectar-language") || "ru";
+
+let currentCategory = null;
+
+
+/* =========================================================
+   DOM
+   ========================================================= */
+
+const homeView = document.getElementById("homeView");
+const categoryView = document.getElementById("categoryView");
+
+const foodCategories =
+  document.getElementById("foodCategories");
+
+const categoryTitle =
+  document.getElementById("categoryTitle");
+
+const categoryNumber =
+  document.getElementById("pageNumber");
+
+const itemList =
+  document.getElementById("itemList");
+
+const backToHome =
+  document.getElementById("backToHome");
+
+const dishOverlay =
+  document.getElementById("dishOverlay");
+
+const dishSheet =
+  document.getElementById("dishSheet");
+
+const sheetPhoto =
+  document.getElementById("sheetPhoto");
+
+const sheetCategory =
+  document.getElementById("sheetCategory");
+
+const sheetTitle =
+  document.getElementById("sheetTitle");
+
+const sheetPrice =
+  document.getElementById("sheetPrice");
+
+const sheetYield =
+  document.getElementById("sheetYield");
+
+const sheetComposition =
+  document.getElementById("sheetComposition");
+
+const searchOverlay =
+  document.getElementById("searchOverlay");
+
+const searchInput =
+  document.getElementById("searchInput");
+
+const searchResults =
+  document.getElementById("searchResults");
+
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+function money(value) {
+  return new Intl.NumberFormat("ru-RU").format(value) + " ₸";
+}
+
+function getCategoryName(category) {
+  return category.names[currentLanguage] || category.names.ru;
+}
+
+function getItemName(item) {
+  /*
+    When accurate professional translations are supplied,
+    add them here without changing the data structure.
+
+    Until then the original dish name remains intact rather
+    than inventing potentially incorrect culinary terminology.
+  */
+  return item[0];
+}
+
+function getItemNote(item) {
+  return item[2] || "";
+}
+
+function allCategories() {
+  return [
+    ...MENU.food,
+    MENU.nonAlcoholic
+  ];
+}
+
+function allItems() {
+  const result = [];
+
+  MENU.food.forEach(category => {
+    category.items.forEach(item => {
+      result.push({
+        category,
+        item
       });
-
+    });
   });
 
+  MENU.nonAlcoholic.items.forEach(item => {
+    result.push({
+      category: MENU.nonAlcoholic,
+      item
+    });
+  });
+
+  return result;
 }
 
 
-/* SECTION */
+/* =========================================================
+   LANGUAGE
+   ========================================================= */
 
-function showSection(type,index){
+function applyLanguage() {
 
-  const section=MENU[type][index];
+  document.documentElement.lang = currentLanguage;
 
-  if(section.future){
+  localStorage.setItem(
+    "nectar-language",
+    currentLanguage
+  );
 
-    $("content").innerHTML=`
+  document
+    .querySelectorAll("[data-i18n]")
+    .forEach(element => {
 
-      <button class="back"
-              onclick="showCategories('${type}')">
-        ← ${tr("back")}
-      </button>
+      const key = element.dataset.i18n;
 
-      <h1 class="page-title">
-        ${section[language==="ru"?"ru":language==="en"?"en":"kk"]}
-      </h1>
+      if (UI[currentLanguage][key]) {
+        element.textContent =
+          UI[currentLanguage][key];
+      }
 
-      <div class="future">
-        ${tr("emptyCocktails")}
+    });
+
+  document
+    .querySelectorAll(".language-button")
+    .forEach(button => {
+
+      button.classList.toggle(
+        "active",
+        button.dataset.lang === currentLanguage
+      );
+
+    });
+
+  searchInput.placeholder =
+    UI[currentLanguage].searchPlaceholder;
+
+  if (currentCategory) {
+    renderCategory(currentCategory);
+  }
+
+  renderFoodCategories();
+}
+
+
+/* =========================================================
+   HOME CATEGORIES
+   ========================================================= */
+
+function renderFoodCategories() {
+
+  foodCategories.innerHTML = "";
+
+  MENU.food.forEach(category => {
+
+    const button =
+      document.createElement("button");
+
+    button.className = "category-item";
+
+    button.dataset.action = "openCategory";
+    button.dataset.category = category.id;
+
+    button.innerHTML = `
+      <span class="category-number">
+        ${category.number}
+      </span>
+
+      <span class="category-name">
+        ${escapeHTML(getCategoryName(category))}
+      </span>
+
+      <span class="category-arrow">
+        →
+      </span>
+    `;
+
+    foodCategories.appendChild(button);
+
+  });
+}
+
+
+/* =========================================================
+   CATEGORY
+   ========================================================= */
+
+function findCategory(id) {
+
+  if (id === "nonAlcoholic") {
+    return MENU.nonAlcoholic;
+  }
+
+  return MENU.food.find(
+    category => category.id === id
+  );
+}
+
+function openCategory(id) {
+
+  const category = findCategory(id);
+
+  if (!category) return;
+
+  currentCategory = category;
+
+  renderCategory(category);
+
+  homeView.classList.remove("active");
+  categoryView.classList.add("active");
+
+  window.scrollTo({
+    top: 0,
+    behavior: "instant"
+  });
+
+  history.pushState(
+    { category: id },
+    "",
+    "#" + id
+  );
+}
+
+function renderCategory(category) {
+
+  categoryTitle.textContent =
+    getCategoryName(category);
+
+  categoryNumber.textContent =
+    "SECTION " + category.number;
+
+  itemList.innerHTML = "";
+
+  category.items.forEach((item, index) => {
+
+    const button =
+      document.createElement("button");
+
+    button.className = "menu-item";
+
+    button.dataset.itemIndex = index;
+
+    button.innerHTML = `
+      <span>
+        <span class="item-name">
+          ${escapeHTML(getItemName(item))}
+        </span>
+
+        ${
+          getItemNote(item)
+            ? `
+              <span class="item-note">
+                ${escapeHTML(getItemNote(item))}
+              </span>
+            `
+            : ""
+        }
+      </span>
+
+      <span class="item-price">
+        ${money(item[1])}
+      </span>
+    `;
+
+    button.addEventListener(
+      "click",
+      () => openDish(category, item)
+    );
+
+    itemList.appendChild(button);
+
+  });
+}
+
+
+/* =========================================================
+   DISH
+   ========================================================= */
+
+function openDish(category, item) {
+
+  sheetCategory.textContent =
+    getCategoryName(category);
+
+  sheetTitle.textContent =
+    getItemName(item);
+
+  sheetPrice.textContent =
+    money(item[1]);
+
+  /*
+    Intentionally blank until the restaurant provides
+    verified serving weight and composition.
+  */
+  sheetYield.textContent = "—";
+
+  sheetComposition.textContent =
+    "—";
+
+  /*
+    Future photo:
+    item[3] can contain a relative path such as
+    assets/photos/caesar.webp
+
+    The architecture is already ready for it.
+  */
+
+  if (item[3]) {
+
+    sheetPhoto.src = item[3];
+    sheetPhoto.alt = getItemName(item);
+
+    dishSheet.classList.add("has-photo");
+
+  } else {
+
+    sheetPhoto.removeAttribute("src");
+    sheetPhoto.alt = "";
+
+    dishSheet.classList.remove("has-photo");
+
+  }
+
+  openOverlay(dishOverlay);
+}
+
+
+/* =========================================================
+   OVERLAYS
+   ========================================================= */
+
+function openOverlay(overlay) {
+
+  overlay.classList.add("open");
+  overlay.setAttribute("aria-hidden", "false");
+
+  document.body.style.overflow = "hidden";
+
+  setTimeout(() => {
+
+    const input =
+      overlay.querySelector("input");
+
+    if (input) {
+      input.focus();
+    }
+
+  }, 250);
+}
+
+function closeOverlay(overlay) {
+
+  overlay.classList.remove("open");
+  overlay.setAttribute("aria-hidden", "true");
+
+  if (
+    !dishOverlay.classList.contains("open") &&
+    !searchOverlay.classList.contains("open")
+  ) {
+    document.body.style.overflow = "";
+  }
+}
+
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+function renderSearchResults(query = "") {
+
+  const normalized =
+    query.trim().toLowerCase();
+
+  searchResults.innerHTML = "";
+
+  if (!normalized) {
+    return;
+  }
+
+  const results =
+    allItems()
+      .filter(({ item }) =>
+        getItemName(item)
+          .toLowerCase()
+          .includes(normalized)
+      )
+      .slice(0, 30);
+
+  if (!results.length) {
+
+    searchResults.innerHTML = `
+      <div
+        style="
+          padding:24px 0;
+          color:var(--muted);
+          font-size:.8rem;
+        "
+      >
+        Ничего не найдено
       </div>
     `;
 
     return;
   }
 
-  $("content").innerHTML=`
+  results.forEach(({ category, item }) => {
 
-    <button class="back"
-            onclick="showCategories('${type}')">
-      ← ${tr("back")}
-    </button>
+    const button =
+      document.createElement("button");
 
-    <h1 class="page-title">
-      ${section[language==="ru"?"ru":language==="en"?"en":"kk"]}
-    </h1>
+    button.className = "search-result";
+    button.type = "button";
 
-    <div class="dishes">
+    button.innerHTML = `
+      <span>
+        <span class="search-result-name">
+          ${escapeHTML(getItemName(item))}
+        </span>
 
-      ${section.items.map((item,index)=>`
+        <span class="search-result-category">
+          ${escapeHTML(getCategoryName(category))}
+        </span>
+      </span>
 
-        <div
-          class="dish"
-          onclick="openDish('${type}',${index},${JSON.stringify(item).replace(/"/g,'&quot;')})">
+      <span class="search-result-price">
+        ${money(item[1])}
+      </span>
+    `;
 
-          <div>
+    button.addEventListener("click", () => {
 
-            <div class="dish-name">
-              ${itemName(item)}
-            </div>
+      closeOverlay(searchOverlay);
 
-            ${
-              itemNote(item)
-              ?
-              `<span class="dish-note">${itemNote(item)}</span>`
-              :""
-            }
+      setTimeout(() => {
 
-          </div>
+        openCategory(category.id);
 
-          <div class="price">
-            ${money(item[3])}
-          </div>
+        setTimeout(() => {
+          openDish(category, item);
+        }, 120);
 
-        </div>
+      }, 180);
 
-      `).join("")}
+    });
 
-    </div>
-  `;
+    searchResults.appendChild(button);
+
+  });
 }
 
 
-/* DISH */
+/* =========================================================
+   ESCAPE HTML
+   ========================================================= */
 
-function openDish(type,index,itemString){
+function escapeHTML(value) {
 
-  const item=typeof itemString==="string"
-    ?JSON.parse(itemString.replace(/&quot;/g,'"'))
-    :itemString;
-
-  $("dishTitle").textContent=itemName(item);
-
-  $("dishPrice").textContent=money(item[3]);
-
-  $("dishYield").textContent="—";
-
-  $("dishComposition").textContent="—";
-
-  $("dishModal").showModal();
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 
 }
 
 
-/* ABOUT */
+/* =========================================================
+   EVENTS
+   ========================================================= */
 
-function showAbout(){
+document.addEventListener(
+  "click",
+  event => {
 
-  const cards=[
+    const categoryButton =
+      event.target.closest(
+        '[data-action="openCategory"]'
+      );
 
-    ["aboutStory","История / история NECTAR"],
-    ["aboutConcept","Концепция"],
-    ["aboutVenue","О заведении"],
-    ["aboutGallery","Фотографии"]
+    if (categoryButton) {
 
-  ];
+      openCategory(
+        categoryButton.dataset.category
+      );
 
-  $("content").innerHTML=`
+      return;
+    }
 
-    <button class="back"
-            onclick="renderHome()">
-      ← ${tr("back")}
-    </button>
+    if (
+      event.target === dishOverlay
+    ) {
+      closeOverlay(dishOverlay);
+    }
 
-    <h1 class="page-title">
-      ${tr("about")}
-    </h1>
+    if (
+      event.target === searchOverlay
+    ) {
+      closeOverlay(searchOverlay);
+    }
 
-    <p class="page-subtitle">
-      ${tr("soon")}
-    </p>
-
-    <div class="info-grid">
-
-      ${cards.map(card=>`
-
-        <article class="info-card">
-
-          <h3>${tr(card[0])}</h3>
-
-          <p>${tr("soon")}</p>
-
-        </article>
-
-      `).join("")}
-
-    </div>
-  `;
-
-}
+  }
+);
 
 
-/* CONSUMER */
+/* Language buttons */
 
-function showGuest(){
+document
+  .querySelectorAll(".language-button")
+  .forEach(button => {
 
-  const cards=[
-    "guestAllergens",
-    "guestRules",
-    "guestPayment",
-    "guestDetails"
-  ];
+    button.addEventListener(
+      "click",
+      () => {
 
-  $("content").innerHTML=`
+        currentLanguage =
+          button.dataset.lang;
 
-    <button class="back"
-            onclick="renderHome()">
-      ← ${tr("back")}
-    </button>
+        applyLanguage();
 
-    <h1 class="page-title">
-      ${tr("guest")}
-    </h1>
-
-    <p class="page-subtitle">
-      ${tr("soon")}
-    </p>
-
-    <div class="info-grid">
-
-      ${cards.map(key=>`
-
-        <article class="info-card">
-
-          <h3>${tr(key)}</h3>
-
-          <p>${tr("soon")}</p>
-
-        </article>
-
-      `).join("")}
-
-    </div>
-  `;
-
-}
-
-
-/* CONTACTS */
-
-function showContacts(){
-
-  $("content").innerHTML=`
-
-    <button class="back"
-            onclick="renderHome()">
-      ← ${tr("back")}
-    </button>
-
-    <h1 class="page-title">
-      ${tr("contacts")}
-    </h1>
-
-    <div class="contacts">
-
-      <a
-        class="contact"
-        href="tel:+77064273269">
-
-        <small>${tr("call")}</small>
-
-        <strong>
-          +7 706 427 32 69
-        </strong>
-
-      </a>
-
-      <a
-        class="contact"
-        href="https://go.2gis.com/C8OUZ"
-        target="_blank"
-        rel="noopener">
-
-        <small>2GIS</small>
-
-        <strong>
-          ${tr("map")}
-        </strong>
-
-      </a>
-
-    </div>
-
-  `;
-
-}
-
-
-/* LANGUAGE */
-
-$("languageButton").onclick=()=>{
-  $("languageModal").showModal();
-};
-
-$("closeLanguage").onclick=()=>{
-  $("languageModal").close();
-};
-
-document.querySelectorAll("[data-language]")
-.forEach(button=>{
-
-  button.onclick=()=>{
-
-    language=button.dataset.language;
-
-    localStorage.setItem(
-      "nectar-language",
-      language
+      }
     );
 
-    $("languageModal").close();
-
-    updateInterface();
-
-  };
-
-});
+  });
 
 
-/* DISH MODAL */
+/* Back */
 
-$("closeDish").onclick=()=>{
-  $("dishModal").close();
-};
+backToHome.addEventListener(
+  "click",
+  () => {
 
+    currentCategory = null;
 
-/* NAV */
+    categoryView.classList.remove("active");
+    homeView.classList.add("active");
 
-$("menuButton").onclick=()=>{
-  showCategories("food");
-};
+    history.pushState(
+      {},
+      "",
+      window.location.pathname
+    );
 
-$("drinksButton").onclick=()=>{
-  showCategories("drinks");
-};
+    window.scrollTo({
+      top: 0,
+      behavior: "instant"
+    });
 
-$("aboutButton").onclick=()=>{
-  showAbout();
-};
-
-$("guestButton").onclick=()=>{
-  showGuest();
-};
-
-$("contactsButton").onclick=()=>{
-  showContacts();
-};
+  }
+);
 
 
-/* START */
+/* Search */
 
-updateInterface();
+document
+  .getElementById("searchTrigger")
+  .addEventListener(
+    "click",
+    () => {
+
+      openOverlay(searchOverlay);
+
+      searchInput.value = "";
+      searchResults.innerHTML = "";
+
+    }
+  );
+
+searchInput.addEventListener(
+  "input",
+  () => {
+    renderSearchResults(
+      searchInput.value
+    );
+  }
+);
+
+
+/* Close buttons */
+
+document
+  .querySelectorAll("[data-close]")
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        if (
+          button.dataset.close === "dish"
+        ) {
+          closeOverlay(dishOverlay);
+        }
+
+        if (
+          button.dataset.close === "search"
+        ) {
+          closeOverlay(searchOverlay);
+        }
+
+      }
+    );
+
+  });
+
+
+/* Escape */
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if (event.key !== "Escape") {
+      return;
+    }
+
+    if (dishOverlay.classList.contains("open")) {
+      closeOverlay(dishOverlay);
+      return;
+    }
+
+    if (searchOverlay.classList.contains("open")) {
+      closeOverlay(searchOverlay);
+    }
+
+  }
+);
+
+
+/* Browser back */
+
+window.addEventListener(
+  "popstate",
+  () => {
+
+    currentCategory = null;
+
+    categoryView.classList.remove("active");
+    homeView.classList.add("active");
+
+  }
+);
+
+
+/* =========================================================
+   INITIALIZE
+   ========================================================= */
+
+applyLanguage();
 
 </script>
 
