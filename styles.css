@@ -1,0 +1,59 @@
+*{box-sizing:border-box}
+:root{
+ --green:#173b2c; --green2:#244d3b; --gold:#a97935; --gold2:#c69b59;
+ --cream:#f5eddd; --paper:#fbf6ea; --ink:#24332c; --muted:#766f64;
+ --line:rgba(169,121,53,.42); --shadow:0 18px 50px rgba(38,28,15,.10);
+}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:Manrope,Arial,sans-serif}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.20;background-image:radial-gradient(rgba(90,62,28,.16) .6px,transparent .6px);background-size:5px 5px;z-index:10}
+.hero{position:relative;overflow:hidden;text-align:center;padding:38px 20px 30px;background:var(--paper);border-bottom:1px solid var(--line)}
+.brand{font-family:"Cormorant Garamond",serif;font-size:clamp(54px,13vw,92px);letter-spacing:.11em;line-height:.8;color:var(--green);font-weight:500;position:relative;z-index:2}
+.tagline{margin-top:18px;color:var(--gold);font-size:12px;letter-spacing:.42em;font-weight:600;position:relative;z-index:2}
+.gold-line{height:1px;width:190px;background:var(--gold);margin:18px auto 0;position:relative}
+.gold-line:after{content:"";width:7px;height:7px;border:1px solid var(--gold);background:var(--paper);position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(45deg)}
+.intro{font-family:"Cormorant Garamond",serif;text-transform:uppercase;letter-spacing:.18em;color:var(--green);font-size:17px;margin:24px 0 0}
+.fruit{position:absolute;font-size:70px;filter:saturate(.85);transform:rotate(-15deg);left:-7px;top:2px;z-index:1}
+.leaf{position:absolute;width:105px;height:42px;background:var(--green2);opacity:.17;border-radius:100% 0 100% 0}
+.leaf-a{left:-30px;top:15px;transform:rotate(25deg)}.leaf-b{right:-30px;top:30px;transform:rotate(150deg)}.leaf-c{right:-40px;bottom:-10px;transform:rotate(40deg)}
+main{max-width:900px;margin:0 auto;padding:0 16px 55px}
+.category-bar{position:sticky;top:0;z-index:8;margin:0 -16px;padding:11px 16px;background:rgba(245,237,221,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);display:flex;gap:8px;overflow:auto;scrollbar-width:none}
+.category-bar::-webkit-scrollbar{display:none}
+.category-bar a{flex:0 0 auto;text-decoration:none;color:var(--green);font-size:12px;font-weight:600;padding:8px 11px;border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.22)}
+.category-bar a.active,.category-bar a:hover{background:var(--green);color:#fff;border-color:var(--green)}
+.toolbar{display:flex;gap:10px;margin:20px 0 30px}
+.search{flex:1;display:flex;align-items:center;gap:8px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:0 13px;box-shadow:0 6px 20px rgba(38,28,15,.05)}
+.search span{font-size:25px;color:var(--gold)}
+.search input{width:100%;border:0;outline:0;background:transparent;padding:13px 0;font:inherit;color:var(--ink)}
+.all-btn{border:1px solid var(--green);border-radius:12px;background:var(--green);color:#fff;padding:0 15px;font:600 12px Manrope;cursor:pointer}
+.menu-section{scroll-margin-top:75px;margin-bottom:42px}
+.section-title{font:600 30px "Cormorant Garamond",serif;letter-spacing:.08em;text-transform:uppercase;color:var(--green);display:flex;align-items:center;gap:12px;margin:0 0 12px}
+.section-title:after{content:"";height:1px;background:var(--gold);opacity:.7;flex:1}
+.diamond{width:6px;height:6px;border:1px solid var(--gold);transform:rotate(45deg);flex:none}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px}
+.item{background:rgba(251,246,234,.72);border:1px solid rgba(169,121,53,.16);border-radius:12px;padding:14px 15px;cursor:pointer;transition:.18s;box-shadow:0 5px 18px rgba(38,28,15,.035)}
+.item:hover{transform:translateY(-1px);border-color:var(--line);box-shadow:var(--shadow)}
+.item-top{display:flex;gap:10px;justify-content:space-between;align-items:flex-start}
+.item-name{font:600 19px/1.05 "Cormorant Garamond",serif;color:var(--green)}
+.price{white-space:nowrap;color:var(--gold);font:600 15px Manrope}
+.meta{display:flex;gap:8px;margin-top:7px;font-size:10px;color:var(--muted)}
+.meta .dot{color:var(--gold)}
+.has-info:after{content:"Подробнее";display:block;margin-top:10px;color:var(--gold);font-size:10px;letter-spacing:.05em}
+.empty{padding:30px;text-align:center;color:var(--muted)}
+footer{text-align:center;background:var(--green);color:#eadfca;padding:38px 20px 45px;font-size:11px;letter-spacing:.05em}
+.footer-brand{font:600 36px "Cormorant Garamond",serif;letter-spacing:.15em}
+.footer-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:20px 0}
+.footer-actions a{color:#eadfca;text-decoration:none;border:1px solid rgba(234,223,202,.35);border-radius:20px;padding:9px 14px}
+footer p{margin:6px 0;color:#cbbda4}
+.modal{display:none;position:fixed;inset:0;z-index:30}.modal.open{display:block}
+.modal-backdrop{position:absolute;inset:0;background:rgba(14,27,21,.55);backdrop-filter:blur(5px)}
+.modal-card{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(92vw,520px);max-height:86vh;overflow:auto;background:var(--paper);border:1px solid var(--gold);border-radius:18px;padding:32px 26px;box-shadow:0 30px 80px rgba(0,0,0,.28)}
+.close{position:absolute;right:12px;top:8px;border:0;background:none;font-size:31px;color:var(--green);cursor:pointer}
+.modal-category{font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:var(--gold);margin-bottom:6px}
+.modal-card h2{font:600 35px/1.0 "Cormorant Garamond",serif;color:var(--green);margin:0 0 7px;padding-right:20px}
+.modal-price{font-size:18px;color:var(--gold);font-weight:600;margin-bottom:22px}
+.detail{display:flex;justify-content:space-between;border-top:1px solid var(--line);padding:14px 0;font-size:13px}.detail span,.detail-label{color:var(--muted)}
+.detail-block{border-top:1px solid var(--line);padding:14px 0;font-size:13px;line-height:1.6}
+.detail-label{font-size:10px;text-transform:uppercase;letter-spacing:.13em;margin-bottom:6px}
+.detail-note{margin-top:8px;color:var(--muted);font-size:11px}
+@media(max-width:650px){.grid{grid-template-columns:1fr}.brand{font-size:57px}.fruit{font-size:55px;left:-12px;top:5px}.tagline{font-size:9px;letter-spacing:.31em}.section-title{font-size:27px}.item-name{font-size:20px}.toolbar{position:sticky;top:54px;z-index:7;background:var(--cream);padding:9px 0;margin:0 0 24px}.all-btn{display:none}}

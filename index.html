@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#173b2c">
+  <meta name="description" content="NECTAR — Lounge · Bar · Kitchen. Электронное меню.">
+  <title>NECTAR · Lounge · Bar · Kitchen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="fruit fruit-a">🍑</div>
+    <div class="leaf leaf-a"></div><div class="leaf leaf-b"></div><div class="leaf leaf-c"></div>
+    <div class="brand">NECTAR</div>
+    <div class="tagline">LOUNGE · BAR · KITCHEN</div>
+    <div class="gold-line"></div>
+    <p class="intro">Меню</p>
+  </header>
+
+  <main>
+    <nav class="category-bar" id="categoryBar" aria-label="Разделы меню"></nav>
+
+    <div class="toolbar">
+      <label class="search">
+        <span>⌕</span>
+        <input id="searchInput" type="search" placeholder="Найти блюдо..." autocomplete="off">
+      </label>
+      <button class="all-btn" id="allBtn">Все блюда</button>
+    </div>
+
+    <section id="menuRoot"></section>
+  </main>
+
+  <footer>
+    <div class="footer-brand">NECTAR</div>
+    <div>LOUNGE · BAR · KITCHEN</div>
+    <div class="footer-actions">
+      <a href="#" id="telegramLink">Telegram</a>
+      <a href="#" id="mapLink">Мы на карте</a>
+      <a href="#" id="phoneLink">Позвонить</a>
+    </div>
+    <p>Пожалуйста, сообщите официанту об имеющихся аллергиях.</p>
+    <p>Все цены указаны в тенге.</p>
+  </footer>
+
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close></div>
+    <article class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="close" data-close aria-label="Закрыть">×</button>
+      <div class="modal-category" id="modalCategory"></div>
+      <h2 id="modalTitle"></h2>
+      <div class="modal-price" id="modalPrice"></div>
+      <div class="detail" id="weightRow"><span>Выход</span><strong id="modalWeight"></strong></div>
+      <div class="detail-block" id="compositionRow">
+        <div class="detail-label">Состав</div>
+        <div id="modalComposition"></div>
+      </div>
+      <div class="detail-note" id="modalNote"></div>
+    </article>
+  </div>
+
+  <script src="menu.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
