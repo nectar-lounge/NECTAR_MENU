@@ -416,4 +416,4 @@
         drinkCategories.innerHTML = '<div style="padding:12px 0;color:var(--text-light);">Напитки загружаются...</div>';
     }
 
-})();
+})()
