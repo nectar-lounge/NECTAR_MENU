@@ -102,6 +102,8 @@ body {
     font-size: 14px;
     color: var(--text-main);
     outline: none;
+    -webkit-appearance: none;
+    appearance: none;
     transition: border-color 0.5s ease, color 0.5s ease;
 }
 
@@ -159,7 +161,6 @@ body {
     color: var(--accent-gold);
 }
 
-/* Элемент меню с точками */
 .menu-item {
     display: flex;
     justify-content: space-between;
@@ -214,7 +215,6 @@ body {
     transition: border-color 0.5s ease;
 }
 
-/* Модальное окно HORECA (Стандарт карточки блюда) */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -308,7 +308,6 @@ body {
     padding-top: 15px;
 }
 
-/* Инфо блоки и контакты */
 .info-block {
     text-align: center;
     padding: 30px 20px;
