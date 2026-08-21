@@ -36,6 +36,14 @@ function changeLanguage(lang) {
     document.getElementById('labelComposition').innerText = I18N.modalLabels.composition[lang];
     document.getElementById('labelOutput').innerText = I18N.modalLabels.output[lang];
 
+    // Меняем заголовок вкладки браузера
+    const titles = { ru: "Nectar — Меню", kz: "Nectar — Мәзір", en: "Nectar — Menu" };
+    document.title = titles[lang];
+
+    // Сбрасываем поиск при смене языка
+    searchInput.value = '';
+    searchQuery = '';
+
     renderNav();
     renderMenu();
 }
@@ -109,10 +117,11 @@ function renderMenu() {
                 
                 filteredItems.forEach(item => {
                     const subText = item.sub && item.sub[currentLang] ? `<span class="item-sub">${item.sub[currentLang]}</span>` : '';
-                    // Экранируем данные для передачи в функцию клика
-                    const compSafe = encodeURIComponent(item.composition || 'Фирменный рецепт заведения');
-                    const outSafe = encodeURIComponent(item.output || '—');
-                    const nameSafe = encodeURIComponent(item.name[currentLang]);
+                    
+                    // Безопасное кодирование данных (исправленная ошибка с кавычками)
+                    const compSafe = encodeURIComponent(item.composition || 'Фирменный рецепт заведения').replace(/'/g, "%27");
+                    const outSafe = encodeURIComponent(item.output || '—').replace(/'/g, "%27");
+                    const nameSafe = encodeURIComponent(item.name[currentLang]).replace(/'/g, "%27");
 
                     html += `
                         <div class="menu-item" onclick="openModal('${nameSafe}', '${compSafe}', '${outSafe}', '${item.price}')">
@@ -143,7 +152,7 @@ function openModal(name, composition, output, price) {
     document.getElementById('modalPrice').innerText = price + ' ₸';
     
     document.getElementById('itemModal').classList.add('active');
-    document.body.style.overflow = 'hidden'; // блокировка скролла страницы под модалкой
+    document.body.style.overflow = 'hidden'; 
 }
 
 function closeModal() {
