@@ -1,46 +1,68 @@
 :root {
-    /* Светлая тема (ДЕНЬ) - по умолчанию */
     --bg-color: #F6F4F0;
     --text-main: #3A2E2A;
     --accent-gold: #B89961;
     --border-color: #E2DFD8;
     --dots-color: #cccccc;
-    --nav-bg: rgba(246, 244, 240, 0.95);
+    --nav-bg: rgba(246, 244, 240, 0.75); /* Усилена прозрачность для стекла */
     
     --font-head: 'Playfair Display', serif;
     --font-text: 'Montserrat', sans-serif;
+    
+    /* Текстура бумаги (Светлая) */
+    --paper-texture: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
 }
 
 body.dark-theme {
-    /* Темная тема (ВЕЧЕР) */
-    --bg-color: #363638;
+    --bg-color: #2A2A2C;
     --text-main: #F6F4F0;
     --accent-gold: #CE9F51;
-    --border-color: #555555;
+    --border-color: #444444;
     --dots-color: #666666;
-    --nav-bg: rgba(54, 54, 56, 0.95);
+    --nav-bg: rgba(42, 42, 44, 0.75);
+    
+    /* Текстура шума (Темная) */
+    --paper-texture: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
 }
 
-* { 
-    box-sizing: border-box; 
-    margin: 0; 
-    padding: 0; 
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
     background-color: var(--bg-color);
+    background-image: var(--paper-texture);
     color: var(--text-main);
     font-family: var(--font-text);
     -webkit-font-smoothing: antialiased;
     transition: background-color 0.5s ease, color 0.5s ease;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Декоративный нектарин в фоне */
+.decorative-bg {
+    position: fixed;
+    top: -50px;
+    left: -50px;
+    width: 300px;
+    height: 300px;
+    background-image: url('https://images.unsplash.com/photo-1629215886364-219463b7e779?auto=format&fit=crop&q=80&w=400&fm=webp'); 
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+    filter: blur(4px) opacity(0.3);
+    z-index: -1;
+    pointer-events: none;
+    transition: filter 0.5s ease;
+}
+
+body.dark-theme .decorative-bg {
+    filter: blur(8px) opacity(0.1) grayscale(50%);
 }
 
 .header {
     text-align: center;
     padding: 30px 20px 15px;
-    background: var(--bg-color);
     position: relative;
-    transition: background-color 0.5s ease;
 }
 
 .logo-container {
@@ -48,14 +70,13 @@ body {
     flex-direction: column;
     align-items: center;
     margin-bottom: 10px;
+    animation: fadeDown 0.8s ease forwards;
 }
 
 .logo {
     font-family: var(--font-head);
     font-size: 42px;
     letter-spacing: 4px;
-    color: var(--text-main);
-    transition: color 0.5s ease;
 }
 
 .subtitle {
@@ -70,6 +91,7 @@ body {
     display: flex;
     justify-content: center;
     gap: 15px;
+    animation: fadeDown 1s ease forwards;
 }
 
 .lang-btn {
@@ -82,10 +104,7 @@ body {
     transition: 0.3s;
 }
 
-.lang-btn.active {
-    color: var(--accent-gold);
-    font-weight: 600;
-}
+.lang-btn.active { color: var(--accent-gold); font-weight: 600; }
 
 .search-container {
     padding: 0 20px;
@@ -97,16 +116,18 @@ body {
     padding: 12px 15px;
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    background: transparent;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
     font-family: var(--font-text);
     font-size: 14px;
     color: var(--text-main);
     outline: none;
     -webkit-appearance: none;
     appearance: none;
-    transition: border-color 0.5s ease, color 0.5s ease;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
 }
 
+/* Glassmorphism для навигации */
 .category-nav {
     display: flex;
     overflow-x: auto;
@@ -115,10 +136,10 @@ body {
     position: sticky;
     top: 0;
     background: var(--nav-bg);
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     z-index: 100;
     border-bottom: 1px solid var(--border-color);
-    transition: background-color 0.5s ease, border-color 0.5s ease;
 }
 
 .category-nav::-webkit-scrollbar { display: none; }
@@ -134,7 +155,7 @@ body {
     opacity: 0.5;
     padding-bottom: 5px;
     cursor: pointer;
-    transition: color 0.5s ease, opacity 0.3s ease;
+    transition: 0.3s ease;
 }
 
 .nav-btn.active {
@@ -159,8 +180,10 @@ body {
     display: inline-block;
     padding-bottom: 5px;
     color: var(--accent-gold);
+    animation: fadeUp 0.5s ease forwards;
 }
 
+/* Каскадная анимация и микроинтеракции блюд */
 .menu-item {
     display: flex;
     justify-content: space-between;
@@ -169,21 +192,29 @@ body {
     position: relative;
     cursor: pointer;
     padding: 4px 0;
-    transition: opacity 0.2s;
+    opacity: 0;
+    transform: translateY(15px);
+    animation: fadeUp 0.5s ease forwards;
+    transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-.menu-item:hover {
-    opacity: 0.8;
+/* Имитация разного времени появления для эффекта "каскада" */
+.menu-item:nth-child(1) { animation-delay: 0.1s; }
+.menu-item:nth-child(2) { animation-delay: 0.2s; }
+.menu-item:nth-child(3) { animation-delay: 0.3s; }
+.menu-item:nth-child(4) { animation-delay: 0.4s; }
+.menu-item:nth-child(n+5) { animation-delay: 0.5s; }
+
+.menu-item:active {
+    transform: scale(0.98);
 }
 
 .item-name {
     font-size: 15px;
     font-weight: 600;
     max-width: 75%;
-    background: var(--bg-color);
     padding-right: 10px;
     z-index: 2;
-    transition: background-color 0.5s ease;
 }
 
 .item-sub {
@@ -197,10 +228,8 @@ body {
 .item-price {
     font-size: 15px;
     font-weight: 600;
-    background: var(--bg-color);
     padding-left: 10px;
     z-index: 2;
-    transition: background-color 0.5s ease;
     color: var(--accent-gold);
 }
 
@@ -211,10 +240,10 @@ body {
     left: 0;
     right: 0;
     border-bottom: 1px dotted var(--dots-color);
-    z-index: 1;
-    transition: border-color 0.5s ease;
+    z-index: -1;
 }
 
+/* Модальное окно */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -222,36 +251,35 @@ body {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    transition: 0.3s ease;
 }
 
-.modal-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
+.modal-overlay.active { opacity: 1; visibility: visible; }
 
 .modal-content {
     background: var(--bg-color);
+    background-image: var(--paper-texture);
     border: 1px solid var(--accent-gold);
     padding: 30px;
-    border-radius: 12px;
+    border-radius: 16px;
     width: 90%;
     max-width: 420px;
     position: relative;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    transform: translateY(20px);
-    transition: transform 0.3s ease;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    transform: translateY(30px) scale(0.95);
+    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .modal-overlay.active .modal-content {
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
 }
 
 .modal-close {
@@ -263,11 +291,6 @@ body {
     font-size: 26px;
     cursor: pointer;
     color: var(--text-main);
-    transition: color 0.2s;
-}
-
-.modal-close:hover {
-    color: var(--accent-gold);
 }
 
 .modal-content h3 {
@@ -275,13 +298,9 @@ body {
     font-size: 22px;
     margin-bottom: 20px;
     padding-right: 20px;
-    color: var(--text-main);
 }
 
-.modal-info-group {
-    margin-bottom: 14px;
-}
-
+.modal-info-group { margin-bottom: 14px; }
 .modal-label {
     font-size: 11px;
     text-transform: uppercase;
@@ -291,13 +310,7 @@ body {
     margin-bottom: 4px;
     font-weight: 600;
 }
-
-.modal-text {
-    font-size: 14px;
-    line-height: 1.5;
-    color: var(--text-main);
-}
-
+.modal-text { font-size: 14px; line-height: 1.5; }
 .modal-price {
     margin-top: 25px;
     font-size: 22px;
@@ -308,66 +321,38 @@ body {
     padding-top: 15px;
 }
 
-.info-block {
-    text-align: center;
-    padding: 30px 20px;
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-.info-block h3 {
-    margin-bottom: 15px;
-    font-family: var(--font-head);
-    font-size: 22px;
-    color: var(--accent-gold);
-}
-
-.info-block p {
-    margin-bottom: 15px;
-    line-height: 1.6;
-    font-size: 14px;
-}
-
-.contact-links {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
+/* Контакты и Футер */
+.info-block { text-align: center; padding: 30px 20px; max-width: 600px; margin: 0 auto; animation: fadeUp 0.5s ease; }
+.info-block h3 { margin-bottom: 15px; font-family: var(--font-head); font-size: 22px; color: var(--accent-gold); }
+.info-block p { margin-bottom: 15px; line-height: 1.6; font-size: 14px; }
+.contact-links { margin-top: 20px; display: flex; flex-direction: column; gap: 12px; }
 .contact-item {
     display: block;
     padding: 15px;
-    background: transparent;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
+    background: rgba(184, 153, 97, 0.1);
+    border: 1px solid var(--accent-gold);
+    border-radius: 12px;
     text-decoration: none;
     color: var(--text-main);
     font-weight: 600;
     transition: 0.3s;
 }
-
-.contact-item:hover {
-    border-color: var(--accent-gold);
-    color: var(--accent-gold);
-}
+.contact-item:active { transform: scale(0.97); }
 
 .footer {
     text-align: center;
     padding: 40px 20px;
     border-top: 1px solid var(--border-color);
     margin-top: 40px;
-    transition: border-color 0.5s ease;
 }
+.allergy-warning { font-size: 12px; letter-spacing: 0.5px; color: var(--accent-gold); margin-bottom: 8px; }
+.currency-warning { font-size: 11px; opacity: 0.6; }
 
-.allergy-warning {
-    font-size: 12px;
-    letter-spacing: 0.5px;
-    color: var(--accent-gold);
-    margin-bottom: 8px;
+/* Ключевые кадры анимаций */
+@keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
 }
-
-.currency-warning {
-    font-size: 11px;
-    color: #888;
+@keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
