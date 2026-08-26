@@ -23,7 +23,7 @@
                     },
                     fontFamily: {
                         "serif-ru": ["Cormorant Garamond", "serif"],
-                        "serif-en": ["Playfair Display", "serif"],
+                        "serif-en": ["Cormorant Garamond", "serif"],
                         "body": ["Manrope", "sans-serif"]
                     }
                 }
@@ -33,7 +33,7 @@
 
     <link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-cream font-body text-forest-green">
+<body class="bg-cream font-body text-forest-green font-serif-ru">
     
     <header class="fixed top-0 inset-x-0 z-50 glass-effect pt-safe border-b border-forest-green/5">
         <div class="px-4 flex items-center justify-between relative h-20">
@@ -61,9 +61,10 @@
             <div class="flex flex-col w-full px-4 relative z-10 -mt-12">
                 <div class="sticky z-40 bg-cream/95 backdrop-blur-xl pt-2 pb-4 -mx-4 px-4 border-b border-forest-green/5 top-0">
                     
-                    <div class="search-bar flex items-center gap-3 bg-white px-5 py-3.5 rounded-2xl relative">
+                    <!-- ВОТ ЗДЕСЬ УБРАНА РАМКА (добавлены классы focus:ring-0 focus:outline-none) -->
+                    <div class="search-bar flex items-center gap-3 bg-white px-5 py-3.5 rounded-2xl relative shadow-sm">
                         <span class="material-symbols-outlined text-forest-green/40">search</span>
-                        <input id="searchInput" type="text" class="flex-1 bg-transparent border-none outline-none text-sm placeholder:text-forest-green/40" placeholder="Поиск блюд, напитков..." data-i18n-placeholder="search_placeholder"/>
+                        <input id="searchInput" type="text" class="flex-1 bg-transparent border-none outline-none focus:ring-0 focus:outline-none text-sm placeholder:text-forest-green/40" placeholder="Поиск блюд, напитков..." data-i18n-placeholder="search_placeholder"/>
                         <button id="clearSearchBtn" class="hidden absolute right-4 text-forest-green/40 hover:text-forest-green" onclick="clearSearch()">
                             <span class="material-symbols-outlined text-[20px]">close</span>
                         </button>
@@ -104,41 +105,41 @@
         </div>
     </nav>
 
+    <!-- МОДАЛЬНОЕ ОКНО -->
     <div id="itemModal" class="fixed inset-0 z-[100] hidden items-center justify-center px-4">
         <div class="absolute inset-0 bg-forest-green/80 backdrop-blur-md" onclick="closeModal()"></div>
         <div class="relative bg-cream w-full max-w-md rounded-[32px] overflow-hidden flex flex-col max-h-[85vh] shadow-2xl modal-glass">
             
-            <div id="modalImageContainer" class="w-full h-48 bg-forest-green/5 hidden relative">
+            <div id="modalImageContainer" class="w-full h-56 bg-forest-green/5 hidden relative">
                 <img id="modalImage" src="" class="w-full h-full object-cover" alt="Dish photo">
-                <div class="absolute inset-0 bg-gradient-to-t from-cream to-transparent"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-cream via-transparent to-transparent"></div>
             </div>
             
-            <div class="p-6 flex flex-col gap-4 relative z-10">
+            <div class="p-6 flex flex-col gap-4 relative z-10 overflow-y-auto">
                 <div class="flex justify-between items-start gap-4">
                     <h3 id="modalTitle" class="font-serif-ru text-[26px] text-forest-green font-semibold leading-tight"></h3>
-                    <button class="w-8 h-8 rounded-full bg-forest-green/5 flex items-center justify-center text-forest-green shrink-0" onclick="closeModal()">
+                    <button class="w-8 h-8 rounded-full bg-forest-green/5 flex items-center justify-center text-forest-green shrink-0 active:scale-95 transition-transform" onclick="closeModal()">
                         <span class="material-symbols-outlined text-[20px]">close</span>
                     </button>
                 </div>
                 
-                <div class="flex items-center gap-4 border-b border-warm-gold/20 pb-4">
+                <div class="flex items-center justify-between border-b border-warm-gold/20 pb-4">
                     <span id="modalPrice" class="font-serif-ru text-[28px] text-warm-gold font-medium"></span>
-                    <span id="modalWeight" class="text-[12px] text-forest-green/50 border border-forest-green/10 px-2 py-1 rounded-md hidden"></span>
+                    <span id="modalWeight" class="text-[12px] text-forest-green/50 border border-forest-green/10 px-3 py-1 rounded-full hidden bg-white"></span>
                 </div>
                 
-                <div id="modalIngredientsContainer" class="flex-col gap-2 mt-2 hidden">
-                    <h4 class="text-[10px] tracking-[0.2em] text-forest-green/40 uppercase" data-i18n="modal_ingredients">Ингредиенты</h4>
-                    <p id="modalIngredients" class="text-[15px] text-forest-green/80 leading-relaxed font-light"></p>
+                <div id="modalIngredientsContainer" class="flex-col gap-1.5 mt-1 hidden">
+                    <h4 class="text-[10px] tracking-[0.2em] text-forest-green/40 uppercase" data-i18n="modal_ingredients">Состав</h4>
+                    <p id="modalIngredients" class="text-[14px] text-forest-green/80 leading-relaxed font-light"></p>
                 </div>
             </div>
             
-            <div class="p-5 mt-auto">
-                <button class="w-full py-4 bg-forest-green text-cream rounded-2xl text-[12px] tracking-widest uppercase shadow-lg shadow-forest-green/20" onclick="closeModal()" data-i18n="modal_close">Закрыть</button>
+            <div class="p-5 mt-auto bg-cream/80 backdrop-blur">
+                <button class="w-full py-4 bg-forest-green text-cream rounded-2xl text-[12px] tracking-widest uppercase shadow-lg shadow-forest-green/20 active:scale-[0.98] transition-transform" onclick="closeModal()" data-i18n="modal_close">Закрыть</button>
             </div>
         </div>
     </div>
 
-    <!-- ТОЛЬКО ОДИН СКРИПТ -->
     <script src="app.js"></script>
 </body>
 </html>
