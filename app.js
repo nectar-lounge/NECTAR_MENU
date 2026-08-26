@@ -1,7 +1,7 @@
 let menuData = { categories: [], items: [] };
 let currentLang = 'RU';
 let currentTab = 'kitchen';
-let currentCategory = null;
+let currentCategory = 'all';
 let currentSearchTerm = '';
 let observer = null;
 
@@ -18,14 +18,13 @@ const translations = {
         cat_all: 'Все',
         info_content: `
             <div class="bg-white rounded-3xl p-6 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
-                <h3 class="font-serif-ru text-2xl text-forest-green mb-3">Добро пожаловать в NECTAR</h3>
-                <p class="text-sm text-forest-green/70 leading-relaxed">Премиальное пространство, где авторская гастрономия встречается с атмосферой абсолютного расслабления. Изысканный бар, авторская кухня и безупречный сервис.</p>
+                <h3 class="font-serif-ru text-2xl text-forest-green mb-3">О нас</h3>
+                <p class="text-sm text-forest-green/70 leading-relaxed">NECTAR — это премиальное пространство для отдыха. Мы объединили авторскую кухню, расслабляющую атмосферу лаунжа и высокий сервис.</p>
             </div>
             <div class="bg-white rounded-3xl p-6 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
-                <h3 class="font-serif-ru text-xl text-forest-green mb-3">Контакты и Режим работы</h3>
-                <p class="text-sm text-forest-green/70 mb-2">📍 Адрес: ул. Примерная, 123</p>
-                <p class="text-sm text-forest-green/70 mb-2">📞 Бронь столов: +7 (777) 123-45-67</p>
-                <p class="text-sm text-forest-green/70">🕒 Ежедневно с 12:00 до 03:00</p>
+                <h3 class="font-serif-ru text-xl text-forest-green mb-3">Контакты</h3>
+                <p class="text-sm text-forest-green/70 mb-2">📍 г. Алматы</p>
+                <p class="text-sm text-forest-green/70">📞 Бронь столов: +7 (XXX) XXX-XX-XX</p>
             </div>
         `
     },
@@ -41,14 +40,13 @@ const translations = {
         cat_all: 'All',
         info_content: `
             <div class="bg-white rounded-3xl p-6 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
-                <h3 class="font-serif-ru text-2xl text-forest-green mb-3">Welcome to NECTAR</h3>
-                <p class="text-sm text-forest-green/70 leading-relaxed">A premium space where signature gastronomy meets an atmosphere of absolute relaxation. Exquisite bar, author's cuisine, and impeccable service.</p>
+                <h3 class="font-serif-ru text-2xl text-forest-green mb-3">About Us</h3>
+                <p class="text-sm text-forest-green/70 leading-relaxed">NECTAR is a premium leisure space combining signature cuisine, a relaxing lounge atmosphere, and top-tier service.</p>
             </div>
             <div class="bg-white rounded-3xl p-6 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
-                <h3 class="font-serif-ru text-xl text-forest-green mb-3">Contacts & Hours</h3>
-                <p class="text-sm text-forest-green/70 mb-2">📍 Address: 123 Sample St</p>
-                <p class="text-sm text-forest-green/70 mb-2">📞 Reservations: +7 (777) 123-45-67</p>
-                <p class="text-sm text-forest-green/70">🕒 Daily from 12:00 PM to 03:00 AM</p>
+                <h3 class="font-serif-ru text-xl text-forest-green mb-3">Contacts</h3>
+                <p class="text-sm text-forest-green/70 mb-2">📍 Almaty</p>
+                <p class="text-sm text-forest-green/70">📞 Reservations: +7 (XXX) XXX-XX-XX</p>
             </div>
         `
     },
@@ -61,16 +59,16 @@ const translations = {
         tab_info: 'Ақпарат',
         modal_ingredients: 'Құрамы',
         modal_close: 'Жабу',
+        cat_all: 'Барлығы',
         info_content: `
             <div class="bg-white rounded-3xl p-6 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
-                <h3 class="font-serif-ru text-2xl text-forest-green mb-3">NECTAR-ға қош келдіңіз</h3>
-                <p class="text-sm text-forest-green/70 leading-relaxed">Авторлық гастрономия мен толық демалыс атмосферасы біріктірілген премиум кеңістік. Талғампаз бар, авторлық асхана және мінсіз сервис.</p>
+                <h3 class="font-serif-ru text-2xl text-forest-green mb-3">Біз туралы</h3>
+                <p class="text-sm text-forest-green/70 leading-relaxed">NECTAR — бұл премиум демалыс орны. Біз авторлық асхананы, лаунж атмосферасын және жоғары сервисті біріктірдік.</p>
             </div>
             <div class="bg-white rounded-3xl p-6 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
-                <h3 class="font-serif-ru text-xl text-forest-green mb-3">Байланыс және жұмыс уақыты</h3>
-                <p class="text-sm text-forest-green/70 mb-2">📍 Мекенжайы: Мысал к-сі, 123</p>
-                <p class="text-sm text-forest-green/70 mb-2">📞 Үстел брондау: +7 (777) 123-45-67</p>
-                <p class="text-sm text-forest-green/70">🕒 Күн сайын 12:00-ден 03:00-ге дейін</p>
+                <h3 class="font-serif-ru text-xl text-forest-green mb-3">Байланыс</h3>
+                <p class="text-sm text-forest-green/70 mb-2">📍 Алматы қ.</p>
+                <p class="text-sm text-forest-green/70">📞 Үстелге тапсырыс: +7 (XXX) XXX-XX-XX</p>
             </div>
         `
     }
@@ -94,7 +92,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function initApp() {
     updateInterfaceTexts();
+    currentCategory = 'all'; // Гарантируем выбор "Все" при старте
     renderCategories();
+    renderMenu();
     
     const searchInput = document.getElementById('searchInput');
     searchInput.addEventListener('input', (e) => {
@@ -153,7 +153,7 @@ function switchMainTab(index, btn) {
         }
     });
 
-    currentCategory = 'all'; // При переходе на вкладку по умолчанию выбираем "Все"
+    currentCategory = 'all'; // При смене вкладки кухня/бар сбрасываем на "Все"
     currentSearchTerm = '';
     document.getElementById('searchInput').value = '';
     document.getElementById('clearSearchBtn').classList.add('hidden');
@@ -168,10 +168,6 @@ function renderCategories() {
     
     const tabs = menuData.categories.filter(c => c.tab === currentTab);
     
-    if (!currentCategory) {
-        currentCategory = 'all';
-    }
-
     // Кнопка "ВСЕ"
     const allBtn = document.createElement('button');
     const isAllActive = currentCategory === 'all';
@@ -212,12 +208,6 @@ function selectCategory(id) {
     currentCategory = id;
     renderCategories();
     renderMenu();
-    
-    const menuSection = document.getElementById('menu-section');
-    window.scrollTo({
-        top: menuSection.offsetTop - 80,
-        behavior: 'smooth'
-    });
 }
 
 function renderMenu() {
@@ -226,7 +216,7 @@ function renderMenu() {
     
     let itemsToRender = menuData.items;
 
-    // Глобальный поиск по всему меню (и кухня, и бар)
+    // Глобальный поиск по всему меню
     if (currentSearchTerm) {
         const term = currentSearchTerm.toLowerCase();
         itemsToRender = itemsToRender.filter(item => {
@@ -239,7 +229,7 @@ function renderMenu() {
         const validCategories = menuData.categories.filter(c => c.tab === currentTab).map(c => c.id);
         itemsToRender = itemsToRender.filter(item => validCategories.includes(item.categoryId));
 
-        // Фильтрация по конкретной категории, если выбрана не "Все"
+        // Фильтрация по конкретной подкатегории, если выбрана не "Все"
         if (currentCategory !== 'all') {
             itemsToRender = itemsToRender.filter(item => item.categoryId === currentCategory);
         }
@@ -338,7 +328,6 @@ function switchSection(sectionId, btn) {
     if(sectionId === 'info') {
         initObserver();
     } else {
-        // При возврате в меню сбрасываем поиск для чистоты интерфейса
         document.getElementById('searchInput').value = '';
         currentSearchTerm = '';
         document.getElementById('clearSearchBtn').classList.add('hidden');
@@ -354,7 +343,6 @@ function openModal(item) {
     document.getElementById('modalTitle').innerText = name;
     document.getElementById('modalPrice').innerText = `${item.price.toLocaleString()} ₸`;
 
-    // Граммаж (если есть в базе, можно выводить, если нет — скрываем)
     const weightEl = document.getElementById('modalWeight');
     if (item.weight) {
         weightEl.innerText = item.weight;
