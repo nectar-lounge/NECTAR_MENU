@@ -417,7 +417,7 @@
 <div class="flex-1 h-[1px] bg-forest-green/10 ml-4"></div>
 </div>
 <div class="flex flex-col gap-3">
-<button aria-expanded="false" class="w-full bg-white hover:bg-forest-green/5 transition-colors rounded-2xl p-4 flex items-center justify-between group text-left border border-forest-green/5" onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true')">
+<button aria-expanded="false" class="w-full bg-white hover:bg-forest-green/5 transition-colors rounded-2xl p-4 flex items-center justify-between group text-left border border-forest-green/5" onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true'); this.blur();">
 <div class="flex items-center gap-3">
 <span aria-hidden="true" class="material-symbols-outlined text-warm-gold/70 group-hover:text-warm-gold transition-colors">verified_user</span>
 <span class="font-body-lg text-body-lg text-forest-green" data-i18n="info_license">Лицензия и регистрация</span>
@@ -427,7 +427,7 @@
 <div class="hidden px-4 pb-4 transition-all duration-300">
 <p class="font-body-md text-body-md text-secondary leading-relaxed lining-nums" data-i18n="info_license_desc">Государственная лицензия на розничную реализацию алкогольной продукции № 12345678 выдана Департаментом государственных доходов по г. Алматы. БИН: 123456789012.</p>
 </div>
-<button aria-expanded="false" class="w-full bg-white hover:bg-forest-green/5 transition-colors rounded-2xl p-4 flex items-center justify-between group text-left border border-forest-green/5" onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true')">
+<button aria-expanded="false" class="w-full bg-white hover:bg-forest-green/5 transition-colors rounded-2xl p-4 flex items-center justify-between group text-left border border-forest-green/5" onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true'); this.blur();">
 <div class="flex items-center gap-3">
 <span aria-hidden="true" class="material-symbols-outlined text-warm-gold/70 group-hover:text-warm-gold transition-colors">menu_book</span>
 <span class="font-body-lg text-body-lg text-forest-green" data-i18n="info_rules">Правила обслуживания</span>
@@ -437,7 +437,7 @@
 <div class="hidden px-4 pb-4 transition-all duration-300">
 <p class="font-body-md text-body-md text-secondary leading-relaxed lining-nums" data-i18n="info_rules_desc">Мы оставляем за собой право отказать в обслуживании лицам в состоянии алкогольного опьянения или нарушающим дресс-код. Вход разрешен гостям старше 21 года.</p>
 </div>
-<button aria-expanded="false" class="w-full bg-white hover:bg-forest-green/5 transition-colors rounded-2xl p-4 flex items-center justify-between group text-left border border-forest-green/5" onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true')">
+<button aria-expanded="false" class="w-full bg-white hover:bg-forest-green/5 transition-colors rounded-2xl p-4 flex items-center justify-between group text-left border border-forest-green/5" onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true'); this.blur();">
 <div class="flex items-center gap-3">
 <span aria-hidden="true" class="material-symbols-outlined text-warm-gold/70 group-hover:text-warm-gold transition-colors">forum</span>
 <span class="font-body-lg text-body-lg text-forest-green" data-i18n="info_feedback">Книга отзывов</span>
@@ -953,9 +953,16 @@
             }
 
             function selectCategory(category) {
-                currentCategory = category;
-                renderCategories();
-                renderMenu(document.getElementById('searchInput').value);
+               currentCategory = category;
+    renderCategories();
+    renderMenu(document.getElementById('searchInput').value);
+    
+    // Плавный скролл к началу блока с меню (чтобы заголовок был виден)
+    const menuSection = document.getElementById('menu-section');
+    window.scrollTo({
+        top: menuSection.offsetTop,
+        behavior: 'smooth'
+    });
             }
 
             function initObserver() {
@@ -1025,7 +1032,7 @@
                                  noteIcon = `<span aria-hidden="true" class="material-symbols-outlined text-red-500/80 text-[18px] ml-2" title="${item.note}">local_fire_department</span>`;
                             }
                             html += `
-                                <div aria-label="View details for ${item[nameKey]}" class="fade-in-up menu-card group bg-white rounded-2xl overflow-hidden soft-shadow flex flex-col cursor-pointer border border-forest-green/5 hover:border-forest-green/20" onclick='openModal(${itemData})' role="button" tabindex="0" style="transition-delay: ${itemIdx * 50}ms;">
+                                <div aria-label="View details for ${item[nameKey]}" class="fade-in-up menu-card group bg-white rounded-2xl overflow-hidden soft-shadow flex flex-col cursor-pointer border border-forest-green/5 hover:border-forest-green/20" onclick='openModal(${itemData})' role="button" tabindex="0">
                                     <div class="px-5 py-5 relative">
                                         <div class="flex justify-between items-start gap-4">
                                             <h3 class="font-serif text-[22px] md:text-headline-sm text-forest-green max-w-[75%] leading-tight font-medium flex items-center flex-wrap">${item[nameKey]}${noteIcon}</h3>
