@@ -13,53 +13,53 @@
     theme: {
       extend: {
         "colors": {
-                "surface-container": "#efeeeb",
-                "inverse-on-surface": "#f2f1ee",
-                "secondary-fixed-dim": "#c9c6bd",
-                "tertiary": "#2e0c00",
                 "on-primary-container": "#819986",
-                "primary-container": "#1b3022",
-                "surface-variant": "#e3e2e0",
-                "surface-tint": "#4d6453",
-                "tertiary-fixed-dim": "#ffb695",
-                "on-secondary-fixed-variant": "#484740",
-                "primary": "#061b0e",
                 "on-background": "#1b1c1a",
-                "on-tertiary-fixed-variant": "#7b2f00",
-                "surface-container-high": "#e9e8e5",
-                "on-surface": "#1b1c1a",
-                "on-secondary-fixed": "#1c1c16",
-                "on-tertiary": "#ffffff",
-                "on-tertiary-container": "#e1743d",
-                "error-container": "#ffdad6",
-                "outline": "#737973",
-                "surface-container-lowest": "#ffffff",
-                "outline-variant": "#c3c8c1",
-                "on-secondary-container": "#64635b",
-                "error": "#ba1a1a",
-                "on-error-container": "#93000a",
-                "primary-fixed": "#d0e9d4",
-                "on-primary-fixed": "#0b2013",
-                "surface-dim": "#dbdad7",
-                "on-tertiary-fixed": "#351000",
-                "background": "#fbf9f6",
-                "tertiary-fixed": "#ffdbcc",
-                "on-error": "#ffffff",
-                "surface": "#fbf9f6",
-                "on-secondary": "#ffffff",
-                "surface-container-highest": "#e3e2e0",
-                "secondary": "#5f5f57",
-                "inverse-primary": "#b4cdb8",
-                "on-primary-fixed-variant": "#364c3c",
                 "tertiary-container": "#4f1b00",
-                "secondary-fixed": "#e5e2d9",
-                "secondary-container": "#e2e0d6",
-                "surface-bright": "#fbf9f6",
-                "on-primary": "#ffffff",
-                "surface-container-low": "#f5f3f0",
-                "primary-fixed-dim": "#b4cdb8",
-                "on-surface-variant": "#434843",
+                "secondary-fixed-dim": "#c9c6bd",
+                "surface": "#fbf9f6",
+                "on-secondary-fixed-variant": "#484740",
+                "background": "#fbf9f6",
+                "primary-container": "#1b3022",
+                "primary": "#061b0e",
+                "primary-fixed": "#d0e9d4",
+                "surface-container": "#efeeeb",
+                "on-secondary": "#ffffff",
+                "on-tertiary-fixed": "#351000",
+                "secondary": "#5f5f57",
+                "inverse-on-surface": "#f2f1ee",
+                "on-surface": "#1b1c1a",
+                "error-container": "#ffdad6",
+                "on-tertiary-fixed-variant": "#7b2f00",
+                "on-primary-fixed": "#0b2013",
                 "inverse-surface": "#30312f",
+                "surface-container-high": "#e9e8e5",
+                "surface-container-highest": "#e3e2e0",
+                "primary-fixed-dim": "#b4cdb8",
+                "outline": "#737973",
+                "on-error": "#ffffff",
+                "tertiary-fixed-dim": "#ffb695",
+                "on-secondary-container": "#64635b",
+                "surface-dim": "#dbdad7",
+                "surface-container-low": "#f5f3f0",
+                "surface-variant": "#e3e2e0",
+                "on-error-container": "#93000a",
+                "on-secondary-fixed": "#1c1c16",
+                "on-primary": "#ffffff",
+                "on-tertiary": "#ffffff",
+                "on-surface-variant": "#434843",
+                "on-primary-fixed-variant": "#364c3c",
+                "surface-tint": "#4d6453",
+                "surface-container-lowest": "#ffffff",
+                "secondary-fixed": "#e5e2d9",
+                "tertiary": "#2e0c00",
+                "on-tertiary-container": "#e1743d",
+                "surface-bright": "#fbf9f6",
+                "secondary-container": "#e2e0d6",
+                "inverse-primary": "#b4cdb8",
+                "error": "#ba1a1a",
+                "outline-variant": "#c3c8c1",
+                "tertiary-fixed": "#ffdbcc",
                 "forest-green": "#1b3022",
                 "warm-gold": "#a97935",
                 "cream": "#fbf9f6"
@@ -71,10 +71,10 @@
                 "full": "9999px"
         },
         "spacing": {
+                "unit": "8px",
+                "gutter": "16px",
                 "container-padding": "24px",
                 "safe-area-bottom": "80px",
-                "gutter": "16px",
-                "unit": "8px",
                 "section-gap": "64px"
         },
         "fontFamily": {
@@ -82,19 +82,19 @@
                         "Manrope"
                 ],
                 "display-lg-mobile": [
-                        "Cormorant Garamond"
+                        "Bodoni Moda"
                 ],
                 "display-lg": [
-                        "Cormorant Garamond"
+                        "Bodoni Moda"
                 ],
                 "headline-sm": [
-                        "Cormorant Garamond"
+                        "Bodoni Moda"
                 ],
                 "body-md": [
                         "Manrope"
                 ],
                 "headline-md": [
-                        "Cormorant Garamond"
+                        "Bodoni Moda"
                 ],
                 "body-lg": [
                         "Manrope"
@@ -219,7 +219,7 @@
         .fade-in-up {
             opacity: 0;
             transform: translateY(20px);
-            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .fade-in-up.is-visible {
@@ -269,14 +269,18 @@
             transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
+        .menu-card {
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+        }
+
         .menu-card:active {
-            transform: scale(0.98);
+            transform: scale(0.96);
             box-shadow: 0 2px 12px rgba(27, 48, 34, 0.06);
         }
 
         /* Hero Image Float */
         .hero-float {
-            animation: float 6s ease-in-out infinite;
+            animation: breath 8s ease-in-out infinite alternate;
         }
 
         @keyframes float {
@@ -284,10 +288,23 @@
             50% { transform: translateY(-8px) scale(1.05); }
             100% { transform: translateY(0px) scale(1.05); }
         }
+
+        @keyframes breath {
+            0% { transform: scale(1.02) rotate(0deg); }
+            100% { transform: scale(1.08) rotate(1deg); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hero-float { animation: none; transform: none; }
+            body::before { animation: none; }
+            .fade-in-up { transition: none; opacity: 1; transform: none; }
+            .menu-card { transition: none; }
+            .menu-card:active { transform: none; }
+        }
     </style>
 </head>
 <body class="bg-cream font-body-md text-on-surface">
-<header class="fixed top-0 inset-x-0 z-50 glass-effect pt-safe border-b border-forest-green/5">
+<header class="fixed top-0 inset-x-0 z-50 glass-effect pt-safe border-b border-forest-green/5 transition-opacity duration-300">
 <div class="px-container-padding flex items-center justify-between relative h-20">
 <div class="min-w-[80px]"></div>
 <div class="absolute left-1/2 -translate-x-1/2 flex flex-col items-center">
@@ -308,23 +325,23 @@
 <section class="spa-section active flex-col w-full" id="menu-section">
 <!-- Hero Image -->
 <div class="w-full h-64 relative -mt-4 mb-4 z-0 overflow-hidden">
-<img alt="Nectarine Hero" class="w-full h-full object-cover mix-blend-multiply opacity-90 hero-float" src="https://lh3.googleusercontent.com/aida/AEtjO1VfckORHX18V6pYkQT8N5yS9yA9sBXpVR9MhYawqAJMa6Xbm6ZQYqU9LL7UaqgjdLtKEFkd-RrEq7PZjXdhVCCwND2Z5DuMATgyoKbTQT35y373wzkqGR4vlge_G9Vgi3Nh9jCJ5JQQhc_SW4dk8AH_36BTha7h-XDx-OsSYpBDcoX0NVZDXi-oLnBW6hfKkAJZU8WPwLvjBiLKre4Z4SKjWd_2ZzhWur3FCVLKRHCF3M4LjtCnuF5h-A"/>
+<img alt="Nectarine Hero" class="w-full h-full object-cover mix-blend-multiply opacity-90 hero-float transform origin-center" src="https://lh3.googleusercontent.com/aida/AEtjO1VfckORHX18V6pYkQT8N5yS9yA9sBXpVR9MhYawqAJMa6Xbm6ZQYqU9LL7UaqgjdLtKEFkd-RrEq7PZjXdhVCCwND2Z5DuMATgyoKbTQT35y373wzkqGR4vlge_G9Vgi3Nh9jCJ5JQQhc_SW4dk8AH_36BTha7h-XDx-OsSYpBDcoX0NVZDXi-oLnBW6hfKkAJZU8WPwLvjBiLKre4Z4SKjWd_2ZzhWur3FCVLKRHCF3M4LjtCnuF5h-A"/>
 <div class="absolute inset-0 bg-gradient-to-t from-cream via-cream/40 to-transparent"></div>
 <div class="absolute inset-0 bg-gradient-to-b from-cream/20 via-transparent to-transparent"></div>
 </div>
 <div class="flex flex-col w-full px-container-padding relative z-10 -mt-12">
 <!-- Sticky Navigation Block -->
-<div class="sticky top-[80px] z-40 bg-cream/95 backdrop-blur-xl pt-2 pb-2 -mx-container-padding px-container-padding flex flex-col gap-4 border-b border-forest-green/5 pb-4">
+<div class="sticky top-[80px] z-40 bg-cream/95 backdrop-blur-xl pt-2 pb-2 -mx-container-padding px-container-padding flex flex-col gap-4 border-b border-forest-green/5 pb-4 transition-all duration-300">
 <!-- Smart Search Bar -->
-<div class="flex items-center gap-3 bg-white shadow-[0_2px_12px_rgba(27,48,34,0.03)] border border-forest-green/10 px-5 py-3.5 rounded-2xl transition-all focus-within:ring-1 focus-within:ring-forest-green/20 focus-within:border-forest-green/30 relative">
-<span class="material-symbols-outlined text-outline/60">search</span>
-<input class="flex-1 bg-transparent border-none outline-none text-body-md text-on-surface placeholder:text-outline-variant font-body-md" data-i18n-placeholder="search_placeholder" id="searchInput" placeholder="Поиск блюд, напитков..." type="text"/>
-<button class="hidden items-center justify-center text-outline hover:text-forest-green transition-colors absolute right-4 h-full px-2" id="clearSearchBtn" onclick="clearSearch()">
+<div class="flex items-center gap-3 bg-white shadow-[0_2px_12px_rgba(27,48,34,0.03)] border border-forest-green/10 px-5 py-3.5 rounded-2xl transition-all duration-300 focus-within:ring-1 focus-within:ring-forest-green/20 focus-within:border-forest-green/30 relative">
+<span class="material-symbols-outlined text-outline/60 transition-opacity duration-300">search</span>
+<input class="flex-1 bg-transparent border-none outline-none text-body-md text-on-surface placeholder:text-outline-variant font-body-md transition-opacity duration-300" data-i18n-placeholder="search_placeholder" id="searchInput" placeholder="Поиск блюд, напитков..." type="text"/>
+<button class="hidden items-center justify-center text-outline hover:text-forest-green transition-all duration-300 absolute right-4 h-full px-2" id="clearSearchBtn" onclick="clearSearch()">
 <span class="material-symbols-outlined text-[20px]">close</span>
 </button>
 </div>
 <!-- Global Navigation: Kitchen | Bar -->
-<div class="flex justify-center mt-2">
+<div class="flex justify-center mt-2 fade-in-up">
 <div class="flex items-center bg-white border border-forest-green/5 rounded-2xl p-1 shadow-[0_2px_8px_rgba(27,48,34,0.02)] relative w-full max-w-sm">
 <div class="absolute left-1 top-1 bottom-1 w-[calc(50%-4px)] bg-forest-green rounded-xl transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] shadow-sm" id="nav-indicator"></div>
 <button class="nav-btn flex-1 relative z-10 px-8 py-2.5 text-label-caps font-label-caps text-cream transition-colors active:scale-95 tracking-widest" data-i18n="nav_kitchen" data-index="0" data-type="kitchen" onclick="switchMainTab(0, this)">КУХНЯ</button>
@@ -332,7 +349,7 @@
 </div>
 </div>
 <!-- Sub-categories (Horizontal Scroll) -->
-<div class="flex overflow-x-auto gap-3 pb-2 mt-3 snap-x snap-mandatory hide-scrollbar" id="categoryContainer">
+<div class="flex overflow-x-auto gap-3 pb-2 mt-3 snap-x snap-mandatory hide-scrollbar fade-in-up" id="categoryContainer" style="transition-delay: 50ms;">
 <button class="snap-start shrink-0 px-6 py-1.5 bg-forest-green text-cream border-forest-green rounded-xl text-[11px] font-label-caps tracking-widest uppercase transition-all active:scale-95 border shadow-sm" onclick="selectCategory('All')">Все</button>
 <button class="snap-start shrink-0 px-6 py-1.5 bg-white text-forest-green/70 border-forest-green/10 hover:border-forest-green/30 rounded-xl text-[11px] font-label-caps tracking-widest uppercase transition-all active:scale-95 border shadow-sm" onclick="selectCategory('Холодные закуски')">Холодные закуски</button>
 <button class="snap-start shrink-0 px-6 py-1.5 bg-white text-forest-green/70 border-forest-green/10 hover:border-forest-green/30 rounded-xl text-[11px] font-label-caps tracking-widest uppercase transition-all active:scale-95 border shadow-sm" onclick="selectCategory('Салаты')">Салаты</button>
@@ -343,193 +360,18 @@
 </div>
 <!-- Menu List -->
 <div class="flex flex-col pb-12 mt-2" id="menuContainer">
-<div class="mt-8 mb-4">
-<div class="flex items-center justify-center gap-4 mb-6 px-4">
-<div class="flex-1 h-[1px] bg-gradient-to-r from-transparent via-warm-gold/30 to-warm-gold/30"></div>
-<h2 class="font-serif text-[26px] text-forest-green tracking-tight text-center font-medium">Холодные закуски</h2>
-<div class="flex-1 h-[1px] bg-gradient-to-l from-transparent via-warm-gold/30 to-warm-gold/30"></div>
 </div>
-<div class="flex flex-col gap-3">
-<div class="fade-in-up menu-card group rounded-2xl overflow-hidden soft-shadow flex flex-col cursor-pointer border border-forest-green/5 hover:border-forest-green/20 is-visible bg-surface-container-low" onclick='openModal({"id":"1-1","category_ru":"Холодные закуски","category_kz":"Салқын тіскебасарлар","category_en":"Cold Appetizers","name_ru":"Мясное плато (казы, жая, жал)","name_kz":"Ет ассортиі (қазы, жая, жал)","name_en":"Meat platter (kazy, zhaya, zhal)","price":4990,"weight":"250g","composition_ru":"Традиционные мясные деликатесы: казы, жая, жал","composition_kz":"Дәстүрлі ет деликатестері: қазы, жая, жал","composition_en":"Traditional meat delicacies: kazy, zhaya, zhal","note":"","type":"kitchen"})'>
-<div class="px-5 py-5 relative">
-<div class="flex justify-between items-start gap-4">
-<h3 class="font-serif text-[22px] md:text-headline-sm text-forest-green max-w-[75%] leading-tight font-medium flex items-center flex-wrap">Мясное плато (казы, жая, жал)</h3>
-<p class="font-serif text-[20px] md:text-headline-sm text-warm-gold whitespace-nowrap mt-0.5">4990 ₸</p>
-</div>
-</div>
-</div>
-<div class="fade-in-up menu-card group rounded-2xl overflow-hidden soft-shadow flex flex-col cursor-pointer border border-forest-green/5 hover:border-forest-green/20 is-visible bg-surface-container-low" onclick='openModal({"id":"1-2","category_ru":"Холодные закуски","category_kz":"Салқын тіскебасарлар","category_en":"Cold Appetizers","name_ru":"Домашние соленья","name_kz":"Үй тұздықтары","name_en":"Homemade pickles","price":2890,"weight":"300g","composition_ru":"Ассорти из домашних солений","composition_kz":"Үй тұздықтарының ассортиі","composition_en":"Assorted homemade pickles","note":"","type":"kitchen"})'>
-<div class="px-5 py-5 relative">
-<div class="flex justify-between items-start gap-4">
-<h3 class="font-serif text-[22px] md:text-headline-sm text-forest-green max-w-[75%] leading-tight font-medium flex items-center flex-wrap">Домашние соленья</h3>
-<p class="font-serif text-[20px] md:text-headline-sm text-warm-gold whitespace-nowrap mt-0.5">2890 ₸</p>
-</div>
-</div>
-</div>
-<div class="fade-in-up menu-card group rounded-2xl overflow-hidden soft-shadow flex flex-col cursor-pointer border border-forest-green/5 hover:border-forest-green/20 is-visible bg-surface-container-low" onclick='openModal({"id":"1-3","category_ru":"Холодные закуски","category_kz":"Салқын тіскебасарлар","category_en":"Cold Appetizers","name_ru":"Овощная нарезка","name_kz":"Көкөніс тілімі","name_en":"Vegetable platter","price":2890,"weight":"350g","composition_ru":"Свежие сезонные овощи","composition_kz":"Балғын маусымдық көкөністер","composition_en":"Fresh seasonal vegetables","note":"","type":"kitchen"})'>
-<div class="px-5 py-5 relative">
-<div class="flex justify-between items-start gap-4">
-<h3 class="font-serif text-[22px] md:text-headline-sm text-forest-green max-w-[75%] leading-tight font-medium flex items-center flex-wrap">Овощная нарезка</h3>
-<p class="font-serif text-[20px] md:text-headline-sm text-warm-gold whitespace-nowrap mt-0.5">2890 ₸</p>
-</div>
-</div>
-</div>
-<div class="fade-in-up menu-card group rounded-2xl overflow-hidden soft-shadow flex flex-col cursor-pointer border border-forest-green/5 hover:border-forest-green/20 is-visible bg-surface-container-low" onclick='openModal({"id":"1-4","category_ru":"Холодные закуски","category_kz":"Салқын тіскебасарлар","category_en":"Cold Appetizers","name_ru":"Рыбное ассорти","name_kz":"Балық ассортиі","name_en":"Fish platter","price":5590,"weight":"250g","composition_ru":"Ассорти из благородных видов рыб","composition_kz":"Асыл балық түрлерінің ассортиі","composition_en":"Assorted noble fish species","note":"","type":"kitchen"})'>
-<div class="px-5 py-5 relative">
-<div class="flex justify-between items-start gap-4">
-<h3 class="font-serif text-[22px] md:text-headline-sm text-forest-green max-w-[75%] leading-tight font-medium flex items-center flex-wrap">Рыбное ассорти</h3>
-<p class="font-serif text-[20px] md:text-headline-sm text-warm-gold whitespace-nowrap mt-0.5">5590 ₸</p>
-</div>
-</div>
-</div>
-<div class="fade-in-up menu-card group rounded-2xl overflow-hidden soft-shadow flex flex-col cursor-pointer border border-forest-green/5 hover:border-forest-green/20 is-visible bg-surface-container-low" onclick='openModal({"id":"1-5","category_ru":"Холодные закуски","category_kz":"Салқын тіскебасарлар","category_en":"Cold Appetizers","name_ru":"Капрезе","name_kz":"Капрезе","name_en":"Caprese","price":2790,"weight":"220g","composition_ru":"Моцарелла, томаты, соус песто","composition_kz":"Моцарелла, қызанақ, песто соусы","composition_en":"Mozzarella, tomatoes, pesto sauce","note":"","type":"kitchen"})'>
-<div class="px-5 py-5 relative">
-<div class="flex justify-between items-start gap-4">
-<h3 class="font-serif text-[22px] md:text-headline-sm text-forest-green max-w-[75%] leading-tight font-medium flex items-center flex-wrap">Капрезе</h3>
-<p class="font-serif text-[20px] md:text-headline-sm text-warm-gold whitespace-nowrap mt-0.5">2790 ₸</p>
-</div>
-</div>
-</div>
-<div class="fade-in-up menu-card group rounded-2xl overflow-hidden soft-shadow flex flex-col cursor-pointer border border-forest-green/5 hover:border-forest-green/20 is-visible bg-surface-container-low" onclick='openModal({"id":"1-6","category_ru":"Холодные закуски","category_kz":"Салқын тіскебасарлар","category_en":"Cold Appetizers","name_ru":"Сырное плато","name_kz":"Ірімшік ассортиі","name_en":"Cheese platter","price":4990,"weight":"250g","composition_ru":"Ассорти из изысканных сортов сыра","composition_kz":"Тіскебасар ірімшіктер ассортиі","composition_en":"Assorted exquisite cheeses","note":"","type":"kitchen"})'>
-<div class="px-5 py-5 relative">
-<div class="flex justify-between items-start gap-4">
-<h3 class="font-serif text-[22px] md:text-headline-sm text-forest-green max-w-[75%] leading-tight font-medium flex items-center flex-wrap">Сырное плато</h3>
-<p class="font-serif text-[20px] md:text-headline-sm text-warm-gold whitespace-nowrap mt-0.5">4990 ₸</p>
-</div>
-</div>
-</div>
-</div></div>
-<div class="mt-8 mb-4">
-<div class="flex items-center justify-center gap-4 mb-6 px-4">
-<div class="flex-1 h-[1px] bg-gradient-to-r from-transparent via-warm-gold/30 to-warm-gold/30"></div>
-<h2 class="font-serif text-[26px] text-forest-green tracking-tight text-center font-medium">Салаты</h2>
-<div class="flex-1 h-[1px] bg-gradient-to-l from-transparent via-warm-gold/30 to-warm-gold/30"></div>
-</div>
-<div class="flex flex-col gap-3">
-<div class="fade-in-up menu-card group rounded-2xl overflow-hidden soft-shadow flex flex-col cursor-pointer border border-forest-green/5 hover:border-forest-green/20 is-visible bg-surface-container-low" onclick='openModal({"id":"2-1","category_ru":"Салаты","category_kz":"Салаттар","category_en":"Salads","name_ru":"Свежий овощной салат","name_kz":"Балғын көкөніс салаты","name_en":"Fresh vegetable salad","price":1990,"weight":"250g","composition_ru":"Сезонные овощи с зеленью","composition_kz":"Маусымдық көкөністер мен көкшөп","composition_en":"Seasonal vegetables with herbs","note":"","type":"kitchen"})'>
-<div class="px-5 py-5 relative">
-<div class="flex justify-between items-start gap-4">
-<h3 class="font-serif text-[22px] md:text-headline-sm text-forest-green max-w-[75%] leading-tight font-medium flex items-center flex-wrap">Свежий овощной салат</h3>
-<p class="font-serif text-[20px] md:text-headline-sm text-warm-gold whitespace-nowrap mt-0.5">1990 ₸</p>
-</div>
-</div>
-</div>
-<div class="fade-in-up menu-card group rounded-2xl overflow-hidden soft-shadow flex flex-col cursor-pointer border border-forest-green/5 hover:border-forest-green/20 is-visible bg-surface-container-low" onclick='openModal({"id":"2-2","category_ru":"Салаты","category_kz":"Салаттар","category_en":"Salads","name_ru":"Аччик-чучук","name_kz":"Аччик-чучук","name_en":"Achichuk","price":1790,"weight":"200g","composition_ru":"Традиционный салат из томатов и лука","composition_kz":"Қызанақ пен пияздан жасалған дәстүрлі салат","composition_en":"Traditional tomato and onion salad","note":"","type":"kitchen"})'>
-<div class="px-5 py-5 relative">
-<div class="flex justify-between items-start gap-4">
-<h3 class="font-serif text-[22px] md:text-headline-sm text-forest-green max-w-[75%] leading-tight font-medium flex items-center flex-wrap">Аччик-чучук</h3>
-<p class="font-serif text-[20px] md:text-headline-sm text-warm-gold whitespace-nowrap mt-0.5">1790 ₸</p>
-</div>
-</div>
-</div>
-<div class="fade-in-up menu-card group rounded-2xl overflow-hidden soft-shadow flex flex-col cursor-pointer border border-forest-green/5 hover:border-forest-green/20 is-visible bg-surface-container-low" onclick='openModal({"id":"2-3","category_ru":"Салаты","category_kz":"Салаттар","category_en":"Salads","name_ru":"Цезарь с курицей","name_kz":"Тауық еті қосылған Цезарь","name_en":"Chicken Caesar","price":2590,"weight":"280g","composition_ru":"Айсберг, куриное филе, соус цезарь, пармезан, гренки","composition_kz":"Айсберг, тауық филесі, цезарь соусы, пармезан, кептірілген нан","composition_en":"Iceberg, chicken fillet, Caesar sauce, parmesan, croutons","note":"","type":"kitchen"})'>
-<div class="px-5 py-5 relative">
-<div class="flex justify-between items-start gap-4">
-<h3 class="font-serif text-[22px] md:text-headline-sm text-forest-green max-w-[75%] leading-tight font-medium flex items-center flex-wrap">Цезарь с курицей</h3>
-<p class="font-serif text-[20px] md:text-headline-sm text-warm-gold whitespace-nowrap mt-0.5">2590 ₸</p>
-</div>
-</div>
-</div>
-<div class="fade-in-up menu-card group rounded-2xl overflow-hidden soft-shadow flex flex-col cursor-pointer border border-forest-green/5 hover:border-forest-green/20 is-visible bg-surface-container-low" onclick='openModal({"id":"2-4","category_ru":"Салаты","category_kz":"Салаттар","category_en":"Salads","name_ru":"Хрустящие баклажаны","name_kz":"Қытырлақ баклажандар","name_en":"Crispy Eggplant","price":2790,"weight":"250g","composition_ru":"Баклажаны, томаты, соус сладкий чили","composition_kz":"Баклажандар, қызанақтар, тәтті чили соусы","composition_en":"Eggplant, tomatoes, sweet chili sauce","note":"","type":"kitchen"})'>
-<div class="px-5 py-5 relative">
-<div class="flex justify-between items-start gap-4">
-<h3 class="font-serif text-[22px] md:text-headline-sm text-forest-green max-w-[75%] leading-tight font-medium flex items-center flex-wrap">Хрустящие баклажаны</h3>
-<p class="font-serif text-[20px] md:text-headline-sm text-warm-gold whitespace-nowrap mt-0.5">2790 ₸</p>
-</div>
-</div>
-</div>
-<div class="fade-in-up menu-card group rounded-2xl overflow-hidden soft-shadow flex flex-col cursor-pointer border border-forest-green/5 hover:border-forest-green/20 is-visible bg-surface-container-low" onclick='openModal({"id":"2-5","category_ru":"Салаты","category_kz":"Салаттар","category_en":"Salads","name_ru":"Греческий салат","name_kz":"Грек салаты","name_en":"Greek Salad","price":2490,"weight":"280g","composition_ru":"Овощи, фета, маслины, оливковое масло","composition_kz":"Көкөністер, фета, зәйтүн, зәйтүн майы","composition_en":"Vegetables, feta, olives, olive oil","note":"","type":"kitchen"})'>
-<div class="px-5 py-5 relative">
-<div class="flex justify-between items-start gap-4">
-<h3 class="font-serif text-[22px] md:text-headline-sm text-forest-green max-w-[75%] leading-tight font-medium flex items-center flex-wrap">Греческий салат</h3>
-<p class="font-serif text-[20px] md:text-headline-sm text-warm-gold whitespace-nowrap mt-0.5">2490 ₸</p>
-</div>
-</div>
-</div>
-<div class="fade-in-up menu-card group rounded-2xl overflow-hidden soft-shadow flex flex-col cursor-pointer border border-forest-green/5 hover:border-forest-green/20 is-visible bg-surface-container-low" onclick='openModal({"id":"2-6","category_ru":"Салаты","category_kz":"Салаттар","category_en":"Salads","name_ru":"Теплый салат с кониной","name_kz":"Жылқы етінен жасалған жылы салат","name_en":"Warm horse meat salad","price":2990,"weight":"260g","composition_ru":"Конина, микс салата, фирменная заправка","composition_kz":"Жылқы еті, салат миксі, фирмалық тұздық","composition_en":"Horse meat, salad mix, signature dressing","note":"","type":"kitchen"})'>
-<div class="px-5 py-5 relative">
-<div class="flex justify-between items-start gap-4">
-<h3 class="font-serif text-[22px] md:text-headline-sm text-forest-green max-w-[75%] leading-tight font-medium flex items-center flex-wrap">Теплый салат с кониной</h3>
-<p class="font-serif text-[20px] md:text-headline-sm text-warm-gold whitespace-nowrap mt-0.5">2990 ₸</p>
-</div>
-</div>
-</div>
-<div class="fade-in-up menu-card group rounded-2xl overflow-hidden soft-shadow flex flex-col cursor-pointer border border-forest-green/5 hover:border-forest-green/20 is-visible bg-surface-container-low" onclick='openModal({"id":"2-7","category_ru":"Салаты","category_kz":"Салаттар","category_en":"Salads","name_ru":"Салат с креветками и рукколой","name_kz":"Креветкалар мен руккола қосылған салат","name_en":"Shrimp and arugula salad","price":3990,"weight":"220g","composition_ru":"Креветки, руккола, черри, кедровые орехи, пармезан","composition_kz":"Креветкалар, руккола, черри, балқарағай жаңғақтары, пармезан","composition_en":"Shrimp, arugula, cherry tomatoes, pine nuts, parmesan","note":"","type":"kitchen"})'>
-<div class="px-5 py-5 relative">
-<div class="flex justify-between items-start gap-4">
-<h3 class="font-serif text-[22px] md:text-headline-sm text-forest-green max-w-[75%] leading-tight font-medium flex items-center flex-wrap">Салат с креветками и рукколой</h3>
-<p class="font-serif text-[20px] md:text-headline-sm text-warm-gold whitespace-nowrap mt-0.5">3990 ₸</p>
-</div>
-</div>
-</div>
-</div></div>
-<div class="mt-8 mb-4">
-<div class="flex items-center justify-center gap-4 mb-6 px-4">
-<div class="flex-1 h-[1px] bg-gradient-to-r from-transparent via-warm-gold/30 to-warm-gold/30"></div>
-<h2 class="font-serif text-[26px] text-forest-green tracking-tight text-center font-medium">Горячие закуски</h2>
-<div class="flex-1 h-[1px] bg-gradient-to-l from-transparent via-warm-gold/30 to-warm-gold/30"></div>
-</div>
-<div class="flex flex-col gap-3">
-<div class="fade-in-up menu-card group rounded-2xl overflow-hidden soft-shadow flex flex-col cursor-pointer border border-forest-green/5 hover:border-forest-green/20 is-visible bg-surface-container-low" onclick='openModal({"id":"3-1","category_ru":"Горячие закуски","category_kz":"Ыстық тіскебасарлар","category_en":"Hot Appetizers","name_ru":"Креветки темпура","name_kz":"Темпура креветкалары","name_en":"Shrimp Tempura","price":3290,"weight":"180g","composition_ru":"Тигровые креветки в хрустящем кляре","composition_kz":"Қытырлақ клярдағы тигр креветкалары","composition_en":"Tiger shrimp in crispy batter","note":"","type":"kitchen"})'>
-<div class="px-5 py-5 relative">
-<div class="flex justify-between items-start gap-4">
-<h3 class="font-serif text-[22px] md:text-headline-sm text-forest-green max-w-[75%] leading-tight font-medium flex items-center flex-wrap">Креветки темпура</h3>
-<p class="font-serif text-[20px] md:text-headline-sm text-warm-gold whitespace-nowrap mt-0.5">3290 ₸</p>
-</div>
-</div>
-</div>
-<div class="fade-in-up menu-card group rounded-2xl overflow-hidden soft-shadow flex flex-col cursor-pointer border border-forest-green/5 hover:border-forest-green/20 is-visible bg-surface-container-low" onclick='openModal({"id":"3-2","category_ru":"Горячие закуски","category_kz":"Ыстық тіскебасарлар","category_en":"Hot Appetizers","name_ru":"Клаб-сэндвич с курицей (подается с картофелем фри)","name_kz":"Тауық еті қосылған клаб-сэндвич (фри картобымен)","name_en":"Chicken Club Sandwich (served with fries)","price":3190,"weight":"350g","composition_ru":"Курица, бекон, яйцо, салат, картофель фри","composition_kz":"Тауық еті, бекон, жұмыртқа, салат, фри картобы","composition_en":"Chicken, bacon, egg, salad, fries","note":"","type":"kitchen"})'>
-<div class="px-5 py-5 relative">
-<div class="flex justify-between items-start gap-4">
-<h3 class="font-serif text-[22px] md:text-headline-sm text-forest-green max-w-[75%] leading-tight font-medium flex items-center flex-wrap">Клаб-сэндвич с курицей (подается с картофелем фри)</h3>
-<p class="font-serif text-[20px] md:text-headline-sm text-warm-gold whitespace-nowrap mt-0.5">3190 ₸</p>
-</div>
-</div>
-</div>
-</div></div>
-<div class="mt-8 mb-4">
-<div class="flex items-center justify-center gap-4 mb-6 px-4">
-<div class="flex-1 h-[1px] bg-gradient-to-r from-transparent via-warm-gold/30 to-warm-gold/30"></div>
-<h2 class="font-serif text-[26px] text-forest-green tracking-tight text-center font-medium">Супы</h2>
-<div class="flex-1 h-[1px] bg-gradient-to-l from-transparent via-warm-gold/30 to-warm-gold/30"></div>
-</div>
-<div class="flex flex-col gap-3">
-<div class="fade-in-up menu-card group rounded-2xl overflow-hidden soft-shadow flex flex-col cursor-pointer border border-forest-green/5 hover:border-forest-green/20 is-visible bg-surface-container-low" onclick='openModal({"id":"5-4","category_ru":"Супы","category_kz":"Сорпалар","category_en":"Soups","name_ru":"Том Ям","name_kz":"Том Ям","name_en":"Tom Yum","price":3590,"weight":"350ml","composition_ru":"Креветки, кальмары, грибы, кокосовое молоко, рис","composition_kz":"Креветкалар, кальмарлар, саңырауқұлақтар, кокос сүті, күріш","composition_en":"Shrimp, squid, mushrooms, coconut milk, rice","note":"Острое блюдо","type":"kitchen"})'>
-<div class="px-5 py-5 relative">
-<div class="flex justify-between items-start gap-4">
-<h3 class="font-serif text-[22px] md:text-headline-sm text-forest-green max-w-[75%] leading-tight font-medium flex items-center flex-wrap">Том Ям<span class="material-symbols-outlined text-red-500/80 text-[18px] ml-2" title="Острое блюдо">local_fire_department</span></h3>
-<p class="font-serif text-[20px] md:text-headline-sm text-warm-gold whitespace-nowrap mt-0.5">3590 ₸</p>
-</div>
-</div>
-</div>
-</div></div>
-<div class="mt-8 mb-4">
-<div class="flex items-center justify-center gap-4 mb-6 px-4">
-<div class="flex-1 h-[1px] bg-gradient-to-r from-transparent via-warm-gold/30 to-warm-gold/30"></div>
-<h2 class="font-serif text-[26px] text-forest-green tracking-tight text-center font-medium">Горячие блюда</h2>
-<div class="flex-1 h-[1px] bg-gradient-to-l from-transparent via-warm-gold/30 to-warm-gold/30"></div>
-</div>
-<div class="flex flex-col gap-3">
-<div class="fade-in-up menu-card group rounded-2xl overflow-hidden soft-shadow flex flex-col cursor-pointer border border-forest-green/5 hover:border-forest-green/20 is-visible bg-surface-container-low" onclick='openModal({"id":"8-2","category_ru":"Горячие блюда","category_kz":"Ыстық тағамдар","category_en":"Main Courses","name_ru":"Плов","name_kz":"Палау","name_en":"Plov","price":3090,"weight":"350g","composition_ru":"Традиционный плов с говядиной","composition_kz":"Сиыр етінен жасалған дәстүрлі палау","composition_en":"Traditional beef plov","note":"","type":"kitchen"})'>
-<div class="px-5 py-5 relative">
-<div class="flex justify-between items-start gap-4">
-<h3 class="font-serif text-[22px] md:text-headline-sm text-forest-green max-w-[75%] leading-tight font-medium flex items-center flex-wrap">Плов</h3>
-<p class="font-serif text-[20px] md:text-headline-sm text-warm-gold whitespace-nowrap mt-0.5">3090 ₸</p>
-</div>
-</div>
-</div>
-</div></div></div>
 </div>
 </section>
 <!-- Info Section -->
-<section class="spa-section flex-col w-full px-container-padding pb-section-gap gap-section-gap pt-12 fade-in-up is-visible" id="info-section">
-<div class="flex flex-col gap-6">
+<section class="spa-section flex-col w-full px-container-padding pb-section-gap gap-section-gap pt-12 fade-in-up" id="info-section">
+<div class="flex flex-col gap-6 fade-in-up">
 <div class="flex flex-col gap-2 items-center text-center">
 <h1 class="font-serif text-[40px] text-forest-green tracking-tight font-semibold" data-i18n="info_title" style="letter-spacing: 0.1em;">Информация</h1>
 <p class="font-body-md text-body-md text-secondary" data-i18n="info_subtitle">Свяжитесь с нами или найдите важные детали</p>
 </div>
 </div>
-<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-4 fade-in-up" style="transition-delay: 100ms;">
 <div class="bg-white rounded-2xl p-6 soft-shadow border border-forest-green/5 flex flex-col gap-6 relative overflow-hidden group">
 <div class="absolute -right-12 -top-12 w-32 h-32 bg-warm-gold/5 rounded-full blur-3xl mix-blend-multiply opacity-50"></div>
 <div class="flex items-start gap-4 relative z-10">
@@ -570,7 +412,7 @@
 </div>
 </div>
 </div>
-<div class="flex flex-col gap-6">
+<div class="flex flex-col gap-6 fade-in-up" style="transition-delay: 200ms;">
 <div class="flex items-center justify-between">
 <h2 class="font-serif text-[24px] text-forest-green font-medium" data-i18n="info_consumer" style="letter-spacing: 0.1em;">Уголок потребителя</h2>
 <div class="flex-1 h-[1px] bg-forest-green/10 ml-4"></div>
@@ -583,7 +425,7 @@
 </div>
 <span class="material-symbols-outlined chevron transition-transform text-outline/60">expand_more</span>
 </button>
-<div class="hidden px-4 pb-4">
+<div class="hidden px-4 pb-4 transition-all duration-300">
 <p class="font-body-md text-body-md text-secondary leading-relaxed" data-i18n="info_license_desc">Государственная лицензия на розничную реализацию алкогольной продукции № 12345678 выдана Департаментом государственных доходов по г. Алматы. БИН: 123456789012.</p>
 </div>
 <button class="w-full bg-white hover:bg-forest-green/5 transition-colors rounded-2xl p-4 flex items-center justify-between group text-left border border-forest-green/5" onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180')">
@@ -593,7 +435,7 @@
 </div>
 <span class="material-symbols-outlined chevron transition-transform text-outline/60">expand_more</span>
 </button>
-<div class="hidden px-4 pb-4">
+<div class="hidden px-4 pb-4 transition-all duration-300">
 <p class="font-body-md text-body-md text-secondary leading-relaxed" data-i18n="info_rules_desc">Мы оставляем за собой право отказать в обслуживании лицам в состоянии алкогольного опьянения или нарушающим дресс-код. Вход разрешен гостям старше 21 года.</p>
 </div>
 <button class="w-full bg-white hover:bg-forest-green/5 transition-colors rounded-2xl p-4 flex items-center justify-between group text-left border border-forest-green/5" onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180')">
@@ -603,7 +445,7 @@
 </div>
 <span class="material-symbols-outlined chevron transition-transform text-outline/60">expand_more</span>
 </button>
-<div class="hidden px-4 pb-4">
+<div class="hidden px-4 pb-4 transition-all duration-300">
 <p class="font-body-md text-body-md text-secondary leading-relaxed" data-i18n="info_feedback_desc">Физическая Книга жалоб и предложений предоставляется по запросу у дежурного менеджера. Альтернативно, вы можете оставить цифровой отзыв через наши контактные формы.</p>
 </div>
 </div>
@@ -758,6 +600,11 @@
                     targetSec.classList.add('active');
                     void targetSec.offsetWidth;
                     targetSec.style.opacity = '1';
+                    
+                    // Trigger animations in new section
+                    setTimeout(() => {
+                        initObserver();
+                    }, 100);
                 }, 400);
                 
                 document.querySelectorAll('.bottom-nav-btn').forEach(b => {
@@ -1112,9 +959,11 @@
 
             function initObserver() {
                 const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
+                    entries.forEach((entry, index) => {
                         if (entry.isIntersecting) {
-                            entry.target.classList.add('is-visible');
+                            setTimeout(() => {
+                                entry.target.classList.add('is-visible');
+                            }, index * 50); // Stagger effect
                             observer.unobserve(entry.target);
                         }
                     });
@@ -1154,7 +1003,7 @@
                     const catItems = allItems.filter(i => i[catKey] === cat);
                     if (catItems.length > 0) {
                         html += `
-                            <div class="mt-8 mb-4">
+                            <div class="mt-8 mb-4 fade-in-up">
                                 <div class="flex items-center justify-center gap-4 mb-6 px-4">
                                     <div class="flex-1 h-[1px] bg-gradient-to-r from-transparent via-warm-gold/30 to-warm-gold/30"></div>
                                     <h2 class="font-serif text-[26px] text-forest-green tracking-tight text-center font-medium">${cat}</h2>
@@ -1162,14 +1011,14 @@
                                 </div>
                                 <div class="flex flex-col gap-3">
                         `;
-                        catItems.forEach(item => {
+                        catItems.forEach((item, itemIdx) => {
                             const itemData = JSON.stringify(item).replace(/"/g, '&quot;');
                             let noteIcon = '';
                             if (item.note && item.note.toLowerCase().includes('острое')) {
                                  noteIcon = `<span class="material-symbols-outlined text-red-500/80 text-[18px] ml-2" title="${item.note}">local_fire_department</span>`;
                             }
                             html += `
-                                <div class="fade-in-up menu-card group bg-white rounded-2xl overflow-hidden soft-shadow flex flex-col cursor-pointer border border-forest-green/5 hover:border-forest-green/20" onclick='openModal(${itemData})'>
+                                <div class="fade-in-up menu-card group bg-white rounded-2xl overflow-hidden soft-shadow flex flex-col cursor-pointer border border-forest-green/5 hover:border-forest-green/20" onclick='openModal(${itemData})' style="transition-delay: ${itemIdx * 50}ms;">
                                     <div class="px-5 py-5 relative">
                                         <div class="flex justify-between items-start gap-4">
                                             <h3 class="font-serif text-[22px] md:text-headline-sm text-forest-green max-w-[75%] leading-tight font-medium flex items-center flex-wrap">${item[nameKey]}${noteIcon}</h3>
