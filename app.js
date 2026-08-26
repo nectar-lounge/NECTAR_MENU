@@ -4,14 +4,13 @@ let currentTab = 'kitchen';
 let currentCategory = 'all';
 let currentSearchTerm = '';
 
-/* Мультиязычный контент для раздела «Инфо» (согласно твоему исходному проекту) */
 const translations = {
     'RU': {
         cat_all: 'Все',
         info_content: `
             <div class="bg-white rounded-[24px] p-6 shadow-sm border border-forest-green/5">
                 <h3 class="font-serif-ru text-2xl text-forest-green mb-2">О пространстве</h3>
-                <p class="text-sm text-forest-green/70 font-light leading-relaxed">NECTAR — премиальное пространство высокой кухни и миксологии, объединяющее эстетику вкуса и атмосферу современного лаунжа.</p>
+                <p class="text-sm text-forest-green/70 font-light leading-relaxed">NECTAR — премиальное пространство высокой кухни и миксологии.</p>
             </div>
             <div class="bg-white rounded-[24px] p-6 shadow-sm border border-forest-green/5">
                 <h3 class="font-serif-ru text-2xl text-forest-green mb-2">Контакты & Режим работы</h3>
@@ -24,7 +23,7 @@ const translations = {
         info_content: `
             <div class="bg-white rounded-[24px] p-6 shadow-sm border border-forest-green/5">
                 <h3 class="font-serif-ru text-2xl text-forest-green mb-2">About Us</h3>
-                <p class="text-sm text-forest-green/70 font-light leading-relaxed">NECTAR is a premium space of haute cuisine and mixology, combining exquisite taste and modern lounge atmosphere.</p>
+                <p class="text-sm text-forest-green/70 font-light leading-relaxed">NECTAR is a premium space of haute cuisine and mixology.</p>
             </div>
             <div class="bg-white rounded-[24px] p-6 shadow-sm border border-forest-green/5">
                 <h3 class="font-serif-ru text-2xl text-forest-green mb-2">Contacts & Hours</h3>
@@ -37,7 +36,7 @@ const translations = {
         info_content: `
             <div class="bg-white rounded-[24px] p-6 shadow-sm border border-forest-green/5">
                 <h3 class="font-serif-ru text-2xl text-forest-green mb-2">Біз туралы</h3>
-                <p class="text-sm text-forest-green/70 font-light leading-relaxed">NECTAR — талғампаз асхана мен бар мәдениетін, сондай-ақ заманауи лаунж атмосферасын біріктіретін премиум кеңістік.</p>
+                <p class="text-sm text-forest-green/70 font-light leading-relaxed">NECTAR — авторлық асхана мен бар мәдениетінің премиум кеңістігі.</p>
             </div>
             <div class="bg-white rounded-[24px] p-6 shadow-sm border border-forest-green/5">
                 <h3 class="font-serif-ru text-2xl text-forest-green mb-2">Байланыс және уақыты</h3>
@@ -113,7 +112,6 @@ function renderCategories() {
     
     const cats = menuData.categories.filter(c => c.tab === currentTab);
     
-    // Кнопка «Все»
     const allBtn = document.createElement('button');
     const isAll = currentCategory === 'all';
     allBtn.className = `whitespace-nowrap px-4 py-2 rounded-xl text-[11px] tracking-[0.1em] uppercase font-medium transition-all ${isAll ? 'bg-forest-green text-cream shadow-sm' : 'bg-white text-forest-green/60 border border-forest-green/5'}`;
@@ -125,7 +123,6 @@ function renderCategories() {
     };
     container.appendChild(allBtn);
 
-    // Динамические категории
     cats.forEach(cat => {
         const isActive = cat.id === currentCategory;
         const btn = document.createElement('button');
@@ -204,8 +201,8 @@ function openModal(item) {
     const modalWeight = document.getElementById('modalWeight');
     const modalImage = document.getElementById('modalImage');
     const imgContainer = document.getElementById('modalImageContainer');
-    const modalIngredients = document.getElementById('modalIngredients');
-    const ingrContainer = document.getElementById('modalIngredientsContainer');
+    const modalDescription = document.getElementById('modalDescription');
+    const descContainer = document.getElementById('modalDescriptionContainer');
     const itemModal = document.getElementById('itemModal');
 
     if (modalTitle) modalTitle.innerText = item.name[currentLang] || item.name['RU'];
@@ -230,14 +227,14 @@ function openModal(item) {
     }
     
     const desc = item.description ? (item.description[currentLang] || item.description['RU']) : '';
-    if (ingrContainer && modalIngredients) {
+    if (descContainer && modalDescription) {
         if (desc) { 
-            modalIngredients.innerText = desc; 
-            ingrContainer.classList.remove('hidden'); 
-            ingrContainer.classList.add('flex'); 
+            modalDescription.innerText = desc; 
+            descContainer.classList.remove('hidden'); 
+            descContainer.classList.add('flex'); 
         } else { 
-            ingrContainer.classList.add('hidden'); 
-            ingrContainer.classList.remove('flex'); 
+            descContainer.classList.add('hidden'); 
+            descContainer.classList.remove('flex'); 
         }
     }
 
