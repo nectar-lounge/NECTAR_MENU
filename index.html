@@ -1,561 +1,2096 @@
 <!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>NECTAR — Lounge · Bar · Kitchen</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              "forest-green": "#1b3022",
-              "warm-gold": "#a97935",
-              "cream": "#fbf9f6",
-              "outline": "#737973"
-            },
-            fontFamily: {
-              serif: ["Cormorant Garamond", "serif"],
-              sans: ["Manrope", "sans-serif"]
+
+<html lang="en" style=""><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&amp;family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "on-primary-container": "#819986",
+                "on-background": "#1b1c1a",
+                "tertiary-container": "#4f1b00",
+                "secondary-fixed-dim": "#c9c6bd",
+                "surface": "#fbf9f6",
+                "on-secondary-fixed-variant": "#484740",
+                "background": "#fbf9f6",
+                "primary-container": "#1b3022",
+                "primary": "#061b0e",
+                "primary-fixed": "#d0e9d4",
+                "surface-container": "#efeeeb",
+                "on-secondary": "#ffffff",
+                "on-tertiary-fixed": "#351000",
+                "secondary": "#5f5f57",
+                "inverse-on-surface": "#f2f1ee",
+                "on-surface": "#1b1c1a",
+                "error-container": "#ffdad6",
+                "on-tertiary-fixed-variant": "#7b2f00",
+                "on-primary-fixed": "#0b2013",
+                "inverse-surface": "#30312f",
+                "surface-container-high": "#e9e8e5",
+                "surface-container-highest": "#e3e2e0",
+                "primary-fixed-dim": "#b4cdb8",
+                "outline": "#737973",
+                "on-error": "#ffffff",
+                "tertiary-fixed-dim": "#ffb695",
+                "on-secondary-container": "#64635b",
+                "surface-dim": "#dbdad7",
+                "surface-container-low": "#f5f3f0",
+                "surface-variant": "#e3e2e0",
+                "on-error-container": "#93000a",
+                "on-secondary-fixed": "#1c1c16",
+                "on-primary": "#ffffff",
+                "on-tertiary": "#ffffff",
+                "on-surface-variant": "#434843",
+                "on-primary-fixed-variant": "#364c3c",
+                "surface-tint": "#4d6453",
+                "surface-container-lowest": "#ffffff",
+                "secondary-fixed": "#e5e2d9",
+                "tertiary": "#2e0c00",
+                "on-tertiary-container": "#e1743d",
+                "surface-bright": "#fbf9f6",
+                "secondary-container": "#e2e0d6",
+                "inverse-primary": "#b4cdb8",
+                "error": "#ba1a1a",
+                "outline-variant": "#c3c8c1",
+                "tertiary-fixed": "#ffdbcc",
+                "forest-green": "#1b3022",
+                "warm-gold": "#a97935",
+                "cream": "#fbf9f6"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "unit": "8px",
+                "gutter": "16px",
+                "container-padding": "24px",
+                "safe-area-bottom": "80px",
+                "section-gap": "64px"
+        },
+        "fontFamily": {
+                "label-caps": [
+                        "Manrope"
+                ],
+                "display-lg-mobile": [
+                        "Bodoni Moda"
+                ],
+                "display-lg": [
+                        "Bodoni Moda"
+                ],
+                "headline-sm": [
+                        "Bodoni Moda"
+                ],
+                "body-md": [
+                        "Manrope"
+                ],
+                "headline-md": [
+                        "Bodoni Moda"
+                ],
+                "body-lg": [
+                        "Manrope"
+                ],
+                "serif": [
+                        "Cormorant Garamond", "serif"
+                ]
+        },
+        "fontSize": {
+                "label-caps": [
+                        "12px",
+                        {
+                                "lineHeight": "1",
+                                "letterSpacing": "0.1em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "display-lg-mobile": [
+                        "36px",
+                        {
+                                "lineHeight": "1.2",
+                                "fontWeight": "600"
+                        }
+                ],
+                "display-lg": [
+                        "48px",
+                        {
+                                "lineHeight": "1.1",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-sm": [
+                        "24px",
+                        {
+                                "lineHeight": "1.3",
+                                "fontWeight": "500"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "1.6",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-md": [
+                        "32px",
+                        {
+                                "lineHeight": "1.2",
+                                "fontWeight": "500"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "1.6",
+                                "fontWeight": "400"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        @layer base {
+            html, body {
+                width: 100vw;
+                margin: 0;
+                padding: 0;
+                background-color: #fbf9f6;
             }
-          }
+            body {
+                overscroll-behavior: none;
+            }
+            .pb-safe {
+                padding-bottom: env(safe-area-inset-bottom, 0px);
+            }
+            .pt-safe {
+                padding-top: env(safe-area-inset-top, 0px);
+            }
+            main > :first-child {
+                margin-top: 0 !important;
+            }
+            main > :last-child {
+                margin-bottom: 0 !important;
+            }
         }
-      }
-    </script>
-    <style>
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+<style>
         body {
-            background-color: #fbf9f6;
-            color: #1b1c1a;
-            font-family: 'Manrope', sans-serif;
-            overflow-x: hidden;
+            min-height: max(884px, 100dvh);
+            position: relative;
         }
-        ::-webkit-scrollbar { display: none; }
+
+        /* Ambient Background Texture */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.4;
+            background: 
+                radial-gradient(circle at 15% 50%, rgba(255, 235, 204, 0.15), transparent 40%),
+                radial-gradient(circle at 85% 30%, rgba(200, 220, 204, 0.1), transparent 50%);
+            animation: ambientLight 15s ease-in-out infinite alternate;
+        }
+
+        @keyframes ambientLight {
+            0% { transform: scale(1) translate(0, 0); opacity: 0.3; }
+            100% { transform: scale(1.05) translate(2%, 2%); opacity: 0.6; }
+        }
+
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .fade-in-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .modal-enter {
+            animation: modalScaleUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        
+        .lining-nums {
+            font-variant-numeric: lining-nums;
+        }
+
+        @keyframes modalScaleUp {
+            from { opacity: 0; transform: scale(0.95) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .lang-active {
+            color: #1b3022 !important;
+        }
+
+        .spa-section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+        }
+
+        .spa-section.active {
+            display: flex;
+            opacity: 1;
+        }
+
         .glass-effect {
-            background: rgba(251, 249, 246, 0.85);
+            background: rgba(251, 249, 246, 0.7);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
         }
-        @keyframes slideUp {
-            from { transform: translateY(100%); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+
+        .modal-glass {
+            background: rgba(251, 249, 246, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5) inset, 0 25px 50px -12px rgba(27, 48, 34, 0.25);
         }
-        .modal-sheet {
-            animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+        .soft-shadow {
+            box-shadow: 0 4px 24px rgba(27, 48, 34, 0.04);
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .menu-card {
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+        }
+
+        .menu-card:active {
+            transform: scale(0.96);
+            box-shadow: 0 2px 12px rgba(27, 48, 34, 0.06);
+        }
+
+        /* Hero Image Float */
+        .hero-float {
+            animation: breath 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) scale(1.05); }
+            50% { transform: translateY(-8px) scale(1.05); }
+            100% { transform: translateY(0px) scale(1.05); }
+        }
+
+        @keyframes breath {
+            0% { transform: scale(1.02) rotate(0deg); }
+            100% { transform: scale(1.08) rotate(1deg); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hero-float { animation: none; transform: none; }
+            body::before { animation: none; }
+            .fade-in-up { transition: none; opacity: 1; transform: none; }
+            .menu-card { transition: none; }
+            .menu-card:active { transform: none; }
         }
     </style>
 </head>
-<body class="bg-cream text-[#1b1c1a] pb-24">
-
-    <!-- Шапка сайта -->
-    <header class="fixed top-0 inset-x-0 z-50 glass-effect border-b border-forest-green/5">
-        <div class="px-6 flex items-center justify-between h-20">
-            <div class="w-16 flex items-center">
-                <a href="https://instagram.com/nectar.lounge" target="_blank" class="text-forest-green hover:text-warm-gold transition-colors flex items-center gap-1" title="Instagram">
-                    <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                </a>
-            </div>
-            <div class="flex flex-col items-center">
-                <h1 class="font-serif text-[28px] text-forest-green tracking-tight font-semibold">NECTAR</h1>
-                <p class="text-[9px] uppercase tracking-[0.25em] text-outline mt-[-3px]">Lounge · Bar · Kitchen</p>
-            </div>
-            <div class="flex items-center gap-2 w-16 justify-end">
-                <button onclick="setLang('RU')" id="btn-RU" class="lang-btn text-xs font-bold text-forest-green">RU</button>
-                <button onclick="setLang('KZ')" id="btn-KZ" class="lang-btn text-xs text-outline">KZ</button>
-                <button onclick="setLang('EN')" id="btn-EN" class="lang-btn text-xs text-outline">EN</button>
-            </div>
-        </div>
-    </header>
-
-    <!-- Основной контейнер -->
-    <main class="pt-24 px-4 max-w-xl mx-auto">
-        <section id="section-menu" class="spa-section">
-            <div class="relative mb-4 mt-2">
-                <span class="material-symbols-outlined absolute left-4 top-3.5 text-outline/60 text-2xl">search</span>
-                <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="Поиск блюд и напитков..." class="w-full bg-white border border-forest-green/10 rounded-2xl py-3.5 pl-12 pr-10 text-sm outline-none focus:border-forest-green/30 shadow-sm">
-                <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-4 top-3.5 text-outline hover:text-forest-green">
-                    <span class="material-symbols-outlined text-xl">close</span>
-                </button>
-            </div>
-
-            <div class="flex bg-white border border-forest-green/5 rounded-2xl p-1 mb-4 shadow-sm relative">
-                <div id="typeIndicator" class="absolute left-1 top-1 bottom-1 w-[calc(50%-4px)] bg-forest-green rounded-xl transition-transform duration-300"></div>
-                <button onclick="switchType('kitchen')" id="type-kitchen" class="flex-1 relative z-10 py-2.5 text-xs font-bold tracking-widest text-cream uppercase transition-colors">Кухня</button>
-                <button onclick="switchType('bar')" id="type-bar" class="flex-1 relative z-10 py-2.5 text-xs font-bold tracking-widest text-outline uppercase transition-colors">Бар</button>
-            </div>
-
-            <div id="categoryContainer" class="flex overflow-x-auto gap-2 pb-2 mb-4 transition-all"></div>
-            <div id="menuContainer" class="flex flex-col gap-3"></div>
-        </section>
-
-        <section id="section-info" class="spa-section hidden flex-col gap-6 pt-4">
-            <div class="text-center">
-                <h2 id="infoTitle" class="font-serif text-3xl text-forest-green font-semibold mb-1">Информация</h2>
-                <p id="infoSub" class="text-sm text-outline">Свяжитесь с нами или найдите важные детали</p>
-            </div>
-
-            <div class="bg-white rounded-2xl p-6 shadow-sm border border-forest-green/5 flex flex-col gap-4">
-                <div>
-                    <h3 id="infoAddressTitle" class="text-[10px] font-bold tracking-widest text-outline uppercase mb-1">Адрес</h3>
-                    <p id="infoAddress" class="text-forest-green font-medium">Проспект Дулати 1а, мкр. Архат, Алматы</p>
-                    <a href="https://go.2gis.com/iV3rq" target="_blank" class="text-warm-gold text-sm inline-flex items-center gap-1 mt-1 font-medium"><span id="infoMapLink">Открыть в 2GIS</span> →</a>
-                </div>
-                <hr class="border-forest-green/5">
-                <div>
-                    <h3 id="infoPhoneTitle" class="text-[10px] font-bold tracking-widest text-outline uppercase mb-1">Телефон</h3>
-                    <a href="tel:+77001234567" class="text-forest-green font-medium text-lg">+7 (700) 123 45 67</a>
-                    <p id="infoHours" class="text-xs text-outline mt-0.5">Ежедневно, 14:00 - 01:00</p>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Навигация -->
-    <nav class="fixed bottom-0 inset-x-0 z-50 glass-effect border-t border-forest-green/10 flex justify-around items-center h-20 px-8">
-        <button onclick="switchTab('menu')" id="nav-menu" class="flex flex-col items-center gap-1 text-forest-green font-medium">
-            <span class="material-symbols-outlined text-2xl">restaurant_menu</span>
-            <span id="navMenuText" class="text-[10px] tracking-widest uppercase">Меню</span>
-        </button>
-        <button onclick="switchTab('info')" id="nav-info" class="flex flex-col items-center gap-1 text-outline">
-            <span class="material-symbols-outlined text-2xl">info</span>
-            <span id="navInfoText" class="text-[10px] tracking-widest uppercase">Инфо</span>
-        </button>
-    </nav>
-
-    <!-- Модальное окно -->
-    <div id="itemModal" class="fixed inset-0 z-[100] hidden items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-0 sm:p-4">
-        <div class="absolute inset-0" onclick="closeModal()"></div>
-        <div class="relative bg-cream w-full sm:max-w-md rounded-t-[32px] sm:rounded-[32px] p-6 modal-sheet max-h-[85vh] overflow-y-auto border border-white shadow-2xl">
-            <div class="flex justify-between items-start mb-4">
-                <h3 id="modalTitle" class="font-serif text-2xl text-forest-green font-semibold pr-4"></h3>
-                <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-forest-green/5 flex items-center justify-center text-forest-green">
-                    <span class="material-symbols-outlined text-lg">close</span>
-                </button>
-            </div>
-            <div class="flex items-baseline gap-3 mb-4 pb-4 border-b border-warm-gold/20">
-                <span id="modalPrice" class="font-serif text-3xl text-warm-gold font-medium"></span>
-                <span id="modalWeight" class="text-xs text-outline tracking-wider uppercase"></span>
-            </div>
-            <div id="modalIngredientsContainer" class="mb-6">
-                <h4 id="modalIngTitle" class="text-[10px] font-bold text-outline uppercase tracking-widest mb-1.5">Состав</h4>
-                <p id="modalIngredients" class="text-sm text-forest-green leading-relaxed"></p>
-            </div>
-            <button onclick="closeModal()" id="modalCloseBtn" class="w-full py-3.5 bg-forest-green text-cream rounded-2xl font-bold tracking-widest text-xs uppercase shadow-lg">Закрыть</button>
-        </div>
-    </div>
-
-    <script>
-        const MENU = [
-          {
-  "categories": [
-    { "id": "cold_snacks", "tab": "kitchen", "name": { "RU": "Холодные закуски", "EN": "Cold Appetizers", "KZ": "Салқын тіскебасарлар" } },
-    { "id": "salads", "tab": "kitchen", "name": { "RU": "Салаты", "EN": "Salads", "KZ": "Салаттар" } },
-    { "id": "hot_snacks", "tab": "kitchen", "name": { "RU": "Горячие закуски", "EN": "Hot Appetizers", "KZ": "Ыстық тіскебасарлар" } },
-    { "id": "snacks", "tab": "kitchen", "name": { "RU": "Снэки", "EN": "Snacks", "KZ": "Снектер" } },
-    { "id": "soups", "tab": "kitchen", "name": { "RU": "Супы", "EN": "Soups", "KZ": "Сорпалар" } },
-    { "id": "pizza", "tab": "kitchen", "name": { "RU": "Пицца и выпечка", "EN": "Pizza & Bakery", "KZ": "Пицца және нан өнімдері" } },
-    { "id": "pasta", "tab": "kitchen", "name": { "RU": "Паста", "EN": "Pasta", "KZ": "Паста" } },
-    { "id": "hot_dishes", "tab": "kitchen", "name": { "RU": "Горячие блюда", "EN": "Hot Dishes", "KZ": "Ыстық тағамдар" } },
-    { "id": "bbq", "tab": "kitchen", "name": { "RU": "Шашлык на мангале", "EN": "BBQ & Grill", "KZ": "Мангалдағы кәуап" } },
-    { "id": "sides", "tab": "kitchen", "name": { "RU": "Гарниры", "EN": "Side Dishes", "KZ": "Гарнирлер" } },
-    { "id": "sauces", "tab": "kitchen", "name": { "RU": "Соусы", "EN": "Sauces", "KZ": "Тұздықтар" } },
-    { "id": "desserts", "tab": "kitchen", "name": { "RU": "Десерты", "EN": "Desserts", "KZ": "Десерттер" } },
-    { "id": "non_alc", "tab": "bar", "name": { "RU": "Безалкогольные напитки", "EN": "Non-Alcoholic Drinks", "KZ": "Алкогольсіз сусындар" } },
-    { "id": "wine", "tab": "bar", "name": { "RU": "Вино", "EN": "Wine", "KZ": "Шарап" } },
-    { "id": "vodka", "tab": "bar", "name": { "RU": "Водка", "EN": "Vodka", "KZ": "Арақ" } },
-    { "id": "beer_bottle", "tab": "bar", "name": { "RU": "Пиво бутылочное", "EN": "Bottled Beer", "KZ": "Бөтелкедегі сыра" } },
-    { "id": "beer_draft", "tab": "bar", "name": { "RU": "Пиво разливное", "EN": "Draft Beer", "KZ": "Құйма сыра" } },
-    { "id": "water", "tab": "bar", "name": { "RU": "Вода и напитки", "EN": "Water & Beverages", "KZ": "Су және сусындар" } }
-  ],
-  "items": [
-    { "categoryId": "cold_snacks", "price": 4990, "weight": "350 г", "name": { "RU": "Мясное плато", "EN": "Meat Platter", "KZ": "Ет ассортиі" } },
-    { "categoryId": "cold_snacks", "price": 2890, "weight": "250 г", "name": { "RU": "Домашние соленья", "EN": "Homemade Pickles", "KZ": "Үй тұздықтары" } },
-    { "categoryId": "cold_snacks", "price": 2890, "weight": "250 г", "name": { "RU": "Овощная нарезка", "EN": "Vegetable Platter", "KZ": "Көкөніс ассортиі" } },
-    { "categoryId": "cold_snacks", "price": 5590, "weight": "300 г", "name": { "RU": "Рыбное ассорти", "EN": "Fish Platter", "KZ": "Балық ассортиі" } },
-    { "categoryId": "cold_snacks", "price": 2790, "weight": "220 г", "name": { "RU": "Капрезе", "EN": "Caprese", "KZ": "Капрезе" } },
-    { "categoryId": "cold_snacks", "price": 4990, "weight": "280 г", "name": { "RU": "Сырное плато", "EN": "Cheese Platter", "KZ": "Ірімшік ассортиі" } },
-
-    { "categoryId": "salads", "price": 1990, "weight": "200 г", "name": { "RU": "Свежий овощной салат", "EN": "Fresh Vegetable Salad", "KZ": "Жаңа піскен көкөніс салаты" } },
-    { "categoryId": "salads", "price": 1790, "weight": "180 г", "name": { "RU": "Аччик-чучук", "EN": "Achichuk", "KZ": "Ащы-тұщы" } },
-    { "categoryId": "salads", "price": 2590, "weight": "230 г", "name": { "RU": "Цезарь с курицей", "EN": "Caesar with Chicken", "KZ": "Тауық етінен Цезарь" } },
-    { "categoryId": "salads", "price": 2790, "weight": "220 г", "name": { "RU": "Хрустящие баклажаны", "EN": "Crispy Eggplants", "KZ": "Қытырлақ баялды" } },
-    { "categoryId": "salads", "price": 2490, "weight": "220 г", "name": { "RU": "Греческий салат", "EN": "Greek Salad", "KZ": "Грек салаты" } },
-    { "categoryId": "salads", "price": 2990, "weight": "240 г", "name": { "RU": "Теплый салат с кониной", "EN": "Warm Salad with Horse Meat", "KZ": "Жылқы етінен жылы салат" } },
-    { "categoryId": "salads", "price": 3990, "weight": "210 г", "name": { "RU": "Салат с креветками и рукколой", "EN": "Shrimp and Arugula Salad", "KZ": "Асшаян мен руккола салаты" } },
-
-    { "categoryId": "hot_snacks", "price": 3290, "weight": "200 г", "name": { "RU": "Креветки темпура", "EN": "Tempura Shrimps", "KZ": "Темпура асшаяндары" } },
-    { "categoryId": "hot_snacks", "price": 3190, "weight": "280 г", "name": { "RU": "Клаб-сэндвич с курицей", "EN": "Chicken Club Sandwich", "KZ": "Тауық етінен клаб-сэндвич" } },
-    { "categoryId": "hot_snacks", "price": 2990, "weight": "250 г", "name": { "RU": "Кесадилья с курицей", "EN": "Chicken Quesadilla", "KZ": "Тауық етінен кесадилья" } },
-    { "categoryId": "hot_snacks", "price": 2590, "weight": "200 г", "name": { "RU": "Чебуреки", "EN": "Chebureki", "KZ": "Чебуректер" } },
-    { "categoryId": "hot_snacks", "price": 1690, "weight": "180 г", "name": { "RU": "Наггетсы куриные", "EN": "Chicken Nuggets", "KZ": "Тауық наггетстері" } },
-
-    { "categoryId": "snacks", "price": 6990, "weight": "700 г", "name": { "RU": "Большой сет закусок", "EN": "Big Snack Set", "KZ": "Үлкен снектер жиынтығы" }, "description": { "RU": "креветки, гренки, чечил, фри, сосиски, луковые кольца", "EN": "shrimps, croutons, chechil cheese, fries, sausages, onion rings", "KZ": "асшаяндар, гренкилер, чечил, фри, шұжықтар, пияз сақиналары" } },
-    { "categoryId": "snacks", "price": 3990, "weight": "250 г", "name": { "RU": "Креветки пивные", "EN": "Beer Shrimps", "KZ": "Сыра асшаяндары" } },
-    { "categoryId": "snacks", "price": 1590, "weight": "100 г", "name": { "RU": "Фисташки", "EN": "Pistachios", "KZ": "Пісте" } },
-    { "categoryId": "snacks", "price": 1590, "weight": "150 г", "name": { "RU": "Чесночные гренки", "EN": "Garlic Croutons", "KZ": "Сарымсақ гренкилері" } },
-    { "categoryId": "snacks", "price": 1390, "weight": "100 г", "name": { "RU": "Чечил копченый", "EN": "Smoked Chechil Cheese", "KZ": "Ысталған чечил" } },
-    { "categoryId": "snacks", "price": 1390, "weight": "120 г", "name": { "RU": "Арахис", "EN": "Peanuts", "KZ": "Жержаңғақ" } },
-
-    { "categoryId": "soups", "price": 2390, "weight": "350 г", "name": { "RU": "Окрошка с мясом (сезонная)", "EN": "Okroshka with Meat (seasonal)", "KZ": "Ет қосылған окрошка (маусымдық)" } },
-    { "categoryId": "soups", "price": 1590, "weight": "300 г", "name": { "RU": "Куриный суп с лапшой", "EN": "Chicken Noodle Soup", "KZ": "Тауық кеспе көжесі" } },
-    { "categoryId": "soups", "price": 3590, "weight": "350 г", "name": { "RU": "Солянка мясная", "EN": "Meat Solyanka", "KZ": "Ет солянкасы" } },
-    
-    { 
-      "categoryId": "soups", 
-      "price": 3590, 
-      "weight": "350 г",
-      "name": { "RU": "Том Ям", "EN": "Tom Yum", "KZ": "Том Ям" },
-      "image": "https://images.unsplash.com/photo-1548943487-a2e4e43b4853?auto=format&fit=crop&w=600&q=80",
-      "description": { "RU": "Традиционный тайский острый суп с морепродуктами", "EN": "Traditional Thai spicy soup with seafood", "KZ": "Теңіз өнімдері қосылған дәстүрлі тай ащы сорпасы" }
-    },
-    
-    { "categoryId": "soups", "price": 3590, "weight": "400 г", "name": { "RU": "Рамен с говядиной", "EN": "Beef Ramen", "KZ": "Сиыр етінен рамен" } },
-    { "categoryId": "soups", "price": 3290, "weight": "400 г", "name": { "RU": "Рамен с курицей", "EN": "Chicken Ramen", "KZ": "Тауық етінен рамен" } },
-    { "categoryId": "soups", "price": 1990, "weight": "300 г", "name": { "RU": "Чечевичный крем-суп", "EN": "Lentil Cream Soup", "KZ": "Жасымық крем-сорпасы" } },
-    { "categoryId": "soups", "price": 3290, "weight": "400 г", "name": { "RU": "Шорпа", "EN": "Shorpa", "KZ": "Сорпа" } },
-    { "categoryId": "soups", "price": 1990, "weight": "250 г", "name": { "RU": "Пельмени (с бульоном / без)", "EN": "Pelmeni (with/without broth)", "KZ": "Тұшпара (сорпамен / сорпасыз)" } },
-
-    { "categoryId": "pizza", "price": 3090, "weight": "500 г", "name": { "RU": "Пицца Пепперони", "EN": "Pepperoni Pizza", "KZ": "Пепперони пиццасы" } },
-    { "categoryId": "pizza", "price": 2590, "weight": "450 г", "name": { "RU": "Пицца Маргарита", "EN": "Margherita Pizza", "KZ": "Маргарита пиццасы" } },
-    { "categoryId": "pizza", "price": 3090, "weight": "520 г", "name": { "RU": "Пицца с курицей и грибами", "EN": "Chicken and Mushroom Pizza", "KZ": "Тауық және саңырауқұлақ пиццасы" } },
-    { "categoryId": "pizza", "price": 2990, "weight": "500 г", "name": { "RU": "Пицца Болоньезе", "EN": "Bolognese Pizza", "KZ": "Болоньезе пиццасы" } },
-    { "categoryId": "pizza", "price": 3590, "weight": "530 г", "name": { "RU": "Мексиканская пицца с халапеньо", "EN": "Mexican Pizza with Jalapeno", "KZ": "Халапеньо қосылған мексикалық пицца" } },
-    { "categoryId": "pizza", "price": 2790, "weight": "400 г", "name": { "RU": "Хачапури по-мегрельски", "EN": "Megrelian Khachapuri", "KZ": "Мегрелше хачапури" } },
-    { "categoryId": "pizza", "price": 890, "weight": "150 г", "name": { "RU": "Хлебная корзина", "EN": "Bread Basket", "KZ": "Нан себеті" } },
-    { "categoryId": "pizza", "price": 590, "weight": "100 г", "name": { "RU": "Лепешка", "EN": "Flatbread", "KZ": "Таба нан" } },
-
-    { "categoryId": "pasta", "price": 4990, "weight": "350 г", "name": { "RU": "Фарфалле с морепродуктами", "EN": "Seafood Farfalle", "KZ": "Теңіз өнімдерімен фарфалле" }, "description": { "RU": "креветки, мидии, кальмары", "EN": "shrimps, mussels, squid", "KZ": "асшаяндар, мидиялар, кальмар" } },
-    { "categoryId": "pasta", "price": 3590, "weight": "330 г", "name": { "RU": "Карбонара", "EN": "Carbonara", "KZ": "Карбонара" } },
-    { "categoryId": "pasta", "price": 3290, "weight": "340 г", "name": { "RU": "Болоньезе", "EN": "Bolognese", "KZ": "Болоньезе" } },
-    { "categoryId": "pasta", "price": 2990, "weight": "320 г", "name": { "RU": "Фетучини с курицей и грибами", "EN": "Fettuccine with Chicken & Mushrooms", "KZ": "Тауық және саңырауқұлақпен фетучини" } },
-
-    { "categoryId": "hot_dishes", "price": 4090, "weight": "300 г", "name": { "RU": "Куырдак", "EN": "Kuyrdak", "KZ": "Қуырдақ" } },
-    { "categoryId": "hot_dishes", "price": 3090, "weight": "350 г", "name": { "RU": "Плов", "EN": "Pilaf", "KZ": "Палау" } },
-    { "categoryId": "hot_dishes", "price": 3290, "weight": "320 г", "name": { "RU": "Бургер с курицей", "EN": "Chicken Burger", "KZ": "Тауық бургері" } },
-    { "categoryId": "hot_dishes", "price": 3590, "weight": "350 г", "name": { "RU": "Бургер с говядиной", "EN": "Beef Burger", "KZ": "Сиыр етінен бургер" } },
-    { "categoryId": "hot_dishes", "price": 4390, "weight": "380 г", "name": { "RU": "Бургер, грибной стаут", "EN": "Mushroom Stout Burger", "KZ": "Саңырауқұлақ стаут бургері" } },
-    { "categoryId": "hot_dishes", "price": 3390, "weight": "250 г", "name": { "RU": "Колбаски говяжьи / бараньи", "EN": "Beef / Lamb Sausages", "KZ": "Сиыр / Қой етінен шұжықтар" } },
-    { "categoryId": "hot_dishes", "price": 2990, "weight": "250 г", "name": { "RU": "Колбаски куриные", "EN": "Chicken Sausages", "KZ": "Тауық шұжықтары" } },
-    { "categoryId": "hot_dishes", "price": 3290, "weight": "350 г", "name": { "RU": "Говядина по-тайски с рисом", "EN": "Thai Beef with Rice", "KZ": "Күрішпен тайша сиыр еті" } },
-    { "categoryId": "hot_dishes", "price": 3290, "weight": "350 г", "name": { "RU": "Бефстроганов с пюре", "EN": "Beef Stroganoff with Puree", "KZ": "Езбемен бефстроганов" } },
-    { "categoryId": "hot_dishes", "price": 3290, "weight": "330 г", "name": { "RU": "Куриная грудка в сырно-сливочном соусе", "EN": "Chicken Breast in Cheese Sauce", "KZ": "Кілегей-ірімшік тұздығындағы тауық төсі" } },
-    { "categoryId": "hot_dishes", "price": 3990, "weight": "400 г", "name": { "RU": "Картофель по-домашнему с мясом", "EN": "Homestyle Potatoes with Meat", "KZ": "Етпен үй стиліндегі картоп" } },
-
-    { "categoryId": "bbq", "price": 3990, "weight": "250 г", "name": { "RU": "Антрекот", "EN": "Entrecote", "KZ": "Антрекот" } },
-    { "categoryId": "bbq", "price": 3190, "weight": "200 г", "name": { "RU": "Баранина", "EN": "Lamb", "KZ": "Қой еті" } },
-    { "categoryId": "bbq", "price": 3190, "weight": "200 г", "name": { "RU": "Люля-кебаб", "EN": "Lula Kebab", "KZ": "Люля-кебаб" } },
-    { "categoryId": "bbq", "price": 2990, "weight": "200 г", "name": { "RU": "Куриное филе", "EN": "Chicken Fillet", "KZ": "Тауық сүбесі" } },
-    { "categoryId": "bbq", "price": 2890, "weight": "220 г", "name": { "RU": "Куриные крылышки", "EN": "Chicken Wings", "KZ": "Тауық қанаттары" } },
-    { "categoryId": "bbq", "price": 2790, "weight": "220 г", "name": { "RU": "Утка", "EN": "Duck", "KZ": "Үйрек" } },
-    { "categoryId": "bbq", "price": 2590, "weight": "220 г", "name": { "RU": "Куриные окорочка", "EN": "Chicken Legs", "KZ": "Тауық сирақтары" } },
-    { "categoryId": "bbq", "price": 1990, "weight": "180 г", "name": { "RU": "Овощи гриль на шпажке", "EN": "Grilled Vegetables on Skewer", "KZ": "Шашлықтағы гриль көкөністері" } },
-    { "categoryId": "bbq", "price": 1790, "weight": "150 г", "name": { "RU": "Шампиньоны на мангале", "EN": "Grilled Champignons", "KZ": "Мангалдағы шампиньондар" } },
-
-    { "categoryId": "sides", "price": 1990, "weight": "200 г", "name": { "RU": "Овощи гриль", "EN": "Grilled Vegetables", "KZ": "Гриль көкөністері" } },
-    { "categoryId": "sides", "price": 1790, "weight": "150 г", "name": { "RU": "Брокколи", "EN": "Broccoli", "KZ": "Брокколи" } },
-    { "categoryId": "sides", "price": 1390, "weight": "150 г", "name": { "RU": "Картофельные дольки", "EN": "Potato Wedges", "KZ": "Картоп бөліктері" } },
-    { "categoryId": "sides", "price": 1190, "weight": "150 г", "name": { "RU": "Картофель фри", "EN": "French Fries", "KZ": "Фри картобы" } },
-    { "categoryId": "sides", "price": 790, "weight": "150 г", "name": { "RU": "Рис", "EN": "Rice", "KZ": "Күріш" } },
-
-    { "categoryId": "sauces", "price": 590, "weight": "50 г", "name": { "RU": "Сырный", "EN": "Cheese Sauce", "KZ": "Ірімшік тұздығы" } },
-    { "categoryId": "sauces", "price": 590, "weight": "50 г", "name": { "RU": "Красный", "EN": "Red Sauce", "KZ": "Қызыл тұздық" } },
-    { "categoryId": "sauces", "price": 590, "weight": "50 г", "name": { "RU": "Белый", "EN": "White Sauce", "KZ": "Ақ тұздық" } },
-    { "categoryId": "sauces", "price": 590, "weight": "50 г", "name": { "RU": "Кетчуп", "EN": "Ketchup", "KZ": "Кетчуп" } },
-    { "categoryId": "sauces", "price": 590, "weight": "50 г", "name": { "RU": "Тартар", "EN": "Tartar Sauce", "KZ": "Тартар тұздығы" } },
-
-    { "categoryId": "desserts", "price": 5490, "weight": "400 г", "name": { "RU": "Восточные сладости", "EN": "Oriental Sweets", "KZ": "Шығыс тәттілері" } },
-    { "categoryId": "desserts", "price": 2590, "weight": "150 г", "name": { "RU": "Пирожное в ассортименте", "EN": "Assorted Cakes", "KZ": "Тәтті нан ассортименті" } },
-
-    { "categoryId": "non_alc", "price": 2990, "weight": "1 л", "name": { "RU": "Фирменные лимонады", "EN": "Signature Lemonades", "KZ": "Фирмалық лимонадтар" }, "description": { "RU": "Вишня–Виноград, Киви–Грейпфрут–Жасмин, Маракуйя–Ананас, Нектар", "EN": "Cherry-Grape, Kiwi-Grapefruit-Jasmine, Passionfruit-Pineapple, Nectar", "KZ": "Шие–Жүзім, Киви–Грейпфрут–Жасмин, Маракуйя–Ананас, Нектар" } },
-    { "categoryId": "non_alc", "price": 2590, "weight": "800 мл", "name": { "RU": "Авторский чай", "EN": "Signature Tea", "KZ": "Авторлық шай" }, "description": { "RU": "Алматинский, Ташкентский, Малина-Лайм, Персик-жасмин", "EN": "Almaty, Tashkent, Raspberry-Lime, Peach-Jasmine", "KZ": "Алматы, Ташкент, Таңқурай-Лайм, Шабдалы-жасмин" } },
-    { "categoryId": "non_alc", "price": 1790, "weight": "0.5 л", "name": { "RU": "Пепси", "EN": "Pepsi", "KZ": "Пепси" } },
-    { "categoryId": "non_alc", "price": 1590, "weight": "600 мл", "name": { "RU": "Листовой чай", "EN": "Leaf Tea", "KZ": "Жапырақты шай" }, "description": { "RU": "Ассам, Сенча, Жасмин, Эрл Грей, Ройбуш, Султан", "EN": "Assam, Sencha, Jasmine, Earl Grey, Rooibos, Sultan", "KZ": "Ассам, Сенча, Жасмин, Эрл Грей, Ройбуш, Сұлтан" } },
-
-    { "categoryId": "wine", "price": 14990, "weight": "0.75 л", "name": { "RU": "Blanc de Blancs Tete de Cheval (бутылка)", "EN": "Blanc de Blancs Tete de Cheval (bottle)", "KZ": "Blanc de Blancs Tete de Cheval (бөтелке)" } },
-
-    { "categoryId": "vodka", "price": 2090, "weight": "50 г", "name": { "RU": "Kosenkоrоva, 50 гр", "EN": "Kosenkоrоva, 50g", "KZ": "Kosenkоrоva, 50 гр" } },
-    { "categoryId": "vodka", "price": 2690, "weight": "50 г", "name": { "RU": "Mont Blanc, 50 гр", "EN": "Mont Blanc, 50g", "KZ": "Mont Blanc, 50 гр" } },
-    { "categoryId": "vodka", "price": 1790, "weight": "50 г", "name": { "RU": "Архангельская Северная, 50 гр", "EN": "Arkhangelskaya Severnaya, 50g", "KZ": "Архангельская Северная, 50 гр" } },
-    { "categoryId": "vodka", "price": 2690, "weight": "50 г", "name": { "RU": "Белуга Нобл, 50 гр", "EN": "Beluga Noble, 50g", "KZ": "Белуга Нобл, 50 гр" } },
-
-    { "categoryId": "beer_bottle", "price": 2990, "weight": "0.5 л", "name": { "RU": "Ayinger, Brauweisse", "EN": "Ayinger, Brauweisse", "KZ": "Ayinger, Brauweisse" }, "description": { "RU": "не фильтрованное", "EN": "unfiltered", "KZ": "сүзілмеген" } },
-    { "categoryId": "beer_bottle", "price": 2990, "weight": "0.5 л", "name": { "RU": "Ayinger, Lager", "EN": "Ayinger, Lager", "KZ": "Ayinger, Lager" }, "description": { "RU": "фильтрованное", "EN": "filtered", "KZ": "сүзілген" } },
-    { "categoryId": "beer_bottle", "price": 1990, "weight": "0.5 л", "name": { "RU": "Gubernija Brown Ale", "EN": "Gubernija Brown Ale", "KZ": "Gubernija Brown Ale" }, "description": { "RU": "темное", "EN": "dark", "KZ": "қараңғы" } },
-    { "categoryId": "beer_bottle", "price": 1990, "weight": "0.5 л", "name": { "RU": "Gubernija Ekstra Lager", "EN": "Gubernija Ekstra Lager", "KZ": "Gubernija Ekstra Lager" }, "description": { "RU": "фильтрованное", "EN": "filtered", "KZ": "сүзілген" } },
-
-    { "categoryId": "beer_draft", "price": 1890, "weight": "0.5 л", "name": { "RU": "Holsten pilsener", "EN": "Holsten pilsener", "KZ": "Holsten pilsener" }, "description": { "RU": "светлое фильтрованное", "EN": "light filtered", "KZ": "ашық сүзілген" } },
-    { "categoryId": "beer_draft", "price": 2290, "weight": "0.5 л", "name": { "RU": "Kronenbourg blanc", "EN": "Kronenbourg blanc", "KZ": "Kronenbourg blanc" }, "description": { "RU": "не фильтрованное", "EN": "unfiltered", "KZ": "сүзілмеген" } },
-
-    { "categoryId": "water", "price": 990, "weight": "0.25 л", "name": { "RU": "Вода Tassay 0.25", "EN": "Tassay Water 0.25", "KZ": "Tassay суы 0.25" } },
-    { "categoryId": "water", "price": 2190, "weight": "0.75 л", "name": { "RU": "Вода Tassay 0.75", "EN": "Tassay Water 0.75", "KZ": "Tassay суы 0.75" } }
-  ]
-}
-        ];
-
-        // Словарь интерфейса для переводов
-        const UI_TEXT = {
-            RU: {
-                searchPlaceholder: "Поиск блюд и напитков...",
-                kitchen: "Кухня",
-                bar: "Бар",
-                all: "Все",
-                infoTitle: "Информация",
-                infoSub: "Свяжитесь с нами или найдите важные детали",
-                addressTitle: "Адрес",
-                addressText: "Проспект Дулати 1а, мкр. Архат, Алматы",
-                mapLink: "Открыть в 2GIS",
-                phoneTitle: "Телефон",
-                hoursText: "Ежедневно, 14:00 - 01:00",
-                navMenu: "Меню",
-                navInfo: "Инфо",
-                ingTitle: "Состав",
-                closeBtn: "Закрыть",
-                notFound: "Ничего не найдено"
-            },
-            KZ: {
-                searchPlaceholder: "Тағамдар мен сусындарды іздеу...",
-                kitchen: "Кухня",
-                bar: "Бар",
-                all: "Барлығы",
-                infoTitle: "Ақпарат",
-                infoSub: "Бізбен хабарласыңыз немесе маңызды мәліметтерді табыңыз",
-                addressTitle: "Мекенжай",
-                addressText: "Дулати даңғылы 1а, Архат ш/а, Алматы",
-                mapLink: "2GIS арқылы ашу",
-                phoneTitle: "Телефон",
-                hoursText: "Күн сайын, 14:00 - 01:00",
-                navMenu: "Мәзір",
-                navInfo: "Ақпарат",
-                ingTitle: "Құрамы",
-                closeBtn: "Жабу",
-                notFound: "Ештеңе табылмады"
-            },
-            EN: {
-                searchPlaceholder: "Search dishes and drinks...",
-                kitchen: "Kitchen",
-                bar: "Bar",
-                all: "All",
-                infoTitle: "Information",
-                infoSub: "Get in touch with us or find details",
-                addressTitle: "Address",
-                addressText: "1a Dulati Ave, Arkhat microdistrict, Almaty",
-                mapLink: "Open in 2GIS",
-                phoneTitle: "Phone",
-                hoursText: "Daily, 14:00 - 01:00",
-                navMenu: "Menu",
-                navInfo: "Info",
-                ingTitle: "Ingredients",
-                closeBtn: "Close",
-                notFound: "Nothing found"
-            }
-        };
-
-        let currentLang = 'RU';
-        let currentType = 'kitchen';
-        let currentCategory = 'All';
-
-        function initApp() {
-            updateInterfaceText();
-            renderCategories();
-            renderMenu();
-        }
-
-        function setLang(lang) {
-            currentLang = lang;
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.remove('font-bold', 'text-forest-green');
-                btn.classList.add('text-outline');
-            });
-            document.getElementById(`btn-${lang}`).classList.add('font-bold', 'text-forest-green');
-            document.getElementById(`btn-${lang}`).classList.remove('text-outline');
-            
-            updateInterfaceText();
-            renderCategories();
-            renderMenu(document.getElementById('searchInput').value);
-        }
-
-        function updateInterfaceText() {
-            const t = UI_TEXT[currentLang];
-            document.getElementById('searchInput').placeholder = t.searchPlaceholder;
-            document.getElementById('type-kitchen').textContent = t.kitchen;
-            document.getElementById('type-bar').textContent = t.bar;
-            document.getElementById('infoTitle').textContent = t.infoTitle;
-            document.getElementById('infoSub').textContent = t.infoSub;
-            document.getElementById('infoAddressTitle').textContent = t.addressTitle;
-            document.getElementById('infoAddress').textContent = t.addressText;
-            document.getElementById('infoMapLink').textContent = t.mapLink;
-            document.getElementById('infoPhoneTitle').textContent = t.phoneTitle;
-            document.getElementById('infoHours').textContent = t.hoursText;
-            document.getElementById('navMenuText').textContent = t.navMenu;
-            document.getElementById('navInfoText').textContent = t.navInfo;
-            document.getElementById('modalIngTitle').textContent = t.ingTitle;
-            document.getElementById('modalCloseBtn').textContent = t.closeBtn;
-        }
-
-        function switchType(type) {
-            currentType = type;
-            currentCategory = 'All';
-            const indicator = document.getElementById('typeIndicator');
-            const btnKitchen = document.getElementById('type-kitchen');
-            const btnBar = document.getElementById('type-bar');
-
-            if (type === 'kitchen') {
-                indicator.style.transform = 'translateX(0)';
-                btnKitchen.className = "flex-1 relative z-10 py-2.5 text-xs font-bold tracking-widest text-cream uppercase transition-colors";
-                btnBar.className = "flex-1 relative z-10 py-2.5 text-xs font-bold tracking-widest text-outline uppercase transition-colors";
-            } else {
-                indicator.style.transform = 'translateX(100%)';
-                btnBar.className = "flex-1 relative z-10 py-2.5 text-xs font-bold tracking-widest text-cream uppercase transition-colors";
-                btnKitchen.className = "flex-1 relative z-10 py-2.5 text-xs font-bold tracking-widest text-outline uppercase transition-colors";
-            }
-            renderCategories();
-            renderMenu();
-        }
-
-        function renderCategories() {
-            const container = document.getElementById('categoryContainer');
-            const searchQuery = document.getElementById('searchInput').value;
-            
-            if (searchQuery) {
-                container.classList.add('hidden');
-                return;
-            } else {
-                container.classList.remove('hidden');
-            }
-
-            const items = MENU.filter(item => item.type === currentType);
-            const catKey = `category_${currentLang.toLowerCase()}`;
-            const uniqueCats = [...new Set(items.map(i => i[catKey]))];
-            
-            const t = UI_TEXT[currentLang];
-            const categories = [{ id: 'All', name: t.all }, ...uniqueCats.map(c => ({ id: c, name: c }))];
-
-            container.innerHTML = categories.map(cat => `
-                <button onclick="selectCategory('${cat.id.replace(/'/g, "\\'")}')" class="shrink-0 px-4 py-2 rounded-xl text-[11px] font-bold tracking-widest uppercase transition-all shadow-sm border ${
-                    currentCategory === cat.id 
-                    ? 'bg-forest-green text-cream border-forest-green' 
-                    : 'bg-white text-outline border-forest-green/10 hover:border-forest-green/35'
-                }">${cat.name}</button>
-            `).join('');
-        }
-
-        function selectCategory(category) {
-            currentCategory = category;
-            renderCategories();
-            renderMenu(document.getElementById('searchInput').value);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function renderMenu(searchQuery = '') {
-            const container = document.getElementById('menuContainer');
-            const nameKey = `name_${currentLang.toLowerCase()}`;
-            const catKey = `category_${currentLang.toLowerCase()}`;
-            const compKey = `composition_${currentLang.toLowerCase()}`;
-
-            let filtered = MENU;
-            if (searchQuery) {
-                const q = searchQuery.toLowerCase();
-                filtered = filtered.filter(i => i[nameKey].toLowerCase().includes(q) || (i[compKey] && i[compKey].toLowerCase().includes(q)));
-            } else {
-                filtered = filtered.filter(i => i.type === currentType);
-                if (currentCategory !== 'All') {
-                    filtered = filtered.filter(i => i[catKey] === currentCategory);
+<body class="bg-cream font-body-md text-on-surface">
+<header class="fixed top-0 inset-x-0 z-50 glass-effect pt-safe border-b border-forest-green/5 transition-opacity duration-300">
+<div class="px-container-padding flex items-center justify-between relative h-20">
+<div class="min-w-[80px]"></div>
+<div class="absolute left-1/2 -translate-x-1/2 flex flex-col items-center">
+<div class="flex items-center gap-2">
+<h1 class="font-serif text-[28px] text-forest-green tracking-tighter font-semibold">NECTAR</h1>
+</div>
+<p class="font-label-caps text-[10px] text-outline tracking-widest uppercase mt-[-2px]" data-i18n="header_subtitle">Lounge · Bar · Kitchen</p>
+</div>
+<div class="flex items-center gap-3 justify-end min-w-[80px]">
+<button aria-label="Switch to Russian" class="lang-btn text-[10px] font-label-caps tracking-[0.2em] text-forest-green lang-active transition-colors opacity-100 font-bold duration-300" onclick="switchLang('RU')">RU</button>
+<button aria-label="Switch to Kazakh" class="lang-btn text-[10px] font-label-caps tracking-[0.2em] text-on-secondary-fixed-variant hover:text-forest-green transition-colors opacity-60 duration-300" onclick="switchLang('KZ')">KZ</button>
+<button aria-label="Switch to English" class="lang-btn text-[10px] font-label-caps tracking-[0.2em] text-on-secondary-fixed-variant hover:text-forest-green transition-colors opacity-60 duration-300" onclick="switchLang('EN')">EN</button>
+</div>
+</div>
+</header>
+<main class="flex flex-col relative w-full pb-safe-area-bottom bg-cream pt-20">
+<!-- Menu Section -->
+<section class="spa-section active flex-col w-full" id="menu-section">
+<!-- Hero Image -->
+<div class="w-full h-64 relative -mt-4 mb-4 z-0 overflow-hidden">
+<img alt="Nectarine Hero" class="w-full h-full object-cover mix-blend-multiply opacity-90 hero-float transform origin-center" src="https://lh3.googleusercontent.com/aida/AEtjO1VfckORHX18V6pYkQT8N5yS9yA9sBXpVR9MhYawqAJMa6Xbm6ZQYqU9LL7UaqgjdLtKEFkd-RrEq7PZjXdhVCCwND2Z5DuMATgyoKbTQT35y373wzkqGR4vlge_G9Vgi3Nh9jCJ5JQQhc_SW4dk8AH_36BTha7h-XDx-OsSYpBDcoX0NVZDXi-oLnBW6hfKkAJZU8WPwLvjBiLKre4Z4SKjWd_2ZzhWur3FCVLKRHCF3M4LjtCnuF5h-A"/>
+<div class="absolute inset-0 bg-gradient-to-t from-cream via-cream/40 to-transparent"></div>
+<div class="absolute inset-0 bg-gradient-to-b from-cream/20 via-transparent to-transparent"></div>
+</div>
+<div class="flex flex-col w-full px-container-padding relative z-10 -mt-12">
+<!-- Sticky Navigation Block -->
+<div class="sticky z-40 bg-cream/95 backdrop-blur-xl pt-2 pb-2 -mx-container-padding px-container-padding flex flex-col gap-4 border-b border-forest-green/5 pb-4 transition-all duration-300 top-0">
+<!-- Smart Search Bar -->
+<div class="flex items-center gap-3 bg-white shadow-[0_2px_12px_rgba(27,48,34,0.03)] border border-forest-green/10 px-5 py-3.5 rounded-2xl transition-all duration-300 focus-within:ring-1 focus-within:ring-forest-green/20 focus-within:border-forest-green/30 relative" role="search">
+<span aria-hidden="true" class="material-symbols-outlined text-outline/60 transition-opacity duration-300">search</span>
+<input aria-label="Search dishes and drinks" class="flex-1 bg-transparent border-none outline-none text-body-md text-on-surface placeholder:text-outline-variant font-body-md transition-opacity duration-300" data-i18n-placeholder="search_placeholder" id="searchInput" placeholder="Поиск блюд, напитков..." type="text"/>
+<button aria-label="Clear search" class="hidden items-center justify-center text-outline hover:text-forest-green transition-all duration-300 absolute right-4 h-full px-2" id="clearSearchBtn" onclick="clearSearch()">
+<span aria-hidden="true" class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Global Navigation: Kitchen | Bar -->
+<div class="flex justify-center mt-2 fade-in-up">
+<div class="flex items-center bg-white border border-forest-green/5 rounded-2xl p-1 shadow-[0_2px_8px_rgba(27,48,34,0.02)] relative w-full max-w-sm" role="tablist">
+<div class="absolute left-1 top-1 bottom-1 w-[calc(50%-4px)] bg-forest-green rounded-xl transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] shadow-sm" id="nav-indicator"></div>
+<button aria-selected="true" class="nav-btn flex-1 relative z-10 px-8 py-2.5 text-label-caps font-label-caps text-cream transition-colors active:scale-95 tracking-widest" data-i18n="nav_kitchen" data-index="0" data-type="kitchen" onclick="switchMainTab(0, this)" role="tab">КУХНЯ</button>
+<button aria-selected="false" class="nav-btn flex-1 relative z-10 px-8 py-2.5 text-label-caps font-label-caps text-on-surface-variant transition-colors active:scale-95 tracking-widest" data-i18n="nav_bar" data-index="1" data-type="bar" onclick="switchMainTab(1, this)" role="tab">БАР</button>
+</div>
+</div>
+<!-- Sub-categories (Horizontal Scroll) -->
+<div class="flex overflow-x-auto gap-3 pb-2 mt-3 snap-x snap-mandatory hide-scrollbar fade-in-up" id="categoryContainer" style="transition-delay: 50ms;">
+<!-- Categories will be rendered here -->
+</div>
+</div>
+<!-- Menu List -->
+<div class="flex flex-col pb-12 mt-2" id="menuContainer">
+</div>
+</div>
+</section>
+<!-- Info Section -->
+<section class="spa-section flex-col w-full px-container-padding pb-section-gap gap-section-gap pt-12 fade-in-up" id="info-section">
+<div class="flex flex-col gap-6 fade-in-up">
+<div class="flex flex-col gap-2 items-center text-center">
+<h1 class="font-serif text-[40px] text-forest-green tracking-tight font-semibold" data-i18n="info_title" style="letter-spacing: 0.1em;">Информация</h1>
+<p class="font-body-md text-body-md text-secondary" data-i18n="info_subtitle">Свяжитесь с нами или найдите важные детали</p>
+</div>
+</div>
+<div class="flex flex-col gap-4 fade-in-up" style="transition-delay: 100ms;">
+<div class="bg-white rounded-2xl p-6 soft-shadow border border-forest-green/5 flex flex-col gap-6 relative overflow-hidden group">
+<div class="absolute -right-12 -top-12 w-32 h-32 bg-warm-gold/5 rounded-full blur-3xl mix-blend-multiply opacity-50"></div>
+<div class="flex items-start gap-4 relative z-10">
+<div class="w-10 h-10 rounded-full bg-forest-green/5 flex items-center justify-center shrink-0 border border-forest-green/10">
+<span aria-hidden="true" class="material-symbols-outlined text-forest-green text-[20px]" style='font-variation-settings: "FILL" 1;'>location_on</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="font-label-caps text-label-caps text-forest-green/70 tracking-wider uppercase" data-i18n="info_address_label">Адрес</h3>
+<p class="font-body-lg text-body-lg text-forest-green" data-i18n="info_address">Проспект Дулати 1а, мкр. Архат, Алматы</p>
+<a class="inline-flex items-center gap-1 mt-1 text-warm-gold font-body-md text-sm hover:text-forest-green transition-colors group/link" href="https://go.2gis.com/iV3rq">
+<span class="" data-i18n="info_open_map">Открыть в 2GIS</span>
+<span aria-hidden="true" class="material-symbols-outlined text-[16px] transition-transform group-hover/link:translate-x-1">arrow_forward</span>
+</a>
+</div>
+</div>
+<div class="w-full h-[1px] bg-forest-green/5"></div>
+<div class="flex items-start gap-4 relative z-10">
+<div class="w-10 h-10 rounded-full bg-forest-green/5 flex items-center justify-center shrink-0 border border-forest-green/10">
+<span aria-hidden="true" class="material-symbols-outlined text-forest-green text-[20px]" style='font-variation-settings: "FILL" 1;'>call</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="font-label-caps text-label-caps text-forest-green/70 tracking-wider uppercase" data-i18n="info_phone_label">Телефон</h3>
+<a class="font-body-lg text-body-lg text-forest-green hover:text-warm-gold transition-colors lining-nums" href="tel:+77001234567">+7 (700) 123 45 67</a>
+<p class="font-body-md text-sm text-secondary mt-1 lining-nums" data-i18n="info_hours">Ежедневно, 14:00 - 01:00</p>
+</div>
+</div>
+<div class="w-full h-[1px] bg-forest-green/5"></div>
+<div class="flex items-start gap-4 relative z-10">
+<div class="w-10 h-10 rounded-full bg-forest-green/5 flex items-center justify-center shrink-0 border border-forest-green/10">
+<svg aria-hidden="true" class="w-5 h-5 text-forest-green" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"></path>
+</svg>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="font-label-caps text-label-caps text-forest-green/70 tracking-wider uppercase">Instagram</h3>
+<a class="font-body-lg text-body-lg text-forest-green hover:text-warm-gold transition-colors" href="https://www.instagram.com/nectar.lounge.almaty" rel="noopener noreferrer" target="_blank">@nectar.lounge.almaty</a>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-6 fade-in-up" style="transition-delay: 200ms;">
+<div class="flex items-center justify-between">
+<h2 class="font-serif text-[24px] text-forest-green font-medium" data-i18n="info_consumer" style="letter-spacing: 0.1em;">Уголок потребителя</h2>
+<div class="flex-1 h-[1px] bg-forest-green/10 ml-4"></div>
+</div>
+<div class="flex flex-col gap-3">
+<button aria-expanded="false" class="w-full bg-white hover:bg-forest-green/5 transition-colors rounded-2xl p-4 flex items-center justify-between group text-left border border-forest-green/5" onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true'); this.blur();">
+<div class="flex items-center gap-3">
+<span aria-hidden="true" class="material-symbols-outlined text-warm-gold/70 group-hover:text-warm-gold transition-colors">verified_user</span>
+<span class="font-body-lg text-body-lg text-forest-green" data-i18n="info_license">Лицензия и регистрация</span>
+</div>
+<span aria-hidden="true" class="material-symbols-outlined chevron transition-transform text-outline/60">expand_more</span>
+</button>
+<div class="hidden px-4 pb-4 transition-all duration-300">
+<p class="font-body-md text-body-md text-secondary leading-relaxed lining-nums" data-i18n="info_license_desc">Государственная лицензия на розничную реализацию алкогольной продукции № 12345678 выдана Департаментом государственных доходов по г. Алматы. БИН: 123456789012.</p>
+</div>
+<button aria-expanded="false" class="w-full bg-white hover:bg-forest-green/5 transition-colors rounded-2xl p-4 flex items-center justify-between group text-left border border-forest-green/5" onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true'); this.blur();">
+<div class="flex items-center gap-3">
+<span aria-hidden="true" class="material-symbols-outlined text-warm-gold/70 group-hover:text-warm-gold transition-colors">menu_book</span>
+<span class="font-body-lg text-body-lg text-forest-green" data-i18n="info_rules">Правила обслуживания</span>
+</div>
+<span aria-hidden="true" class="material-symbols-outlined chevron transition-transform text-outline/60">expand_more</span>
+</button>
+<div class="hidden px-4 pb-4 transition-all duration-300">
+<p class="font-body-md text-body-md text-secondary leading-relaxed lining-nums" data-i18n="info_rules_desc">Мы оставляем за собой право отказать в обслуживании лицам в состоянии алкогольного опьянения или нарушающим дресс-код. Вход разрешен гостям старше 21 года.</p>
+</div>
+<button aria-expanded="false" class="w-full bg-white hover:bg-forest-green/5 transition-colors rounded-2xl p-4 flex items-center justify-between group text-left border border-forest-green/5" onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true'); this.blur();">
+<div class="flex items-center gap-3">
+<span aria-hidden="true" class="material-symbols-outlined text-warm-gold/70 group-hover:text-warm-gold transition-colors">forum</span>
+<span class="font-body-lg text-body-lg text-forest-green" data-i18n="info_feedback">Книга отзывов</span>
+</div>
+<span aria-hidden="true" class="material-symbols-outlined chevron transition-transform text-outline/60">expand_more</span>
+</button>
+<div class="hidden px-4 pb-4 transition-all duration-300">
+<p class="font-body-md text-body-md text-secondary leading-relaxed" data-i18n="info_feedback_desc">Физическая Книга жалоб и предложений предоставляется по запросу у дежурного менеджера. Альтернативно, вы можете оставить цифровой отзыв через наши контактные формы.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Modal Overlay -->
+<div aria-modal="true" class="fixed inset-0 z-[100] hidden items-center justify-center px-4" id="itemModal" role="dialog">
+<div class="absolute inset-0 bg-forest-green/60 backdrop-blur-sm transition-opacity duration-300" onclick="closeModal()"></div>
+<div class="relative modal-glass w-full max-w-md rounded-[32px] overflow-hidden flex flex-col max-h-[85vh] border border-white/40">
+<div class="sticky top-0 bg-transparent p-5 flex justify-between items-start z-10 border-b border-forest-green/10 gap-4">
+<h3 class="font-serif text-[24px] text-forest-green font-semibold leading-tight break-words pr-4" id="modalTitle">Item Name</h3>
+<button aria-label="Close modal" class="w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-full bg-forest-green/5 text-forest-green hover:bg-forest-green/15 transition-colors mt-0.5 active:scale-95" onclick="closeModal()">
+<span aria-hidden="true" class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<div class="overflow-y-auto p-6 flex flex-col gap-6"><div class="flex flex-col gap-1 border-b border-warm-gold/30 pb-4"><span class="font-serif text-[32px] text-warm-gold font-medium lining-nums" id="modalPrice">0 ₸</span><div class="flex items-center gap-2 opacity-50"><span aria-hidden="true" class="material-symbols-outlined text-[14px]">scale</span><span class="font-label-caps text-[10px] tracking-widest uppercase lining-nums" id="modalWeight"></span></div></div><div class="hidden flex-col gap-3" id="modalIngredientsContainer"><h4 class="font-label-caps text-[11px] text-forest-green/50 tracking-[0.2em] uppercase" data-i18n="modal_ingredients">Ингредиенты</h4><div class="font-serif text-[20px] text-forest-green leading-relaxed" id="modalIngredients" style="line-height: 1.7;"></div></div></div>
+<div class="p-5 bg-transparent border-t border-forest-green/10">
+<button class="w-full py-3.5 bg-forest-green text-cream rounded-xl font-label-caps tracking-widest text-sm active:scale-[0.98] transition-transform shadow-lg shadow-forest-green/20" data-i18n="modal_close" onclick="closeModal()">ЗАКРЫТЬ</button>
+</div>
+</div>
+</div>
+<script>
+            const translations = {
+                'RU': {
+                    'header_subtitle': 'Lounge · Bar · Kitchen',
+                    'search_placeholder': 'Поиск блюд, напитков...',
+                    'nav_kitchen': 'КУХНЯ',
+                    'nav_bar': 'БАР',
+                    'modal_ingredients': 'Ингредиенты',
+                    'modal_close': 'ЗАКРЫТЬ',
+                    'tab_menu': 'Меню',
+                    'tab_info': 'Инфо',
+                    'cat_all': 'Все',
+                    'info_title': 'Информация',
+                    'info_subtitle': 'Свяжитесь с нами или найдите важные детали',
+                    'info_address_label': 'Адрес',
+                    'info_address': 'Проспект Дулати 1а, мкр. Архат, Алматы',
+                    'info_open_map': 'Открыть в 2GIS',
+                    'info_phone_label': 'Телефон',
+                    'info_hours': 'Ежедневно, 14:00 - 01:00',
+                    'info_consumer': 'Уголок потребителя',
+                    'info_license': 'Лицензия и регистрация',
+                    'info_license_desc': 'Государственная лицензия на розничную реализацию алкогольной продукции № 12345678 выдана Департаментом государственных доходов по г. Алматы. БИН: 123456789012.',
+                    'info_rules': 'Правила обслуживания',
+                    'info_rules_desc': 'Мы оставляем за собой право отказать в обслуживании лицам в состоянии алкогольного опьянения или нарушающим дресс-код. Вход разрешен гостям старше 21 года.',
+                    'info_feedback': 'Книга отзывов',
+                    'info_feedback_desc': 'Физическая Книга жалоб и предложений предоставляется по запросу у дежурного менеджера. Альтернативно, вы можете оставить цифровой отзыв через наши контактные формы.',
+                    'info_find_us': 'Найти нас здесь'
+                },
+                'KZ': {
+                    'header_subtitle': 'Lounge · Bar · Kitchen',
+                    'search_placeholder': 'Тағамдарды, сусындарды іздеу...',
+                    'nav_kitchen': 'АСХАНА',
+                    'nav_bar': 'БАР',
+                    'modal_ingredients': 'Құрамы',
+                    'modal_close': 'ЖАБУ',
+                    'tab_menu': 'Мәзір',
+                    'tab_info': 'Ақпарат',
+                    'cat_all': 'Барлығы',
+                    'info_title': 'Ақпарат',
+                    'info_subtitle': 'Бізбен хабарласыңыз немесе маңызды мәліметтерді табыңыз',
+                    'info_address_label': 'Мекен-жайы',
+                    'info_address': 'Дулати даңғылы 1а, Архат ықшамауданы, Алматы',
+                    'info_open_map': '2GIS-те ашу',
+                    'info_phone_label': 'Телефон',
+                    'info_hours': 'Күн сайын, 14:00 - 01:00',
+                    'info_consumer': 'Тұтынушы бұрышы',
+                    'info_license': 'Лицензия және тіркеу',
+                    'info_license_desc': 'Алкоголь өнімдерін бөлшек саудада өткізуге арналған № 12345678 мемлекеттік лицензияны Алматы қаласы бойынша Мемлекеттік кірістер департаменті берген. БСН: 123456789012.',
+                    'info_rules': 'Қызмет көрсету ережелері',
+                    'info_rules_desc': 'Біз мас күйдегі немесе дресс-кодты бұзған адамдарға қызмет көрсетуден бас тарту құқығын өзімізде қалдырамыз. 21 жастан асқан қонақтарға кіруге рұқсат етіледі.',
+                    'info_feedback': 'Пікірлер кітабы',
+                    'info_feedback_desc': 'Шағымдар мен ұсыныстардың физикалық кітабы кезекші менеджердің сұрауы бойынша қол жетімді. Немесе біздің байланыс формаларымыз арқылы сандық пікір қалдыра аласыз.',
+                    'info_find_us': 'Бізді осы жерден табыңыз'
+                },
+                'EN': {
+                    'header_subtitle': 'Lounge · Bar · Kitchen',
+                    'search_placeholder': 'Search dishes, drinks...',
+                    'nav_kitchen': 'KITCHEN',
+                    'nav_bar': 'BAR',
+                    'modal_ingredients': 'Ingredients',
+                    'modal_close': 'CLOSE',
+                    'tab_menu': 'Menu',
+                    'tab_info': 'Info',
+                    'cat_all': 'All',
+                    'info_title': 'Information',
+                    'info_subtitle': 'Get in touch or find essential details',
+                    'info_address_label': 'Address',
+                    'info_address': 'Prospect Dulati, 1a, Arhat district, Almaty',
+                    'info_open_map': 'Open in 2GIS',
+                    'info_phone_label': 'Phone',
+                    'info_hours': 'Every day, 14:00 - 01:00',
+                    'info_consumer': 'Consumer Corner',
+                    'info_license': 'License & Registration',
+                    'info_license_desc': 'State License for Retail Sale of Alcoholic Beverages No. 12345678 issued by the Department of State Revenue of Almaty. Business Identification Number (BIN): 123456789012.',
+                    'info_rules': 'Rules of Service',
+                    'info_rules_desc': 'We reserve the right to refuse service to intoxicated individuals or those violating our dress code. Entry is restricted to guests 21 years of age and older.',
+                    'info_feedback': 'Feedback Book',
+                    'info_feedback_desc': 'The physical Book of Complaints and Suggestions is available upon request from the manager on duty. Alternatively, you may leave digital feedback via our contact forms.',
+                    'info_find_us': 'Find Us Here'
                 }
-            }
+            };
 
-            renderCategories();
+            let currentLang = 'RU';
+            let currentTab = 'menu';
 
-            if (filtered.length === 0) {
-                const t = UI_TEXT[currentLang];
-                container.innerHTML = `<div class="text-center py-12 text-outline font-serif italic text-lg">${t.notFound}</div>`;
-                return;
-            }
-
-            const categoriesToRender = [...new Set(filtered.map(i => i[catKey]))];
-            let html = '';
-
-            categoriesToRender.forEach(cat => {
-                const catItems = filtered.filter(i => i[catKey] === cat);
-                html += `
-                    <div class="mt-4 mb-2">
-                        <h2 class="font-serif text-xl text-forest-green font-semibold mb-3 px-1">${cat}</h2>
-                        <div class="flex flex-col gap-2.5">
-                `;
-                catItems.forEach(item => {
-                    const itemStr = JSON.stringify(item).replace(/"/g, '&quot;');
-                    html += `
-                        <div onclick='openModal(${itemStr})' class="bg-white rounded-2xl p-4 shadow-sm border border-forest-green/5 cursor-pointer hover:border-forest-green/20 transition-all flex justify-between items-start gap-4">
-                            <div>
-                                <h3 class="font-serif text-lg text-forest-green font-medium leading-tight mb-1">${item[nameKey]}</h3>
-                                ${item[compKey] ? `<p class="text-xs text-outline line-clamp-1">${item[compKey]}</p>` : ''}
-                            </div>
-                            <span class="font-serif text-lg text-warm-gold font-semibold whitespace-nowrap">${item.price} ₸</span>
-                        </div>
-                    `;
+            function switchLang(lang) {
+                currentLang = lang;
+                
+                document.querySelectorAll('.lang-btn').forEach(btn => {
+                    if(btn.textContent.trim() === lang) {
+                        btn.classList.add('text-forest-green', 'lang-active', 'font-bold');
+                        btn.classList.remove('text-on-secondary-fixed-variant');
+                    } else {
+                        btn.classList.remove('text-forest-green', 'lang-active', 'font-bold');
+                        btn.classList.add('text-on-secondary-fixed-variant');
+                    }
                 });
-                html += `</div></div>`;
+
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    if (translations[lang][key]) {
+                        el.textContent = translations[lang][key];
+                    }
+                });
+
+                document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                    const key = el.getAttribute('data-i18n-placeholder');
+                    if (translations[lang][key]) {
+                        el.placeholder = translations[lang][key];
+                    }
+                });
+                
+                renderCategories();
+                const searchInput = document.getElementById('searchInput');
+                renderMenu(searchInput.value);
+            }
+            
+            function switchSection(sectionId, btn) {
+                if (currentTab === sectionId) return;
+                currentTab = sectionId;
+                
+                document.querySelectorAll('.spa-section').forEach(sec => {
+                    sec.style.opacity = '0';
+                    setTimeout(() => {
+                        sec.classList.remove('active');
+                    }, 400); 
+                });
+                
+                setTimeout(() => {
+                    const targetSec = document.getElementById(`${sectionId}-section`);
+                    targetSec.classList.add('active');
+                    void targetSec.offsetWidth;
+                    targetSec.style.opacity = '1';
+                    
+                    // Trigger animations in new section
+                    setTimeout(() => {
+                        initObserver();
+                    }, 100);
+                }, 400);
+                
+                document.querySelectorAll('.bottom-nav-btn').forEach(b => {
+                    if (b.dataset.path === sectionId) {
+                        b.classList.remove('text-outline');
+                        b.classList.add('text-forest-green');
+                    } else {
+                        b.classList.add('text-outline');
+                        b.classList.remove('text-forest-green');
+                    }
+                });
+                
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+          const MENU = [
+    // Холодные закуски
+    {
+        "id": "1-1",
+        "category_ru": "Холодные закуски",
+        "category_kz": "Салқын тіскебасарлар",
+        "category_en": "Cold Appetizers",
+        "name_ru": "Мясное плато",
+        "name_kz": "Ет ассортиі",
+        "name_en": "Meat Platter",
+        "price": 4990,
+        "weight": "350 г",
+        "composition_ru": "Традиционные мясные деликатесы",
+        "composition_kz": "Дәстүрлі ет деликатестері",
+        "composition_en": "Traditional meat delicacies",
+        "type": "kitchen"
+    },
+    {
+        "id": "1-2",
+        "category_ru": "Холодные закуски",
+        "category_kz": "Салқын тіскебасарлар",
+        "category_en": "Cold Appetizers",
+        "name_ru": "Домашние соленья",
+        "name_kz": "Үй тұздықтары",
+        "name_en": "Homemade Pickles",
+        "price": 2890,
+        "weight": "250 г",
+        "composition_ru": "Ассорти из домашних солений",
+        "composition_kz": "Үй тұздықтарының ассортиі",
+        "composition_en": "Assorted homemade pickles",
+        "type": "kitchen"
+    },
+    {
+        "id": "1-3",
+        "category_ru": "Холодные закуски",
+        "category_kz": "Салқын тіскебасарлар",
+        "category_en": "Cold Appetizers",
+        "name_ru": "Овощная нарезка",
+        "name_kz": "Көкөніс ассортиі",
+        "name_en": "Vegetable Platter",
+        "price": 2890,
+        "weight": "250 г",
+        "composition_ru": "Свежие сезонные овощи",
+        "composition_kz": "Балғын маусымдық көкөністер",
+        "composition_en": "Fresh seasonal vegetables",
+        "type": "kitchen"
+    },
+    {
+        "id": "1-4",
+        "category_ru": "Холодные закуски",
+        "category_kz": "Салқын тіскебасарлар",
+        "category_en": "Cold Appetizers",
+        "name_ru": "Рыбное ассорти",
+        "name_kz": "Балық ассортиі",
+        "name_en": "Fish Platter",
+        "price": 5590,
+        "weight": "300 г",
+        "composition_ru": "Ассорти из благородных видов рыб",
+        "composition_kz": "Асыл балық түрлерінің ассортиі",
+        "composition_en": "Assorted noble fish species",
+        "type": "kitchen"
+    },
+    {
+        "id": "1-5",
+        "category_ru": "Холодные закуски",
+        "category_kz": "Салқын тіскебасарлар",
+        "category_en": "Cold Appetizers",
+        "name_ru": "Капрезе",
+        "name_kz": "Капрезе",
+        "name_en": "Caprese",
+        "price": 2790,
+        "weight": "220 г",
+        "composition_ru": "Моцарелла, томаты, соус песто",
+        "composition_kz": "Моцарелла, қызанақ, песто соусы",
+        "composition_en": "Mozzarella, tomatoes, pesto sauce",
+        "type": "kitchen"
+    },
+    {
+        "id": "1-6",
+        "category_ru": "Холодные закуски",
+        "category_kz": "Салқын тіскебасарлар",
+        "category_en": "Cold Appetizers",
+        "name_ru": "Сырное плато",
+        "name_kz": "Ірімшік ассортиі",
+        "name_en": "Cheese Platter",
+        "price": 4990,
+        "weight": "280 г",
+        "composition_ru": "Ассорти из изысканных сортов сыра",
+        "composition_kz": "Ірімшік түрлерінің ассортиі",
+        "composition_en": "Assorted exquisite cheeses",
+        "type": "kitchen"
+    },
+
+    // Салаты
+    {
+        "id": "2-1",
+        "category_ru": "Салаты",
+        "category_kz": "Салаттар",
+        "category_en": "Salads",
+        "name_ru": "Свежий овощной салат",
+        "name_kz": "Жаңа піскен көкөніс салаты",
+        "name_en": "Fresh Vegetable Salad",
+        "price": 1990,
+        "weight": "200 г",
+        "composition_ru": "Сезонные овощи с зеленью",
+        "composition_kz": "Маусымдық көкөністер мен көкшөп",
+        "composition_en": "Seasonal vegetables with herbs",
+        "type": "kitchen"
+    },
+    {
+        "id": "2-2",
+        "category_ru": "Салаты",
+        "category_kz": "Салаттар",
+        "category_en": "Salads",
+        "name_ru": "Аччик-чучук",
+        "name_kz": "Ащы-тұщы",
+        "name_en": "Achichuk",
+        "price": 1790,
+        "weight": "180 г",
+        "composition_ru": "Томаты и лук",
+        "composition_kz": "Қызанақ пен пияз",
+        "composition_en": "Tomatoes and onions",
+        "type": "kitchen"
+    },
+    {
+        "id": "2-3",
+        "category_ru": "Салаты",
+        "category_kz": "Салаттар",
+        "category_en": "Salads",
+        "name_ru": "Цезарь с курицей",
+        "name_kz": "Тауық етінен Цезарь",
+        "name_en": "Caesar with Chicken",
+        "price": 2590,
+        "weight": "230 г",
+        "composition_ru": "Айсберг, куриное филе, соус, пармезан",
+        "composition_kz": "Айсберг, тауық филесі, соус, пармезан",
+        "composition_en": "Iceberg, chicken fillet, sauce, parmesan",
+        "type": "kitchen"
+    },
+    {
+        "id": "2-4",
+        "category_ru": "Салаты",
+        "category_kz": "Салаттар",
+        "category_en": "Salads",
+        "name_ru": "Хрустящие баклажаны",
+        "name_kz": "Қытырлақ баялды",
+        "name_en": "Crispy Eggplants",
+        "price": 2790,
+        "weight": "220 г",
+        "composition_ru": "Баклажаны, томаты, соус",
+        "composition_kz": "Баклажандар, қызанақтар, соус",
+        "composition_en": "Eggplants, tomatoes, sauce",
+        "type": "kitchen"
+    },
+    {
+        "id": "2-5",
+        "category_ru": "Салаты",
+        "category_kz": "Салаттар",
+        "category_en": "Salads",
+        "name_ru": "Греческий салат",
+        "name_kz": "Грек салаты",
+        "name_en": "Greek Salad",
+        "price": 2490,
+        "weight": "220 г",
+        "composition_ru": "Овощи, фета, маслины",
+        "composition_kz": "Көкөністер, фета, зәйтүн",
+        "composition_en": "Vegetables, feta, olives",
+        "type": "kitchen"
+    },
+    {
+        "id": "2-6",
+        "category_ru": "Салаты",
+        "category_kz": "Салаттар",
+        "category_en": "Salads",
+        "name_ru": "Теплый салат с кониной",
+        "name_kz": "Жылқы етінен жылы салат",
+        "name_en": "Warm Salad with Horse Meat",
+        "price": 2990,
+        "weight": "240 г",
+        "composition_ru": "Конина, микс салата, заправка",
+        "composition_kz": "Жылқы еті, салат миксі, тұздық",
+        "composition_en": "Horse meat, salad mix, dressing",
+        "type": "kitchen"
+    },
+    {
+        "id": "2-7",
+        "category_ru": "Салаты",
+        "category_kz": "Салаттар",
+        "category_en": "Salads",
+        "name_ru": "Салат с креветками и рукколой",
+        "name_kz": "Асшаян мен руккола салаты",
+        "name_en": "Shrimp and Arugula Salad",
+        "price": 3990,
+        "weight": "210 г",
+        "composition_ru": "Креветки, руккола, черри, пармезан",
+        "composition_kz": "Асшаяндар, руккола, черри, пармезан",
+        "composition_en": "Shrimp, arugula, cherry, parmesan",
+        "type": "kitchen"
+    },
+
+    // Горячие закуски
+    {
+        "id": "3-1",
+        "category_ru": "Горячие закуски",
+        "category_kz": "Ыстық тіскебасарлар",
+        "category_en": "Hot Appetizers",
+        "name_ru": "Креветки темпура",
+        "category_kz": "Темпура асшаяндары",
+        "name_en": "Tempura Shrimps",
+        "price": 3290,
+        "weight": "200 г",
+        "composition_ru": "Тигровые креветки в хрустящем кляре",
+        "composition_kz": "Қытырлақ клярдағы тигр асшаяндары",
+        "composition_en": "Tiger shrimp in crispy batter",
+        "type": "kitchen"
+    },
+    {
+        "id": "3-2",
+        "category_ru": "Горячие закуски",
+        "category_kz": "Ыстық тіскебасарлар",
+        "category_en": "Hot Appetizers",
+        "name_ru": "Клаб-сэндвич с курицей",
+        "name_kz": "Тауық етінен клаб-сэндвич",
+        "name_en": "Chicken Club Sandwich",
+        "price": 3190,
+        "weight": "280 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "3-3",
+        "category_ru": "Горячие закуски",
+        "category_kz": "Ыстық тіскебасарлар",
+        "category_en": "Hot Appetizers",
+        "name_ru": "Кесадилья с курицей",
+        "name_kz": "Тауық етінен кесадилья",
+        "name_en": "Chicken Quesadilla",
+        "price": 2990,
+        "weight": "250 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "3-4",
+        "category_ru": "Горячие закуски",
+        "category_kz": "Ыстық тіскебасарлар",
+        "category_en": "Hot Appetizers",
+        "name_ru": "Чебуреки",
+        "name_kz": "Чебуректер",
+        "name_en": "Chebureki",
+        "price": 2590,
+        "weight": "200 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "3-5",
+        "category_ru": "Горячие закуски",
+        "category_kz": "Ыстық тіскебасарлар",
+        "category_en": "Hot Appetizers",
+        "name_ru": "Наггетсы куриные",
+        "name_kz": "Тауық наггетстері",
+        "name_en": "Chicken Nuggets",
+        "price": 1690,
+        "weight": "180 г",
+        "type": "kitchen"
+    },
+
+    // Снэки
+    {
+        "id": "4-1",
+        "category_ru": "Снэки",
+        "category_kz": "Снектер",
+        "category_en": "Snacks",
+        "name_ru": "Большой сет закусок",
+        "name_kz": "Үлкен снектер жиынтығы",
+        "name_en": "Big Snack Set",
+        "price": 6990,
+        "weight": "700 г",
+        "composition_ru": "креветки, гренки, чечил, фри, сосиски, луковые кольца",
+        "composition_kz": "асшаяндар, гренкилер, чечил, фри, шұжықтар, пияз сақиналары",
+        "composition_en": "shrimps, croutons, chechil cheese, fries, sausages, onion rings",
+        "type": "kitchen"
+    },
+    {
+        "id": "4-2",
+        "category_ru": "Снэки",
+        "category_kz": "Снектер",
+        "category_en": "Snacks",
+        "name_ru": "Креветки пивные",
+        "name_kz": "Сыра асшаяндары",
+        "name_en": "Beer Shrimps",
+        "price": 3990,
+        "weight": "250 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "4-3",
+        "category_ru": "Снэки",
+        "category_kz": "Снектер",
+        "category_en": "Snacks",
+        "name_ru": "Фисташки",
+        "name_kz": "Пісте",
+        "name_en": "Pistachios",
+        "price": 1590,
+        "weight": "100 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "4-4",
+        "category_ru": "Снэки",
+        "category_kz": "Снектер",
+        "category_en": "Snacks",
+        "name_ru": "Чесночные гренки",
+        "name_kz": "Сарымсақ гренкилері",
+        "name_en": "Garlic Croutons",
+        "price": 1590,
+        "weight": "150 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "4-5",
+        "category_ru": "Снэки",
+        "category_kz": "Снектер",
+        "category_en": "Snacks",
+        "name_ru": "Чечил копченый",
+        "name_kz": "Ысталған чечил",
+        "name_en": "Smoked Chechil Cheese",
+        "price": 1390,
+        "weight": "100 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "4-6",
+        "category_ru": "Снэки",
+        "category_kz": "Снектер",
+        "category_en": "Snacks",
+        "name_ru": "Арахис",
+        "name_kz": "Жержаңғақ",
+        "name_en": "Peanuts",
+        "price": 1390,
+        "weight": "120 г",
+        "type": "kitchen"
+    },
+
+    // Супы
+    {
+        "id": "5-1",
+        "category_ru": "Супы",
+        "category_kz": "Сорпалар",
+        "category_en": "Soups",
+        "name_ru": "Окрошка с мясом (сезонная)",
+        "name_kz": "Ет қосылған окрошка (маусымдық)",
+        "name_en": "Okroshka with Meat (seasonal)",
+        "price": 2390,
+        "weight": "350 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "5-2",
+        "category_ru": "Супы",
+        "category_kz": "Сорпалар",
+        "category_en": "Soups",
+        "name_ru": "Куриный суп с лапшой",
+        "name_kz": "Тауық кеспе көжесі",
+        "name_en": "Chicken Noodle Soup",
+        "price": 1590,
+        "weight": "300 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "5-3",
+        "category_ru": "Супы",
+        "category_kz": "Сорпалар",
+        "category_en": "Soups",
+        "name_ru": "Солянка мясная",
+        "name_kz": "Ет солянкасы",
+        "name_en": "Meat Solyanka",
+        "price": 3590,
+        "weight": "350 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "5-4",
+        "category_ru": "Супы",
+        "category_kz": "Сорпалар",
+        "category_en": "Soups",
+        "name_ru": "Том Ям",
+        "name_kz": "Том Ям",
+        "name_en": "Tom Yum",
+        "price": 3590,
+        "weight": "350 г",
+        "composition_ru": "Традиционный тайский острый суп с морепродуктами",
+        "composition_kz": "Теңіз өнімдері қосылған дәстүрлі тай ащы сорпасы",
+        "composition_en": "Traditional Thai spicy soup with seafood",
+        "note": "Острое блюдо",
+        "type": "kitchen"
+    },
+    {
+        "id": "5-5",
+        "category_ru": "Супы",
+        "category_kz": "Сорпалар",
+        "category_en": "Soups",
+        "name_ru": "Рамен с говядиной",
+        "name_kz": "Сиыр етінен рамен",
+        "name_en": "Beef Ramen",
+        "price": 3590,
+        "weight": "400 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "5-6",
+        "category_ru": "Супы",
+        "category_kz": "Сорпалар",
+        "category_en": "Soups",
+        "name_ru": "Рамен с курицей",
+        "name_kz": "Тауық етінен рамен",
+        "name_en": "Chicken Ramen",
+        "price": 3290,
+        "weight": "400 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "5-7",
+        "category_ru": "Супы",
+        "category_kz": "Сорпалар",
+        "category_en": "Soups",
+        "name_ru": "Чечевичный крем-суп",
+        "name_kz": "Жасымық крем-сорпасы",
+        "name_en": "Lentil Cream Soup",
+        "price": 1990,
+        "weight": "300 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "5-8",
+        "category_ru": "Супы",
+        "category_kz": "Сорпалар",
+        "category_en": "Soups",
+        "name_ru": "Шорпа",
+        "name_kz": "Сорпа",
+        "name_en": "Shorpa",
+        "price": 3290,
+        "weight": "400 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "5-9",
+        "category_ru": "Супы",
+        "category_kz": "Сорпалар",
+        "category_en": "Soups",
+        "name_ru": "Пельмени (с бульоном / без)",
+        "name_kz": "Тұшпара (сорпамен / сорпасыз)",
+        "name_en": "Pelmeni (with/without broth)",
+        "price": 1990,
+        "weight": "250 г",
+        "type": "kitchen"
+    },
+
+    // Пицца и выпечка
+    {
+        "id": "6-1",
+        "category_ru": "Пицца и выпечка",
+        "category_kz": "Пицца және нан өнімдері",
+        "category_en": "Pizza & Bakery",
+        "name_ru": "Пицца Пепперони",
+        "name_kz": "Пепперони пиццасы",
+        "name_en": "Pepperoni Pizza",
+        "price": 3090,
+        "weight": "500 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "6-2",
+        "category_ru": "Пицца и выпечка",
+        "category_kz": "Пицца және нан өнімдері",
+        "category_en": "Pizza & Bakery",
+        "name_ru": "Пицца Маргарита",
+        "name_kz": "Маргарита пиццасы",
+        "name_en": "Margherita Pizza",
+        "price": 2590,
+        "weight": "450 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "6-3",
+        "category_ru": "Пицца и выпечка",
+        "category_kz": "Пицца және нан өнімдері",
+        "category_en": "Pizza & Bakery",
+        "name_ru": "Пицца с курицей и грибами",
+        "name_kz": "Тауық және саңырауқұлақ пиццасы",
+        "name_en": "Chicken and Mushroom Pizza",
+        "price": 3090,
+        "weight": "520 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "6-4",
+        "category_ru": "Пицца и выпечка",
+        "category_kz": "Пицца және нан өнімдері",
+        "category_en": "Pizza & Bakery",
+        "name_ru": "Пицца Болоньезе",
+        "name_kz": "Болоньезе пиццасы",
+        "name_en": "Bolognese Pizza",
+        "price": 2990,
+        "weight": "500 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "6-5",
+        "category_ru": "Пицца и выпечка",
+        "category_kz": "Пицца және нан өнімдері",
+        "category_en": "Pizza & Bakery",
+        "name_ru": "Мексиканская пицца с халапеньо",
+        "name_kz": "Халапеньо қосылған мексикалық пицца",
+        "name_en": "Mexican Pizza with Jalapeno",
+        "price": 3590,
+        "weight": "530 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "6-6",
+        "category_ru": "Пицца и выпечка",
+        "category_kz": "Пицца және нан өнімдері",
+        "category_en": "Pizza & Bakery",
+        "name_ru": "Хачапури по-мегрельски",
+        "name_kz": "Мегрелше хачапури",
+        "name_en": "Megrelian Khachapuri",
+        "price": 2790,
+        "weight": "400 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "6-7",
+        "category_ru": "Пицца и выпечка",
+        "category_kz": "Пицца және нан өнімдері",
+        "category_en": "Pizza & Bakery",
+        "name_ru": "Хлебная корзина",
+        "name_kz": "Нан себеті",
+        "name_en": "Bread Basket",
+        "price": 890,
+        "weight": "150 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "6-8",
+        "category_ru": "Пицца и выпечка",
+        "category_kz": "Пицца және нан өнімдері",
+        "category_en": "Pizza & Bakery",
+        "name_ru": "Лепешка",
+        "name_kz": "Таба нан",
+        "name_en": "Flatbread",
+        "price": 590,
+        "weight": "100 г",
+        "type": "kitchen"
+    },
+
+    // Паста
+    {
+        "id": "7-1",
+        "category_ru": "Паста",
+        "category_kz": "Паста",
+        "category_en": "Pasta",
+        "name_ru": "Фарфалле с морепродуктами",
+        "name_kz": "Теңіз өнімдерімен фарфалле",
+        "name_en": "Seafood Farfalle",
+        "price": 4990,
+        "weight": "350 г",
+        "composition_ru": "креветки, мидии, кальмары",
+        "composition_kz": "асшаяндар, мидиялар, кальмар",
+        "composition_en": "shrimps, mussels, squid",
+        "type": "kitchen"
+    },
+    {
+        "id": "7-2",
+        "category_ru": "Паста",
+        "category_kz": "Паста",
+        "category_en": "Pasta",
+        "name_ru": "Карбонара",
+        "name_kz": "Карбонара",
+        "name_en": "Carbonara",
+        "price": 3590,
+        "weight": "330 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "7-3",
+        "category_ru": "Паста",
+        "category_kz": "Паста",
+        "category_en": "Pasta",
+        "name_ru": "Болоньезе",
+        "name_kz": "Болоньезе",
+        "name_en": "Bolognese",
+        "price": 3290,
+        "weight": "340 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "7-4",
+        "category_ru": "Паста",
+        "category_kz": "Паста",
+        "category_en": "Pasta",
+        "name_ru": "Фетучини с курицей и грибами",
+        "name_kz": "Тауық және саңырауқұлақпен фетучини",
+        "name_en": "Fettuccine with Chicken & Mushrooms",
+        "price": 2990,
+        "weight": "320 г",
+        "type": "kitchen"
+    },
+
+    // Горячие блюда
+    {
+        "id": "8-1",
+        "category_ru": "Горячие блюда",
+        "category_kz": "Ыстық тағамдар",
+        "category_en": "Hot Dishes",
+        "name_ru": "Куырдак",
+        "name_kz": "Қуырдақ",
+        "name_en": "Kuyrdak",
+        "price": 4090,
+        "weight": "300 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "8-2",
+        "category_ru": "Горячие блюда",
+        "category_kz": "Ыстық тағамдар",
+        "category_en": "Hot Dishes",
+        "name_ru": "Плов",
+        "name_kz": "Палау",
+        "name_en": "Pilaf",
+        "price": 3090,
+        "weight": "350 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "8-3",
+        "category_ru": "Горячие блюда",
+        "category_kz": "Ыстық тағамдар",
+        "category_en": "Hot Dishes",
+        "name_ru": "Бургер с курицей",
+        "name_kz": "Тауық бургері",
+        "name_en": "Chicken Burger",
+        "price": 3290,
+        "weight": "320 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "8-4",
+        "category_ru": "Горячие блюда",
+        "category_kz": "Ыстық тағамдар",
+        "category_en": "Hot Dishes",
+        "name_ru": "Бургер с говядиной",
+        "name_kz": "Сиыр етінен бургер",
+        "name_en": "Beef Burger",
+        "price": 3590,
+        "weight": "350 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "8-5",
+        "category_ru": "Горячие блюда",
+        "category_kz": "Ыстық тағамдар",
+        "category_en": "Hot Dishes",
+        "name_ru": "Бургер, грибной стаут",
+        "name_kz": "Саңырауқұлақ стаут бургері",
+        "name_en": "Mushroom Stout Burger",
+        "price": 4390,
+        "weight": "380 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "8-6",
+        "category_ru": "Горячие блюда",
+        "category_kz": "Ыстық тағамдар",
+        "category_en": "Hot Dishes",
+        "name_ru": "Колбаски говяжьи / бараньи",
+        "name_kz": "Сиыр / Қой етінен шұжықтар",
+        "name_en": "Beef / Lamb Sausages",
+        "price": 3390,
+        "weight": "250 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "8-7",
+        "category_ru": "Горячие блюда",
+        "category_kz": "Ыстық тағамдар",
+        "category_en": "Hot Dishes",
+        "name_ru": "Колбаски куриные",
+        "name_kz": "Тауық шұжықтары",
+        "name_en": "Chicken Sausages",
+        "price": 2990,
+        "weight": "250 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "8-8",
+        "category_ru": "Горячие блюда",
+        "category_kz": "Ыстық тағамдар",
+        "category_en": "Hot Dishes",
+        "name_ru": "Говядина по-тайски с рисом",
+        "name_kz": "Күрішпен тайша сиыр еті",
+        "name_en": "Thai Beef with Rice",
+        "price": 3290,
+        "weight": "350 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "8-9",
+        "category_ru": "Горячие блюда",
+        "category_kz": "Ыстық тағамдар",
+        "category_en": "Hot Dishes",
+        "name_ru": "Бефстроганов с пюре",
+        "name_kz": "Езбемен бефстроганов",
+        "name_en": "Beef Stroganoff with Puree",
+        "price": 3290,
+        "weight": "350 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "8-10",
+        "category_ru": "Горячие блюда",
+        "category_kz": "Ыстық тағамдар",
+        "category_en": "Hot Dishes",
+        "name_ru": "Куриная грудка в сырно-сливочном соусе",
+        "name_kz": "Кілегей-ірімшік тұздығындағы тауық төсі",
+        "name_en": "Chicken Breast in Cheese Sauce",
+        "price": 3290,
+        "weight": "330 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "8-11",
+        "category_ru": "Горячие блюда",
+        "category_kz": "Ыстық тағамдар",
+        "category_en": "Hot Dishes",
+        "name_ru": "Картофель по-домашнему с мясом",
+        "name_kz": "Етпен үй стиліндегі картоп",
+        "name_en": "Homestyle Potatoes with Meat",
+        "price": 3990,
+        "weight": "400 г",
+        "type": "kitchen"
+    },
+
+    // Шашлык на мангале
+    {
+        "id": "9-1",
+        "category_ru": "Шашлык на мангале",
+        "category_kz": "Мангалдағы кәуап",
+        "category_en": "BBQ & Grill",
+        "name_ru": "Антрекот",
+        "name_kz": "Антрекот",
+        "name_en": "Entrecote",
+        "price": 3990,
+        "weight": "250 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "9-2",
+        "category_ru": "Шашлык на мангале",
+        "category_kz": "Мангалдағы кәуап",
+        "category_en": "BBQ & Grill",
+        "name_ru": "Баранина",
+        "name_kz": "Қой еті",
+        "name_en": "Lamb",
+        "price": 3190,
+        "weight": "200 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "9-3",
+        "category_ru": "Шашлык на мангале",
+        "category_kz": "Мангалдағы кәуап",
+        "category_en": "BBQ & Grill",
+        "name_ru": "Люля-кебаб",
+        "name_kz": "Люля-кебаб",
+        "name_en": "Lula Kebab",
+        "price": 3190,
+        "weight": "200 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "9-4",
+        "category_ru": "Шашлык на мангале",
+        "category_kz": "Мангалдағы кәуап",
+        "category_en": "BBQ & Grill",
+        "name_ru": "Куриное филе",
+        "name_kz": "Тауық сүбесі",
+        "name_en": "Chicken Fillet",
+        "price": 2990,
+        "weight": "200 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "9-5",
+        "category_ru": "Шашлык на мангале",
+        "category_kz": "Мангалдағы кәуап",
+        "category_en": "BBQ & Grill",
+        "name_ru": "Куриные крылышки",
+        "name_kz": "Тауық қанаттары",
+        "name_en": "Chicken Wings",
+        "price": 2890,
+        "weight": "220 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "9-6",
+        "category_ru": "Шашлык на мангале",
+        "category_kz": "Мангалдағы кәуап",
+        "category_en": "BBQ & Grill",
+        "name_ru": "Утка",
+        "name_kz": "Үйрек",
+        "name_en": "Duck",
+        "price": 2790,
+        "weight": "220 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "9-7",
+        "category_ru": "Шашлык на мангале",
+        "category_kz": "Мангалдағы кәуап",
+        "category_en": "BBQ & Grill",
+        "name_ru": "Куриные окорочка",
+        "name_kz": "Тауық сирақтары",
+        "name_en": "Chicken Legs",
+        "price": 2590,
+        "weight": "220 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "9-8",
+        "category_ru": "Шашлык на мангале",
+        "category_kz": "Мангалдағы кәуап",
+        "category_en": "BBQ & Grill",
+        "name_ru": "Овощи гриль на шпажке",
+        "name_kz": "Шашлықтағы гриль көкөністері",
+        "name_en": "Grilled Vegetables on Skewer",
+        "price": 1990,
+        "weight": "180 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "9-9",
+        "category_ru": "Шашлык на мангале",
+        "category_kz": "Мангалдағы кәуап",
+        "category_en": "BBQ & Grill",
+        "name_ru": "Шампиньоны на мангале",
+        "name_kz": "Мангалдағы шампиньондар",
+        "name_en": "Grilled Champignons",
+        "price": 1790,
+        "weight": "150 г",
+        "type": "kitchen"
+    },
+
+    // Гарниры
+    {
+        "id": "10-1",
+        "category_ru": "Гарниры",
+        "category_kz": "Гарнирлер",
+        "category_en": "Side Dishes",
+        "name_ru": "Овощи гриль",
+        "name_kz": "Гриль көкөністері",
+        "name_en": "Grilled Vegetables",
+        "price": 1990,
+        "weight": "200 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "10-2",
+        "category_ru": "Гарниры",
+        "category_kz": "Гарнирлер",
+        "category_en": "Side Dishes",
+        "name_ru": "Брокколи",
+        "name_kz": "Брокколи",
+        "name_en": "Broccoli",
+        "price": 1790,
+        "weight": "150 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "10-3",
+        "category_ru": "Гарниры",
+        "category_kz": "Гарнирлер",
+        "category_en": "Side Dishes",
+        "name_ru": "Картофельные дольки",
+        "name_kz": "Картоп бөліктері",
+        "name_en": "Potato Wedges",
+        "price": 1390,
+        "weight": "150 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "10-4",
+        "category_ru": "Гарниры",
+        "category_kz": "Гарнирлер",
+        "category_en": "Side Dishes",
+        "name_ru": "Картофель фри",
+        "name_kz": "Фри картобы",
+        "name_en": "French Fries",
+        "price": 1190,
+        "weight": "150 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "10-5",
+        "category_ru": "Гарниры",
+        "category_kz": "Гарнирлер",
+        "category_en": "Side Dishes",
+        "name_ru": "Рис",
+        "name_kz": "Күріш",
+        "name_en": "Rice",
+        "price": 790,
+        "weight": "150 г",
+        "type": "kitchen"
+    },
+
+    // Соусы
+    {
+        "id": "11-1",
+        "category_ru": "Соусы",
+        "category_kz": "Тұздықтар",
+        "category_en": "Sauces",
+        "name_ru": "Сырный",
+        "name_kz": "Ірімшік тұздығы",
+        "name_en": "Cheese Sauce",
+        "price": 590,
+        "weight": "50 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "11-2",
+        "category_ru": "Соусы",
+        "category_kz": "Тұздықтар",
+        "category_en": "Sauces",
+        "name_ru": "Красный",
+        "name_kz": "Қызыл тұздық",
+        "name_en": "Red Sauce",
+        "price": 590,
+        "weight": "50 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "11-3",
+        "category_ru": "Соусы",
+        "category_kz": "Тұздықтар",
+        "category_en": "Sauces",
+        "name_ru": "Белый",
+        "name_kz": "Ақ тұздық",
+        "name_en": "White Sauce",
+        "price": 590,
+        "weight": "50 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "11-4",
+        "category_ru": "Соусы",
+        "category_kz": "Тұздықтар",
+        "category_en": "Sauces",
+        "name_ru": "Кетчуп",
+        "name_kz": "Кетчуп",
+        "name_en": "Ketchup",
+        "price": 590,
+        "weight": "50 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "11-5",
+        "category_ru": "Соусы",
+        "category_kz": "Тұздықтар",
+        "category_en": "Sauces",
+        "name_ru": "Тартар",
+        "name_kz": "Тартар тұздығы",
+        "name_en": "Tartar Sauce",
+        "price": 590,
+        "weight": "50 г",
+        "type": "kitchen"
+    },
+
+    // Десерты
+    {
+        "id": "12-1",
+        "category_ru": "Десерты",
+        "category_kz": "Десерттер",
+        "category_en": "Desserts",
+        "name_ru": "Восточные сладости",
+        "name_kz": "Шығыс тәттілері",
+        "name_en": "Oriental Sweets",
+        "price": 5490,
+        "weight": "400 г",
+        "type": "kitchen"
+    },
+    {
+        "id": "12-2",
+        "category_ru": "Десерты",
+        "category_kz": "Десерттер",
+        "category_en": "Desserts",
+        "name_ru": "Пирожное в ассортименте",
+        "name_kz": "Тәтті нан ассортименті",
+        "name_en": "Assorted Cakes",
+        "price": 2590,
+        "weight": "150 г",
+        "type": "kitchen"
+    },
+
+    // БАР: Безалкогольные напитки
+    {
+        "id": "13-1",
+        "category_ru": "Безалкогольные напитки",
+        "category_kz": "Алкогольсіз сусындар",
+        "category_en": "Non-Alcoholic Drinks",
+        "name_ru": "Фирменные лимонады",
+        "name_kz": "Фирмалық лимонадтар",
+        "name_en": "Signature Lemonades",
+        "price": 2990,
+        "weight": "1 л",
+        "composition_ru": "Вишня–Виноград, Киви–Грейпфрут–Жасмин, Маракуйя–Ананас, Нектар",
+        "composition_kz": "Шие–Жүзім, Киви–Грейпфрут–Жасмин, Маракуйя–Ананас, Нектар",
+        "composition_en": "Cherry-Grape, Kiwi-Grapefruit-Jasmine, Passionfruit-Pineapple, Nectar",
+        "type": "bar"
+    },
+    {
+        "id": "13-2",
+        "category_ru": "Безалкогольные напитки",
+        "category_kz": "Алкогольсіз сусындар",
+        "category_en": "Non-Alcoholic Drinks",
+        "name_ru": "Авторский чай",
+        "name_kz": "Авторлық шай",
+        "name_en": "Signature Tea",
+        "price": 2590,
+        "weight": "800 мл",
+        "composition_ru": "Алматинский, Ташкентский, Малина-Лайм, Персик-жасмин",
+        "composition_kz": "Алматы, Ташкент, Таңқурай-Лайм, Шабдалы-жасмин",
+        "composition_en": "Almaty, Tashkent, Raspberry-Lime, Peach-Jasmine",
+        "type": "bar"
+    },
+    {
+        "id": "13-3",
+        "category_ru": "Безалкогольные напитки",
+        "category_kz": "Алкогольсіз сусындар",
+        "category_en": "Non-Alcoholic Drinks",
+        "name_ru": "Пепси",
+        "name_kz": "Пепси",
+        "name_en": "Pepsi",
+        "price": 1790,
+        "weight": "0.5 л",
+        "type": "bar"
+    },
+    {
+        "id": "13-4",
+        "category_ru": "Безалкогольные напитки",
+        "category_kz": "Алкогольсіз сусындар",
+        "category_en": "Non-Alcoholic Drinks",
+        "name_ru": "Листовой чай",
+        "name_kz": "Жапырақты шай",
+        "name_en": "Leaf Tea",
+        "price": 1590,
+        "weight": "600 мл",
+        "composition_ru": "Ассам, Сенча, Жасмин, Эрл Грей, Ройбуш, Султан",
+        "composition_kz": "Ассам, Сенча, Жасмин, Эрл Грей, Ройбуш, Сұлтан",
+        "composition_en": "Assam, Sencha, Jasmine, Earl Grey, Rooibos, Sultan",
+        "type": "bar"
+    },
+
+    // БАР: Вино
+    {
+        "id": "14-1",
+        "category_ru": "Вино",
+        "category_kz": "Шарап",
+        "category_en": "Wine",
+        "name_ru": "Blanc de Blancs Tete de Cheval (бутылка)",
+        "name_kz": "Blanc de Blancs Tete de Cheval (бөтелке)",
+        "name_en": "Blanc de Blancs Tete de Cheval (bottle)",
+        "price": 14990,
+        "weight": "0.75 л",
+        "type": "bar"
+    },
+
+    // БАР: Водка
+    {
+        "id": "15-1",
+        "category_ru": "Водка",
+        "category_kz": "Арақ",
+        "category_en": "Vodka",
+        "name_ru": "Kosenkоrоva, 50 гр",
+        "name_kz": "Kosenkоrоva, 50 гр",
+        "name_en": "Kosenkоrоva, 50g",
+        "price": 2090,
+        "weight": "50 г",
+        "type": "bar"
+    },
+    {
+        "id": "15-2",
+        "category_ru": "Водка",
+        "category_kz": "Арақ",
+        "category_en": "Vodka",
+        "name_ru": "Mont Blanc, 50 гр",
+        "name_kz": "Mont Blanc, 50 гр",
+        "name_en": "Mont Blanc, 50g",
+        "price": 2690,
+        "weight": "50 г",
+        "type": "bar"
+    },
+    {
+        "id": "15-3",
+        "category_ru": "Водка",
+        "category_kz": "Арақ",
+        "category_en": "Vodka",
+        "name_ru": "Архангельская Северная, 50 гр",
+        "name_kz": "Архангельская Северная, 50 гр",
+        "name_en": "Arkhangelskaya Severnaya, 50g",
+        "price": 1790,
+        "weight": "50 г",
+        "type": "bar"
+    },
+    {
+        "id": "15-4",
+        "category_ru": "Водка",
+        "category_kz": "Арақ",
+        "category_en": "Vodka",
+        "name_ru": "Белуга Нобл, 50 гр",
+        "name_kz": "Белуга Нобл, 50 гр",
+        "name_en": "Beluga Noble, 50g",
+        "price": 2690,
+        "weight": "50 г",
+        "type": "bar"
+    },
+
+    // БАР: Пиво бутылочное
+    {
+        "id": "16-1",
+        "category_ru": "Пиво бутылочное",
+        "category_kz": "Бөтелкедегі сыра",
+        "category_en": "Bottled Beer",
+        "name_ru": "Ayinger, Brauweisse",
+        "name_kz": "Ayinger, Brauweisse",
+        "name_en": "Ayinger, Brauweisse",
+        "price": 2990,
+        "weight": "0.5 л",
+        "composition_ru": "не фильтрованное",
+        "composition_kz": "сүзілмеген",
+        "composition_en": "unfiltered",
+        "type": "bar"
+    },
+    {
+        "id": "16-2",
+        "category_ru": "Пиво бутылочное",
+        "category_kz": "Бөтелкедегі сыра",
+        "category_en": "Bottled Beer",
+        "name_ru": "Ayinger, Lager",
+        "name_kz": "Ayinger, Lager",
+        "name_en": "Ayinger, Lager",
+        "price": 2990,
+        "weight": "0.5 л",
+        "composition_ru": "фильтрованное",
+        "composition_kz": "сүзілген",
+        "composition_en": "filtered",
+        "type": "bar"
+    },
+    {
+        "id": "16-3",
+        "category_ru": "Пиво бутылочное",
+        "category_kz": "Бөтелкедегі сыра",
+        "category_en": "Bottled Beer",
+        "name_ru": "Gubernija Brown Ale",
+        "name_kz": "Gubernija Brown Ale",
+        "name_en": "Gubernija Brown Ale",
+        "price": 1990,
+        "weight": "0.5 л",
+        "composition_ru": "темное",
+        "composition_kz": "қараңғы",
+        "composition_en": "dark",
+        "type": "bar"
+    },
+    {
+        "id": "16-4",
+        "category_ru": "Пиво бутылочное",
+        "category_kz": "Бөтелкедегі сыра",
+        "category_en": "Bottled Beer",
+        "name_ru": "Gubernija Ekstra Lager",
+        "name_kz": "Gubernija Ekstra Lager",
+        "name_en": "Gubernija Ekstra Lager",
+        "price": 1990,
+        "weight": "0.5 л",
+        "composition_ru": "фильтрованное",
+        "composition_kz": "сүзілген",
+        "composition_en": "filtered",
+        "type": "bar"
+    },
+
+    // БАР: Пиво разливное
+    {
+        "id": "17-1",
+        "category_ru": "Пиво разливное",
+        "category_kz": "Құйма сыра",
+        "category_en": "Draft Beer",
+        "name_ru": "Holsten pilsener",
+        "name_kz": "Holsten pilsener",
+        "name_en": "Holsten pilsener",
+        "price": 1890,
+        "weight": "0.5 л",
+        "composition_ru": "светлое фильтрованное",
+        "composition_kz": "ашық сүзілген",
+        "composition_en": "light filtered",
+        "type": "bar"
+    },
+    {
+        "id": "17-2",
+        "category_ru": "Пиво разливное",
+        "category_kz": "Құйма сыра",
+        "category_en": "Draft Beer",
+        "name_ru": "Kronenbourg blanc",
+        "name_kz": "Kronenbourg blanc",
+        "name_en": "Kronenbourg blanc",
+        "price": 2290,
+        "weight": "0.5 л",
+        "composition_ru": "не фильтрованное",
+        "composition_kz": "сүзілмеген",
+        "composition_en": "unfiltered",
+        "type": "bar"
+    },
+
+    // БАР: Вода и напитки
+    {
+        "id": "18-1",
+        "category_ru": "Вода и напитки",
+        "category_kz": "Су және сусындар",
+        "category_en": "Water & Beverages",
+        "name_ru": "Вода Tassay 0.25",
+        "name_kz": "Tassay суы 0.25",
+        "name_en": "Tassay Water 0.25",
+        "price": 990,
+        "weight": "0.25 л",
+        "type": "bar"
+    },
+    {
+        "id": "18-2",
+        "category_ru": "Вода и напитки",
+        "category_kz": "Су және сусындар",
+        "category_en": "Water & Beverages",
+        "name_ru": "Вода Tassay 0.75",
+        "name_kz": "Tassay суы 0.75",
+        "name_en": "Tassay Water 0.75",
+        "price": 2190,
+        "weight": "0.75 л",
+        "type": "bar"
+    }
+];
+
+            let currentType = 'kitchen';
+            let currentCategory = 'All';
+
+            function switchMainTab(index, btn) {
+                const indicator = document.getElementById('nav-indicator');
+                const buttons = document.querySelectorAll('.nav-btn');
+                
+                clearSearch();
+                
+                indicator.style.transform = `translateX(${index * 100}%)`;
+                
+                buttons.forEach((b, i) => {
+                    if(i === index) {
+                        b.classList.replace('text-on-surface-variant', 'text-cream');
+                        b.setAttribute('aria-selected', 'true');
+                    } else {
+                        b.classList.replace('text-cream', 'text-on-surface-variant');
+                        b.setAttribute('aria-selected', 'false');
+                    }
+                });
+
+                currentType = btn.dataset.type;
+                currentCategory = 'All';
+                renderCategories();
+                renderMenu();
+            }
+
+            function renderCategories() {
+                const container = document.getElementById('categoryContainer');
+                const items = MENU.filter(item => item.type === currentType);
+                
+                const catKey = `category_${currentLang.toLowerCase()}`;
+                const uniqueCategories = [...new Set(items.map(item => item[catKey]))];
+                const allText = translations[currentLang]['cat_all'];
+                
+                const categories = [{id: 'All', name: allText}, ...uniqueCategories.map(c => ({id: c, name: c}))];
+                
+                container.innerHTML = categories.map(cat => `
+                    <button class="snap-start shrink-0 px-6 py-1.5 ${currentCategory === cat.id ? 'bg-forest-green text-cream border-forest-green' : 'bg-white text-forest-green/70 border-forest-green/10 hover:border-forest-green/30'} rounded-xl text-[11px] font-label-caps tracking-widest uppercase transition-all active:scale-95 border shadow-sm" onclick="selectCategory('${cat.id}')">${cat.name}</button>
+                `).join('');
+            }
+
+            function selectCategory(category) {
+               currentCategory = category;
+    renderCategories();
+    renderMenu(document.getElementById('searchInput').value);
+    
+    // Плавный скролл к началу блока с меню (чтобы заголовок был виден)
+    const menuSection = document.getElementById('menu-section');
+    window.scrollTo({
+        top: menuSection.offsetTop,
+        behavior: 'smooth'
+    });
+            }
+
+            function initObserver() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach((entry, index) => {
+                        if (entry.isIntersecting) {
+                            setTimeout(() => {
+                                entry.target.classList.add('is-visible');
+                            }, index * 50); // Stagger effect
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, {
+                    threshold: 0.1,
+                    rootMargin: "0px 0px -50px 0px"
+                });
+
+                document.querySelectorAll('.fade-in-up').forEach(el => {
+                    observer.observe(el);
+                });
+            }
+
+            function renderMenu(searchQuery = '') {
+                const container = document.getElementById('menuContainer');
+                const nameKey = `name_${currentLang.toLowerCase()}`;
+                const catKey = `category_${currentLang.toLowerCase()}`;
+                const compKey = `composition_${currentLang.toLowerCase()}`;
+                
+                let allItems = MENU;
+                
+                if (searchQuery) {
+                    const q = searchQuery.toLowerCase();
+                    allItems = allItems.filter(item => 
+                        item[nameKey].toLowerCase().includes(q) || 
+                        item[catKey].toLowerCase().includes(q) || 
+                        (item[compKey] && item[compKey].toLowerCase().includes(q))
+                    );
+                } else {
+                    allItems = allItems.filter(item => item.type === currentType);
+                }
+
+                let categoriesToRender = [];
+                if (currentCategory === 'All' || searchQuery) {
+                    categoriesToRender = [...new Set(allItems.map(i => i[catKey]))];
+                } else {
+                    categoriesToRender = [currentCategory];
+                }
+
+                let html = '';
+
+                categoriesToRender.forEach((cat, index) => {
+                    const catItems = allItems.filter(i => i[catKey] === cat);
+                    if (catItems.length > 0) {
+                        html += `
+                            <div class="mt-8 mb-4 fade-in-up scroll-mt-[120px]">
+                                <div class="flex items-center justify-center gap-4 mb-6 px-4">
+                                    <div class="flex-1 h-[1px] bg-gradient-to-r from-transparent via-warm-gold/30 to-warm-gold/30"></div>
+                                    <h2 class="font-serif text-[26px] text-forest-green tracking-tight text-center font-medium">${cat}</h2>
+                                    <div class="flex-1 h-[1px] bg-gradient-to-l from-transparent via-warm-gold/30 to-warm-gold/30"></div>
+                                </div>
+                                <div class="flex flex-col gap-3">
+                        `;
+                        catItems.forEach((item, itemIdx) => {
+                            const itemData = JSON.stringify(item).replace(/"/g, '&quot;');
+                            let noteIcon = '';
+                            if (item.note && item.note.toLowerCase().includes('острое')) {
+                                 noteIcon = `<span aria-hidden="true" class="material-symbols-outlined text-red-500/80 text-[18px] ml-2" title="${item.note}">local_fire_department</span>`;
+                            }
+                            html += `
+                                <div aria-label="View details for ${item[nameKey]}" class="fade-in-up menu-card group bg-white rounded-2xl overflow-hidden soft-shadow flex flex-col cursor-pointer border border-forest-green/5 hover:border-forest-green/20" onclick='openModal(${itemData})' role="button" tabindex="0">
+                                    <div class="px-5 py-5 relative">
+                                        <div class="flex justify-between items-start gap-4">
+                                            <h3 class="font-serif text-[22px] md:text-headline-sm text-forest-green max-w-[75%] leading-tight font-medium flex items-center flex-wrap">${item[nameKey]}${noteIcon}</h3>
+                                            <p class="font-serif text-[20px] md:text-headline-sm text-warm-gold whitespace-nowrap mt-0.5 lining-nums">${item.price} ₸</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        html += `</div></div>`;
+                    }
+                });
+
+                if (html === '') {
+                    html = `<div class="text-center py-12 text-outline text-body-md fade-in-up is-visible font-serif italic text-lg">Ничего не найдено.</div>`;
+                }
+                container.innerHTML = html;
+                
+                // Re-initialize intersection observer for new elements
+                setTimeout(() => {
+                    initObserver();
+                }, 100);
+            }
+
+            function openModal(item) {
+                const modal = document.getElementById('itemModal');
+                const modalContent = modal.querySelector('.relative');
+                
+                const nameKey = `name_${currentLang.toLowerCase()}`;
+                const compKey = `composition_${currentLang.toLowerCase()}`;
+                
+                document.getElementById('modalTitle').textContent = item[nameKey];
+                document.getElementById('modalPrice').textContent = `${item.price} ₸`;
+                document.getElementById('modalWeight').textContent = item.weight || '';
+                
+                const ingredientsContainer = document.getElementById('modalIngredientsContainer');
+                const ingredientsList = document.getElementById('modalIngredients');
+                
+                if (item[compKey]) {
+                    ingredientsContainer.classList.remove('hidden');
+                    ingredientsContainer.classList.add('flex');
+                    ingredientsList.textContent = item[compKey];
+                } else {
+                    ingredientsContainer.classList.add('hidden');
+                    ingredientsContainer.classList.remove('flex');
+                }
+
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                modalContent.classList.add('modal-enter');
+                
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal() {
+                const modal = document.getElementById('itemModal');
+                const modalContent = modal.querySelector('.relative');
+                
+                modalContent.classList.remove('modal-enter');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                    document.body.style.overflow = '';
+                }, 300); // match animation duration somewhat or just hide immediately
+            }
+            
+            function clearSearch() {
+                const input = document.getElementById('searchInput');
+                const btn = document.getElementById('clearSearchBtn');
+                input.value = '';
+                btn.classList.add('hidden');
+                btn.classList.remove('flex');
+                renderMenu('');
+            }
+
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                const val = e.target.value;
+                const btn = document.getElementById('clearSearchBtn');
+                if (val) {
+                    btn.classList.remove('hidden');
+                    btn.classList.add('flex');
+                } else {
+                    btn.classList.add('hidden');
+                    btn.classList.remove('flex');
+                }
+                renderMenu(val);
             });
 
-            container.innerHTML = html;
-        }
-
-        function switchTab(tab) {
-            document.querySelectorAll('.spa-section').forEach(s => s.classList.add('hidden'));
-            document.getElementById(`section-${tab}`).classList.remove('hidden');
-            
-            document.getElementById('nav-menu').className = tab === 'menu' ? "flex flex-col items-center gap-1 text-forest-green font-medium" : "flex flex-col items-center gap-1 text-outline";
-            document.getElementById('nav-info').className = tab === 'info' ? "flex flex-col items-center gap-1 text-forest-green font-medium" : "flex flex-col items-center gap-1 text-outline";
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function handleSearch(val) {
-            const clearBtn = document.getElementById('clearSearchBtn');
-            if (val) {
-                clearBtn.classList.remove('hidden');
-            } else {
-                clearBtn.classList.add('hidden');
-            }
-            renderMenu(val);
-        }
-
-        function clearSearch() {
-            document.getElementById('searchInput').value = '';
-            document.getElementById('clearSearchBtn').classList.add('hidden');
-            renderMenu('');
-        }
-
-        function openModal(item) {
-            const nameKey = `name_${currentLang.toLowerCase()}`;
-            const compKey = `composition_${currentLang.toLowerCase()}`;
-            
-            document.getElementById('modalTitle').textContent = item[nameKey];
-            document.getElementById('modalPrice').textContent = `${item.price} ₸`;
-            document.getElementById('modalWeight').textContent = item.weight || '';
-            
-            const ingContainer = document.getElementById('modalIngredientsContainer');
-            if (item[compKey]) {
-                ingContainer.classList.remove('hidden');
-                document.getElementById('modalIngredients').textContent = item[compKey];
-            } else {
-                ingContainer.classList.add('hidden');
-            }
-
-            const modal = document.getElementById('itemModal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('itemModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-            document.body.style.overflow = '';
-        }
-
-        initApp();
-    </script>
-</body>
-</html>
+            // Initialize
+            renderCategories();
+            renderMenu();
+            switchLang(currentLang);
+        </script>
+</main>
+<nav class="fixed bottom-0 inset-x-0 z-50 pb-safe glass-effect border-t border-forest-green/10">
+<div class="flex justify-around items-center h-[72px] px-8">
+<button aria-label="Menu" class="bottom-nav-btn flex flex-col items-center justify-center gap-1 transition-all text-forest-green active:scale-95" data-path="menu" onclick="switchSection('menu', this)">
+<span aria-hidden="true" class="material-symbols-outlined text-[24px]">restaurant_menu</span>
+<span class="text-[10px] font-label-caps tracking-widest uppercase" data-i18n="tab_menu">Menu</span>
+</button>
+<button aria-label="Information" class="bottom-nav-btn flex flex-col items-center justify-center gap-1 text-outline transition-all hover:text-forest-green active:scale-95" data-path="info" onclick="switchSection('info', this)">
+<span aria-hidden="true" class="material-symbols-outlined text-[24px]">info</span>
+<span class="text-[10px] font-label-caps tracking-widest uppercase" data-i18n="tab_info">Info</span>
+</button>
+</div>
+</nav>
+</body></html>
