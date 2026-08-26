@@ -1,46 +1,55 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NECTAR — Lounge Kitchen Bar</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NECTAR — Lounge Kitchen Bar</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Шрифты и иконки при необходимости можно подключить здесь -->
 </head>
 <body>
 
-  <header>
-    <div class="logo-area">
-      <h1>Nectar</h1>
-      <span>Lounge Kitchen Bar • Almaty</span>
-    </div>
-    <!-- Переключатель языка -->
-    <div class="lang-switcher">
-      <select id="langSelect" style="background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); padding: 6px 10px; border-radius: 6px;">
-        <option value="RU">RU</option>
-        <option value="EN">EN</option>
-        <option value="KZ">KZ</option>
-      </select>
-    </div>
-  </header>
+    <!-- Шапка профиля -->
+    <header class="header">
+        <h1>NECTAR</h1>
+        <p class="subtitle">Lounge Kitchen Bar • Алматы</p>
+        
+        <!-- Переключатель языков -->
+        <div class="lang-switcher">
+            <button onclick="setLanguage('ru')">RU</button>
+            <button onclick="setLanguage('en')">EN</button>
+            <button onclick="setLanguage('kz')">KZ</button>
+        </div>
+    </header>
 
-  <div class="controls-container">
-    <div class="tabs-main">
-      <button class="tab-btn active" data-tab="kitchen" id="tabKitchen">Кухня</button>
-      <button class="tab-btn" data-tab="bar" id="tabBar">Бар</button>
-      <button class="tab-btn" data-tab="info" id="tabInfo">Инфо</button>
-    </div>
+    <!-- Основное меню категорий и подкатегорий -->
+    <nav class="categories-nav" id="categories-nav">
+        <!-- Скрипт сам отрисует категории, либо здесь твоя верстка -->
+    </nav>
 
-    <!-- Подкатегории (скрываются на вкладке Инфо) -->
-    <div class="subcategories-scroll" id="subcategoriesContainer">
-      <!-- Динамически заполнится из JS -->
-    </div>
-  </div>
+    <!-- Контейнер меню с вау-эффектом (плавное появление) -->
+    <main class="menu-container" id="menu-container">
+        <div class="menu-grid" id="menu-grid">
+            <!-- Карточки блюд и позиций бара подгружаются сюда -->
+        </div>
+    </main>
 
-  <!-- Основной контейнер меню -->
-  <main class="menu-container" id="menuContainer">
-    <!-- Блюда или Уголок потребителя рендерятся сюда -->
-  </main>
+    <!-- Секция Инфо / Уголок потребителя -->
+    <section class="info-section">
+        <details class="info-dropdown">
+            <summary>Лицензия и регистрация</summary>
+            <p>Информация о юридическом лице и разрешительных документах...</p>
+        </details>
+        <details class="info-dropdown">
+            <summary>Правила обслуживания</summary>
+            <p>Правила поведения и нахождения в Lounge Kitchen Bar Nectar...</p>
+        </details>
+        <details class="info-dropdown">
+            <summary>Книга отзывов и предложений</summary>
+            <p>Вы можете оставить свой отзыв или связаться с нами...</p>
+        </details>
+    </section>
 
-  <script src="app.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
