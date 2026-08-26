@@ -2,54 +2,393 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NECTAR — Lounge Kitchen Bar</title>
-    <link rel="stylesheet" href="styles.css">
-    <!-- Шрифты и иконки при необходимости можно подключить здесь -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>NECTAR — Lounge · Bar · Kitchen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "forest-green": "#1b3022",
+              "warm-gold": "#a97935",
+              "cream": "#fbf9f6",
+              "outline": "#737973"
+            },
+            fontFamily: {
+              serif: ["Cormorant Garamond", "serif"],
+              sans: ["Manrope", "sans-serif"]
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+        body {
+            background-color: #fbf9f6;
+            color: #1b1c1a;
+            font-family: 'Manrope', sans-serif;
+            overflow-x: hidden;
+        }
+        ::-webkit-scrollbar { display: none; }
+        .glass-effect {
+            background: rgba(251, 249, 246, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        /* Анимация шторки снизу (Bottom Sheet) для мобилок */
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .modal-sheet {
+            animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
 </head>
-<body>
+<body class="bg-cream text-[#1b1c1a] pb-24">
 
-    <!-- Шапка профиля -->
-    <header class="header">
-        <h1>NECTAR</h1>
-        <p class="subtitle">Lounge Kitchen Bar • Алматы</p>
-        
-        <!-- Переключатель языков -->
-        <div class="lang-switcher">
-            <button onclick="setLanguage('ru')">RU</button>
-            <button onclick="setLanguage('en')">EN</button>
-            <button onclick="setLanguage('kz')">KZ</button>
+    <!-- Шапкa сайта -->
+    <header class="fixed top-0 inset-x-0 z-50 glass-effect border-b border-forest-green/5">
+        <div class="px-6 flex items-center justify-between h-20">
+            <div class="w-16"></div>
+            <div class="flex flex-col items-center">
+                <h1 class="font-serif text-[28px] text-forest-green tracking-tight font-semibold">NECTAR</h1>
+                <p class="text-[9px] uppercase tracking-[0.25em] text-outline mt-[-3px]">Lounge · Bar · Kitchen</p>
+            </div>
+            <!-- Переключатель языков -->
+            <div class="flex items-center gap-2 w-16 justify-end">
+                <button onclick="setLang('RU')" id="btn-RU" class="lang-btn text-xs font-bold text-forest-green">RU</button>
+                <button onclick="setLang('KZ')" id="btn-KZ" class="lang-btn text-xs text-outline">KZ</button>
+                <button onclick="setLang('EN')" id="btn-EN" class="lang-btn text-xs text-outline">EN</button>
+            </div>
         </div>
     </header>
 
-    <!-- Основное меню категорий и подкатегорий -->
-    <nav class="categories-nav" id="categories-nav">
-        <!-- Скрипт сам отрисует категории, либо здесь твоя верстка -->
-    </nav>
+    <!-- Основной контейнер -->
+    <main class="pt-24 px-4 max-w-xl mx-auto">
 
-    <!-- Контейнер меню с вау-эффектом (плавное появление) -->
-    <main class="menu-container" id="menu-container">
-        <div class="menu-grid" id="menu-grid">
-            <!-- Карточки блюд и позиций бара подгружаются сюда -->
-        </div>
+        <!-- Секция МЕНЮ -->
+        <section id="section-menu" class="spa-section">
+            <!-- Поиск -->
+            <div class="relative mb-4 mt-2">
+                <span class="material-symbols-outlined absolute left-4 top-3.5 text-outline/60 text-2xl">search</span>
+                <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="Поиск блюд и напитков..." class="w-full bg-white border border-forest-green/10 rounded-2xl py-3.5 pl-12 pr-10 text-sm outline-none focus:border-forest-green/30 shadow-sm">
+                <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-4 top-3.5 text-outline hover:text-forest-green">
+                    <span class="material-symbols-outlined text-xl">close</span>
+                </button>
+            </div>
+
+            <!-- Переключатель Кухня / Бар -->
+            <div class="flex bg-white border border-forest-green/5 rounded-2xl p-1 mb-4 shadow-sm relative">
+                <div id="typeIndicator" class="absolute left-1 top-1 bottom-1 w-[calc(50%-4px)] bg-forest-green rounded-xl transition-transform duration-300"></div>
+                <button onclick="switchType('kitchen')" id="type-kitchen" class="flex-1 relative z-10 py-2.5 text-xs font-bold tracking-widest text-cream uppercase transition-colors">Кухня</button>
+                <button onclick="switchType('bar')" id="type-bar" class="flex-1 relative z-10 py-2.5 text-xs font-bold tracking-widest text-outline uppercase transition-colors">Бар</button>
+            </div>
+
+            <!-- Горизонтальные категории -->
+            <div id="categoryContainer" class="flex overflow-x-auto gap-2 pb-2 mb-4"></div>
+
+            <!-- Список блюд -->
+            <div id="menuContainer" class="flex flex-col gap-3"></div>
+        </section>
+
+        <!-- Секция ИНФО -->
+        <section id="section-info" class="spa-section hidden flex-col gap-6 pt-4">
+            <div class="text-center">
+                <h2 class="font-serif text-3xl text-forest-green font-semibold mb-1">Информация</h2>
+                <p class="text-sm text-outline">Свяжитесь с нами или найдите важные детали</p>
+            </div>
+
+            <!-- Карточка контактов -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-forest-green/5 flex flex-col gap-4">
+                <div>
+                    <h3 class="text-[10px] font-bold tracking-widest text-outline uppercase mb-1">Адрес</h3>
+                    <p class="text-forest-green font-medium">Проспект Дулати 1а, мкр. Архат, Алматы</p>
+                    <a href="https://go.2gis.com/iV3rq" target="_blank" class="text-warm-gold text-sm inline-flex items-center gap-1 mt-1 font-medium">Открыть в 2GIS →</a>
+                </div>
+                <hr class="border-forest-green/5">
+                <div>
+                    <h3 class="text-[10px] font-bold tracking-widest text-outline uppercase mb-1">Телефон</h3>
+                    <a href="tel:+77001234567" class="text-forest-green font-medium text-lg">+7 (700) 123 45 67</a>
+                    <p class="text-xs text-outline mt-0.5">Ежедневно, 14:00 - 01:00</p>
+                </div>
+            </div>
+
+            <!-- Уголок потребителя (Аккордеоны с исправленным сбросом фокуса) -->
+            <div class="flex flex-col gap-3">
+                <h3 class="font-serif text-xl text-forest-green font-medium">Уголок потребителя</h3>
+                
+                <div class="bg-white rounded-2xl border border-forest-green/5 overflow-hidden">
+                    <button onclick="toggleAccordion(this)" class="w-full p-4 flex items-center justify-between text-left font-medium text-forest-green">
+                        <span>Лицензия и регистрация</span>
+                        <span class="material-symbols-outlined transition-transform duration-300">expand_more</span>
+                    </button>
+                    <div class="hidden px-4 pb-4 text-sm text-outline leading-relaxed">
+                        Государственная лицензия на розничную реализацию алкогольной продукции № 12345678 выдана Департаментом государственных доходов по г. Алматы. БИН: 123456789012.
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-forest-green/5 overflow-hidden">
+                    <button onclick="toggleAccordion(this)" class="w-full p-4 flex items-center justify-between text-left font-medium text-forest-green">
+                        <span>Правила обслуживания</span>
+                        <span class="material-symbols-outlined transition-transform duration-300">expand_more</span>
+                    </button>
+                    <div class="hidden px-4 pb-4 text-sm text-outline leading-relaxed">
+                        Мы оставляем за собой право отказать в обслуживании лицам в состоянии алкогольного опьянения или нарушающим дресс-код. Вход разрешен гостям старше 21 года.
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-forest-green/5 overflow-hidden">
+                    <button onclick="toggleAccordion(this)" class="w-full p-4 flex items-center justify-between text-left font-medium text-forest-green">
+                        <span>Книга отзывов</span>
+                        <span class="material-symbols-outlined transition-transform duration-300">expand_more</span>
+                    </button>
+                    <div class="hidden px-4 pb-4 text-sm text-outline leading-relaxed">
+                        Физическая Книга жалоб и предложений предоставляется по запросу у дежурного менеджера.
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
-    <!-- Секция Инфо / Уголок потребителя -->
-    <section class="info-section">
-        <details class="info-dropdown">
-            <summary>Лицензия и регистрация</summary>
-            <p>Информация о юридическом лице и разрешительных документах...</p>
-        </details>
-        <details class="info-dropdown">
-            <summary>Правила обслуживания</summary>
-            <p>Правила поведения и нахождения в Lounge Kitchen Bar Nectar...</p>
-        </details>
-        <details class="info-dropdown">
-            <summary>Книга отзывов и предложений</summary>
-            <p>Вы можете оставить свой отзыв или связаться с нами...</p>
-        </details>
-    </section>
+    <!-- Нижняя навигация -->
+    <nav class="fixed bottom-0 inset-x-0 z-50 glass-effect border-t border-forest-green/10 flex justify-around items-center h-20 px-8">
+        <button onclick="switchTab('menu')" id="nav-menu" class="flex flex-col items-center gap-1 text-forest-green font-medium">
+            <span class="material-symbols-outlined text-2xl">restaurant_menu</span>
+            <span class="text-[10px] tracking-widest uppercase">Меню</span>
+        </button>
+        <button onclick="switchTab('info')" id="nav-info" class="flex flex-col items-center gap-1 text-outline">
+            <span class="material-symbols-outlined text-2xl">info</span>
+            <span class="text-[10px] tracking-widest uppercase">Инфо</span>
+        </button>
+    </nav>
 
-    <script src="app.js"></script>
+    <!-- Модальное окно (Bottom Sheet снизу для удобства на смартфонах) -->
+    <div id="itemModal" class="fixed inset-0 z-[100] hidden items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-0 sm:p-4">
+        <div class="absolute inset-0" onclick="closeModal()"></div>
+        <div class="relative bg-cream w-full sm:max-w-md rounded-t-[32px] sm:rounded-[32px] p-6 modal-sheet max-h-[85vh] overflow-y-auto border border-white shadow-2xl">
+            <div class="flex justify-between items-start mb-4">
+                <h3 id="modalTitle" class="font-serif text-2xl text-forest-green font-semibold pr-4"></h3>
+                <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-forest-green/5 flex items-center justify-center text-forest-green">
+                    <span class="material-symbols-outlined text-lg">close</span>
+                </button>
+            </div>
+            <div class="flex items-baseline gap-3 mb-4 pb-4 border-b border-warm-gold/20">
+                <span id="modalPrice" class="font-serif text-3xl text-warm-gold font-medium"></span>
+                <span id="modalWeight" class="text-xs text-outline tracking-wider uppercase"></span>
+            </div>
+            <div id="modalIngredientsContainer" class="mb-6">
+                <h4 class="text-[10px] font-bold text-outline uppercase tracking-widest mb-1.5">Состав</h4>
+                <p id="modalIngredients" class="text-sm text-forest-green leading-relaxed"></p>
+            </div>
+            <button onclick="closeModal()" class="w-full py-3.5 bg-forest-green text-cream rounded-2xl font-bold tracking-widest text-xs uppercase shadow-lg">Закрыть</button>
+        </div>
+    </div>
+
+    <!-- Логика приложения (JavaScript) -->
+    <script>
+        let MENU = [];
+        let currentLang = 'RU';
+        let currentType = 'kitchen';
+        let currentCategory = 'All';
+
+        // Загружаем данные из menu.json при открытии страницы
+        async function loadMenu() {
+            try {
+                const response = await fetch('menu.json');
+                MENU = await response.json();
+                renderCategories();
+                renderMenu();
+            } catch (error) {
+                console.error('Ошибка загрузки menu.json:', error);
+                document.getElementById('menuContainer').innerHTML = '<p class="text-center text-red-500 py-8">Не удалось загрузить меню. Проверьте файл menu.json</p>';
+            }
+        }
+
+        // Переключение языков
+        function setLang(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('font-bold', 'text-forest-green');
+                btn.classList.add('text-outline');
+            });
+            document.getElementById(`btn-${lang}`).classList.add('font-bold', 'text-forest-green');
+            document.getElementById(`btn-${lang}`).classList.remove('text-outline');
+            renderCategories();
+            renderMenu(document.getElementById('searchInput').value);
+        }
+
+        // Переключение Кухня / Бар
+        function switchType(type) {
+            currentType = type;
+            currentCategory = 'All';
+            const indicator = document.getElementById('typeIndicator');
+            const btnKitchen = document.getElementById('type-kitchen');
+            const btnBar = document.getElementById('type-bar');
+
+            if (type === 'kitchen') {
+                indicator.style.transform = 'translateX(0)';
+                btnKitchen.className = "flex-1 relative z-10 py-2.5 text-xs font-bold tracking-widest text-cream uppercase transition-colors";
+                btnBar.className = "flex-1 relative z-10 py-2.5 text-xs font-bold tracking-widest text-outline uppercase transition-colors";
+            } else {
+                indicator.style.transform = 'translateX(100%)';
+                btnBar.className = "flex-1 relative z-10 py-2.5 text-xs font-bold tracking-widest text-cream uppercase transition-colors";
+                btnKitchen.className = "flex-1 relative z-10 py-2.5 text-xs font-bold tracking-widest text-outline uppercase transition-colors";
+            }
+            renderCategories();
+            renderMenu();
+        }
+
+        // Рендер категорий
+        function renderCategories() {
+            const container = document.getElementById('categoryContainer');
+            const items = MENU.filter(item => item.type === currentType);
+            const catKey = `category_${currentLang.toLowerCase()}`;
+            const uniqueCats = [...new Set(items.map(i => i[catKey]))];
+            
+            const allNames = { RU: 'Все', KZ: 'Барлығы', EN: 'All' };
+            const categories = [{ id: 'All', name: allNames[currentLang] }, ...uniqueCats.map(c => ({ id: c, name: c }))];
+
+            container.innerHTML = categories.map(cat => `
+                <button onclick="selectCategory('${cat.id}')" class="shrink-0 px-4 py-2 rounded-xl text-[11px] font-bold tracking-widest uppercase transition-all shadow-sm border ${
+                    currentCategory === cat.id 
+                    ? 'bg-forest-green text-cream border-forest-green' 
+                    : 'bg-white text-outline border-forest-green/10 hover:border-forest-green/30'
+                }">${cat.name}</button>
+            `).join('');
+        }
+
+        // Выбор подкатегории с плавным скроллом вверх (решает твою проблему №2)
+        function selectCategory(category) {
+            currentCategory = category;
+            renderCategories();
+            renderMenu(document.getElementById('searchInput').value);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Рендер позиций меню
+        function renderMenu(searchQuery = '') {
+            const container = document.getElementById('menuContainer');
+            const nameKey = `name_${currentLang.toLowerCase()}`;
+            const catKey = `category_${currentLang.toLowerCase()}`;
+            const compKey = `composition_${currentLang.toLowerCase()}`;
+
+            let filtered = MENU;
+            if (searchQuery) {
+                const q = searchQuery.toLowerCase();
+                filtered = filtered.filter(i => i[nameKey].toLowerCase().includes(q) || (i[compKey] && i[compKey].toLowerCase().includes(q)));
+            } else {
+                filtered = filtered.filter(i => i.type === currentType);
+                if (currentCategory !== 'All') {
+                    filtered = filtered.filter(i => i[catKey] === currentCategory);
+                }
+            }
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="text-center py-12 text-outline font-serif italic text-lg">Ничего не найдено</div>';
+                return;
+            }
+
+            const categoriesToRender = [...new Set(filtered.map(i => i[catKey]))];
+            let html = '';
+
+            categoriesToRender.forEach(cat => {
+                const catItems = filtered.filter(i => i[catKey] === cat);
+                html += `
+                    <div class="mt-4 mb-2">
+                        <h2 class="font-serif text-xl text-forest-green font-semibold mb-3 px-1">${cat}</h2>
+                        <div class="flex flex-col gap-2.5">
+                `;
+                catItems.forEach(item => {
+                    const itemStr = JSON.stringify(item).replace(/"/g, '&quot;');
+                    html += `
+                        <div onclick='openModal(${itemStr})' class="bg-white rounded-2xl p-4 shadow-sm border border-forest-green/5 cursor-pointer hover:border-forest-green/20 transition-all flex justify-between items-start gap-4">
+                            <div>
+                                <h3 class="font-serif text-lg text-forest-green font-medium leading-tight mb-1">${item[nameKey]}</h3>
+                                ${item[compKey] ? `<p class="text-xs text-outline line-clamp-1">${item[compKey]}</p>` : ''}
+                            </div>
+                            <span class="font-serif text-lg text-warm-gold font-semibold whitespace-nowrap">${item.price} ₸</span>
+                        </div>
+                    `;
+                });
+                html += `</div></div>`;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Управление аккордеонами в Инфо (сбрасывает серый цвет фокуса — проблема №1)
+        function toggleAccordion(btn) {
+            const content = btn.nextElementSibling;
+            const icon = btn.querySelector('.material-symbols-outlined');
+            content.classList.toggle('hidden');
+            icon.classList.toggle('rotate-180');
+            btn.blur(); // Сбрасывает серый цвет выделения после клика
+        }
+
+        // Переключение нижних вкладок (Меню / Инфо)
+        function switchTab(tab) {
+            document.querySelectorAll('.spa-section').forEach(s => s.classList.add('hidden'));
+            document.getElementById(`section-${tab}`).classList.remove('hidden');
+            
+            document.getElementById('nav-menu').className = tab === 'menu' ? "flex flex-col items-center gap-1 text-forest-green font-medium" : "flex flex-col items-center gap-1 text-outline";
+            document.getElementById('nav-info').className = tab === 'info' ? "flex flex-col items-center gap-1 text-forest-green font-medium" : "flex flex-col items-center gap-1 text-outline";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Поиск
+        function handleSearch(val) {
+            const clearBtn = document.getElementById('clearSearchBtn');
+            if (val) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+            renderMenu(val);
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('clearSearchBtn').classList.add('hidden');
+            renderMenu('');
+        }
+
+        // Модальное окно
+        function openModal(item) {
+            const nameKey = `name_${currentLang.toLowerCase()}`;
+            const compKey = `composition_${currentLang.toLowerCase()}`;
+            
+            document.getElementById('modalTitle').textContent = item[nameKey];
+            document.getElementById('modalPrice').textContent = `${item.price} ₸`;
+            document.getElementById('modalWeight').textContent = item.weight || '';
+            
+            const ingContainer = document.getElementById('modalIngredientsContainer');
+            if (item[compKey]) {
+                ingContainer.classList.remove('hidden');
+                document.getElementById('modalIngredients').textContent = item[compKey];
+            } else {
+                ingContainer.classList.add('hidden');
+            }
+
+            const modal = document.getElementById('itemModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('itemModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+
+        // Запуск при загрузке
+        loadMenu();
+    </script>
 </body>
 </html>
