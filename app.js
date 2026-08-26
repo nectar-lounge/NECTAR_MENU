@@ -73,13 +73,7 @@ const translations = {
 
 // 1. ЗАГРУЗКА ДАННЫХ
 document.addEventListener('DOMContentLoaded', () => {
-    fetch('menu.json')
-        .then(response => response.json())
-        .then(data => {
-            menuData = data;
-            initApp();
-        })
-        .catch(error => console.error("Ошибка загрузки меню:", error));
+    initApp();
 });
 
 function initApp() {
