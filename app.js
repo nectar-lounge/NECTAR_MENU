@@ -13,17 +13,19 @@ const translations = {
         search_placeholder: 'Поиск блюд, напитков...',
         tab_menu: 'Меню',
         tab_info: 'Инфо',
-        modal_ingredients: 'Описание',
+        modal_ingredients: 'Состав',
         modal_close: 'Закрыть',
+        cat_all: 'Все',
         info_content: `
             <div class="bg-white rounded-3xl p-6 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
-                <h3 class="font-serif-ru text-xl text-forest-green mb-2">О нас</h3>
-                <p class="text-sm text-forest-green/70">NECTAR — это премиальное пространство для отдыха. Мы объединили авторскую кухню, расслабляющую атмосферу лаунжа и высокий сервис.</p>
+                <h3 class="font-serif-ru text-2xl text-forest-green mb-3">Добро пожаловать в NECTAR</h3>
+                <p class="text-sm text-forest-green/70 leading-relaxed">Премиальное пространство, где авторская гастрономия встречается с атмосферой абсолютного расслабления. Изысканный бар, авторская кухня и безупречный сервис.</p>
             </div>
             <div class="bg-white rounded-3xl p-6 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
-                <h3 class="font-serif-ru text-xl text-forest-green mb-2">Контакты</h3>
-                <p class="text-sm text-forest-green/70 mb-2">📍 г. Алматы</p>
-                <p class="text-sm text-forest-green/70">📞 Бронь столов: +7 (XXX) XXX-XX-XX</p>
+                <h3 class="font-serif-ru text-xl text-forest-green mb-3">Контакты и Режим работы</h3>
+                <p class="text-sm text-forest-green/70 mb-2">📍 Адрес: ул. Примерная, 123</p>
+                <p class="text-sm text-forest-green/70 mb-2">📞 Бронь столов: +7 (777) 123-45-67</p>
+                <p class="text-sm text-forest-green/70">🕒 Ежедневно с 12:00 до 03:00</p>
             </div>
         `
     },
@@ -34,17 +36,19 @@ const translations = {
         search_placeholder: 'Search for dishes, drinks...',
         tab_menu: 'Menu',
         tab_info: 'Info',
-        modal_ingredients: 'Description',
+        modal_ingredients: 'Ingredients',
         modal_close: 'Close',
+        cat_all: 'All',
         info_content: `
             <div class="bg-white rounded-3xl p-6 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
-                <h3 class="font-serif-en text-xl text-forest-green mb-2">About Us</h3>
-                <p class="text-sm text-forest-green/70">NECTAR is a premium leisure space combining signature cuisine, a relaxing lounge atmosphere, and top-tier service.</p>
+                <h3 class="font-serif-ru text-2xl text-forest-green mb-3">Welcome to NECTAR</h3>
+                <p class="text-sm text-forest-green/70 leading-relaxed">A premium space where signature gastronomy meets an atmosphere of absolute relaxation. Exquisite bar, author's cuisine, and impeccable service.</p>
             </div>
             <div class="bg-white rounded-3xl p-6 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
-                <h3 class="font-serif-en text-xl text-forest-green mb-2">Contacts</h3>
-                <p class="text-sm text-forest-green/70 mb-2">📍 Almaty</p>
-                <p class="text-sm text-forest-green/70">📞 Reservations: +7 (XXX) XXX-XX-XX</p>
+                <h3 class="font-serif-ru text-xl text-forest-green mb-3">Contacts & Hours</h3>
+                <p class="text-sm text-forest-green/70 mb-2">📍 Address: 123 Sample St</p>
+                <p class="text-sm text-forest-green/70 mb-2">📞 Reservations: +7 (777) 123-45-67</p>
+                <p class="text-sm text-forest-green/70">🕒 Daily from 12:00 PM to 03:00 AM</p>
             </div>
         `
     },
@@ -55,24 +59,24 @@ const translations = {
         search_placeholder: 'Тағамдар, сусындар іздеу...',
         tab_menu: 'Мәзір',
         tab_info: 'Ақпарат',
-        modal_ingredients: 'Сипаттамасы',
+        modal_ingredients: 'Құрамы',
         modal_close: 'Жабу',
         info_content: `
             <div class="bg-white rounded-3xl p-6 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
-                <h3 class="font-serif-ru text-xl text-forest-green mb-2">Біз туралы</h3>
-                <p class="text-sm text-forest-green/70">NECTAR — бұл премиум демалыс орны. Біз авторлық асхананы, лаунж атмосферасын және жоғары сервисті біріктірдік.</p>
+                <h3 class="font-serif-ru text-2xl text-forest-green mb-3">NECTAR-ға қош келдіңіз</h3>
+                <p class="text-sm text-forest-green/70 leading-relaxed">Авторлық гастрономия мен толық демалыс атмосферасы біріктірілген премиум кеңістік. Талғампаз бар, авторлық асхана және мінсіз сервис.</p>
             </div>
             <div class="bg-white rounded-3xl p-6 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
-                <h3 class="font-serif-ru text-xl text-forest-green mb-2">Байланыс</h3>
-                <p class="text-sm text-forest-green/70 mb-2">📍 Алматы қ.</p>
-                <p class="text-sm text-forest-green/70">📞 Үстелге тапсырыс: +7 (XXX) XXX-XX-XX</p>
+                <h3 class="font-serif-ru text-xl text-forest-green mb-3">Байланыс және жұмыс уақыты</h3>
+                <p class="text-sm text-forest-green/70 mb-2">📍 Мекенжайы: Мысал к-сі, 123</p>
+                <p class="text-sm text-forest-green/70 mb-2">📞 Үстел брондау: +7 (777) 123-45-67</p>
+                <p class="text-sm text-forest-green/70">🕒 Күн сайын 12:00-ден 03:00-ге дейін</p>
             </div>
         `
     }
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Эта команда нужна для GitHub Pages
     fetch('menu.json')
         .then(response => {
             if (!response.ok) throw new Error("Сетевая ошибка");
@@ -94,7 +98,7 @@ function initApp() {
     
     const searchInput = document.getElementById('searchInput');
     searchInput.addEventListener('input', (e) => {
-        currentSearchTerm = e.target.value;
+        currentSearchTerm = e.target.value.trim();
         const clearBtn = document.getElementById('clearSearchBtn');
         if(currentSearchTerm.length > 0) {
             clearBtn.classList.remove('hidden');
@@ -111,13 +115,6 @@ function switchLang(lang) {
     document.querySelectorAll('.lang-btn').forEach(btn => {
         btn.classList.toggle('lang-active', btn.innerText === lang);
     });
-
-    const root = document.documentElement;
-    if (lang === 'EN') {
-        document.body.classList.replace('font-serif-ru', 'font-serif-en');
-    } else {
-        document.body.classList.replace('font-serif-en', 'font-serif-ru');
-    }
 
     updateInterfaceTexts();
     renderCategories();
@@ -156,7 +153,7 @@ function switchMainTab(index, btn) {
         }
     });
 
-    currentCategory = null;
+    currentCategory = 'all'; // При переходе на вкладку по умолчанию выбираем "Все"
     currentSearchTerm = '';
     document.getElementById('searchInput').value = '';
     document.getElementById('clearSearchBtn').classList.add('hidden');
@@ -171,9 +168,22 @@ function renderCategories() {
     
     const tabs = menuData.categories.filter(c => c.tab === currentTab);
     
-    if (tabs.length > 0 && !currentCategory) {
-        currentCategory = tabs[0].id;
+    if (!currentCategory) {
+        currentCategory = 'all';
     }
+
+    // Кнопка "ВСЕ"
+    const allBtn = document.createElement('button');
+    const isAllActive = currentCategory === 'all';
+    allBtn.className = `whitespace-nowrap px-4 py-2 rounded-xl text-[13px] tracking-wide font-medium transition-all duration-300 snap-center ${
+        isAllActive ? 'bg-forest-green text-cream shadow-md shadow-forest-green/10' : 'bg-white text-forest-green/60 border border-forest-green/5'
+    }`;
+    allBtn.innerText = translations[currentLang]['cat_all'];
+    allBtn.onclick = () => {
+        allBtn.blur();
+        selectCategory('all');
+    };
+    container.appendChild(allBtn);
 
     tabs.forEach(cat => {
         const isActive = cat.id === currentCategory;
@@ -216,14 +226,23 @@ function renderMenu() {
     
     let itemsToRender = menuData.items;
 
+    // Глобальный поиск по всему меню (и кухня, и бар)
     if (currentSearchTerm) {
         const term = currentSearchTerm.toLowerCase();
         itemsToRender = itemsToRender.filter(item => {
             const name = (item.name[currentLang] || item.name['RU']).toLowerCase();
-            return name.includes(term) && menuData.categories.find(c => c.id === item.categoryId).tab === currentTab;
+            const desc = item.description ? (item.description[currentLang] || item.description['RU']).toLowerCase() : '';
+            return name.includes(term) || desc.includes(term);
         });
     } else {
-        itemsToRender = itemsToRender.filter(item => item.categoryId === currentCategory);
+        // Фильтрация по вкладке (кухня/бар)
+        const validCategories = menuData.categories.filter(c => c.tab === currentTab).map(c => c.id);
+        itemsToRender = itemsToRender.filter(item => validCategories.includes(item.categoryId));
+
+        // Фильтрация по конкретной категории, если выбрана не "Все"
+        if (currentCategory !== 'all') {
+            itemsToRender = itemsToRender.filter(item => item.categoryId === currentCategory);
+        }
     }
 
     if (itemsToRender.length === 0) {
@@ -231,25 +250,23 @@ function renderMenu() {
         return;
     }
 
-    const serifClass = currentLang === 'EN' ? 'font-serif-en' : 'font-serif-ru';
-
     itemsToRender.forEach(item => {
         const name = item.name[currentLang] || item.name['RU'];
         const description = item.description ? (item.description[currentLang] || item.description['RU']) : '';
         const hasImage = !!item.image;
         
         const el = document.createElement('div');
-        el.className = 'menu-card fade-in-up bg-white rounded-3xl p-4 mb-3 border border-forest-green/5 flex items-center justify-between gap-4 cursor-pointer relative overflow-hidden';
+        el.className = 'menu-card fade-in-up bg-white rounded-3xl p-4 mb-3 border border-forest-green/5 flex items-center justify-between gap-4 cursor-pointer relative overflow-hidden active:scale-[0.98] transition-transform';
         
         const imageIndicator = hasImage ? `<div class="absolute left-0 top-0 bottom-0 w-1 bg-nectar-accent/80"></div>` : '';
 
         el.innerHTML = `
             ${imageIndicator}
             <div class="flex-1 min-w-0 py-1 pl-1">
-                <h3 class="${serifClass} text-[19px] text-forest-green font-semibold leading-snug truncate">${name}</h3>
+                <h3 class="font-serif-ru text-[19px] text-forest-green font-semibold leading-snug truncate">${name}</h3>
                 ${description ? `<p class="text-[11px] text-forest-green/50 mt-1 truncate tracking-wide">${description}</p>` : ''}
                 <div class="flex items-center gap-2 mt-2">
-                    <span class="${serifClass} text-[16px] text-warm-gold font-medium">${item.price.toLocaleString()} ₸</span>
+                    <span class="font-serif-ru text-[16px] text-warm-gold font-medium">${item.price.toLocaleString()} ₸</span>
                 </div>
             </div>
             ${hasImage ? `
@@ -320,6 +337,12 @@ function switchSection(sectionId, btn) {
 
     if(sectionId === 'info') {
         initObserver();
+    } else {
+        // При возврате в меню сбрасываем поиск для чистоты интерфейса
+        document.getElementById('searchInput').value = '';
+        currentSearchTerm = '';
+        document.getElementById('clearSearchBtn').classList.add('hidden');
+        renderMenu();
     }
 }
 
@@ -327,13 +350,18 @@ function openModal(item) {
     const modal = document.getElementById('itemModal');
     const name = item.name[currentLang] || item.name['RU'];
     const desc = item.description ? (item.description[currentLang] || item.description['RU']) : '';
-    const serifClass = currentLang === 'EN' ? 'font-serif-en' : 'font-serif-ru';
     
-    const titleEl = document.getElementById('modalTitle');
-    titleEl.className = `${serifClass} text-[26px] text-forest-green font-semibold leading-tight`;
-    titleEl.innerText = name;
-    
+    document.getElementById('modalTitle').innerText = name;
     document.getElementById('modalPrice').innerText = `${item.price.toLocaleString()} ₸`;
+
+    // Граммаж (если есть в базе, можно выводить, если нет — скрываем)
+    const weightEl = document.getElementById('modalWeight');
+    if (item.weight) {
+        weightEl.innerText = item.weight;
+        weightEl.classList.remove('hidden');
+    } else {
+        weightEl.classList.add('hidden');
+    }
 
     const imgContainer = document.getElementById('modalImageContainer');
     const imgEl = document.getElementById('modalImage');
@@ -357,7 +385,6 @@ function openModal(item) {
 
     modal.classList.remove('hidden');
     modal.classList.add('flex');
-    
     modal.querySelector('.relative.bg-cream').classList.add('modal-enter');
 }
 
