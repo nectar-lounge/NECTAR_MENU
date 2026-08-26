@@ -230,6 +230,10 @@
         .modal-enter {
             animation: modalScaleUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
+        
+        .lining-nums {
+            font-variant-numeric: lining-nums;
+        }
 
         @keyframes modalScaleUp {
             from { opacity: 0; transform: scale(0.95) translateY(10px); }
@@ -314,9 +318,9 @@
 <p class="font-label-caps text-[10px] text-outline tracking-widest uppercase mt-[-2px]" data-i18n="header_subtitle">Lounge · Bar · Kitchen</p>
 </div>
 <div class="flex items-center gap-3 justify-end min-w-[80px]">
-<button class="lang-btn text-[10px] font-label-caps tracking-[0.2em] text-forest-green lang-active transition-colors opacity-100 font-bold duration-300" onclick="switchLang('RU')">RU</button>
-<button class="lang-btn text-[10px] font-label-caps tracking-[0.2em] text-on-secondary-fixed-variant hover:text-forest-green transition-colors opacity-60 duration-300" onclick="switchLang('KZ')">KZ</button>
-<button class="lang-btn text-[10px] font-label-caps tracking-[0.2em] text-on-secondary-fixed-variant hover:text-forest-green transition-colors opacity-60 duration-300" onclick="switchLang('EN')">EN</button>
+<button aria-label="Switch to Russian" class="lang-btn text-[10px] font-label-caps tracking-[0.2em] text-forest-green lang-active transition-colors opacity-100 font-bold duration-300" onclick="switchLang('RU')">RU</button>
+<button aria-label="Switch to Kazakh" class="lang-btn text-[10px] font-label-caps tracking-[0.2em] text-on-secondary-fixed-variant hover:text-forest-green transition-colors opacity-60 duration-300" onclick="switchLang('KZ')">KZ</button>
+<button aria-label="Switch to English" class="lang-btn text-[10px] font-label-caps tracking-[0.2em] text-on-secondary-fixed-variant hover:text-forest-green transition-colors opacity-60 duration-300" onclick="switchLang('EN')">EN</button>
 </div>
 </div>
 </header>
@@ -333,29 +337,24 @@
 <!-- Sticky Navigation Block -->
 <div class="sticky z-40 bg-cream/95 backdrop-blur-xl pt-2 pb-2 -mx-container-padding px-container-padding flex flex-col gap-4 border-b border-forest-green/5 pb-4 transition-all duration-300 top-0">
 <!-- Smart Search Bar -->
-<div class="flex items-center gap-3 bg-white shadow-[0_2px_12px_rgba(27,48,34,0.03)] border border-forest-green/10 px-5 py-3.5 rounded-2xl transition-all duration-300 focus-within:ring-1 focus-within:ring-forest-green/20 focus-within:border-forest-green/30 relative">
-<span class="material-symbols-outlined text-outline/60 transition-opacity duration-300">search</span>
-<input class="flex-1 bg-transparent border-none outline-none text-body-md text-on-surface placeholder:text-outline-variant font-body-md transition-opacity duration-300" data-i18n-placeholder="search_placeholder" id="searchInput" placeholder="Поиск блюд, напитков..." type="text"/>
-<button class="hidden items-center justify-center text-outline hover:text-forest-green transition-all duration-300 absolute right-4 h-full px-2" id="clearSearchBtn" onclick="clearSearch()">
-<span class="material-symbols-outlined text-[20px]">close</span>
+<div class="flex items-center gap-3 bg-white shadow-[0_2px_12px_rgba(27,48,34,0.03)] border border-forest-green/10 px-5 py-3.5 rounded-2xl transition-all duration-300 focus-within:ring-1 focus-within:ring-forest-green/20 focus-within:border-forest-green/30 relative" role="search">
+<span aria-hidden="true" class="material-symbols-outlined text-outline/60 transition-opacity duration-300">search</span>
+<input aria-label="Search dishes and drinks" class="flex-1 bg-transparent border-none outline-none text-body-md text-on-surface placeholder:text-outline-variant font-body-md transition-opacity duration-300" data-i18n-placeholder="search_placeholder" id="searchInput" placeholder="Поиск блюд, напитков..." type="text"/>
+<button aria-label="Clear search" class="hidden items-center justify-center text-outline hover:text-forest-green transition-all duration-300 absolute right-4 h-full px-2" id="clearSearchBtn" onclick="clearSearch()">
+<span aria-hidden="true" class="material-symbols-outlined text-[20px]">close</span>
 </button>
 </div>
 <!-- Global Navigation: Kitchen | Bar -->
 <div class="flex justify-center mt-2 fade-in-up">
-<div class="flex items-center bg-white border border-forest-green/5 rounded-2xl p-1 shadow-[0_2px_8px_rgba(27,48,34,0.02)] relative w-full max-w-sm">
+<div class="flex items-center bg-white border border-forest-green/5 rounded-2xl p-1 shadow-[0_2px_8px_rgba(27,48,34,0.02)] relative w-full max-w-sm" role="tablist">
 <div class="absolute left-1 top-1 bottom-1 w-[calc(50%-4px)] bg-forest-green rounded-xl transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] shadow-sm" id="nav-indicator"></div>
-<button class="nav-btn flex-1 relative z-10 px-8 py-2.5 text-label-caps font-label-caps text-cream transition-colors active:scale-95 tracking-widest" data-i18n="nav_kitchen" data-index="0" data-type="kitchen" onclick="switchMainTab(0, this)">КУХНЯ</button>
-<button class="nav-btn flex-1 relative z-10 px-8 py-2.5 text-label-caps font-label-caps text-on-surface-variant transition-colors active:scale-95 tracking-widest" data-i18n="nav_bar" data-index="1" data-type="bar" onclick="switchMainTab(1, this)">БАР</button>
+<button aria-selected="true" class="nav-btn flex-1 relative z-10 px-8 py-2.5 text-label-caps font-label-caps text-cream transition-colors active:scale-95 tracking-widest" data-i18n="nav_kitchen" data-index="0" data-type="kitchen" onclick="switchMainTab(0, this)" role="tab">КУХНЯ</button>
+<button aria-selected="false" class="nav-btn flex-1 relative z-10 px-8 py-2.5 text-label-caps font-label-caps text-on-surface-variant transition-colors active:scale-95 tracking-widest" data-i18n="nav_bar" data-index="1" data-type="bar" onclick="switchMainTab(1, this)" role="tab">БАР</button>
 </div>
 </div>
 <!-- Sub-categories (Horizontal Scroll) -->
 <div class="flex overflow-x-auto gap-3 pb-2 mt-3 snap-x snap-mandatory hide-scrollbar fade-in-up" id="categoryContainer" style="transition-delay: 50ms;">
-<button class="snap-start shrink-0 px-6 py-1.5 bg-forest-green text-cream border-forest-green rounded-xl text-[11px] font-label-caps tracking-widest uppercase transition-all active:scale-95 border shadow-sm" onclick="selectCategory('All')">Все</button>
-<button class="snap-start shrink-0 px-6 py-1.5 bg-white text-forest-green/70 border-forest-green/10 hover:border-forest-green/30 rounded-xl text-[11px] font-label-caps tracking-widest uppercase transition-all active:scale-95 border shadow-sm" onclick="selectCategory('Холодные закуски')">Холодные закуски</button>
-<button class="snap-start shrink-0 px-6 py-1.5 bg-white text-forest-green/70 border-forest-green/10 hover:border-forest-green/30 rounded-xl text-[11px] font-label-caps tracking-widest uppercase transition-all active:scale-95 border shadow-sm" onclick="selectCategory('Салаты')">Салаты</button>
-<button class="snap-start shrink-0 px-6 py-1.5 bg-white text-forest-green/70 border-forest-green/10 hover:border-forest-green/30 rounded-xl text-[11px] font-label-caps tracking-widest uppercase transition-all active:scale-95 border shadow-sm" onclick="selectCategory('Горячие закуски')">Горячие закуски</button>
-<button class="snap-start shrink-0 px-6 py-1.5 bg-white text-forest-green/70 border-forest-green/10 hover:border-forest-green/30 rounded-xl text-[11px] font-label-caps tracking-widest uppercase transition-all active:scale-95 border shadow-sm" onclick="selectCategory('Супы')">Супы</button>
-<button class="snap-start shrink-0 px-6 py-1.5 bg-white text-forest-green/70 border-forest-green/10 hover:border-forest-green/30 rounded-xl text-[11px] font-label-caps tracking-widest uppercase transition-all active:scale-95 border shadow-sm" onclick="selectCategory('Горячие блюда')">Горячие блюда</button>
+<!-- Categories will be rendered here -->
 </div>
 </div>
 <!-- Menu List -->
@@ -376,32 +375,32 @@
 <div class="absolute -right-12 -top-12 w-32 h-32 bg-warm-gold/5 rounded-full blur-3xl mix-blend-multiply opacity-50"></div>
 <div class="flex items-start gap-4 relative z-10">
 <div class="w-10 h-10 rounded-full bg-forest-green/5 flex items-center justify-center shrink-0 border border-forest-green/10">
-<span class="material-symbols-outlined text-forest-green text-[20px]" style='font-variation-settings: "FILL" 1;'>location_on</span>
+<span aria-hidden="true" class="material-symbols-outlined text-forest-green text-[20px]" style='font-variation-settings: "FILL" 1;'>location_on</span>
 </div>
 <div class="flex flex-col gap-1">
 <h3 class="font-label-caps text-label-caps text-forest-green/70 tracking-wider uppercase" data-i18n="info_address_label">Адрес</h3>
 <p class="font-body-lg text-body-lg text-forest-green" data-i18n="info_address">Проспект Дулати 1а, мкр. Архат, Алматы</p>
 <a class="inline-flex items-center gap-1 mt-1 text-warm-gold font-body-md text-sm hover:text-forest-green transition-colors group/link" href="https://go.2gis.com/iV3rq">
 <span class="" data-i18n="info_open_map">Открыть в 2GIS</span>
-<span class="material-symbols-outlined text-[16px] transition-transform group-hover/link:translate-x-1">arrow_forward</span>
+<span aria-hidden="true" class="material-symbols-outlined text-[16px] transition-transform group-hover/link:translate-x-1">arrow_forward</span>
 </a>
 </div>
 </div>
 <div class="w-full h-[1px] bg-forest-green/5"></div>
 <div class="flex items-start gap-4 relative z-10">
 <div class="w-10 h-10 rounded-full bg-forest-green/5 flex items-center justify-center shrink-0 border border-forest-green/10">
-<span class="material-symbols-outlined text-forest-green text-[20px]" style='font-variation-settings: "FILL" 1;'>call</span>
+<span aria-hidden="true" class="material-symbols-outlined text-forest-green text-[20px]" style='font-variation-settings: "FILL" 1;'>call</span>
 </div>
 <div class="flex flex-col gap-1">
 <h3 class="font-label-caps text-label-caps text-forest-green/70 tracking-wider uppercase" data-i18n="info_phone_label">Телефон</h3>
-<a class="font-body-lg text-body-lg text-forest-green hover:text-warm-gold transition-colors" href="tel:+77001234567">+7 (700) 123 45 67</a>
-<p class="font-body-md text-sm text-secondary mt-1" data-i18n="info_hours">Ежедневно, 14:00 - 01:00</p>
+<a class="font-body-lg text-body-lg text-forest-green hover:text-warm-gold transition-colors lining-nums" href="tel:+77001234567">+7 (700) 123 45 67</a>
+<p class="font-body-md text-sm text-secondary mt-1 lining-nums" data-i18n="info_hours">Ежедневно, 14:00 - 01:00</p>
 </div>
 </div>
 <div class="w-full h-[1px] bg-forest-green/5"></div>
 <div class="flex items-start gap-4 relative z-10">
 <div class="w-10 h-10 rounded-full bg-forest-green/5 flex items-center justify-center shrink-0 border border-forest-green/10">
-<svg class="w-5 h-5 text-forest-green" fill="currentColor" viewbox="0 0 24 24">
+<svg aria-hidden="true" class="w-5 h-5 text-forest-green" fill="currentColor" viewbox="0 0 24 24">
 <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"></path>
 </svg>
 </div>
@@ -418,32 +417,32 @@
 <div class="flex-1 h-[1px] bg-forest-green/10 ml-4"></div>
 </div>
 <div class="flex flex-col gap-3">
-<button class="w-full bg-white hover:bg-forest-green/5 transition-colors rounded-2xl p-4 flex items-center justify-between group text-left border border-forest-green/5" onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180')">
+<button aria-expanded="false" class="w-full bg-white hover:bg-forest-green/5 transition-colors rounded-2xl p-4 flex items-center justify-between group text-left border border-forest-green/5" onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true')">
 <div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-warm-gold/70 group-hover:text-warm-gold transition-colors">verified_user</span>
+<span aria-hidden="true" class="material-symbols-outlined text-warm-gold/70 group-hover:text-warm-gold transition-colors">verified_user</span>
 <span class="font-body-lg text-body-lg text-forest-green" data-i18n="info_license">Лицензия и регистрация</span>
 </div>
-<span class="material-symbols-outlined chevron transition-transform text-outline/60">expand_more</span>
+<span aria-hidden="true" class="material-symbols-outlined chevron transition-transform text-outline/60">expand_more</span>
 </button>
 <div class="hidden px-4 pb-4 transition-all duration-300">
-<p class="font-body-md text-body-md text-secondary leading-relaxed" data-i18n="info_license_desc">Государственная лицензия на розничную реализацию алкогольной продукции № 12345678 выдана Департаментом государственных доходов по г. Алматы. БИН: 123456789012.</p>
+<p class="font-body-md text-body-md text-secondary leading-relaxed lining-nums" data-i18n="info_license_desc">Государственная лицензия на розничную реализацию алкогольной продукции № 12345678 выдана Департаментом государственных доходов по г. Алматы. БИН: 123456789012.</p>
 </div>
-<button class="w-full bg-white hover:bg-forest-green/5 transition-colors rounded-2xl p-4 flex items-center justify-between group text-left border border-forest-green/5" onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180')">
+<button aria-expanded="false" class="w-full bg-white hover:bg-forest-green/5 transition-colors rounded-2xl p-4 flex items-center justify-between group text-left border border-forest-green/5" onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true')">
 <div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-warm-gold/70 group-hover:text-warm-gold transition-colors">menu_book</span>
+<span aria-hidden="true" class="material-symbols-outlined text-warm-gold/70 group-hover:text-warm-gold transition-colors">menu_book</span>
 <span class="font-body-lg text-body-lg text-forest-green" data-i18n="info_rules">Правила обслуживания</span>
 </div>
-<span class="material-symbols-outlined chevron transition-transform text-outline/60">expand_more</span>
+<span aria-hidden="true" class="material-symbols-outlined chevron transition-transform text-outline/60">expand_more</span>
 </button>
 <div class="hidden px-4 pb-4 transition-all duration-300">
-<p class="font-body-md text-body-md text-secondary leading-relaxed" data-i18n="info_rules_desc">Мы оставляем за собой право отказать в обслуживании лицам в состоянии алкогольного опьянения или нарушающим дресс-код. Вход разрешен гостям старше 21 года.</p>
+<p class="font-body-md text-body-md text-secondary leading-relaxed lining-nums" data-i18n="info_rules_desc">Мы оставляем за собой право отказать в обслуживании лицам в состоянии алкогольного опьянения или нарушающим дресс-код. Вход разрешен гостям старше 21 года.</p>
 </div>
-<button class="w-full bg-white hover:bg-forest-green/5 transition-colors rounded-2xl p-4 flex items-center justify-between group text-left border border-forest-green/5" onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180')">
+<button aria-expanded="false" class="w-full bg-white hover:bg-forest-green/5 transition-colors rounded-2xl p-4 flex items-center justify-between group text-left border border-forest-green/5" onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180'); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true')">
 <div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-warm-gold/70 group-hover:text-warm-gold transition-colors">forum</span>
+<span aria-hidden="true" class="material-symbols-outlined text-warm-gold/70 group-hover:text-warm-gold transition-colors">forum</span>
 <span class="font-body-lg text-body-lg text-forest-green" data-i18n="info_feedback">Книга отзывов</span>
 </div>
-<span class="material-symbols-outlined chevron transition-transform text-outline/60">expand_more</span>
+<span aria-hidden="true" class="material-symbols-outlined chevron transition-transform text-outline/60">expand_more</span>
 </button>
 <div class="hidden px-4 pb-4 transition-all duration-300">
 <p class="font-body-md text-body-md text-secondary leading-relaxed" data-i18n="info_feedback_desc">Физическая Книга жалоб и предложений предоставляется по запросу у дежурного менеджера. Альтернативно, вы можете оставить цифровой отзыв через наши контактные формы.</p>
@@ -452,16 +451,16 @@
 </div>
 </section>
 <!-- Modal Overlay -->
-<div class="fixed inset-0 z-[100] hidden items-center justify-center px-4" id="itemModal">
+<div aria-modal="true" class="fixed inset-0 z-[100] hidden items-center justify-center px-4" id="itemModal" role="dialog">
 <div class="absolute inset-0 bg-forest-green/60 backdrop-blur-sm transition-opacity duration-300" onclick="closeModal()"></div>
 <div class="relative modal-glass w-full max-w-md rounded-[32px] overflow-hidden flex flex-col max-h-[85vh] border border-white/40">
 <div class="sticky top-0 bg-transparent p-5 flex justify-between items-start z-10 border-b border-forest-green/10 gap-4">
 <h3 class="font-serif text-[24px] text-forest-green font-semibold leading-tight break-words pr-4" id="modalTitle">Item Name</h3>
-<button class="w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-full bg-forest-green/5 text-forest-green hover:bg-forest-green/15 transition-colors mt-0.5 active:scale-95" onclick="closeModal()">
-<span class="material-symbols-outlined text-[20px]">close</span>
+<button aria-label="Close modal" class="w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-full bg-forest-green/5 text-forest-green hover:bg-forest-green/15 transition-colors mt-0.5 active:scale-95" onclick="closeModal()">
+<span aria-hidden="true" class="material-symbols-outlined text-[20px]">close</span>
 </button>
 </div>
-<div class="overflow-y-auto p-6 flex flex-col gap-6"><div class="flex flex-col gap-1 border-b border-warm-gold/30 pb-4"><span class="font-serif text-[32px] text-warm-gold font-medium" id="modalPrice">0 ₸</span><div class="flex items-center gap-2 opacity-50"><span class="material-symbols-outlined text-[14px]">scale</span><span class="font-label-caps text-[10px] tracking-widest uppercase" id="modalWeight"></span></div></div><div class="hidden flex-col gap-3" id="modalIngredientsContainer"><h4 class="font-label-caps text-[11px] text-forest-green/50 tracking-[0.2em] uppercase" data-i18n="modal_ingredients">Ингредиенты</h4><div class="font-serif text-[20px] text-forest-green leading-relaxed" id="modalIngredients" style="line-height: 1.7;"></div></div></div>
+<div class="overflow-y-auto p-6 flex flex-col gap-6"><div class="flex flex-col gap-1 border-b border-warm-gold/30 pb-4"><span class="font-serif text-[32px] text-warm-gold font-medium lining-nums" id="modalPrice">0 ₸</span><div class="flex items-center gap-2 opacity-50"><span aria-hidden="true" class="material-symbols-outlined text-[14px]">scale</span><span class="font-label-caps text-[10px] tracking-widest uppercase lining-nums" id="modalWeight"></span></div></div><div class="hidden flex-col gap-3" id="modalIngredientsContainer"><h4 class="font-label-caps text-[11px] text-forest-green/50 tracking-[0.2em] uppercase" data-i18n="modal_ingredients">Ингредиенты</h4><div class="font-serif text-[20px] text-forest-green leading-relaxed" id="modalIngredients" style="line-height: 1.7;"></div></div></div>
 <div class="p-5 bg-transparent border-t border-forest-green/10">
 <button class="w-full py-3.5 bg-forest-green text-cream rounded-xl font-label-caps tracking-widest text-sm active:scale-[0.98] transition-transform shadow-lg shadow-forest-green/20" data-i18n="modal_close" onclick="closeModal()">ЗАКРЫТЬ</button>
 </div>
@@ -925,8 +924,10 @@
                 buttons.forEach((b, i) => {
                     if(i === index) {
                         b.classList.replace('text-on-surface-variant', 'text-cream');
+                        b.setAttribute('aria-selected', 'true');
                     } else {
                         b.classList.replace('text-cream', 'text-on-surface-variant');
+                        b.setAttribute('aria-selected', 'false');
                     }
                 });
 
@@ -981,11 +982,17 @@
                 const container = document.getElementById('menuContainer');
                 const nameKey = `name_${currentLang.toLowerCase()}`;
                 const catKey = `category_${currentLang.toLowerCase()}`;
+                const compKey = `composition_${currentLang.toLowerCase()}`;
                 
                 let allItems = MENU;
                 
                 if (searchQuery) {
-                    allItems = allItems.filter(item => item[nameKey].toLowerCase().includes(searchQuery.toLowerCase()));
+                    const q = searchQuery.toLowerCase();
+                    allItems = allItems.filter(item => 
+                        item[nameKey].toLowerCase().includes(q) || 
+                        item[catKey].toLowerCase().includes(q) || 
+                        (item[compKey] && item[compKey].toLowerCase().includes(q))
+                    );
                 } else {
                     allItems = allItems.filter(item => item.type === currentType);
                 }
@@ -1003,7 +1010,7 @@
                     const catItems = allItems.filter(i => i[catKey] === cat);
                     if (catItems.length > 0) {
                         html += `
-                            <div class="mt-8 mb-4 fade-in-up">
+                            <div class="mt-8 mb-4 fade-in-up scroll-mt-[120px]">
                                 <div class="flex items-center justify-center gap-4 mb-6 px-4">
                                     <div class="flex-1 h-[1px] bg-gradient-to-r from-transparent via-warm-gold/30 to-warm-gold/30"></div>
                                     <h2 class="font-serif text-[26px] text-forest-green tracking-tight text-center font-medium">${cat}</h2>
@@ -1015,14 +1022,14 @@
                             const itemData = JSON.stringify(item).replace(/"/g, '&quot;');
                             let noteIcon = '';
                             if (item.note && item.note.toLowerCase().includes('острое')) {
-                                 noteIcon = `<span class="material-symbols-outlined text-red-500/80 text-[18px] ml-2" title="${item.note}">local_fire_department</span>`;
+                                 noteIcon = `<span aria-hidden="true" class="material-symbols-outlined text-red-500/80 text-[18px] ml-2" title="${item.note}">local_fire_department</span>`;
                             }
                             html += `
-                                <div class="fade-in-up menu-card group bg-white rounded-2xl overflow-hidden soft-shadow flex flex-col cursor-pointer border border-forest-green/5 hover:border-forest-green/20" onclick='openModal(${itemData})' style="transition-delay: ${itemIdx * 50}ms;">
+                                <div aria-label="View details for ${item[nameKey]}" class="fade-in-up menu-card group bg-white rounded-2xl overflow-hidden soft-shadow flex flex-col cursor-pointer border border-forest-green/5 hover:border-forest-green/20" onclick='openModal(${itemData})' role="button" tabindex="0" style="transition-delay: ${itemIdx * 50}ms;">
                                     <div class="px-5 py-5 relative">
                                         <div class="flex justify-between items-start gap-4">
                                             <h3 class="font-serif text-[22px] md:text-headline-sm text-forest-green max-w-[75%] leading-tight font-medium flex items-center flex-wrap">${item[nameKey]}${noteIcon}</h3>
-                                            <p class="font-serif text-[20px] md:text-headline-sm text-warm-gold whitespace-nowrap mt-0.5">${item.price} ₸</p>
+                                            <p class="font-serif text-[20px] md:text-headline-sm text-warm-gold whitespace-nowrap mt-0.5 lining-nums">${item.price} ₸</p>
                                         </div>
                                     </div>
                                 </div>
@@ -1115,12 +1122,12 @@
 </main>
 <nav class="fixed bottom-0 inset-x-0 z-50 pb-safe glass-effect border-t border-forest-green/10">
 <div class="flex justify-around items-center h-[72px] px-8">
-<button class="bottom-nav-btn flex flex-col items-center justify-center gap-1 transition-all text-forest-green active:scale-95" data-path="menu" onclick="switchSection('menu', this)">
-<span class="material-symbols-outlined text-[24px]">restaurant_menu</span>
+<button aria-label="Menu" class="bottom-nav-btn flex flex-col items-center justify-center gap-1 transition-all text-forest-green active:scale-95" data-path="menu" onclick="switchSection('menu', this)">
+<span aria-hidden="true" class="material-symbols-outlined text-[24px]">restaurant_menu</span>
 <span class="text-[10px] font-label-caps tracking-widest uppercase" data-i18n="tab_menu">Menu</span>
 </button>
-<button class="bottom-nav-btn flex flex-col items-center justify-center gap-1 text-outline transition-all hover:text-forest-green active:scale-95" data-path="info" onclick="switchSection('info', this)">
-<span class="material-symbols-outlined text-[24px]">info</span>
+<button aria-label="Information" class="bottom-nav-btn flex flex-col items-center justify-center gap-1 text-outline transition-all hover:text-forest-green active:scale-95" data-path="info" onclick="switchSection('info', this)">
+<span aria-hidden="true" class="material-symbols-outlined text-[24px]">info</span>
 <span class="text-[10px] font-label-caps tracking-widest uppercase" data-i18n="tab_info">Info</span>
 </button>
 </div>
