@@ -1,19 +1,17 @@
-/* Базовые настройки для мобильных устройств */
 html, body {
     width: 100vw;
     margin: 0;
     padding: 0;
     background-color: #fbf9f6;
-    overscroll-behavior: none; /* Убирает лишний скролл-баунс на iOS */
-    -webkit-tap-highlight-color: transparent; /* Убирает синий квадрат при клике на iOS */
+    overscroll-behavior: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
-/* Прячем системный скроллбар для красоты */
 ::-webkit-scrollbar {
     display: none;
 }
 
-/* Ambient Background Texture - Тот самый нектариновый свет */
+/* Изысканный фоновый градиент */
 body::before {
     content: '';
     position: fixed;
@@ -23,52 +21,39 @@ body::before {
     height: 100%;
     pointer-events: none;
     z-index: -1;
-    opacity: 0.5;
+    opacity: 0.4;
     background: 
-        radial-gradient(circle at 15% 50%, rgba(225, 116, 61, 0.08), transparent 45%), /* Нектарин */
-        radial-gradient(circle at 85% 30%, rgba(27, 48, 34, 0.05), transparent 50%); /* Лес */
-    animation: ambientLight 12s ease-in-out infinite alternate;
+        radial-gradient(circle at 10% 20%, rgba(225, 116, 61, 0.06), transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(27, 48, 34, 0.04), transparent 45%);
 }
 
-@keyframes ambientLight {
-    0% { transform: scale(1); opacity: 0.4; }
-    100% { transform: scale(1.1); opacity: 0.7; }
-}
-
-/* Безопасные зоны для iPhone (челки и полоска внизу) */
 .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
 .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
 
-/* --- ТАБЫ И НАВИГАЦИЯ --- */
 .lang-btn {
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    font-weight: 500;
     color: rgba(27, 48, 34, 0.4);
     transition: all 0.3s ease;
 }
 .lang-active {
     color: #1b3022;
-    font-weight: 800;
+    font-weight: 700;
 }
 
 .bottom-nav-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     transition: all 0.2s ease;
 }
 .bottom-nav-btn:active {
     transform: scale(0.92);
 }
 
-/* --- СЕКЦИИ SPA (Single Page Application) --- */
 .spa-section {
     display: none;
     opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 0.4s ease, transform 0.4s ease;
+    transform: translateY(8px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
 }
 .spa-section.active {
     display: flex;
@@ -76,69 +61,53 @@ body::before {
     transform: translateY(0);
 }
 
-/* --- ЭФФЕКТЫ "СТЕКЛА" (Glassmorphism) --- */
 .glass-effect {
-    background: rgba(251, 249, 246, 0.75);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(251, 249, 246, 0.8);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
 }
 
 .modal-glass {
-    border: 1px solid rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.8);
 }
 
-/* --- КАРТОЧКИ БЛЮД --- */
 .menu-card {
-    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 8px rgba(27, 48, 34, 0.02);
+    border: 1px solid rgba(27, 48, 34, 0.04);
 }
 .menu-card:active {
-    transform: scale(0.97); /* Легкое вдавливание при клике */
-    box-shadow: 0 2px 10px rgba(225, 116, 61, 0.05); /* Нектариновая тень при клике */
+    transform: scale(0.98);
 }
 
-/* Скрываем скроллбар для категорий, но оставляем прокрутку */
 .hide-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
 
-/* --- АНИМАЦИИ ПОЯВЛЕНИЯ --- */
-/* Убрали задержку, теперь анимация быстрая и плавная */
 .fade-in-up {
     opacity: 0;
-    transform: translateY(15px);
-    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    transform: translateY(12px);
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
 }
 .fade-in-up.is-visible {
     opacity: 1;
     transform: translateY(0);
 }
 
-/* Анимация модального окна */
-.modal-enter {
-    animation: modalScaleUp 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-}
-@keyframes modalScaleUp {
-    from { opacity: 0; transform: scale(0.95) translateY(20px); }
-    to { opacity: 1; transform: scale(1) translateY(0); }
-}
-
-/* Эффект дыхания для главной картинки */
 .hero-float {
-    animation: breath 10s ease-in-out infinite alternate;
+    animation: breath 12s ease-in-out infinite alternate;
 }
 @keyframes breath {
-    0% { transform: scale(1.02) translateY(0); }
-    100% { transform: scale(1.08) translateY(-5px); }
+    0% { transform: scale(1.02); }
+    100% { transform: scale(1.07); }
 }
 
-/* Поисковая строка */
 .search-bar {
-    box-shadow: 0 2px 12px rgba(27,48,34,0.03);
+    box-shadow: 0 2px 10px rgba(27,48,34,0.02);
     border: 1px solid rgba(27,48,34,0.05);
     transition: all 0.3s ease;
 }
 .search-bar:focus-within {
-    box-shadow: 0 4px 20px rgba(225, 116, 61, 0.08); /* Нектариновое свечение фокуса */
+    box-shadow: 0 4px 20px rgba(225, 116, 61, 0.06);
     border-color: rgba(225, 116, 61, 0.3);
 }
