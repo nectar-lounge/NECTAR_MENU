@@ -1,10 +1,10 @@
 let menuData = { categories: [], items: [] };
 let currentLang = 'RU';
-let currentTab = 'kitchen'; // 'kitchen' или 'bar'
+let currentTab = 'kitchen';
 let currentCategory = null;
 let currentSearchTerm = '';
+let observer = null;
 
-// Словари для интерфейса
 const translations = {
     'RU': {
         header_subtitle: 'Lounge · Bar · Kitchen',
@@ -18,7 +18,7 @@ const translations = {
         info_content: `
             <div class="bg-white rounded-3xl p-6 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
                 <h3 class="font-serif-ru text-xl text-forest-green mb-2">О нас</h3>
-                <p class="text-sm text-forest-green/70">NECTAR — это премиальное пространство для отдыха в Алматы. Мы объединили авторскую кухню, расслабляющую атмосферу лаунжа и высокий сервис.</p>
+                <p class="text-sm text-forest-green/70">NECTAR — это премиальное пространство для отдыха. Мы объединили авторскую кухню, расслабляющую атмосферу лаунжа и высокий сервис.</p>
             </div>
             <div class="bg-white rounded-3xl p-6 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
                 <h3 class="font-serif-ru text-xl text-forest-green mb-2">Контакты</h3>
@@ -39,7 +39,7 @@ const translations = {
         info_content: `
             <div class="bg-white rounded-3xl p-6 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
                 <h3 class="font-serif-en text-xl text-forest-green mb-2">About Us</h3>
-                <p class="text-sm text-forest-green/70">NECTAR is a premium leisure space in Almaty combining signature cuisine, a relaxing lounge atmosphere, and top-tier service.</p>
+                <p class="text-sm text-forest-green/70">NECTAR is a premium leisure space combining signature cuisine, a relaxing lounge atmosphere, and top-tier service.</p>
             </div>
             <div class="bg-white rounded-3xl p-6 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
                 <h3 class="font-serif-en text-xl text-forest-green mb-2">Contacts</h3>
@@ -60,7 +60,7 @@ const translations = {
         info_content: `
             <div class="bg-white rounded-3xl p-6 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
                 <h3 class="font-serif-ru text-xl text-forest-green mb-2">Біз туралы</h3>
-                <p class="text-sm text-forest-green/70">NECTAR — Алматыдағы премиум демалыс орны. Біз авторлық асхананы, лаунж атмосферасын және жоғары сервисті біріктірдік.</p>
+                <p class="text-sm text-forest-green/70">NECTAR — бұл премиум демалыс орны. Біз авторлық асхананы, лаунж атмосферасын және жоғары сервисті біріктірдік.</p>
             </div>
             <div class="bg-white rounded-3xl p-6 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
                 <h3 class="font-serif-ru text-xl text-forest-green mb-2">Байланыс</h3>
@@ -71,16 +71,27 @@ const translations = {
     }
 };
 
-// 1. ЗАГРУЗКА ДАННЫХ
 document.addEventListener('DOMContentLoaded', () => {
-    initApp();
+    // Эта команда нужна для GitHub Pages
+    fetch('menu.json')
+        .then(response => {
+            if (!response.ok) throw new Error("Сетевая ошибка");
+            return response.json();
+        })
+        .then(data => {
+            menuData = data;
+            initApp();
+        })
+        .catch(error => {
+            console.error("Ошибка загрузки меню:", error);
+            document.getElementById('menuContainer').innerHTML = `<p class="text-center text-red-500 mt-10 text-sm">Ошибка загрузки меню. Проверьте файл menu.json</p>`;
+        });
 });
 
 function initApp() {
     updateInterfaceTexts();
     renderCategories();
     
-    // Инициализация поиска
     const searchInput = document.getElementById('searchInput');
     searchInput.addEventListener('input', (e) => {
         currentSearchTerm = e.target.value;
@@ -94,16 +105,13 @@ function initApp() {
     });
 }
 
-// 2. ПЕРЕКЛЮЧЕНИЕ ЯЗЫКОВ И ШРИФТОВ
 function switchLang(lang) {
     currentLang = lang;
     
-    // Обновляем активную кнопку
     document.querySelectorAll('.lang-btn').forEach(btn => {
         btn.classList.toggle('lang-active', btn.innerText === lang);
     });
 
-    // Смена шрифтов для Английского
     const root = document.documentElement;
     if (lang === 'EN') {
         document.body.classList.replace('font-serif-ru', 'font-serif-en');
@@ -130,16 +138,13 @@ function updateInterfaceTexts() {
     if (infoContainer) infoContainer.innerHTML = dict['info_content'];
 }
 
-// 3. ПЕРЕКЛЮЧЕНИЕ КУХНЯ / БАР
 function switchMainTab(index, btn) {
-    btn.blur(); // Сбрасываем фокус, чтобы не залипало
+    btn.blur();
     currentTab = btn.getAttribute('data-type');
     
-    // Двигаем зеленый индикатор
     const indicator = document.getElementById('nav-indicator');
     indicator.style.transform = `translateX(${index * 100}%)`;
     
-    // Меняем цвета текста кнопок
     const btns = document.querySelectorAll('.nav-btn');
     btns.forEach((b, i) => {
         if(i === index) {
@@ -160,12 +165,10 @@ function switchMainTab(index, btn) {
     renderMenu();
 }
 
-// 4. РЕНДЕР КАТЕГОРИЙ (Горизонтальный скролл)
 function renderCategories() {
     const container = document.getElementById('categoryContainer');
     container.innerHTML = '';
     
-    // Фильтруем категории по текущему табу (Кухня или Бар)
     const tabs = menuData.categories.filter(c => c.tab === currentTab);
     
     if (tabs.length > 0 && !currentCategory) {
@@ -182,12 +185,11 @@ function renderCategories() {
         }`;
         btn.innerText = catName;
         btn.onclick = () => {
-            btn.blur(); // Избегаем залипания
+            btn.blur();
             selectCategory(cat.id);
         };
         container.appendChild(btn);
 
-        // Центрируем активную категорию
         if (isActive) {
             setTimeout(() => {
                 btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
@@ -201,7 +203,6 @@ function selectCategory(id) {
     renderCategories();
     renderMenu();
     
-    // Плавный скролл к началу списка блюд
     const menuSection = document.getElementById('menu-section');
     window.scrollTo({
         top: menuSection.offsetTop - 80,
@@ -209,14 +210,12 @@ function selectCategory(id) {
     });
 }
 
-// 5. РЕНДЕР БЛЮД С ИНТЕРСЕКШН ОБЗЕРВЕРОМ
 function renderMenu() {
     const container = document.getElementById('menuContainer');
     container.innerHTML = '';
     
     let itemsToRender = menuData.items;
 
-    // Фильтрация по поиску или категории
     if (currentSearchTerm) {
         const term = currentSearchTerm.toLowerCase();
         itemsToRender = itemsToRender.filter(item => {
@@ -239,11 +238,9 @@ function renderMenu() {
         const description = item.description ? (item.description[currentLang] || item.description['RU']) : '';
         const hasImage = !!item.image;
         
-        // Создаем HTML карточки
         const el = document.createElement('div');
         el.className = 'menu-card fade-in-up bg-white rounded-3xl p-4 mb-3 border border-forest-green/5 flex items-center justify-between gap-4 cursor-pointer relative overflow-hidden';
         
-        // Если есть картинка, добавляем красивый мини-маркер слева
         const imageIndicator = hasImage ? `<div class="absolute left-0 top-0 bottom-0 w-1 bg-nectar-accent/80"></div>` : '';
 
         el.innerHTML = `
@@ -273,7 +270,6 @@ function renderMenu() {
         container.appendChild(el);
     });
 
-    // Запускаем Intersection Observer без задержек (исправление твоей проблемы)
     initObserver();
 }
 
@@ -304,7 +300,6 @@ function clearSearch() {
     renderMenu();
 }
 
-// 6. ПЕРЕКЛЮЧЕНИЕ СЕКЦИЙ SPA (Меню / Инфо)
 function switchSection(sectionId, btn) {
     btn.blur();
     
@@ -313,7 +308,6 @@ function switchSection(sectionId, btn) {
     });
     document.getElementById(`${sectionId}-section`).classList.add('active');
 
-    // Обновляем цвета иконок в нижнем меню
     document.querySelectorAll('.bottom-nav-btn').forEach(b => {
         if(b.getAttribute('data-path') === sectionId) {
             b.classList.remove('text-forest-green/40');
@@ -325,25 +319,22 @@ function switchSection(sectionId, btn) {
     });
 
     if(sectionId === 'info') {
-        initObserver(); // Анимируем появление блоков в Инфо
+        initObserver();
     }
 }
 
-// 7. ЛОГИКА МОДАЛЬНОГО ОКНА БЛЮДА
 function openModal(item) {
     const modal = document.getElementById('itemModal');
     const name = item.name[currentLang] || item.name['RU'];
     const desc = item.description ? (item.description[currentLang] || item.description['RU']) : '';
     const serifClass = currentLang === 'EN' ? 'font-serif-en' : 'font-serif-ru';
     
-    // Настраиваем шрифты
     const titleEl = document.getElementById('modalTitle');
     titleEl.className = `${serifClass} text-[26px] text-forest-green font-semibold leading-tight`;
     titleEl.innerText = name;
     
     document.getElementById('modalPrice').innerText = `${item.price.toLocaleString()} ₸`;
 
-    // Работаем с картинкой
     const imgContainer = document.getElementById('modalImageContainer');
     const imgEl = document.getElementById('modalImage');
     if (item.image) {
@@ -354,7 +345,6 @@ function openModal(item) {
         imgEl.src = '';
     }
 
-    // Описание
     const ingrContainer = document.getElementById('modalIngredientsContainer');
     if (desc) {
         document.getElementById('modalIngredients').innerText = desc;
@@ -368,7 +358,6 @@ function openModal(item) {
     modal.classList.remove('hidden');
     modal.classList.add('flex');
     
-    // Анимация появления
     modal.querySelector('.relative.bg-cream').classList.add('modal-enter');
 }
 
