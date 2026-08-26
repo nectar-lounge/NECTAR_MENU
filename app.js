@@ -13,18 +13,19 @@ const translations = {
         search_placeholder: 'Поиск блюд, напитков...',
         tab_menu: 'Меню',
         tab_info: 'Инфо',
-        modal_ingredients: 'Состав',
+        modal_ingredients: 'Состав блюда',
         modal_close: 'Закрыть',
         cat_all: 'Все',
         info_content: `
-            <div class="bg-white rounded-3xl p-6 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
-                <h3 class="font-serif-ru text-2xl text-forest-green mb-3">О нас</h3>
-                <p class="text-sm text-forest-green/70 leading-relaxed">NECTAR — это премиальное пространство для отдыха. Мы объединили авторскую кухню, расслабляющую атмосферу лаунжа и высокий сервис.</p>
+            <div class="bg-white rounded-[28px] p-7 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
+                <h3 class="font-serif-ru text-2xl text-forest-green mb-3 font-medium">О пространстве</h3>
+                <p class="text-sm text-forest-green/70 leading-relaxed font-light">NECTAR — это премиальное пространство для ценителей подлинного отдыха. Мы гармонично объединили высокую авторскую кухню, утонченную культуру миксологии и расслабляющую атмосферу лаунжа.</p>
             </div>
-            <div class="bg-white rounded-3xl p-6 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
-                <h3 class="font-serif-ru text-xl text-forest-green mb-3">Контакты</h3>
-                <p class="text-sm text-forest-green/70 mb-2">📍 г. Алматы</p>
-                <p class="text-sm text-forest-green/70">📞 Бронь столов: +7 (XXX) XXX-XX-XX</p>
+            <div class="bg-white rounded-[28px] p-7 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
+                <h3 class="font-serif-ru text-xl text-forest-green mb-3 font-medium">Контакты & Резерв</h3>
+                <p class="text-sm text-forest-green/70 mb-2 flex items-center gap-2">📍 <span class="font-light">г. Алматы, ул. Премиальная, 1</span></p>
+                <p class="text-sm text-forest-green/70 flex items-center gap-2">📞 <span class="font-light">Бронь столов: +7 (777) 000-00-00</span></p>
+                <p class="text-sm text-forest-green/70 mt-2 flex items-center gap-2">⏰ <span class="font-light">Ежедневно с 14:00 до 03:00</span></p>
             </div>
         `
     },
@@ -32,21 +33,22 @@ const translations = {
         header_subtitle: 'Lounge · Bar · Kitchen',
         nav_kitchen: 'Kitchen',
         nav_bar: 'Bar',
-        search_placeholder: 'Search for dishes, drinks...',
+        search_placeholder: 'Search dishes, drinks...',
         tab_menu: 'Menu',
         tab_info: 'Info',
         modal_ingredients: 'Ingredients',
         modal_close: 'Close',
         cat_all: 'All',
         info_content: `
-            <div class="bg-white rounded-3xl p-6 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
-                <h3 class="font-serif-ru text-2xl text-forest-green mb-3">About Us</h3>
-                <p class="text-sm text-forest-green/70 leading-relaxed">NECTAR is a premium leisure space combining signature cuisine, a relaxing lounge atmosphere, and top-tier service.</p>
+            <div class="bg-white rounded-[28px] p-7 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
+                <h3 class="font-serif-ru text-2xl text-forest-green mb-3 font-medium">About Us</h3>
+                <p class="text-sm text-forest-green/70 leading-relaxed font-light">NECTAR is a premium leisure space harmoniously combining signature haute cuisine, refined mixology culture, and an ambient lounge atmosphere.</p>
             </div>
-            <div class="bg-white rounded-3xl p-6 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
-                <h3 class="font-serif-ru text-xl text-forest-green mb-3">Contacts</h3>
-                <p class="text-sm text-forest-green/70 mb-2">📍 Almaty</p>
-                <p class="text-sm text-forest-green/70">📞 Reservations: +7 (XXX) XXX-XX-XX</p>
+            <div class="bg-white rounded-[28px] p-7 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
+                <h3 class="font-serif-ru text-xl text-forest-green mb-3 font-medium">Contacts & Reservations</h3>
+                <p class="text-sm text-forest-green/70 mb-2 flex items-center gap-2">📍 <span class="font-light">Almaty, Premium St., 1</span></p>
+                <p class="text-sm text-forest-green/70 flex items-center gap-2">📞 <span class="font-light">Reservations: +7 (777) 000-00-00</span></p>
+                <p class="text-sm text-forest-green/70 mt-2 flex items-center gap-2">⏰ <span class="font-light">Daily from 2:00 PM to 3:00 AM</span></p>
             </div>
         `
     },
@@ -61,14 +63,15 @@ const translations = {
         modal_close: 'Жабу',
         cat_all: 'Барлығы',
         info_content: `
-            <div class="bg-white rounded-3xl p-6 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
-                <h3 class="font-serif-ru text-2xl text-forest-green mb-3">Біз туралы</h3>
-                <p class="text-sm text-forest-green/70 leading-relaxed">NECTAR — бұл премиум демалыс орны. Біз авторлық асхананы, лаунж атмосферасын және жоғары сервисті біріктірдік.</p>
+            <div class="bg-white rounded-[28px] p-7 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
+                <h3 class="font-serif-ru text-2xl text-forest-green mb-3 font-medium">Біз туралы</h3>
+                <p class="text-sm text-forest-green/70 leading-relaxed font-light">NECTAR — бұл шынайы демалысты бағалаушыларға арналған премиум кеңістік. Біз авторлық асхананы, талғампаз бар мәдениетін және жайлы лаунж атмосферасын біріктірдік.</p>
             </div>
-            <div class="bg-white rounded-3xl p-6 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
-                <h3 class="font-serif-ru text-xl text-forest-green mb-3">Байланыс</h3>
-                <p class="text-sm text-forest-green/70 mb-2">📍 Алматы қ.</p>
-                <p class="text-sm text-forest-green/70">📞 Үстелге тапсырыс: +7 (XXX) XXX-XX-XX</p>
+            <div class="bg-white rounded-[28px] p-7 shadow-sm border border-forest-green/5 mb-4 fade-in-up">
+                <h3 class="font-serif-ru text-xl text-forest-green mb-3 font-medium">Байланыс & Бронь</h3>
+                <p class="text-sm text-forest-green/70 mb-2 flex items-center gap-2">📍 <span class="font-light">Алматы қ., Премиум к-сі, 1</span></p>
+                <p class="text-sm text-forest-green/70 flex items-center gap-2">📞 <span class="font-light">Үстел брондау: +7 (777) 000-00-00</span></p>
+                <p class="text-sm text-forest-green/70 mt-2 flex items-center gap-2">⏰ <span class="font-light">Күн сайын 14:00-ден 03:00-ге дейін</span></p>
             </div>
         `
     }
@@ -86,13 +89,13 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => {
             console.error("Ошибка загрузки меню:", error);
-            document.getElementById('menuContainer').innerHTML = `<p class="text-center text-red-500 mt-10 text-sm">Ошибка загрузки меню. Проверьте файл menu.json</p>`;
+            document.getElementById('menuContainer').innerHTML = `<p class="text-center text-forest-green/50 mt-10 text-sm font-light">Не удалось загрузить данные меню.</p>`;
         });
 });
 
 function initApp() {
     updateInterfaceTexts();
-    currentCategory = 'all'; // Гарантируем выбор "Все" при старте
+    currentCategory = 'all';
     renderCategories();
     renderMenu();
     
@@ -153,7 +156,7 @@ function switchMainTab(index, btn) {
         }
     });
 
-    currentCategory = 'all'; // При смене вкладки кухня/бар сбрасываем на "Все"
+    currentCategory = 'all';
     currentSearchTerm = '';
     document.getElementById('searchInput').value = '';
     document.getElementById('clearSearchBtn').classList.add('hidden');
@@ -168,11 +171,10 @@ function renderCategories() {
     
     const tabs = menuData.categories.filter(c => c.tab === currentTab);
     
-    // Кнопка "ВСЕ"
     const allBtn = document.createElement('button');
     const isAllActive = currentCategory === 'all';
-    allBtn.className = `whitespace-nowrap px-4 py-2 rounded-xl text-[13px] tracking-wide font-medium transition-all duration-300 snap-center ${
-        isAllActive ? 'bg-forest-green text-cream shadow-md shadow-forest-green/10' : 'bg-white text-forest-green/60 border border-forest-green/5'
+    allBtn.className = `whitespace-nowrap px-4 py-2 rounded-xl text-[12px] tracking-[0.1em] uppercase font-medium transition-all duration-300 snap-center ${
+        isAllActive ? 'bg-forest-green text-cream shadow-sm' : 'bg-white text-forest-green/60 border border-forest-green/5 hover:border-forest-green/20'
     }`;
     allBtn.innerText = translations[currentLang]['cat_all'];
     allBtn.onclick = () => {
@@ -186,8 +188,8 @@ function renderCategories() {
         const catName = cat.name[currentLang] || cat.name['RU'];
         
         const btn = document.createElement('button');
-        btn.className = `whitespace-nowrap px-4 py-2 rounded-xl text-[13px] tracking-wide font-medium transition-all duration-300 snap-center ${
-            isActive ? 'bg-forest-green text-cream shadow-md shadow-forest-green/10' : 'bg-white text-forest-green/60 border border-forest-green/5'
+        btn.className = `whitespace-nowrap px-4 py-2 rounded-xl text-[12px] tracking-[0.1em] uppercase font-medium transition-all duration-300 snap-center ${
+            isActive ? 'bg-forest-green text-cream shadow-sm' : 'bg-white text-forest-green/60 border border-forest-green/5 hover:border-forest-green/20'
         }`;
         btn.innerText = catName;
         btn.onclick = () => {
@@ -216,7 +218,6 @@ function renderMenu() {
     
     let itemsToRender = menuData.items;
 
-    // Глобальный поиск по всему меню
     if (currentSearchTerm) {
         const term = currentSearchTerm.toLowerCase();
         itemsToRender = itemsToRender.filter(item => {
@@ -225,18 +226,16 @@ function renderMenu() {
             return name.includes(term) || desc.includes(term);
         });
     } else {
-        // Фильтрация по вкладке (кухня/бар)
         const validCategories = menuData.categories.filter(c => c.tab === currentTab).map(c => c.id);
         itemsToRender = itemsToRender.filter(item => validCategories.includes(item.categoryId));
 
-        // Фильтрация по конкретной подкатегории, если выбрана не "Все"
         if (currentCategory !== 'all') {
             itemsToRender = itemsToRender.filter(item => item.categoryId === currentCategory);
         }
     }
 
     if (itemsToRender.length === 0) {
-        container.innerHTML = `<p class="text-center text-forest-green/40 mt-10 text-sm">Ничего не найдено</p>`;
+        container.innerHTML = `<p class="text-center text-forest-green/40 mt-12 text-sm font-light">Ничего не найдено</p>`;
         return;
     }
 
@@ -246,25 +245,25 @@ function renderMenu() {
         const hasImage = !!item.image;
         
         const el = document.createElement('div');
-        el.className = 'menu-card fade-in-up bg-white rounded-3xl p-4 mb-3 border border-forest-green/5 flex items-center justify-between gap-4 cursor-pointer relative overflow-hidden active:scale-[0.98] transition-transform';
+        el.className = 'menu-card fade-in-up bg-white rounded-[24px] p-4.5 border border-forest-green/5 flex items-center justify-between gap-4 cursor-pointer relative overflow-hidden active:scale-[0.98] transition-all';
         
         const imageIndicator = hasImage ? `<div class="absolute left-0 top-0 bottom-0 w-1 bg-nectar-accent/80"></div>` : '';
 
         el.innerHTML = `
             ${imageIndicator}
-            <div class="flex-1 min-w-0 py-1 pl-1">
-                <h3 class="font-serif-ru text-[19px] text-forest-green font-semibold leading-snug truncate">${name}</h3>
-                ${description ? `<p class="text-[11px] text-forest-green/50 mt-1 truncate tracking-wide">${description}</p>` : ''}
-                <div class="flex items-center gap-2 mt-2">
-                    <span class="font-serif-ru text-[16px] text-warm-gold font-medium">${item.price.toLocaleString()} ₸</span>
+            <div class="flex-1 min-w-0 pl-1">
+                <h3 class="font-serif-ru text-[20px] text-forest-green font-medium leading-snug truncate">${name}</h3>
+                ${description ? `<p class="text-[12px] text-forest-green/50 mt-1 truncate tracking-wide font-light">${description}</p>` : ''}
+                <div class="flex items-center gap-2 mt-2.5">
+                    <span class="font-serif-ru text-[18px] text-warm-gold font-medium">${item.price.toLocaleString()} ₸</span>
                 </div>
             </div>
             ${hasImage ? `
-                <div class="w-16 h-16 rounded-xl overflow-hidden shrink-0 shadow-sm">
+                <div class="w-16 h-16 rounded-2xl overflow-hidden shrink-0 shadow-sm border border-forest-green/5">
                     <img src="${item.image}" class="w-full h-full object-cover" alt="${name}">
                 </div>
             ` : `
-                <div class="w-8 h-8 rounded-full bg-forest-green/5 flex items-center justify-center shrink-0">
+                <div class="w-9 h-9 rounded-full bg-forest-green/5 flex items-center justify-center shrink-0">
                     <span class="material-symbols-outlined text-[16px] text-forest-green/40">chevron_right</span>
                 </div>
             `}
@@ -373,14 +372,10 @@ function openModal(item) {
 
     modal.classList.remove('hidden');
     modal.classList.add('flex');
-    modal.querySelector('.relative.bg-cream').classList.add('modal-enter');
 }
 
 function closeModal() {
     const modal = document.getElementById('itemModal');
-    const modalContent = modal.querySelector('.relative.bg-cream');
-    
-    modalContent.classList.remove('modal-enter');
     modal.classList.add('hidden');
     modal.classList.remove('flex');
 }
