@@ -1,253 +1,200 @@
-let menuData = { categories: [], items: [] };
-let currentLang = 'RU';
-let currentTab = 'kitchen';
-let currentCategory = 'all';
-let currentSearchTerm = '';
+document.addEventListener("DOMContentLoaded", () => {
+  let menuData = { categories: [], items: [] };
+  let currentTab = "kitchen";
+  let currentSubCat = "all";
+  let currentLang = "RU";
 
-const translations = {
-    'RU': {
-        cat_all: 'Все',
-        info_content: `
-            <div class="bg-white rounded-[24px] p-6 shadow-sm border border-forest-green/5">
-                <h3 class="font-serif-ru text-2xl text-forest-green mb-2">О пространстве</h3>
-                <p class="text-sm text-forest-green/70 font-light leading-relaxed">NECTAR — премиальное пространство высокой кухни и миксологии.</p>
-            </div>
-            <div class="bg-white rounded-[24px] p-6 shadow-sm border border-forest-green/5">
-                <h3 class="font-serif-ru text-2xl text-forest-green mb-2">Контакты & Режим работы</h3>
-                <p class="text-sm text-forest-green/70 font-light leading-relaxed">г. Алматы<br>Ежедневно с 14:00 до 03:00</p>
-            </div>
-        `
-    },
-    'EN': {
-        cat_all: 'All',
-        info_content: `
-            <div class="bg-white rounded-[24px] p-6 shadow-sm border border-forest-green/5">
-                <h3 class="font-serif-ru text-2xl text-forest-green mb-2">About Us</h3>
-                <p class="text-sm text-forest-green/70 font-light leading-relaxed">NECTAR is a premium space of haute cuisine and mixology.</p>
-            </div>
-            <div class="bg-white rounded-[24px] p-6 shadow-sm border border-forest-green/5">
-                <h3 class="font-serif-ru text-2xl text-forest-green mb-2">Contacts & Hours</h3>
-                <p class="text-sm text-forest-green/70 font-light leading-relaxed">Almaty city<br>Daily from 2:00 PM to 3:00 AM</p>
-            </div>
-        `
-    },
-    'KZ': {
-        cat_all: 'Барлығы',
-        info_content: `
-            <div class="bg-white rounded-[24px] p-6 shadow-sm border border-forest-green/5">
-                <h3 class="font-serif-ru text-2xl text-forest-green mb-2">Біз туралы</h3>
-                <p class="text-sm text-forest-green/70 font-light leading-relaxed">NECTAR — авторлық асхана мен бар мәдениетінің премиум кеңістігі.</p>
-            </div>
-            <div class="bg-white rounded-[24px] p-6 shadow-sm border border-forest-green/5">
-                <h3 class="font-serif-ru text-2xl text-forest-green mb-2">Байланыс және уақыты</h3>
-                <p class="text-sm text-forest-green/70 font-light leading-relaxed">Алматы қ.<br>Күн сайын 14:00-ден 03:00-ге дейін</p>
-            </div>
-        `
-    }
-};
+  const langSelect = document.getElementById("langSelect");
+  const tabKitchen = document.getElementById("tabKitchen");
+  const tabBar = document.getElementById("tabBar");
+  const tabInfo = document.getElementById("tabInfo");
+  const subContainer = document.getElementById("subcategoriesContainer");
+  const menuContainer = document.getElementById("menuContainer");
 
-document.addEventListener('DOMContentLoaded', () => {
-    fetch('menu.json')
-        .then(res => res.json())
-        .then(data => {
-            menuData = data;
-            initApp();
-        })
-        .catch(err => console.error("Ошибка загрузки menu.json:", err));
+  // Загружаем menu.json
+  fetch("menu.json")
+    .then(response => response.json())
+    .then(data => {
+      menuData = data;
+      renderApp();
+    })
+    .catch(err => console.error("Ошибка загрузки меню:", err));
 
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-        searchInput.addEventListener('input', (e) => {
-            currentSearchTerm = e.target.value.trim().toLowerCase();
-            renderMenu();
-        });
-    }
-});
+  // Переключение языка
+  langSelect.addEventListener("change", (e) => {
+    currentLang = e.target.value;
+    renderApp();
+  });
 
-function initApp() {
-    renderCategories();
-    renderMenu();
-    updateInfo();
-}
-
-function switchLang(lang) {
-    currentLang = lang;
-    document.querySelectorAll('.lang-btn').forEach(b => {
-        b.classList.toggle('lang-active', b.innerText === lang);
+  // Переключение основных вкладок
+  [tabKitchen, tabBar, tabInfo].forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      e.target.classList.add("active");
+      currentTab = e.target.dataset.tab;
+      currentSubCat = "all"; // сбрасываем подкатегорию при смене вкладки
+      renderApp();
     });
-    renderCategories();
-    renderMenu();
-    updateInfo();
-}
+  });
 
-function updateInfo() {
-    const infoContainer = document.getElementById('infoContainer');
-    if (infoContainer && translations[currentLang]) {
-        infoContainer.innerHTML = translations[currentLang].info_content;
+  function renderApp() {
+    if (currentTab === "info") {
+      subContainer.style.display = "none";
+      renderInfoSection();
+    } else {
+      subContainer.style.display = "flex";
+      renderSubcategories();
+      renderMenu();
     }
-}
+  }
 
-function switchMainTab(index, btn) {
-    currentTab = btn.getAttribute('data-type');
-    const indicator = document.getElementById('nav-indicator');
-    if (indicator) {
-        indicator.style.transform = `translateX(${index * 100}%)`;
-    }
-    
-    document.querySelectorAll('.nav-btn').forEach((b, i) => {
-        b.className = i === index 
-            ? 'nav-btn flex-1 relative z-10 py-2.5 text-[11px] tracking-[0.2em] text-cream uppercase font-semibold' 
-            : 'nav-btn flex-1 relative z-10 py-2.5 text-[11px] tracking-[0.2em] text-forest-green/60 uppercase font-semibold';
-    });
-
-    currentCategory = 'all';
-    renderCategories();
-    renderMenu();
-}
-
-function renderCategories() {
-    const container = document.getElementById('categoryContainer');
-    if (!container) return;
-    container.innerHTML = '';
-    
+  // Рендер горизонтальных подкатегорий
+  function renderSubcategories() {
     const cats = menuData.categories.filter(c => c.tab === currentTab);
     
-    const allBtn = document.createElement('button');
-    const isAll = currentCategory === 'all';
-    allBtn.className = `whitespace-nowrap px-4 py-2 rounded-xl text-[11px] tracking-[0.1em] uppercase font-medium transition-all ${isAll ? 'bg-forest-green text-cream shadow-sm' : 'bg-white text-forest-green/60 border border-forest-green/5'}`;
-    allBtn.innerText = translations[currentLang].cat_all;
-    allBtn.onclick = () => { 
-        currentCategory = 'all'; 
-        renderCategories(); 
-        renderMenu(); 
-    };
-    container.appendChild(allBtn);
-
+    let html = `<button class="sub-pill ${currentSubCat === 'all' ? 'active' : ''}" data-id="all">${getTranslation("Все", "All", "Барлығы")}</button>`;
+    
     cats.forEach(cat => {
-        const isActive = cat.id === currentCategory;
-        const btn = document.createElement('button');
-        btn.className = `whitespace-nowrap px-4 py-2 rounded-xl text-[11px] tracking-[0.1em] uppercase font-medium transition-all ${isActive ? 'bg-forest-green text-cream shadow-sm' : 'bg-white text-forest-green/60 border border-forest-green/5'}`;
-        btn.innerText = cat.name[currentLang] || cat.name['RU'];
-        btn.onclick = () => { 
-            currentCategory = cat.id; 
-            renderCategories(); 
-            renderMenu(); 
-        };
-        container.appendChild(btn);
+      const activeClass = currentSubCat === cat.id ? "active" : "";
+      html += `<button class="sub-pill ${activeClass}" data-id="${cat.id}">${cat.name[currentLang] || cat.name.RU}</button>`;
     });
-}
 
-function renderMenu() {
-    const container = document.getElementById('menuContainer');
-    if (!container) return;
-    container.innerHTML = '';
-    
-    let items = menuData.items;
-    
-    if (currentSearchTerm) {
-        items = items.filter(i => {
-            const name = (i.name[currentLang] || i.name['RU']).toLowerCase();
-            const desc = i.description ? (i.description[currentLang] || i.description['RU']).toLowerCase() : '';
-            return name.includes(currentSearchTerm) || desc.includes(currentSearchTerm);
-        });
-    } else {
-        const validCats = menuData.categories.filter(c => c.tab === currentTab).map(c => c.id);
-        items = items.filter(i => validCats.includes(i.categoryId));
-        if (currentCategory !== 'all') {
-            items = items.filter(i => i.categoryId === currentCategory);
+    subContainer.innerHTML = html;
+
+    // Вешаем клики на пилюли подкатегорий
+    document.querySelectorAll(".sub-pill").forEach(pill => {
+      pill.addEventListener("click", (e) => {
+        currentSubCat = e.target.dataset.id;
+        renderSubcategories();
+        renderMenu();
+
+        // ИСПРАВЛЕНИЕ БАГА №2: Плавный скролл к началу выбранной категории
+        if (currentSubCat !== "all") {
+          const targetElement = document.getElementById(`cat-${currentSubCat}`);
+          if (targetElement) {
+            const headerOffset = 130; // Учитываем высоту липкой шапки
+            const elementPosition = targetElement.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: "smooth"
+            });
+          }
+        } else {
+          window.scrollTo({ top: 0, behavior: "smooth" });
         }
-    }
+      });
+    });
+  }
 
-    if (items.length === 0) {
-        container.innerHTML = `<p class="text-center text-forest-green/40 mt-10 text-sm font-light">Ничего не найдено</p>`;
-        return;
-    }
+  // Рендер карточек меню (статично, без дергающейся анимации скролла)
+  function renderMenu() {
+    const cats = menuData.categories.filter(c => c.tab === currentTab);
+    const targetCats = currentSubCat === "all" ? cats : cats.filter(c => c.id === currentSubCat);
 
-    items.forEach(item => {
-        const name = item.name[currentLang] || item.name['RU'];
-        const desc = item.description ? (item.description[currentLang] || item.description['RU']) : '';
-        const el = document.createElement('div');
-        el.className = 'menu-card bg-white rounded-[22px] p-4 flex items-center justify-between gap-4 cursor-pointer active:scale-[0.98] transition-transform';
-        el.innerHTML = `
-            <div class="flex-1 min-w-0">
-                <h3 class="font-serif-ru text-[19px] text-forest-green font-medium truncate">${name}</h3>
-                ${desc ? `<p class="text-[12px] text-forest-green/50 mt-1 truncate font-light">${desc}</p>` : ''}
-                <div class="mt-2"><span class="font-serif-ru text-[17px] text-warm-gold font-medium">${item.price.toLocaleString()} ₸</span></div>
+    let html = "";
+
+    targetCats.forEach(cat => {
+      const items = menuData.items.filter(i => i.categoryId === cat.id);
+      if (items.length === 0) return;
+
+      html += `
+        <div class="category-section" id="cat-${cat.id}">
+          <h2 class="category-title">${cat.name[currentLang] || cat.name.RU}</h2>
+          <div class="menu-grid">
+      `;
+
+      items.forEach(item => {
+        const name = item.name[currentLang] || item.name.RU;
+        const desc = item.description ? (item.description[currentLang] || item.description.RU) : "";
+
+        html += `
+          <div class="menu-card">
+            <div>
+              <div class="card-header">
+                <span class="card-title">${name}</span>
+                <span class="card-price">${item.price} ₸</span>
+              </div>
+              ${desc ? `<div class="card-desc">${desc}</div>` : ""}
             </div>
-            ${item.image ? `<div class="w-16 h-16 rounded-2xl overflow-hidden shrink-0 border border-forest-green/5"><img src="${item.image}" class="w-full h-full object-cover"></div>` : ''}
+            <div class="card-footer">${item.weight}</div>
+          </div>
         `;
-        el.onclick = () => openModal(item);
-        container.appendChild(el);
+      });
+
+      html += `</div></div>`;
     });
-}
 
-function switchSection(sectionId, btn) {
-    document.querySelectorAll('.spa-section').forEach(s => s.classList.remove('active'));
-    const targetSection = document.getElementById(`${sectionId}-section`);
-    if (targetSection) {
-        targetSection.classList.add('active');
-    }
+    menuContainer.innerHTML = html;
+  }
+
+  // Рендер Уголка потребителя с решением бага #1 (убираем серый фокус)
+  function renderInfoSection() {
+    const infoTexts = {
+      RU: [
+        { title: "Лицензия и регистрация", text: "ТОО 'NECTAR LOUNGE BAR'. Свидетельство о государственной регистрации № 000000000 от 2026 года. Лицензия на реализацию алкогольной продукции." },
+        { title: "Правила обслуживания", text: "Мы ценим атмосферу нашего заведения. Администрация оставляет за собой право отказывать в доступе лицам в состоянии сильного алкогольного опьянения. Действует дресс-код." },
+        { title: "Книга отзывов и предложений", text: "Ваше мнение важно для нас. Вы можете оставить свой отзыв управляющему заведением через QR-код на столе или направить на email: feedback@nectar-lounge.kz" }
+      ],
+      EN: [
+        { title: "License & Registration", text: "LLC 'NECTAR LOUNGE BAR'. State registration certificate No. 000000000. Alcohol sales license issued in accordance with legislation." },
+        { title: "Service Rules", text: "We value our lounge atmosphere. The management reserves the right to refuse service to intoxicated individuals. Dress code applies." },
+        { title: "Feedback Book", text: "Your feedback matters. You can share your thoughts with the manager via the table QR-code or send an email to feedback@nectar-lounge.kz" }
+      ],
+      KZ: [
+        { title: "Лицензия және тіркеу", text: "«NECTAR LOUNGE BAR» ЖШС. Мемлекеттік тіркеу куәлігі № 000000000. Алкоголь өнімін өткізу лицензиясы." },
+        { title: "Қызмет көрсету ережелері", text: "Біз өз атмосферамызды бағалаймыз. Әкімшілік мас күйіндегі тұлғаларға қызмет көрсетуден бас тартуға құқылы." },
+        { title: "Пікірлер кітабы", text: "Сіздің пікіріңіз біз үшін маңызды. Барлық ұсыныстар мен шағымдарды менеджерге жолдай аласыз." }
+      ]
+    };
+
+    const currentList = infoTexts[currentLang] || infoTexts.RU;
+
+    let html = `<div class="category-section"><h2 class="category-title">${getTranslation("Уголок потребителя", "Consumer Corner", "Тұтынушы бұрышы")}</h2>`;
     
-    document.querySelectorAll('nav button').forEach((b, i) => {
-        b.className = (i === (sectionId === 'menu' ? 0 : 1)) 
-            ? 'flex flex-col items-center text-forest-green transition-opacity' 
-            : 'flex flex-col items-center text-forest-green/40 transition-opacity';
+    currentList.forEach((item, index) => {
+      html += `
+        <div class="accordion-item">
+          <button class="accordion-header" data-index="${index}">
+            <span>${item.title}</span>
+            <span>+</span>
+          </button>
+          <div class="accordion-content" id="acc-${index}">
+            <p>${item.text}</p>
+          </div>
+        </div>
+      `;
     });
-}
 
-function openModal(item) {
-    const modalTitle = document.getElementById('modalTitle');
-    const modalPrice = document.getElementById('modalPrice');
-    const modalWeight = document.getElementById('modalWeight');
-    const modalImage = document.getElementById('modalImage');
-    const imgContainer = document.getElementById('modalImageContainer');
-    const modalDescription = document.getElementById('modalDescription');
-    const descContainer = document.getElementById('modalDescriptionContainer');
-    const itemModal = document.getElementById('itemModal');
+    html += `</div>`;
+    menuContainer.innerHTML = html;
 
-    if (modalTitle) modalTitle.innerText = item.name[currentLang] || item.name['RU'];
-    if (modalPrice) modalPrice.innerText = `${item.price.toLocaleString()} ₸`;
-    
-    if (modalWeight) {
-        if (item.weight) { 
-            modalWeight.innerText = item.weight; 
-            modalWeight.classList.remove('hidden'); 
-        } else { 
-            modalWeight.classList.add('hidden'); 
+    // Логика аккордеона с ИСПРАВЛЕНИЕМ БАГА №1 (.blur() сбрасывает серый цвет)
+    document.querySelectorAll(".accordion-header").forEach(btn => {
+      btn.addEventListener("click", function() {
+        const idx = this.dataset.index;
+        const content = document.getElementById(`acc-${idx}`);
+        const isOpen = content.classList.contains("open");
+
+        // Закрываем все
+        document.querySelectorAll(".accordion-content").forEach(c => c.classList.remove("open"));
+        document.querySelectorAll(".accordion-header span:last-child").forEach(s => s.textContent = "+");
+
+        if (!isOpen) {
+          content.classList.add("open");
+          this.querySelector("span:last-child").textContent = "−";
         }
-    }
-    
-    if (imgContainer && modalImage) {
-        if (item.image) { 
-            modalImage.src = item.image; 
-            imgContainer.classList.remove('hidden'); 
-        } else { 
-            imgContainer.classList.add('hidden'); 
-        }
-    }
-    
-    const desc = item.description ? (item.description[currentLang] || item.description['RU']) : '';
-    if (descContainer && modalDescription) {
-        if (desc) { 
-            modalDescription.innerText = desc; 
-            descContainer.classList.remove('hidden'); 
-            descContainer.classList.add('flex'); 
-        } else { 
-            descContainer.classList.add('hidden'); 
-            descContainer.classList.remove('flex'); 
-        }
-    }
 
-    if (itemModal) {
-        itemModal.classList.remove('hidden');
-        itemModal.classList.add('flex');
-    }
-}
+        // КРИТИЧЕСКИ ВАЖНО: сбрасываем фокус, чтобы кнопка не оставалась серой
+        this.blur();
+      });
+    });
+  }
 
-function closeModal() {
-    const itemModal = document.getElementById('itemModal');
-    if (itemModal) {
-        itemModal.classList.add('hidden');
-        itemModal.classList.remove('flex');
-    }
-}
+  function getTranslation(ru, en, kz) {
+    if (currentLang === "EN") return en;
+    if (currentLang === "KZ") return kz;
+    return ru;
+  }
+});
