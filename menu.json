@@ -1,4 +1,4 @@
-const menuData = {
+{
   "categories": [
     { "id": "cold_snacks", "tab": "kitchen", "name": { "RU": "Холодные закуски", "EN": "Cold Appetizers", "KZ": "Салқын тіскебасарлар" } },
     { "id": "salads", "tab": "kitchen", "name": { "RU": "Салаты", "EN": "Salads", "KZ": "Салаттар" } },
