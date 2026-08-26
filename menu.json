@@ -51,7 +51,6 @@
     { "categoryId": "soups", "price": 2390, "weight": "350 г", "name": { "RU": "Окрошка с мясом (сезонная)", "EN": "Okroshka with Meat (seasonal)", "KZ": "Ет қосылған окрошка (маусымдық)" } },
     { "categoryId": "soups", "price": 1590, "weight": "300 г", "name": { "RU": "Куриный суп с лапшой", "EN": "Chicken Noodle Soup", "KZ": "Тауық кеспе көжесі" } },
     { "categoryId": "soups", "price": 3590, "weight": "350 г", "name": { "RU": "Солянка мясная", "EN": "Meat Solyanka", "KZ": "Ет солянкасы" } },
-    
     { 
       "categoryId": "soups", 
       "price": 3590, 
@@ -60,7 +59,6 @@
       "image": "https://images.unsplash.com/photo-1548943487-a2e4e43b4853?auto=format&fit=crop&w=600&q=80",
       "description": { "RU": "Традиционный тайский острый суп с морепродуктами", "EN": "Traditional Thai spicy soup with seafood", "KZ": "Теңіз өнімдері қосылған дәстүрлі тай ащы сорпасы" }
     },
-    
     { "categoryId": "soups", "price": 3590, "weight": "400 г", "name": { "RU": "Рамен с говядиной", "EN": "Beef Ramen", "KZ": "Сиыр етінен рамен" } },
     { "categoryId": "soups", "price": 3290, "weight": "400 г", "name": { "RU": "Рамен с курицей", "EN": "Chicken Ramen", "KZ": "Тауық етінен рамен" } },
     { "categoryId": "soups", "price": 1990, "weight": "300 г", "name": { "RU": "Чечевичный крем-суп", "EN": "Lentil Cream Soup", "KZ": "Жасымық крем-сорпасы" } },
