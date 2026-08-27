@@ -7,6 +7,7 @@ let currentTab = 'menu';
 let currentType = 'kitchen';
 let currentCategory = 'All';
 let searchQuery = '';
+let isModalOpen = false;
 
 // ============================================
 // ПЕРЕКЛЮЧЕНИЕ ЯЗЫКА
@@ -42,9 +43,12 @@ function switchLang(lang) {
         }
     });
 
-    // Перерисовываем меню с сохранением поиска
+    // Сохраняем текущий поиск
+    const searchVal = document.getElementById('searchInput').value;
+    
+    // Перерисовываем категории и меню
     renderCategories();
-    renderMenu(document.getElementById('searchInput').value);
+    renderMenu(searchVal);
 }
 
 // ============================================
@@ -71,7 +75,6 @@ function switchSection(sectionId, btn) {
         
         // Если переключились на Меню - обновляем его
         if (sectionId === 'menu') {
-            // Сохраняем текущий поиск
             const searchVal = document.getElementById('searchInput').value;
             renderCategories();
             renderMenu(searchVal);
@@ -161,18 +164,20 @@ function selectCategory(category) {
     const searchVal = document.getElementById('searchInput').value;
     renderMenu(searchVal);
 
-    // Плавный скролл к началу меню
-    const menuContainer = document.getElementById('menuContainer');
-    if (menuContainer) {
-        const headerOffset = 140;
-        const elementPosition = menuContainer.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-        
-        window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-        });
-    }
+    // Плавный скролл к началу меню с учетом sticky шапки
+    setTimeout(() => {
+        const menuContainer = document.getElementById('menuContainer');
+        if (menuContainer) {
+            const headerOffset = 160;
+            const elementPosition = menuContainer.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+            
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+        }
+    }, 100);
 }
 
 // ============================================
@@ -307,6 +312,9 @@ function openModal(item) {
     if (modalContent) {
         modalContent.classList.add('modal-enter');
     }
+    
+    // Блокируем скролл только на время открытия модалки
+    isModalOpen = true;
     document.body.style.overflow = 'hidden';
 }
 
@@ -322,6 +330,9 @@ function closeModal() {
     setTimeout(() => {
         modal.classList.add('hidden');
         modal.classList.remove('flex');
+        
+        // Восстанавливаем скролл
+        isModalOpen = false;
         document.body.style.overflow = '';
     }, 300);
 }
@@ -341,25 +352,29 @@ document.addEventListener('click', (e) => {
 // ПОИСК
 // ============================================
 
-document.addEventListener('DOMContentLoaded', function() {
+function initSearch() {
     const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-        searchInput.addEventListener('input', (e) => {
-            const val = e.target.value;
-            const btn = document.getElementById('clearSearchBtn');
-            
-            if (val.trim()) {
-                btn.classList.remove('hidden');
-                btn.classList.add('flex');
-            } else {
-                btn.classList.add('hidden');
-                btn.classList.remove('flex');
-            }
-            
-            renderMenu(val);
-        });
-    }
-});
+    if (!searchInput) return;
+    
+    // Удаляем старые обработчики
+    const newInput = searchInput.cloneNode(true);
+    searchInput.parentNode.replaceChild(newInput, searchInput);
+    
+    newInput.addEventListener('input', (e) => {
+        const val = e.target.value;
+        const btn = document.getElementById('clearSearchBtn');
+        
+        if (val.trim()) {
+            btn.classList.remove('hidden');
+            btn.classList.add('flex');
+        } else {
+            btn.classList.add('hidden');
+            btn.classList.remove('flex');
+        }
+        
+        renderMenu(val);
+    });
+}
 
 function clearSearch() {
     const input = document.getElementById('searchInput');
@@ -411,31 +426,19 @@ document.addEventListener('DOMContentLoaded', function() {
     renderCategories();
     renderMenu('');
     
-    // Устанавливаем обработчик для поиска (если еще не установлен)
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-        // Удаляем старые обработчики (если есть)
-        const newInput = searchInput.cloneNode(true);
-        searchInput.parentNode.replaceChild(newInput, searchInput);
-        
-        newInput.addEventListener('input', (e) => {
-            const val = e.target.value;
-            const btn = document.getElementById('clearSearchBtn');
-            
-            if (val.trim()) {
-                btn.classList.remove('hidden');
-                btn.classList.add('flex');
-            } else {
-                btn.classList.add('hidden');
-                btn.classList.remove('flex');
-            }
-            
-            renderMenu(val);
-        });
-    }
+    // Инициализируем поиск
+    initSearch();
+    
+    // Восстанавливаем скролл на случай, если модалка была открыта
+    document.body.style.overflow = '';
     
     console.log('✅ NECTAR Menu initialized successfully!');
     console.log(`📋 Current language: ${currentLang}`);
     console.log(`🍽️ Current tab: ${currentType}`);
     console.log(`📂 Current category: ${currentCategory}`);
+});
+
+// Обработчик для восстановления скролла при ошибках
+window.addEventListener('error', function() {
+    document.body.style.overflow = '';
 });
