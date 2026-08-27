@@ -1,105 +1,250 @@
-/* Базовые настройки и премиальная стилистика */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    -webkit-tap-highlight-color: transparent; /* Убирает мобильную подсветку тапа */
+/* ============================================
+   БАЗОВЫЕ СТИЛИ
+   ============================================ */
+
+@layer base {
+    html, body {
+        width: 100vw;
+        margin: 0;
+        padding: 0;
+        background-color: #fbf9f6;
+        overflow-x: hidden;
+    }
+    
+    body {
+        overscroll-behavior: none;
+        min-height: max(884px, 100dvh);
+        position: relative;
+    }
+
+    /* Ambient Background Texture */
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: -1;
+        opacity: 0.4;
+        background: 
+            radial-gradient(circle at 15% 50%, rgba(255, 235, 204, 0.15), transparent 40%),
+            radial-gradient(circle at 85% 30%, rgba(200, 220, 204, 0.1), transparent 50%);
+        animation: ambientLight 15s ease-in-out infinite alternate;
+    }
+
+    @keyframes ambientLight {
+        0% { transform: scale(1) translate(0, 0); opacity: 0.3; }
+        100% { transform: scale(1.05) translate(2%, 2%); opacity: 0.6; }
+    }
+
+    /* Safe Areas */
+    .pb-safe {
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    .pt-safe {
+        padding-top: env(safe-area-inset-top, 0px);
+    }
+    .pb-safe-area-bottom {
+        padding-bottom: env(safe-area-inset-bottom, 80px);
+    }
+
+    /* Скрываем скролл */
+    ::-webkit-scrollbar {
+        display: none;
+    }
+    .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
 }
 
-body {
-    background-color: #0b0b0b; /* Глубокий премиальный темный фон */
-    color: #f4f4f4;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    line-height: 1.5;
+/* ============================================
+   КОМПОНЕНТЫ
+   ============================================ */
+
+/* Glass Effect */
+.glass-effect {
+    background: rgba(251, 249, 246, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 }
 
-/* Шапка */
-.header {
-    text-align: center;
-    padding: 30px 20px;
-    background: linear-gradient(to bottom, #141414, #0b0b0b);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+.modal-glass {
+    background: rgba(251, 249, 246, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5) inset, 0 25px 50px -12px rgba(27, 48, 34, 0.25);
 }
 
-.header h1 {
-    font-size: 28px;
-    letter-spacing: 3px;
-    font-weight: 400;
-    margin-bottom: 5px;
+.soft-shadow {
+    box-shadow: 0 4px 24px rgba(27, 48, 34, 0.04);
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.subtitle {
-    font-size: 13px;
-    color: #999;
-    letter-spacing: 1px;
+/* ============================================
+   SPA НАВИГАЦИЯ
+   ============================================ */
+
+.spa-section {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
 }
 
-/* Переключатель языков */
-.lang-switcher {
-    margin-top: 15px;
+.spa-section.active {
+    display: flex;
+    opacity: 1;
 }
 
-.lang-switcher button {
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #fff;
-    padding: 5px 12px;
-    font-size: 12px;
+/* ============================================
+   КАРТОЧКИ МЕНЮ
+   ============================================ */
+
+.menu-card {
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                box-shadow 0.3s ease,
+                border-color 0.3s ease;
     cursor: pointer;
+}
+
+.menu-card:active {
+    transform: scale(0.97);
+    box-shadow: 0 2px 12px rgba(27, 48, 34, 0.06);
+}
+
+/* Десктоп: при наведении */
+@media (hover: hover) {
+    .menu-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 32px rgba(27, 48, 34, 0.08);
+        border-color: rgba(27, 48, 34, 0.2);
+    }
+}
+
+/* Индикатор "кликабельности" */
+.menu-card .click-hint {
+    opacity: 0.3;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    font-size: 18px;
+    color: #737973;
+}
+
+@media (hover: hover) {
+    .menu-card:hover .click-hint {
+        opacity: 0.7;
+        transform: scale(1.05);
+    }
+}
+
+/* На мобилках всегда виден */
+@media (hover: none) {
+    .menu-card .click-hint {
+        opacity: 0.5;
+    }
+}
+
+/* ============================================
+   ГЕРОЙ
+   ============================================ */
+
+.hero-float {
+    animation: breath 8s ease-in-out infinite alternate;
+}
+
+@keyframes breath {
+    0% { transform: scale(1.02) rotate(0deg); }
+    100% { transform: scale(1.08) rotate(1deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-float { animation: none; transform: none; }
+    body::before { animation: none; }
+}
+
+/* ============================================
+   ПОИСК
+   ============================================ */
+
+/* Убираем синюю рамку браузера */
+.search-input:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.search-container:focus-within {
+    border-color: rgba(27, 48, 34, 0.3) !important;
+    box-shadow: 0 0 0 3px rgba(27, 48, 34, 0.05) !important;
+}
+
+/* ============================================
+   ИНФО-СЕКЦИЯ
+   ============================================ */
+
+.info-btn {
     transition: all 0.3s ease;
 }
 
-.lang-switcher button:hover, .lang-switcher button:active {
-    background: #fff;
-    color: #000;
+.info-btn:active {
+    transform: scale(0.98);
 }
 
-/* Убираем залипание серого цвета на аккордеонах "Инфо" */
-details summary, 
-details summary:focus, 
-details summary:active,
-button {
-    outline: none;
-    background-color: transparent;
+.info-btn .chevron {
+    transition: transform 0.3s ease;
 }
 
-.info-section {
-    padding: 20px;
-    max-width: 600px;
-    margin: 0 auto 50px auto;
+.info-btn .chevron.rotated {
+    transform: rotate(180deg);
 }
 
-.info-dropdown {
-    background: #141414;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    margin-bottom: 10px;
-    padding: 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.3s ease;
+.info-content {
+    transition: all 0.3s ease;
+    overflow: hidden;
 }
 
-.info-dropdown summary {
-    font-weight: 500;
-    font-size: 14px;
-    letter-spacing: 0.5px;
+.info-content.hidden {
+    display: none;
 }
 
-/* ВАУ-ЭФФЕКТ: Плавное бесшовное появление контента (Fade-In) */
-.menu-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
-    padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
-    opacity: 1;
-    transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
-    transform: translateY(0);
+.info-content:not(.hidden) {
+    display: block;
+    animation: slideDown 0.3s ease forwards;
 }
 
-/* Класс, который запускает эффект растворения при переключении */
-.menu-grid.fade-out {
-    opacity: 0;
-    transform: translateY(10px);
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================
+   МОДАЛЬНОЕ ОКНО
+   ============================================ */
+
+.modal-enter {
+    animation: modalScaleUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes modalScaleUp {
+    from { opacity: 0; transform: scale(0.95) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ============================================
+   ПОМОЩНИКИ
+   ============================================ */
+
+.lining-nums {
+    font-variant-numeric: lining-nums;
+}
+
+.lang-active {
+    color: #1b3022 !important;
+    opacity: 1 !important;
 }
