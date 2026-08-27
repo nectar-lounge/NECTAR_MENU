@@ -6,6 +6,7 @@ let currentLang = 'RU';
 let currentTab = 'menu';
 let currentType = 'kitchen';
 let currentCategory = 'All';
+let searchQuery = '';
 
 // ============================================
 // ПЕРЕКЛЮЧЕНИЕ ЯЗЫКА
@@ -41,7 +42,7 @@ function switchLang(lang) {
         }
     });
 
-    // Перерисовываем меню
+    // Перерисовываем меню с сохранением поиска
     renderCategories();
     renderMenu(document.getElementById('searchInput').value);
 }
@@ -67,6 +68,14 @@ function switchSection(sectionId, btn) {
         const targetSec = document.getElementById(`${sectionId}-section`);
         targetSec.classList.add('active');
         targetSec.style.opacity = '1';
+        
+        // Если переключились на Меню - обновляем его
+        if (sectionId === 'menu') {
+            // Сохраняем текущий поиск
+            const searchVal = document.getElementById('searchInput').value;
+            renderCategories();
+            renderMenu(searchVal);
+        }
     }, 400);
 
     // Обновляем нижнюю навигацию
@@ -80,13 +89,6 @@ function switchSection(sectionId, btn) {
         }
     });
 
-    // Если переключились на Меню - сбрасываем поиск
-    if (sectionId === 'menu') {
-        clearSearch();
-        renderCategories();
-        renderMenu();
-    }
-
     // Скролл к началу
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -98,9 +100,6 @@ function switchSection(sectionId, btn) {
 function switchMainTab(index, btn) {
     const indicator = document.getElementById('nav-indicator');
     const buttons = document.querySelectorAll('.nav-btn');
-
-    // Сброс поиска
-    clearSearch();
 
     // Двигаем индикатор
     indicator.style.transform = `translateX(${index * 100}%)`;
@@ -118,8 +117,12 @@ function switchMainTab(index, btn) {
 
     currentType = btn.dataset.type;
     currentCategory = 'All';
+    
+    // Сбрасываем поиск при переключении вкладок
+    clearSearch();
+    
     renderCategories();
-    renderMenu();
+    renderMenu('');
 }
 
 // ============================================
@@ -128,13 +131,15 @@ function switchMainTab(index, btn) {
 
 function renderCategories() {
     const container = document.getElementById('categoryContainer');
+    if (!container) return;
+    
     const items = MENU.filter(item => item.type === currentType);
 
     // Получаем уникальные категории на текущем языке
     const catKey = `category_${currentLang.toLowerCase()}`;
     const uniqueCategories = [...new Set(items.map(item => item[catKey]))];
 
-    const allText = TRANSLATIONS[currentLang]['cat_all'];
+    const allText = TRANSLATIONS[currentLang]['cat_all'] || 'Все';
     const categories = [{ id: 'All', name: allText }, ...uniqueCategories.map(c => ({ id: c, name: c }))];
 
     container.innerHTML = categories.map(cat => `
@@ -151,13 +156,22 @@ function renderCategories() {
 function selectCategory(category) {
     currentCategory = category;
     renderCategories();
-    renderMenu(document.getElementById('searchInput').value);
+    
+    // Получаем текущий поиск и рендерим меню
+    const searchVal = document.getElementById('searchInput').value;
+    renderMenu(searchVal);
 
     // Плавный скролл к началу меню
     const menuContainer = document.getElementById('menuContainer');
     if (menuContainer) {
-        const offset = menuContainer.getBoundingClientRect().top + window.pageYOffset - 120;
-        window.scrollTo({ top: offset, behavior: 'smooth' });
+        const headerOffset = 140;
+        const elementPosition = menuContainer.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+        });
     }
 }
 
@@ -167,14 +181,16 @@ function selectCategory(category) {
 
 function renderMenu(searchQuery = '') {
     const container = document.getElementById('menuContainer');
+    if (!container) return;
+    
     const nameKey = `name_${currentLang.toLowerCase()}`;
     const catKey = `category_${currentLang.toLowerCase()}`;
     const compKey = `composition_${currentLang.toLowerCase()}`;
 
     let items = MENU;
 
-    // Поиск по всему меню (кухня + бар)
-    if (searchQuery) {
+    // Если есть поиск - ищем по всему меню (кухня + бар)
+    if (searchQuery && searchQuery.trim() !== '') {
         const q = searchQuery.toLowerCase().trim();
         items = items.filter(item =>
             item[nameKey].toLowerCase().includes(q) ||
@@ -188,7 +204,7 @@ function renderMenu(searchQuery = '') {
 
     // Группируем по категориям
     let categoriesToRender = [];
-    if (currentCategory === 'All' || searchQuery) {
+    if (currentCategory === 'All' || (searchQuery && searchQuery.trim() !== '')) {
         categoriesToRender = [...new Set(items.map(i => i[catKey]))];
     } else {
         categoriesToRender = [currentCategory];
@@ -201,7 +217,7 @@ function renderMenu(searchQuery = '') {
         if (catItems.length === 0) return;
 
         html += `
-            <div class="mt-8 mb-4 scroll-mt-[120px]">
+            <div class="mt-8 mb-4 scroll-mt-[120px] category-section">
                 <div class="flex items-center justify-center gap-4 mb-6 px-4">
                     <div class="flex-1 h-[1px] bg-gradient-to-r from-transparent via-warm-gold/30 to-warm-gold/30"></div>
                     <h2 class="font-serif text-[26px] text-forest-green tracking-tight text-center font-medium">${cat}</h2>
@@ -251,6 +267,8 @@ function renderMenu(searchQuery = '') {
 
 function openModal(item) {
     const modal = document.getElementById('itemModal');
+    if (!modal) return;
+    
     const nameKey = `name_${currentLang.toLowerCase()}`;
     const compKey = `composition_${currentLang.toLowerCase()}`;
 
@@ -285,13 +303,22 @@ function openModal(item) {
     // Показываем модалку
     modal.classList.remove('hidden');
     modal.classList.add('flex');
-    modal.querySelector('.relative').classList.add('modal-enter');
+    const modalContent = modal.querySelector('.relative');
+    if (modalContent) {
+        modalContent.classList.add('modal-enter');
+    }
     document.body.style.overflow = 'hidden';
 }
 
 function closeModal() {
     const modal = document.getElementById('itemModal');
-    modal.querySelector('.relative').classList.remove('modal-enter');
+    if (!modal) return;
+    
+    const modalContent = modal.querySelector('.relative');
+    if (modalContent) {
+        modalContent.classList.remove('modal-enter');
+    }
+    
     setTimeout(() => {
         modal.classList.add('hidden');
         modal.classList.remove('flex');
@@ -304,31 +331,46 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeModal();
 });
 
+// Закрытие по клику на фон
+document.addEventListener('click', (e) => {
+    const modal = document.getElementById('itemModal');
+    if (e.target === modal) closeModal();
+});
+
 // ============================================
 // ПОИСК
 // ============================================
 
-document.getElementById('searchInput').addEventListener('input', (e) => {
-    const val = e.target.value;
-    const btn = document.getElementById('clearSearchBtn');
-    
-    if (val.trim()) {
-        btn.classList.remove('hidden');
-        btn.classList.add('flex');
-    } else {
-        btn.classList.add('hidden');
-        btn.classList.remove('flex');
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            const val = e.target.value;
+            const btn = document.getElementById('clearSearchBtn');
+            
+            if (val.trim()) {
+                btn.classList.remove('hidden');
+                btn.classList.add('flex');
+            } else {
+                btn.classList.add('hidden');
+                btn.classList.remove('flex');
+            }
+            
+            renderMenu(val);
+        });
     }
-    
-    renderMenu(val);
 });
 
 function clearSearch() {
     const input = document.getElementById('searchInput');
     const btn = document.getElementById('clearSearchBtn');
-    input.value = '';
-    btn.classList.add('hidden');
-    btn.classList.remove('flex');
+    if (input) {
+        input.value = '';
+    }
+    if (btn) {
+        btn.classList.add('hidden');
+        btn.classList.remove('flex');
+    }
     renderMenu('');
 }
 
@@ -337,6 +379,8 @@ function clearSearch() {
 // ============================================
 
 function toggleInfo(btn) {
+    if (!btn) return;
+    
     const content = btn.nextElementSibling;
     const chevron = btn.querySelector('.chevron');
     const isHidden = content.classList.contains('hidden');
@@ -346,11 +390,11 @@ function toggleInfo(btn) {
 
     if (isHidden) {
         content.classList.remove('hidden');
-        chevron.classList.add('rotated');
+        if (chevron) chevron.classList.add('rotated');
         btn.setAttribute('aria-expanded', 'true');
     } else {
         content.classList.add('hidden');
-        chevron.classList.remove('rotated');
+        if (chevron) chevron.classList.remove('rotated');
         btn.setAttribute('aria-expanded', 'false');
     }
 }
@@ -359,14 +403,39 @@ function toggleInfo(btn) {
 // ИНИЦИАЛИЗАЦИЯ
 // ============================================
 
-// Ставим начальный язык
-switchLang('RU');
-
-// Загружаем меню
-renderCategories();
-renderMenu();
-
-// Обработка кликов вне модалки
-document.getElementById('itemModal').addEventListener('click', (e) => {
-    if (e.target === e.currentTarget) closeModal();
+document.addEventListener('DOMContentLoaded', function() {
+    // Ставим начальный язык
+    switchLang('RU');
+    
+    // Загружаем меню
+    renderCategories();
+    renderMenu('');
+    
+    // Устанавливаем обработчик для поиска (если еще не установлен)
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        // Удаляем старые обработчики (если есть)
+        const newInput = searchInput.cloneNode(true);
+        searchInput.parentNode.replaceChild(newInput, searchInput);
+        
+        newInput.addEventListener('input', (e) => {
+            const val = e.target.value;
+            const btn = document.getElementById('clearSearchBtn');
+            
+            if (val.trim()) {
+                btn.classList.remove('hidden');
+                btn.classList.add('flex');
+            } else {
+                btn.classList.add('hidden');
+                btn.classList.remove('flex');
+            }
+            
+            renderMenu(val);
+        });
+    }
+    
+    console.log('✅ NECTAR Menu initialized successfully!');
+    console.log(`📋 Current language: ${currentLang}`);
+    console.log(`🍽️ Current tab: ${currentType}`);
+    console.log(`📂 Current category: ${currentCategory}`);
 });
