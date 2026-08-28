@@ -1,96 +1,177 @@
 /* ============================================
-   БАЗОВЫЕ СТИЛИ
+   NECTAR MENU
+   BASE
    ============================================ */
 
-@layer base {
-    html, body {
-        width: 100vw;
-        margin: 0;
-        padding: 0;
-        background-color: #fbf9f6;
-        overflow-x: hidden;
-    }
-    
-    body {
-        overscroll-behavior: none;
-        min-height: max(884px, 100dvh);
-        position: relative;
+html {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: #fbf9f6;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+body {
+    width: 100%;
+    min-height: 100dvh;
+    margin: 0;
+    padding: 0;
+    background: #fbf9f6;
+    color: #1b1c1a;
+
+    overflow-x: hidden;
+
+    /*
+       ВАЖНО:
+       не запрещаем нормальный touch scroll.
+    */
+    overscroll-behavior-x: none;
+
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    -webkit-tap-highlight-color: transparent;
+}
+
+a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+/* ============================================
+   SAFE AREAS
+   ============================================ */
+
+.pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.pt-safe {
+    padding-top: env(safe-area-inset-top, 0px);
+}
+
+.pb-safe-area-bottom {
+    padding-bottom: max(
+        80px,
+        env(safe-area-inset-bottom)
+    );
+}
+
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+.hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+
+/* ============================================
+   AMBIENT BACKGROUND
+   ============================================ */
+
+body::before {
+    content: '';
+
+    position: fixed;
+    inset: 0;
+
+    pointer-events: none;
+
+    z-index: -1;
+
+    opacity: 0.4;
+
+    background:
+        radial-gradient(
+            circle at 15% 50%,
+            rgba(255, 235, 204, 0.15),
+            transparent 40%
+        ),
+        radial-gradient(
+            circle at 85% 30%,
+            rgba(200, 220, 204, 0.1),
+            transparent 50%
+        );
+
+    animation:
+        ambientLight 15s ease-in-out infinite alternate;
+}
+
+@keyframes ambientLight {
+    from {
+        transform: scale(1) translate(0, 0);
+        opacity: 0.3;
     }
 
-    /* Ambient Background Texture */
-    body::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        z-index: -1;
-        opacity: 0.4;
-        background: 
-            radial-gradient(circle at 15% 50%, rgba(255, 235, 204, 0.15), transparent 40%),
-            radial-gradient(circle at 85% 30%, rgba(200, 220, 204, 0.1), transparent 50%);
-        animation: ambientLight 15s ease-in-out infinite alternate;
-    }
-
-    @keyframes ambientLight {
-        0% { transform: scale(1) translate(0, 0); opacity: 0.3; }
-        100% { transform: scale(1.05) translate(2%, 2%); opacity: 0.6; }
-    }
-
-    /* Safe Areas */
-    .pb-safe {
-        padding-bottom: env(safe-area-inset-bottom, 0px);
-    }
-    .pt-safe {
-        padding-top: env(safe-area-inset-top, 0px);
-    }
-    .pb-safe-area-bottom {
-        padding-bottom: env(safe-area-inset-bottom, 80px);
-    }
-
-    /* Скрываем скролл */
-    ::-webkit-scrollbar {
-        display: none;
-    }
-    .hide-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
+    to {
+        transform: scale(1.05) translate(2%, 2%);
+        opacity: 0.6;
     }
 }
 
+
 /* ============================================
-   КОМПОНЕНТЫ
+   GLASS
    ============================================ */
 
-/* Glass Effect */
 .glass-effect {
-    background: rgba(251, 249, 246, 0.7);
+    background: rgba(251, 249, 246, 0.72);
+
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
+
+    border-color: rgba(27, 48, 34, 0.06);
 }
 
 .modal-glass {
-    background: rgba(251, 249, 246, 0.85);
+    background: rgba(251, 249, 246, 0.86);
+
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5) inset, 0 25px 50px -12px rgba(27, 48, 34, 0.25);
+
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.5) inset,
+        0 25px 50px -12px rgba(27, 48, 34, 0.25);
 }
 
 .soft-shadow {
-    box-shadow: 0 4px 24px rgba(27, 48, 34, 0.04);
-    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:
+        0 4px 24px rgba(27, 48, 34, 0.04);
+
+    transition:
+        transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.25s ease;
 }
 
+
 /* ============================================
-   SPA НАВИГАЦИЯ
+   SPA
    ============================================ */
 
 .spa-section {
     display: none;
     opacity: 0;
-    transition: opacity 0.4s ease-in-out;
 }
 
 .spa-section.active {
@@ -98,100 +179,382 @@
     opacity: 1;
 }
 
+
 /* ============================================
-   КАРТОЧКИ МЕНЮ
+   HERO
    ============================================ */
 
-.menu-card {
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
-                box-shadow 0.3s ease,
-                border-color 0.3s ease;
-    cursor: pointer;
+.hero-wrapper {
+    position: relative;
+
+    width: 100%;
+
+    height: min(460px, 72vw);
+
+    min-height: 320px;
+
+    overflow: hidden;
+
+    margin-bottom: -12px;
+
+    background: #fbf9f6;
 }
 
-.menu-card:active {
-    transform: scale(0.97);
-    box-shadow: 0 2px 12px rgba(27, 48, 34, 0.06);
+.hero-image {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    object-position: center 48%;
+
+    mix-blend-mode: multiply;
+
+    opacity: 0.88;
+
+    transform: scale(1.02);
 }
 
-/* Десктоп: при наведении */
-@media (hover: hover) {
-    .menu-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 32px rgba(27, 48, 34, 0.08);
-        border-color: rgba(27, 48, 34, 0.2);
-    }
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(251, 249, 246, 0.08) 0%,
+            rgba(251, 249, 246, 0.08) 35%,
+            rgba(251, 249, 246, 0.55) 65%,
+            #fbf9f6 100%
+        );
 }
 
-/* Индикатор "кликабельности" */
-.menu-card .click-hint {
-    opacity: 0.3;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    font-size: 18px;
+.hero-content {
+    position: absolute;
+
+    left: 24px;
+    right: 24px;
+
+    bottom: 28px;
+
+    z-index: 2;
+}
+
+.hero-brand {
+    font-family: Manrope, sans-serif;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.35em;
+
+    color: #1b3022;
+
+    margin-bottom: 3px;
+}
+
+.hero-subtitle {
+    font-family: Manrope, sans-serif;
+
+    font-size: 9px;
+
+    letter-spacing: 0.22em;
+
     color: #737973;
+
+    text-transform: uppercase;
+
+    margin-bottom: 7px;
 }
 
-@media (hover: hover) {
-    .menu-card:hover .click-hint {
-        opacity: 0.7;
-        transform: scale(1.05);
-    }
+.hero-title {
+    font-family:
+        "Cormorant Garamond",
+        serif;
+
+    color: #1b3022;
+
+    font-size: clamp(
+        54px,
+        13vw,
+        78px
+    );
+
+    line-height: 0.9;
+
+    font-weight: 500;
+
+    letter-spacing: -0.035em;
+
+    margin: 0;
 }
 
-/* На мобилках всегда виден */
-@media (hover: none) {
-    .menu-card .click-hint {
-        opacity: 0.5;
-    }
-}
+.hero-description {
+    margin: 8px 0 0;
 
-/* ============================================
-   ГЕРОЙ
-   ============================================ */
+    font-family: Manrope, sans-serif;
+
+    font-size: 13px;
+
+    color: #5f5f57;
+}
 
 .hero-float {
-    animation: breath 8s ease-in-out infinite alternate;
+    animation:
+        heroBreath 9s ease-in-out infinite alternate;
 }
 
-@keyframes breath {
-    0% { transform: scale(1.02) rotate(0deg); }
-    100% { transform: scale(1.08) rotate(1deg); }
+@keyframes heroBreath {
+    from {
+        transform: scale(1.02);
+    }
+
+    to {
+        transform: scale(1.07);
+    }
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .hero-float { animation: none; transform: none; }
-    body::before { animation: none; }
-}
 
 /* ============================================
-   ПОИСК
+   MENU STICKY NAVIGATION
    ============================================ */
 
-/* Убираем синюю рамку браузера */
+.menu-sticky {
+    position: sticky;
+
+    top: 0;
+
+    z-index: 40;
+
+    margin-left: -24px;
+    margin-right: -24px;
+
+    padding:
+        10px
+        24px
+        12px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    background:
+        rgba(251, 249, 246, 0.92);
+
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    border-bottom:
+        1px solid
+        rgba(27, 48, 34, 0.06);
+}
+
+
+/* ============================================
+   SEARCH
+   ============================================ */
+
 .search-input:focus {
     outline: none !important;
     box-shadow: none !important;
 }
 
 .search-container:focus-within {
-    border-color: rgba(27, 48, 34, 0.3) !important;
-    box-shadow: 0 0 0 3px rgba(27, 48, 34, 0.05) !important;
+    border-color:
+        rgba(27, 48, 34, 0.3) !important;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(27, 48, 34, 0.05) !important;
 }
 
+
 /* ============================================
-   ИНФО-СЕКЦИЯ
+   CATEGORY BUTTONS
+   ============================================ */
+
+.category-btn {
+    touch-action: manipulation;
+
+    user-select: none;
+
+    transition:
+        transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+        background-color 0.25s ease,
+        color 0.25s ease,
+        border-color 0.25s ease;
+}
+
+.category-btn:active {
+    transform: scale(0.96);
+}
+
+.category-btn {
+    scroll-margin-top: 180px;
+}
+
+
+/* ============================================
+   CATEGORY SECTIONS
+   ============================================ */
+
+.category-section {
+    scroll-margin-top: 185px;
+
+    margin-top: 34px;
+
+    margin-bottom: 18px;
+}
+
+.category-section:first-child {
+    margin-top: 22px;
+}
+
+
+/* ============================================
+   ONE-TIME MENU REVEAL
+   ============================================ */
+
+.menu-reveal {
+    opacity: 0;
+    transform: translateY(18px);
+}
+
+.menu-reveal-active {
+    animation:
+        menuReveal
+        0.7s
+        cubic-bezier(0.16, 1, 0.3, 1)
+        forwards;
+}
+
+@keyframes menuReveal {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ============================================
+   MENU CARDS
+   ============================================ */
+
+.menu-card {
+    cursor: pointer;
+
+    touch-action: manipulation;
+
+    transition:
+        transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.3s ease;
+}
+
+.menu-card:active {
+    transform: scale(0.985);
+
+    box-shadow:
+        0 2px 12px
+        rgba(27, 48, 34, 0.06);
+}
+
+@media (hover: hover) {
+
+    .menu-card:hover {
+        transform: translateY(-2px);
+
+        box-shadow:
+            0 8px 32px
+            rgba(27, 48, 34, 0.08);
+
+        border-color:
+            rgba(27, 48, 34, 0.2);
+    }
+
+}
+
+.menu-card .click-hint {
+    opacity: 0.3;
+
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease;
+
+    color: #737973;
+}
+
+@media (hover: hover) {
+
+    .menu-card:hover .click-hint {
+        opacity: 0.7;
+
+        transform: scale(1.05);
+    }
+
+}
+
+@media (hover: none) {
+
+    .menu-card .click-hint {
+        opacity: 0.45;
+    }
+
+}
+
+
+/* ============================================
+   INFO
    ============================================ */
 
 .info-btn {
-    transition: all 0.3s ease;
+    touch-action: manipulation;
+
+    transition:
+        transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+        background-color 0.2s ease;
 }
 
 .info-btn:active {
-    transform: scale(0.98);
+    transform: scale(0.985);
+}
+
+@media (hover: hover) {
+
+    .info-btn:hover {
+        background-color:
+            rgba(27, 48, 34, 0.035);
+    }
+
+}
+
+.info-btn:focus {
+    outline: none;
+}
+
+.info-btn:focus-visible {
+    outline:
+        2px solid
+        rgba(169, 121, 53, 0.35);
+
+    outline-offset: 2px;
 }
 
 .info-btn .chevron {
-    transition: transform 0.3s ease;
+    transition:
+        transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .info-btn .chevron.rotated {
@@ -199,7 +562,6 @@
 }
 
 .info-content {
-    transition: all 0.3s ease;
     overflow: hidden;
 }
 
@@ -207,44 +569,180 @@
     display: none;
 }
 
-.info-content:not(.hidden) {
-    display: block;
-    animation: slideDown 0.3s ease forwards;
+.info-content.flex {
+    display: flex;
+
+    animation:
+        slideDown
+        0.3s
+        cubic-bezier(0.16, 1, 0.3, 1)
+        forwards;
 }
 
 @keyframes slideDown {
+
     from {
         opacity: 0;
         transform: translateY(-8px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
     }
+
 }
 
+
 /* ============================================
-   МОДАЛЬНОЕ ОКНО
+   MODAL
    ============================================ */
 
+#itemModal {
+    overscroll-behavior: contain;
+}
+
 .modal-enter {
-    animation: modalScaleUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    animation:
+        modalScaleUp
+        0.4s
+        cubic-bezier(0.16, 1, 0.3, 1)
+        forwards;
+}
+
+.modal-closing .modal-glass {
+    animation:
+        modalScaleDown
+        0.18s
+        ease-in
+        forwards;
 }
 
 @keyframes modalScaleUp {
-    from { opacity: 0; transform: scale(0.95) translateY(10px); }
-    to { opacity: 1; transform: scale(1) translateY(0); }
+
+    from {
+        opacity: 0;
+
+        transform:
+            scale(0.96)
+            translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            scale(1)
+            translateY(0);
+    }
+
 }
 
+@keyframes modalScaleDown {
+
+    from {
+        opacity: 1;
+
+        transform:
+            scale(1)
+            translateY(0);
+    }
+
+    to {
+        opacity: 0;
+
+        transform:
+            scale(0.98)
+            translateY(8px);
+    }
+
+}
+
+
 /* ============================================
-   ПОМОЩНИКИ
+   BODY WHEN MODAL OPEN
+   ============================================ */
+
+body.modal-open {
+    overscroll-behavior: none;
+}
+
+
+/* ============================================
+   PRICE
    ============================================ */
 
 .lining-nums {
     font-variant-numeric: lining-nums;
 }
 
-.lang-active {
+
+/* ============================================
+   LANGUAGE
+   ============================================ */
+
+.lang-btn {
+    color: #484740;
+
+    transition:
+        color 0.25s ease,
+        opacity 0.25s ease;
+}
+
+.lang-btn.lang-active {
     color: #1b3022 !important;
+
     opacity: 1 !important;
+}
+
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    html {
+        scroll-behavior: auto;
+    }
+
+    body::before,
+    .hero-float,
+    .menu-reveal-active,
+    .modal-enter,
+    .modal-closing .modal-glass,
+    .info-content.flex {
+        animation: none !important;
+    }
+
+    .menu-reveal {
+        opacity: 1;
+        transform: none;
+    }
+
+}
+
+
+/* ============================================
+   SMALL PHONES
+   ============================================ */
+
+@media (max-width: 380px) {
+
+    .hero-wrapper {
+        min-height: 300px;
+    }
+
+    .hero-content {
+        left: 18px;
+        right: 18px;
+    }
+
+    .menu-sticky {
+        margin-left: -18px;
+        margin-right: -18px;
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
 }
