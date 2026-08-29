@@ -1,807 +1,2063 @@
-// ============================================
-// NECTAR MENU — APPLICATION
-// ============================================
+(() => {
+  'use strict';
 
-let currentLang = 'RU';
-let currentTab = 'menu';
-let currentType = 'kitchen';
-let searchQuery = '';
-let isModalOpen = false;
-let searchTimer = null;
-let isProgrammaticScroll = false;
-let revealPlayed = false;
+  const state = {
+    lang: 'RU',
+    section: 'menu',
+    type: 'kitchen',
+    categoryId: null,
+    query: '',
+    modalItemId: null,
+    searchTimer: null,
+    scrollLockY: 0,
+    previousFocus: null
+  };
 
-const categoryObserverMap = new Map();
 
-// ============================================
-// HELPERS
-// ============================================
+  /* =====================================================
+     HELPERS
+     ===================================================== */
 
-function getLangKey(prefix) {
-    return `${prefix}_${currentLang.toLowerCase()}`;
-}
+  const $ = (selector, root = document) =>
+    root.querySelector(selector);
 
-function getItemName(item) {
-    return item[getLangKey('name')] || item.name_ru || '';
-}
+  const $$ = (selector, root = document) =>
+    Array.from(root.querySelectorAll(selector));
 
-function getItemCategory(item) {
-    return item[getLangKey('category')] || item.category_ru || '';
-}
 
-function getItemComposition(item) {
-    return item[getLangKey('composition')] || item.composition_ru || '';
-}
+  const getKey = (prefix) =>
+    `${prefix}_${state.lang.toLowerCase()}`;
 
-function normalizeText(value = '') {
-    return String(value)
-        .toLowerCase()
-        .normalize('NFKC')
-        .replace(/\s+/g, ' ')
-        .trim();
-}
 
-function getCategoriesForType(type) {
-    const items = MENU.filter(item => item.type === type);
-    const categoryKey = getLangKey('category');
+  /*
+    В BAR сознательно показываем только две категории:
+    lemonades + tea.
+  */
+
+  const SAFE_BAR_CATEGORIES = new Set([
+    'lemonades',
+    'tea'
+  ]);
+
+
+  function getMenuSource() {
+
+    /*
+      menu-data.js использует:
+
+      const MENU = [...]
+
+      а не window.MENU.
+
+      Поэтому обращаемся к глобальному lexical scope.
+    */
+
+    return (
+      typeof MENU !== 'undefined' &&
+      Array.isArray(MENU)
+    )
+      ? MENU
+      : [];
+  }
+
+
+  function getVisibleMenu() {
+
+    return getMenuSource().filter(item => {
+
+      if (item.type === 'kitchen') {
+        return true;
+      }
+
+      if (item.type !== 'bar') {
+        return false;
+      }
+
+      return SAFE_BAR_CATEGORIES.has(
+        String(item.category_id || '').toLowerCase()
+      );
+    });
+  }
+
+
+  function getItemsForType(type = state.type) {
+
+    return getVisibleMenu().filter(
+      item => item.type === type
+    );
+  }
+
+
+  function getCategoryKey() {
+    return getKey('category');
+  }
+
+
+  function getNameKey() {
+    return getKey('name');
+  }
+
+
+  function getCompositionKey() {
+    return getKey('composition');
+  }
+
+
+  function getCategoryList(type = state.type) {
+
+    const categoryKey = getCategoryKey();
 
     const seen = new Set();
-    const result = [];
+    const categories = [];
 
-    items.forEach(item => {
-        const id = item.category_id;
-        const name = item[categoryKey] || item.category_ru;
+    getItemsForType(type).forEach(item => {
 
-        if (!seen.has(id)) {
-            seen.add(id);
-            result.push({
-                id,
-                name
-            });
-        }
+      const id =
+        item.category_id ||
+        item[categoryKey] ||
+        'uncategorized';
+
+      if (seen.has(id)) {
+        return;
+      }
+
+      seen.add(id);
+
+      categories.push({
+        id,
+        name:
+          item[categoryKey] ||
+          item.category_ru ||
+          '—'
+      });
+
     });
 
-    return result;
-}
+    return categories;
+  }
 
-function getFirstCategory(type = currentType) {
-    return getCategoriesForType(type)[0] || null;
-}
 
-// ============================================
-// LANGUAGE
-// ============================================
+  function firstCategoryId(type = state.type) {
 
-function switchLang(lang) {
-    if (!TRANSLATIONS[lang]) return;
+    return getCategoryList(type)[0]?.id || null;
+  }
 
-    currentLang = lang;
+
+  function categoryName(
+    categoryId,
+    type = state.type
+  ) {
+
+    const categoryKey = getCategoryKey();
+
+    const item =
+      getItemsForType(type)
+        .find(
+          entry =>
+            entry.category_id === categoryId
+        );
+
+    return (
+      item?.[categoryKey] ||
+      item?.category_ru ||
+      categoryId
+    );
+  }
+
+
+  function normalizeText(value) {
+
+    return String(value ?? '')
+      .toLocaleLowerCase(
+        state.lang === 'KZ'
+          ? 'kk'
+          : state.lang === 'RU'
+            ? 'ru'
+            : 'en'
+      )
+      .normalize('NFKC')
+      .trim();
+  }
+
+
+  function escapeHtml(value) {
+
+    return String(value ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+
+  function formatPrice(value) {
+
+    const number = Number(value);
+
+    if (!Number.isFinite(number)) {
+      return escapeHtml(value);
+    }
+
+    return new Intl.NumberFormat(
+      state.lang === 'KZ'
+        ? 'kk-KZ'
+        : state.lang === 'EN'
+          ? 'en-US'
+          : 'ru-RU'
+    ).format(number);
+  }
+
+
+  function translate(key, fallback = '') {
+
+    const dictionary =
+      typeof TRANSLATIONS !== 'undefined'
+        ? TRANSLATIONS
+        : {};
+
+    return (
+      dictionary?.[state.lang]?.[key] ??
+      fallback
+    );
+  }
+
+
+  /* =====================================================
+     LANGUAGE
+     ===================================================== */
+
+  function setLanguageUI() {
 
     document.documentElement.lang =
-        lang === 'RU' ? 'ru' :
-        lang === 'KZ' ? 'kk' :
-        'en';
+      state.lang === 'KZ'
+        ? 'kk'
+        : state.lang.toLowerCase();
 
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        const active = btn.dataset.lang === lang;
 
-        btn.classList.toggle('lang-active', active);
-        btn.classList.toggle('font-bold', active);
-        btn.classList.toggle('opacity-60', !active);
+    $$('[data-i18n]').forEach(element => {
+
+      const key = element.dataset.i18n;
+
+      const value = translate(key);
+
+      if (value) {
+        element.textContent = value;
+      }
+
     });
 
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.dataset.i18n;
 
-        if (TRANSLATIONS[lang][key] !== undefined) {
-            el.textContent = TRANSLATIONS[lang][key];
-        }
-    });
-
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-        const key = el.dataset.i18nPlaceholder;
-
-        if (TRANSLATIONS[lang][key] !== undefined) {
-            el.placeholder = TRANSLATIONS[lang][key];
-        }
-    });
-
-    // После смены языка всегда начинаем с первой категории.
-    window.scrollTo({
-        top: 0,
-        behavior: 'auto'
-    });
-
-    renderCategories();
-    renderMenu(searchQuery);
-
-    requestAnimationFrame(() => {
-        updateActiveCategoryFromScroll();
-    });
-}
-
-// ============================================
-// MENU / INFO
-// ============================================
-
-function switchSection(sectionId) {
-    if (currentTab === sectionId) return;
-
-    currentTab = sectionId;
-
-    document.querySelectorAll('.spa-section').forEach(section => {
-        section.classList.remove('active');
-    });
-
-    const target = document.getElementById(`${sectionId}-section`);
-
-    if (target) {
-        target.classList.add('active');
-    }
-
-    document.querySelectorAll('.bottom-nav-btn').forEach(btn => {
-        const active = btn.dataset.path === sectionId;
-
-        btn.classList.toggle('text-forest-green', active);
-        btn.classList.toggle('text-outline', !active);
-    });
-
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-
-    if (sectionId === 'menu') {
-        renderCategories();
-        renderMenu(searchQuery);
-
-        requestAnimationFrame(() => {
-            updateActiveCategoryFromScroll();
-        });
-    }
-}
-
-// ============================================
-// KITCHEN / BAR
-// ============================================
-
-function switchMainTab(index, btn) {
-    if (!btn) return;
-
-    currentType = btn.dataset.type;
-
-    const indicator = document.getElementById('nav-indicator');
-    if (indicator) {
-        indicator.style.transform = `translateX(${index * 100}%)`;
-    }
-
-    document.querySelectorAll('.nav-btn').forEach((button, i) => {
-        const active = i === index;
-
-        button.setAttribute('aria-selected', active ? 'true' : 'false');
-
-        button.classList.toggle('text-cream', active);
-        button.classList.toggle('text-on-surface-variant', !active);
-    });
-
-    // Переключение кухни/бара не должно ломать поиск.
-    renderCategories();
-    renderMenu(searchQuery);
-
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-
-    requestAnimationFrame(() => {
-        updateActiveCategoryFromScroll();
-    });
-}
-
-// ============================================
-// CATEGORIES
-// ============================================
-
-function renderCategories() {
-    const container = document.getElementById('categoryContainer');
-
-    if (!container) return;
-
-    const categories = getCategoriesForType(currentType);
-
-    container.innerHTML = categories.map(category => `
-        <button
-            class="category-btn snap-start shrink-0 px-5 py-2 rounded-xl text-[11px]
-                   font-label-caps tracking-widest uppercase transition-all
-                   border bg-white text-forest-green/70 border-forest-green/10
-                   hover:border-forest-green/30 active:scale-95"
-            data-category-id="${category.id}"
-            onclick="selectCategory('${category.id}')"
-        >
-            ${escapeHtml(category.name)}
-        </button>
-    `).join('');
-
-    updateActiveCategoryFromScroll();
-}
-
-function selectCategory(categoryId) {
-    const target = document.querySelector(
-        `[data-category-section="${CSS.escape(categoryId)}"]`
-    );
-
-    if (!target) return;
-
-    isProgrammaticScroll = true;
-
-    const offset = getStickyOffset();
-
-    const targetPosition =
-        target.getBoundingClientRect().top +
-        window.scrollY -
-        offset;
-
-    window.scrollTo({
-        top: Math.max(0, targetPosition),
-        behavior: 'smooth'
-    });
-
-    setActiveCategory(categoryId);
-
-    setTimeout(() => {
-        isProgrammaticScroll = false;
-        updateActiveCategoryFromScroll();
-    }, 700);
-}
-
-function getStickyOffset() {
-    const header = document.querySelector('header');
-    const sticky = document.querySelector('.menu-sticky');
-
-    const headerHeight = header
-        ? header.getBoundingClientRect().height
-        : 0;
-
-    const stickyHeight = sticky
-        ? sticky.getBoundingClientRect().height
-        : 0;
-
-    return headerHeight + Math.min(stickyHeight, 170) + 12;
-}
-
-function setActiveCategory(categoryId) {
-    document.querySelectorAll('.category-btn').forEach(btn => {
-        const active = btn.dataset.categoryId === categoryId;
-
-        btn.classList.toggle('bg-forest-green', active);
-        btn.classList.toggle('text-cream', active);
-        btn.classList.toggle('border-forest-green', active);
-
-        btn.classList.toggle('bg-white', !active);
-        btn.classList.toggle('text-forest-green/70', !active);
-        btn.classList.toggle('border-forest-green/10', !active);
-    });
-
-    const activeButton = document.querySelector(
-        `.category-btn[data-category-id="${CSS.escape(categoryId)}"]`
-    );
-
-    if (activeButton && !isProgrammaticScroll) {
-        activeButton.scrollIntoView({
-            behavior: 'smooth',
-            block: 'nearest',
-            inline: 'center'
-        });
-    }
-}
-
-function updateActiveCategoryFromScroll() {
-    if (isProgrammaticScroll) return;
-
-    const sections = [
-        ...document.querySelectorAll('[data-category-section]')
-    ];
-
-    if (!sections.length) return;
-
-    const marker = getStickyOffset() + 20;
-
-    let active = sections[0].dataset.categorySection;
-
-    for (const section of sections) {
-        const rect = section.getBoundingClientRect();
-
-        if (rect.top <= marker) {
-            active = section.dataset.categorySection;
-        }
-    }
-
-    setActiveCategory(active);
-}
-
-// ============================================
-// MENU RENDER
-// ============================================
-
-function renderMenu(query = '') {
-    const container = document.getElementById('menuContainer');
-
-    if (!container) return;
-
-    const normalizedQuery = normalizeText(query);
-
-    let items;
-
-    if (normalizedQuery) {
-        // ГЛОБАЛЬНЫЙ ПОИСК:
-        // Кухня + Бар + все категории.
-        items = MENU.filter(item => {
-            const searchable = [
-                getItemName(item),
-                getItemCategory(item),
-                getItemComposition(item)
-            ]
-                .map(normalizeText)
-                .join(' ');
-
-            return searchable.includes(normalizedQuery);
-        });
-    } else {
-        // Без поиска показываем только текущий тип.
-        items = MENU.filter(item => item.type === currentType);
-    }
-
-    if (!items.length) {
-        container.innerHTML = `
-            <div class="text-center py-16 px-6">
-                <div class="font-serif text-[26px] text-forest-green mb-2">
-                    ${escapeHtml(TRANSLATIONS[currentLang].nothing_found)}
-                </div>
-                <p class="text-secondary font-body-md">
-                    ${escapeHtml(TRANSLATIONS[currentLang].try_another_search)}
-                </p>
-            </div>
-        `;
-        return;
-    }
-
-    const categoryKey = getLangKey('category');
-
-    // При поиске группируем результаты по категориям.
-    const grouped = new Map();
-
-    items.forEach(item => {
-        const categoryId = item.category_id;
-        const categoryName = item[categoryKey] || item.category_ru;
-
-        if (!grouped.has(categoryId)) {
-            grouped.set(categoryId, {
-                id: categoryId,
-                name: categoryName,
-                items: []
-            });
+    $$('[data-i18n-placeholder]')
+      .forEach(element => {
+
+        const value =
+          translate(
+            element.dataset.i18nPlaceholder
+          );
+
+        if (value) {
+          element.setAttribute(
+            'placeholder',
+            value
+          );
         }
 
-        grouped.get(categoryId).items.push(item);
+      });
+
+
+    $$('.lang-btn').forEach(button => {
+
+      const active =
+        button.dataset.lang === state.lang;
+
+      button.classList.toggle(
+        'is-active',
+        active
+      );
+
+      button.setAttribute(
+        'aria-pressed',
+        String(active)
+      );
+
     });
 
-    const fragment = document.createDocumentFragment();
 
-    grouped.forEach(group => {
-        const section = document.createElement('section');
+    $$('.bottom-nav-btn')
+      .forEach(button => {
 
-        section.className =
-            'category-section menu-reveal';
+        const active =
+          button.dataset.path === state.section;
 
-        section.dataset.categorySection = group.id;
+        button.classList.toggle(
+          'is-active',
+          active
+        );
 
-        section.innerHTML = `
-            <div class="flex items-center justify-center gap-4 mb-6 px-1">
-                <div class="flex-1 h-px bg-gradient-to-r from-transparent via-warm-gold/30 to-warm-gold/30"></div>
+        button.setAttribute(
+          'aria-current',
+          active
+            ? 'page'
+            : 'false'
+        );
 
-                <h2 class="font-serif text-[26px] text-forest-green
-                           tracking-tight text-center font-medium whitespace-nowrap">
-                    ${escapeHtml(group.name)}
-                </h2>
+      });
 
-                <div class="flex-1 h-px bg-gradient-to-l from-transparent via-warm-gold/30 to-warm-gold/30"></div>
-            </div>
+  }
 
-            <div class="flex flex-col gap-3"></div>
-        `;
 
-        const cardsContainer = section.querySelector('.flex.flex-col.gap-3');
+  function switchLang(lang) {
 
-        group.items.forEach(item => {
-            cardsContainer.appendChild(createMenuCard(item));
-        });
+    const dictionary =
+      typeof TRANSLATIONS !== 'undefined'
+        ? TRANSLATIONS
+        : {};
 
-        fragment.appendChild(section);
-    });
-
-    container.innerHTML = '';
-    container.appendChild(fragment);
-
-    if (!revealPlayed) {
-        requestAnimationFrame(() => {
-            document.querySelectorAll('.menu-reveal').forEach((el, index) => {
-                el.style.animationDelay = `${Math.min(index * 60, 300)}ms`;
-                el.classList.add('menu-reveal-active');
-            });
-
-            revealPlayed = true;
-        });
+    if (!dictionary[lang]) {
+      return;
     }
 
-    updateActiveCategoryFromScroll();
-}
 
-function createMenuCard(item) {
-    const card = document.createElement('article');
+    state.lang = lang;
 
-    card.className =
-        'menu-card bg-white rounded-2xl overflow-hidden soft-shadow flex flex-col border border-forest-green/5';
+    /*
+      Поиск сбрасываем.
+      Иначе клиент мог искать старый запрос,
+      а визуально уже видеть другой язык.
+    */
 
-    card.setAttribute('role', 'button');
-    card.setAttribute('tabindex', '0');
+    state.query = '';
 
-    const name = getItemName(item);
-    const composition = getItemComposition(item);
 
-    const isSpicy =
-        item.note &&
-        normalizeText(item.note).includes('остро');
+    /*
+      ВАЖНО:
 
-    card.innerHTML = `
-        <div class="px-5 py-5 relative">
-            <div class="flex justify-between items-start gap-4">
-                <h3 class="font-serif text-[22px] text-forest-green
-                           max-w-[75%] leading-tight font-medium
-                           flex items-center flex-wrap gap-2">
+      После смены языка всегда открываем
+      первую категорию текущего типа.
 
-                    ${escapeHtml(name)}
+      Кухня → Холодные закуски
+      Бар → первая категория бара.
+    */
 
-                    ${
-                        isSpicy
-                            ? `
-                                <span
-                                    class="material-symbols-outlined text-red-500/80 text-[18px]"
-                                    title="${escapeHtml(item.note)}"
-                                >
-                                    local_fire_department
-                                </span>
-                              `
-                            : ''
-                    }
+    state.categoryId =
+      firstCategoryId(
+        state.type
+      );
 
-                    <span
-                        class="click-hint material-symbols-outlined text-[18px]"
-                        aria-hidden="true"
-                    >
-                        info
-                    </span>
-                </h3>
 
-                <p class="font-serif text-[20px] text-warm-gold
-                          whitespace-nowrap mt-0.5 lining-nums">
-                    ${formatPrice(item.price)}
-                </p>
-            </div>
-        </div>
-    `;
-
-    card.addEventListener('click', () => openModal(item));
-
-    card.addEventListener('keydown', event => {
-        if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            openModal(item);
-        }
-    });
-
-    return card;
-}
-
-function formatPrice(price) {
-    return `${Number(price).toLocaleString('ru-RU')} ₸`;
-}
-
-// ============================================
-// MODAL
-// ============================================
-
-function openModal(item) {
-    const modal = document.getElementById('itemModal');
-
-    if (!modal) return;
-
-    const title = document.getElementById('modalTitle');
-    const price = document.getElementById('modalPrice');
-    const weight = document.getElementById('modalWeight');
-    const ingredientsContainer =
-        document.getElementById('modalIngredientsContainer');
-    const ingredients =
-        document.getElementById('modalIngredients');
-
-    const imageContainer =
-        document.getElementById('modalImageContainer');
-    const image =
-        document.getElementById('modalImage');
-
-    title.textContent = getItemName(item);
-    price.textContent = formatPrice(item.price);
-    weight.textContent = item.weight || '';
-
-    const composition = getItemComposition(item);
-
-    if (composition) {
-        ingredientsContainer.classList.remove('hidden');
-        ingredientsContainer.classList.add('flex');
-        ingredients.textContent = composition;
-    } else {
-        ingredientsContainer.classList.add('hidden');
-        ingredientsContainer.classList.remove('flex');
-        ingredients.textContent = '';
-    }
-
-    if (item.image) {
-        imageContainer.style.display = 'block';
-        image.src = item.image;
-        image.alt = getItemName(item);
-    } else {
-        imageContainer.style.display = 'none';
-        image.removeAttribute('src');
-    }
-
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-
-    requestAnimationFrame(() => {
-        const modalContent = modal.querySelector('.modal-glass');
-
-        if (modalContent) {
-            modalContent.classList.remove('modal-enter');
-            void modalContent.offsetWidth;
-            modalContent.classList.add('modal-enter');
-        }
-    });
-
-    isModalOpen = true;
-
-    document.body.classList.add('modal-open');
-    document.body.style.overflow = 'hidden';
-
-    const closeButton = modal.querySelector('[data-modal-close]');
-    if (closeButton) {
-        setTimeout(() => closeButton.focus(), 50);
-    }
-}
-
-function closeModal() {
-    const modal = document.getElementById('itemModal');
-
-    if (!modal || !isModalOpen) return;
-
-    const modalContent = modal.querySelector('.modal-glass');
-
-    if (modalContent) {
-        modalContent.classList.remove('modal-enter');
-    }
-
-    modal.classList.add('modal-closing');
-
-    setTimeout(() => {
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-        modal.classList.remove('modal-closing');
-
-        isModalOpen = false;
-
-        document.body.classList.remove('modal-open');
-        document.body.style.overflow = '';
-    }, 180);
-}
-
-// Escape
-document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && isModalOpen) {
-        closeModal();
-    }
-});
-
-// Overlay
-document.addEventListener('click', event => {
-    const modal = document.getElementById('itemModal');
-
-    if (modal && event.target === modal) {
-        closeModal();
-    }
-});
-
-// ============================================
-// SEARCH
-// ============================================
-
-function initSearch() {
-    const input = document.getElementById('searchInput');
-
-    if (!input) return;
-
-    input.addEventListener('input', event => {
-        const value = event.target.value;
-
-        searchQuery = value;
-
-        updateSearchButton();
-
-        clearTimeout(searchTimer);
-
-        searchTimer = setTimeout(() => {
-            renderMenu(searchQuery);
-        }, 300);
-    });
-}
-
-function updateSearchButton() {
-    const input = document.getElementById('searchInput');
-    const button = document.getElementById('clearSearchBtn');
-
-    if (!input || !button) return;
-
-    const hasValue = Boolean(input.value.trim());
-
-    button.classList.toggle('hidden', !hasValue);
-    button.classList.toggle('flex', hasValue);
-}
-
-function clearSearch() {
-    const input = document.getElementById('searchInput');
+    const input =
+      $('#searchInput');
 
     if (input) {
-        input.value = '';
-        input.focus();
+      input.value = '';
     }
 
-    searchQuery = '';
 
-    updateSearchButton();
-    renderMenu('');
-}
+    updateSearchClearButton();
 
-// ============================================
-// INFO ACCORDION
-// ============================================
+    setLanguageUI();
 
-function toggleInfo(button) {
-    if (!button) return;
+    renderCategories();
 
-    const content = button.nextElementSibling;
-    const chevron = button.querySelector('.chevron');
+    renderMenu();
 
-    if (!content) return;
 
-    const isOpen = !content.classList.contains('hidden');
+    observerSuppressedUntil =
+      Date.now() + 700;
 
-    button.blur();
 
-    content.classList.toggle('hidden', isOpen);
-    content.classList.toggle('flex', !isOpen);
+    requestAnimationFrame(() => {
 
-    button.setAttribute(
-        'aria-expanded',
-        isOpen ? 'false' : 'true'
+      scrollToCategory(
+        state.categoryId,
+        'auto'
+      );
+
+    });
+
+  }
+
+
+  /* =====================================================
+     MENU / INFO
+     ===================================================== */
+
+  function switchSection(sectionId) {
+
+    if (
+      !['menu', 'info']
+        .includes(sectionId)
+    ) {
+      return;
+    }
+
+
+    state.section = sectionId;
+
+
+    $('#menu-section')
+      ?.classList.toggle(
+        'is-active',
+        sectionId === 'menu'
+      );
+
+
+    $('#info-section')
+      ?.classList.toggle(
+        'is-active',
+        sectionId === 'info'
+      );
+
+
+    setLanguageUI();
+
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'auto'
+    });
+
+
+    if (sectionId === 'menu') {
+
+      requestAnimationFrame(() => {
+        renderMenu();
+      });
+
+    }
+
+  }
+
+
+  /* =====================================================
+     KITCHEN / BAR
+     ===================================================== */
+
+  function setMainType(type) {
+
+    if (
+      !['kitchen', 'bar']
+        .includes(type)
+    ) {
+      return;
+    }
+
+
+    if (state.type === type) {
+      return;
+    }
+
+
+    state.type = type;
+
+    state.query = '';
+
+    state.categoryId =
+      firstCategoryId(type);
+
+
+    const input =
+      $('#searchInput');
+
+    if (input) {
+      input.value = '';
+    }
+
+
+    updateSearchClearButton();
+
+    updateMainTypeUI();
+
+    renderCategories();
+
+    renderMenu();
+
+
+    observerSuppressedUntil =
+      Date.now() + 900;
+
+
+    requestAnimationFrame(() => {
+
+      scrollToCategory(
+        state.categoryId,
+        'smooth'
+      );
+
+    });
+
+  }
+
+
+  function updateMainTypeUI() {
+
+    const indicator =
+      $('#nav-indicator');
+
+
+    if (indicator) {
+
+      indicator.style.transform =
+        state.type === 'bar'
+          ? 'translateX(100%)'
+          : 'translateX(0)';
+
+    }
+
+
+    $$('.nav-btn').forEach(button => {
+
+      const active =
+        button.dataset.type === state.type;
+
+
+      button.classList.toggle(
+        'is-active',
+        active
+      );
+
+
+      button.setAttribute(
+        'aria-selected',
+        String(active)
+      );
+
+    });
+
+  }
+
+
+  /* =====================================================
+     CATEGORY NAVIGATION
+     ===================================================== */
+
+  function renderCategories() {
+
+    const container =
+      $('#categoryContainer');
+
+    if (!container) {
+      return;
+    }
+
+
+    const categories =
+      getCategoryList(
+        state.type
+      );
+
+
+    if (
+      !state.categoryId ||
+      !categories.some(
+        category =>
+          category.id === state.categoryId
+      )
+    ) {
+
+      state.categoryId =
+        categories[0]?.id || null;
+
+    }
+
+
+    container.innerHTML = '';
+
+
+    const fragment =
+      document.createDocumentFragment();
+
+
+    categories.forEach(category => {
+
+      const button =
+        document.createElement('button');
+
+
+      button.type = 'button';
+
+      button.className =
+        'category-btn';
+
+
+      button.dataset.category =
+        category.id;
+
+
+      button.textContent =
+        category.name;
+
+
+      button.setAttribute(
+        'aria-label',
+        category.name
+      );
+
+
+      button.setAttribute(
+        'aria-selected',
+        String(
+          category.id === state.categoryId
+        )
+      );
+
+
+      button.addEventListener(
+        'click',
+        () =>
+          selectCategory(
+            category.id
+          )
+      );
+
+
+      fragment.appendChild(button);
+
+    });
+
+
+    container.appendChild(
+      fragment
     );
 
-    if (chevron) {
-        chevron.classList.toggle('rotated', !isOpen);
+
+    updateCategoryButtons();
+
+  }
+
+
+  function updateCategoryButtons(
+    activeId = state.categoryId
+  ) {
+
+    $$('.category-btn')
+      .forEach(button => {
+
+        const active =
+          button.dataset.category === activeId;
+
+
+        button.classList.toggle(
+          'is-active',
+          active
+        );
+
+
+        button.setAttribute(
+          'aria-selected',
+          String(active)
+        );
+
+      });
+
+  }
+
+
+  function selectCategory(categoryId) {
+
+    const valid =
+      getCategoryList(
+        state.type
+      ).some(
+        category =>
+          category.id === categoryId
+      );
+
+
+    if (!valid) {
+      return;
     }
 
-    // Принудительно убираем touch/active визуальное состояние.
-    requestAnimationFrame(() => {
-        button.classList.remove('is-touch-active');
+
+    state.categoryId =
+      categoryId;
+
+
+    /*
+      Не позволяем IntersectionObserver
+      перехватывать состояние во время
+      smooth scroll.
+    */
+
+    observerSuppressedUntil =
+      Date.now() + 800;
+
+
+    updateCategoryButtons(
+      categoryId
+    );
+
+
+    scrollToCategory(
+      categoryId,
+      'smooth'
+    );
+
+  }
+
+
+  function scrollToCategory(
+    categoryId,
+    behavior = 'smooth'
+  ) {
+
+    if (
+      !categoryId ||
+      state.query
+    ) {
+      return;
+    }
+
+
+    const section =
+      document.querySelector(
+        `[data-category-section="${CSS.escape(
+          String(categoryId)
+        )}"]`
+      );
+
+
+    if (!section) {
+      return;
+    }
+
+
+    const header =
+      $('.site-header');
+
+    const sticky =
+      $('.menu-sticky');
+
+
+    const offset =
+      (
+        header?.getBoundingClientRect()
+          .height || 0
+      ) +
+      (
+        sticky?.getBoundingClientRect()
+          .height || 0
+      ) +
+      18;
+
+
+    const top =
+      Math.max(
+        0,
+        section.getBoundingClientRect()
+          .top +
+          window.scrollY -
+          offset
+      );
+
+
+    if (
+      behavior === 'smooth'
+    ) {
+
+      observerSuppressedUntil =
+        Math.max(
+          observerSuppressedUntil,
+          Date.now() + 800
+        );
+
+    }
+
+
+    window.scrollTo({
+      top,
+      behavior
     });
-}
 
-// ============================================
-// ESCAPE HTML
-// ============================================
+  }
 
-function escapeHtml(value = '') {
-    return String(value)
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#039;');
-}
 
-// ============================================
-// CATEGORY OBSERVER
-// ============================================
+  /* =====================================================
+     SEARCH
+     ===================================================== */
 
-function initCategoryObserver() {
-    if (!('IntersectionObserver' in window)) return;
+  function searchMatches(
+    item,
+    query
+  ) {
 
-    const observer = new IntersectionObserver(
+    if (!query) {
+      return true;
+    }
+
+
+    const nameKey =
+      getNameKey();
+
+    const compositionKey =
+      getCompositionKey();
+
+    const categoryKey =
+      getCategoryKey();
+
+
+    const fields = [
+
+      item[nameKey],
+
+      item[compositionKey],
+
+      item[categoryKey],
+
+      /*
+        Ищем также по всем языкам.
+
+        Это важно:
+
+        клиент на RU может ввести
+        английское название,
+        а клиент на EN —
+        русское.
+      */
+
+      item.name_ru,
+      item.name_kz,
+      item.name_en,
+
+      item.composition_ru,
+      item.composition_kz,
+      item.composition_en,
+
+      item.category_ru,
+      item.category_kz,
+      item.category_en
+
+    ];
+
+
+    return fields.some(
+      field =>
+        normalizeText(field)
+          .includes(query)
+    );
+
+  }
+
+
+  function getFilteredItems() {
+
+    const query =
+      normalizeText(
+        state.query
+      );
+
+
+    /*
+      Обычный режим:
+
+      только текущая секция
+      Kitchen / Bar.
+    */
+
+    let items =
+      getItemsForType(
+        state.type
+      );
+
+
+    /*
+      Поиск:
+
+      ГЛОБАЛЬНЫЙ.
+
+      Kitchen + safe Bar.
+    */
+
+    if (query) {
+
+      items =
+        getVisibleMenu()
+          .filter(
+            item =>
+              searchMatches(
+                item,
+                query
+              )
+          );
+
+    }
+
+
+    return items;
+
+  }
+
+
+  /* =====================================================
+     MENU RENDER
+     ===================================================== */
+
+  function renderMenu() {
+
+    const container =
+      $('#menuContainer');
+
+    if (!container) {
+      return;
+    }
+
+
+    const items =
+      getFilteredItems();
+
+
+    const categoryKey =
+      getCategoryKey();
+
+    const nameKey =
+      getNameKey();
+
+    const compositionKey =
+      getCompositionKey();
+
+    const query =
+      normalizeText(
+        state.query
+      );
+
+
+    container.innerHTML = '';
+
+
+    const fragment =
+      document.createDocumentFragment();
+
+
+    /* EMPTY */
+
+    if (!items.length) {
+
+      const empty =
+        document.createElement('div');
+
+
+      empty.className =
+        'empty-state';
+
+
+      empty.innerHTML = `
+
+        <strong>
+          ${escapeHtml(
+            translate(
+              'nothing_found',
+              'Ничего не найдено'
+            )
+          )}
+        </strong>
+
+        <span>
+          ${escapeHtml(
+            translate(
+              'try_another_search',
+              'Попробуйте изменить запрос.'
+            )
+          )}
+        </span>
+
+      `;
+
+
+      fragment.appendChild(
+        empty
+      );
+
+
+      container.appendChild(
+        fragment
+      );
+
+
+      updateCategoryButtons(null);
+
+      return;
+
+    }
+
+
+    /*
+      Получаем категории в порядке
+      появления в MENU.
+    */
+
+    const categoryIds = [];
+
+    const seen =
+      new Set();
+
+
+    items.forEach(item => {
+
+      const id =
+        item.category_id ||
+        item[categoryKey] ||
+        'uncategorized';
+
+
+      if (!seen.has(id)) {
+
+        seen.add(id);
+
+        categoryIds.push(id);
+
+      }
+
+    });
+
+
+    categoryIds.forEach(
+      categoryId => {
+
+        const categoryItems =
+          items.filter(
+            item =>
+              (
+                item.category_id ||
+                item[categoryKey] ||
+                'uncategorized'
+              ) === categoryId
+          );
+
+
+        if (!categoryItems.length) {
+          return;
+        }
+
+
+        const section =
+          document.createElement(
+            'section'
+          );
+
+
+        section.className =
+          'category-section';
+
+
+        section.dataset.categorySection =
+          categoryId;
+
+
+        section.dataset.type =
+          state.type;
+
+
+        /*
+          CATEGORY TITLE
+        */
+
+        const title =
+          document.createElement(
+            'div'
+          );
+
+
+        title.className =
+          'category-heading';
+
+
+        title.innerHTML = `
+
+          <span></span>
+
+          <h2>
+            ${escapeHtml(
+              categoryName(
+                categoryId,
+                state.type
+              )
+            )}
+          </h2>
+
+          <span></span>
+
+        `;
+
+
+        section.appendChild(
+          title
+        );
+
+
+        /*
+          ITEMS
+        */
+
+        const list =
+          document.createElement(
+            'div'
+          );
+
+
+        list.className =
+          'menu-list';
+
+
+        categoryItems.forEach(
+          item => {
+
+            const card =
+              document.createElement(
+                'button'
+              );
+
+
+            card.type = 'button';
+
+            card.className =
+              'menu-card';
+
+
+            card.dataset.itemId =
+              item.id;
+
+
+            card.setAttribute(
+              'aria-label',
+              item[nameKey] ||
+              item.name_ru ||
+              'Menu item'
+            );
+
+
+            const spicy =
+              item.note &&
+              normalizeText(
+                item.note
+              ).includes('остр');
+
+
+            const composition =
+              item[compositionKey] ||
+              '';
+
+
+            card.innerHTML = `
+
+              <span class="menu-card-main">
+
+                <span class="menu-card-title">
+                  ${escapeHtml(
+                    item[nameKey] ||
+                    item.name_ru ||
+                    '—'
+                  )}
+                </span>
+
+                ${
+                  spicy
+                    ? `
+                      <span
+                        class="spicy-mark"
+                        aria-label="spicy"
+                      >
+                        ●
+                      </span>
+                    `
+                    : ''
+                }
+
+                <span
+                  class="menu-card-hint"
+                  aria-hidden="true"
+                >
+                  info
+                </span>
+
+              </span>
+
+
+              <span class="menu-card-meta">
+
+                <span class="menu-card-price">
+
+                  ${formatPrice(
+                    item.price
+                  )}
+
+                  <small>₸</small>
+
+                </span>
+
+              </span>
+
+
+              <span class="sr-only">
+
+                ${escapeHtml(
+                  composition
+                )}
+
+              </span>
+
+            `;
+
+
+            card.addEventListener(
+              'click',
+              () =>
+                openModal(item)
+            );
+
+
+            list.appendChild(
+              card
+            );
+
+          }
+        );
+
+
+        section.appendChild(
+          list
+        );
+
+
+        fragment.appendChild(
+          section
+        );
+
+      }
+    );
+
+
+    container.appendChild(
+      fragment
+    );
+
+
+    /*
+      При поиске IntersectionObserver
+      не нужен.
+    */
+
+    if (query) {
+
+      updateCategoryButtons(
+        null
+      );
+
+    } else {
+
+      updateCategoryButtons(
+        state.categoryId
+      );
+
+      setupCategoryObserver();
+
+    }
+
+  }
+
+
+  /* =====================================================
+     INTERSECTION OBSERVER
+     ===================================================== */
+
+  let categoryObserver = null;
+
+  let observerSuppressedUntil = 0;
+
+
+  function setupCategoryObserver() {
+
+    if (categoryObserver) {
+
+      categoryObserver.disconnect();
+
+      categoryObserver = null;
+
+    }
+
+
+    if (
+      !('IntersectionObserver' in window) ||
+      state.query
+    ) {
+      return;
+    }
+
+
+    const sections =
+      $$('.category-section', $('#menuContainer'));
+
+
+    if (!sections.length) {
+      return;
+    }
+
+
+    categoryObserver =
+      new IntersectionObserver(
         entries => {
-            if (isProgrammaticScroll) return;
 
-            const visible = entries
-                .filter(entry => entry.isIntersecting)
-                .sort(
-                    (a, b) =>
-                        a.boundingClientRect.top -
-                        b.boundingClientRect.top
-                );
+          if (
+            Date.now() <
+            observerSuppressedUntil
+          ) {
+            return;
+          }
 
-            if (visible.length) {
-                setActiveCategory(
-                    visible[0].target.dataset.categorySection
-                );
-            }
+
+          const visible =
+            entries
+
+              .filter(
+                entry =>
+                  entry.isIntersecting
+              )
+
+              .sort(
+                (a, b) =>
+                  a.boundingClientRect.top -
+                  b.boundingClientRect.top
+              );
+
+
+          const first =
+            visible[0];
+
+
+          if (!first) {
+            return;
+          }
+
+
+          const id =
+            first.target
+              .dataset
+              .categorySection;
+
+
+          if (
+            id &&
+            id !== state.categoryId
+          ) {
+
+            state.categoryId =
+              id;
+
+
+            updateCategoryButtons(
+              id
+            );
+
+
+            centerCategoryButton(
+              id
+            );
+
+          }
+
         },
         {
-            root: null,
-            rootMargin: '-190px 0px -55% 0px',
-            threshold: 0
+
+          root: null,
+
+          /*
+            Активной становится категория,
+            когда она находится примерно
+            в верхней центральной зоне.
+          */
+
+          rootMargin:
+            '-30% 0px -55% 0px',
+
+          threshold: 0
+
         }
+      );
+
+
+    sections.forEach(
+      section =>
+        categoryObserver.observe(
+          section
+        )
     );
 
-    const refresh = () => {
-        observer.disconnect();
+  }
 
-        document
-            .querySelectorAll('[data-category-section]')
-            .forEach(section => observer.observe(section));
-    };
 
-    const originalRenderMenu = renderMenu;
+  function centerCategoryButton(
+    categoryId
+  ) {
 
-    // MutationObserver вместо ручного вызова после каждого рендера.
-    const menuContainer =
-        document.getElementById('menuContainer');
+    const button =
+      document.querySelector(
+        `.category-btn[data-category="${CSS.escape(
+          String(categoryId)
+        )}"]`
+      );
 
-    if (menuContainer) {
-        const mutationObserver = new MutationObserver(() => {
-            refresh();
-        });
 
-        mutationObserver.observe(menuContainer, {
-            childList: true
-        });
+    if (!button) {
+      return;
     }
 
-    refresh();
-}
 
-// ============================================
-// INITIALIZATION
-// ============================================
+    button.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+      inline: 'center'
+    });
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Начальный язык
-    switchLang('RU');
+  }
 
-    // Начальное состояние
-    currentType = 'kitchen';
 
-    const kitchenButton =
-        document.querySelector('.nav-btn[data-type="kitchen"]');
+  /* =====================================================
+     SEARCH STATE
+     ===================================================== */
 
-    if (kitchenButton) {
-        switchMainTab(0, kitchenButton);
+  function setSearch(query) {
+
+    state.query = query;
+
+    renderMenu();
+
+  }
+
+
+  function updateSearchClearButton() {
+
+    const button =
+      $('#clearSearchBtn');
+
+
+    if (!button) {
+      return;
     }
+
+
+    const hasValue =
+      Boolean(
+        normalizeText(
+          $('#searchInput')?.value
+        )
+      );
+
+
+    button.hidden =
+      !hasValue;
+
+  }
+
+
+  function clearSearch() {
+
+    const input =
+      $('#searchInput');
+
+
+    if (input) {
+      input.value = '';
+    }
+
+
+    state.query = '';
+
+
+    updateSearchClearButton();
+
+
+    state.categoryId =
+      firstCategoryId(
+        state.type
+      );
+
+
+    renderMenu();
+
+
+    observerSuppressedUntil =
+      Date.now() + 900;
+
+
+    requestAnimationFrame(() => {
+
+      scrollToCategory(
+        state.categoryId,
+        'smooth'
+      );
+
+    });
+
+  }
+
+
+  /* =====================================================
+     MODAL
+     ===================================================== */
+
+  function openModal(item) {
+
+    const modal =
+      $('#itemModal');
+
+
+    if (!modal || !item) {
+      return;
+    }
+
+
+    state.modalItemId =
+      item.id;
+
+
+    state.previousFocus =
+      document.activeElement
+        instanceof HTMLElement
+          ? document.activeElement
+          : null;
+
+
+    const nameKey =
+      getNameKey();
+
+
+    const compositionKey =
+      getCompositionKey();
+
+
+    $('#modalTitle').textContent =
+      item[nameKey] ||
+      item.name_ru ||
+      '—';
+
+
+    $('#modalPrice').innerHTML = `
+
+      ${escapeHtml(
+        formatPrice(
+          item.price
+        )
+      )}
+
+      <small>₸</small>
+
+    `;
+
+
+    $('#modalWeight').textContent =
+      item.weight || '';
+
+
+    $('#modalIngredients').textContent =
+      item[compositionKey] || '';
+
+
+    const ingredients =
+      $('#modalIngredientsContainer');
+
+
+    ingredients.hidden =
+      !item[compositionKey];
+
+
+    const imageContainer =
+      $('#modalImageContainer');
+
+
+    const image =
+      $('#modalImage');
+
+
+    if (item.image) {
+
+      image.src =
+        item.image;
+
+      image.alt =
+        item[nameKey] || '';
+
+      imageContainer.hidden =
+        false;
+
+    } else {
+
+      image.removeAttribute(
+        'src'
+      );
+
+      image.alt = '';
+
+      imageContainer.hidden =
+        true;
+
+    }
+
+
+    modal.hidden =
+      false;
+
+
+    document.body.classList.add(
+      'modal-open'
+    );
+
+
+    state.scrollLockY =
+      window.scrollY;
+
+
+    document.body.style.top =
+      `-${state.scrollLockY}px`;
+
+
+    requestAnimationFrame(() => {
+
+      modal.classList.add(
+        'is-open'
+      );
+
+    });
+
+
+    $('#modalCloseButton')
+      ?.focus({
+        preventScroll: true
+      });
+
+  }
+
+
+  function closeModal() {
+
+    const modal =
+      $('#itemModal');
+
+
+    if (
+      !modal ||
+      modal.hidden
+    ) {
+      return;
+    }
+
+
+    modal.classList.remove(
+      'is-open'
+    );
+
+
+    window.setTimeout(
+      () => {
+
+        modal.hidden =
+          true;
+
+
+        document.body.classList.remove(
+          'modal-open'
+        );
+
+
+        document.body.style.top =
+          '';
+
+
+        window.scrollTo(
+          0,
+          state.scrollLockY
+        );
+
+
+        state.modalItemId =
+          null;
+
+
+        state.previousFocus
+          ?.focus?.({
+            preventScroll: true
+          });
+
+
+        state.previousFocus =
+          null;
+
+      },
+      220
+    );
+
+  }
+
+
+  /* =====================================================
+     INFO ACCORDION
+     ===================================================== */
+
+  function toggleInfo(button) {
+
+    if (!button) {
+      return;
+    }
+
+
+    const content =
+      button.nextElementSibling;
+
+
+    if (!content) {
+      return;
+    }
+
+
+    const expanded =
+      button.getAttribute(
+        'aria-expanded'
+      ) === 'true';
+
+
+    button.setAttribute(
+      'aria-expanded',
+      String(!expanded)
+    );
+
+
+    content.hidden =
+      expanded;
+
+
+    button.classList.toggle(
+      'is-open',
+      !expanded
+    );
+
+  }
+
+
+  /* =====================================================
+     INITIALIZATION
+     ===================================================== */
+
+  function initSearch() {
+
+    const input =
+      $('#searchInput');
+
+
+    if (!input) {
+      return;
+    }
+
+
+    input.addEventListener(
+      'input',
+      event => {
+
+        const value =
+          event.target.value;
+
+
+        updateSearchClearButton();
+
+
+        window.clearTimeout(
+          state.searchTimer
+        );
+
+
+        state.searchTimer =
+          window.setTimeout(
+            () =>
+              setSearch(value),
+            180
+          );
+
+      }
+    );
+
+
+    input.addEventListener(
+      'keydown',
+      event => {
+
+        if (
+          event.key === 'Escape' &&
+          input.value
+        ) {
+
+          clearSearch();
+
+        }
+
+      }
+    );
+
+  }
+
+
+  function initModal() {
+
+    const modal =
+      $('#itemModal');
+
+
+    if (!modal) {
+      return;
+    }
+
+
+    $('.modal-backdrop', modal)
+      ?.addEventListener(
+        'click',
+        closeModal
+      );
+
+
+    $$('[data-modal-close]', modal)
+      .forEach(button => {
+
+        button.addEventListener(
+          'click',
+          closeModal
+        );
+
+      });
+
+
+    $('#modalImage')
+      ?.addEventListener(
+        'error',
+        event => {
+
+          event.currentTarget
+            .removeAttribute(
+              'src'
+            );
+
+
+          $('#modalImageContainer')
+            .hidden = true;
+
+        }
+      );
+
+  }
+
+
+  function initInfo() {
+
+    $$('.info-btn')
+      .forEach(button => {
+
+        button.addEventListener(
+          'click',
+          () =>
+            toggleInfo(
+              button
+            )
+        );
+
+      });
+
+  }
+
+
+  function initNavigation() {
+
+    $$('.lang-btn')
+      .forEach(button => {
+
+        button.addEventListener(
+          'click',
+          () =>
+            switchLang(
+              button.dataset.lang
+            )
+        );
+
+      });
+
+
+    $$('.nav-btn')
+      .forEach(button => {
+
+        button.addEventListener(
+          'click',
+          () =>
+            setMainType(
+              button.dataset.type
+            )
+        );
+
+      });
+
+
+    $$('.bottom-nav-btn')
+      .forEach(button => {
+
+        button.addEventListener(
+          'click',
+          () =>
+            switchSection(
+              button.dataset.path
+            )
+        );
+
+      });
+
+
+    $('#clearSearchBtn')
+      ?.addEventListener(
+        'click',
+        clearSearch
+      );
+
+  }
+
+
+  function initKeyboard() {
+
+    document.addEventListener(
+      'keydown',
+      event => {
+
+        if (
+          event.key === 'Escape'
+        ) {
+
+          closeModal();
+
+        }
+
+      }
+    );
+
+  }
+
+
+  function init() {
+
+    if (
+      !(
+        typeof MENU !== 'undefined' &&
+        Array.isArray(MENU)
+      )
+    ) {
+
+      console.error(
+        'NECTAR: MENU data is missing or invalid.'
+      );
+
+    }
+
+
+    state.categoryId =
+      firstCategoryId(
+        'kitchen'
+      );
+
+
+    setLanguageUI();
+
+    updateMainTypeUI();
+
+    renderCategories();
+
+    renderMenu();
 
     initSearch();
-    initCategoryObserver();
 
-    document.body.style.overflow = '';
+    initModal();
 
-    // Делает reveal только один раз за жизненный цикл страницы.
-    setTimeout(() => {
-        revealPlayed = false;
-        renderMenu(searchQuery);
-    }, 20);
+    initInfo();
 
-    console.log('✅ NECTAR Menu initialized');
-});
+    initNavigation();
+
+    initKeyboard();
+
+
+    /*
+      После загрузки шрифтов
+      пересобираем observer,
+      потому что высота элементов
+      могла измениться.
+    */
+
+    if (
+      document.fonts?.ready
+    ) {
+
+      document.fonts.ready
+        .then(
+          () =>
+            setupCategoryObserver()
+        );
+
+    }
+
+
+    /*
+      Hero fallback.
+    */
+
+    $('.hero-image')
+      ?.addEventListener(
+        'error',
+        event => {
+
+          event.currentTarget
+            .style.display =
+              'none';
+
+        }
+      );
+
+  }
+
+
+  /* =====================================================
+     PUBLIC COMPATIBILITY API
+     ===================================================== */
+
+  /*
+    Оставляем эти функции глобально доступными,
+    чтобы старые ссылки/вызовы не ломали страницу.
+  */
+
+  Object.assign(
+    window,
+    {
+
+      switchLang,
+
+      switchSection,
+
+      switchMainTab:
+        (index, button) =>
+          setMainType(
+            button?.dataset?.type ||
+            (
+              index === 1
+                ? 'bar'
+                : 'kitchen'
+            )
+          ),
+
+      selectCategory,
+
+      clearSearch,
+
+      openModal,
+
+      closeModal,
+
+      toggleInfo
+
+    }
+  );
+
+
+  document.addEventListener(
+    'DOMContentLoaded',
+    init
+  );
+
+})();
