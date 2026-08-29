@@ -28,7 +28,6 @@
     interactionLockedUntil: 0
   };
 
-  const SEARCH_DEBOUNCE_MS = 180;
   const MODAL_ANIMATION_MS = 280;
   const SCROLL_RESTORE_TOLERANCE = 3;
   const SCROLL_RESTORE_MAX_ATTEMPTS = 8;
@@ -96,6 +95,18 @@
     return String(value ?? '')
       .toLocaleLowerCase(locale)
       .normalize('NFKC')
+      .replace(/ё/g, 'е')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function normalizeSearch(value) {
+    return String(value ?? '')
+      .toLocaleLowerCase('ru')
+      .normalize('NFKD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/ё/g, 'е')
+      .replace(/[^a-zа-я0-9]+/gi, ' ')
       .replace(/\s+/g, ' ')
       .trim();
   }
@@ -162,22 +173,31 @@
     ].join('::');
   }
 
-  function itemImage(item) {
-    if (item?.image) return item.image;
+  function itemImageCandidates(item) {
+    const candidates = [];
+
+    if (item?.image) candidates.push(item.image);
+
+    const id = String(item?.id ?? '').trim();
+    if (id) candidates.push(`assets/menu/items/${id}.webp`);
 
     const allNames = [item?.name_ru, item?.name_kz, item?.name_en]
       .map(value => normalize(value, 'ru'))
       .join(' ');
 
     if (allNames.includes('том ям') || allNames.includes('tom yum')) {
-      return DEMO_IMAGE_MAP.tomYum;
+      candidates.push(DEMO_IMAGE_MAP.tomYum);
     }
 
     if (categoryIdOf(item) === 'lemonades') {
-      return DEMO_IMAGE_MAP.lemonades;
+      candidates.push(DEMO_IMAGE_MAP.lemonades);
     }
 
-    return '';
+    return [...new Set(candidates.filter(Boolean))];
+  }
+
+  function itemImage(item) {
+    return itemImageCandidates(item)[0] || '';
   }
 
   function isAllowedBarItem(item) {
@@ -592,11 +612,24 @@
 
     const img = $('.menu-card__image', button);
     if (img) {
+      const candidates = itemImageCandidates(item);
+      let candidateIndex = 0;
+
       const markLoaded = () => img.classList.add('is-loaded');
       if (img.complete && img.naturalWidth > 0) markLoaded();
-      else img.addEventListener('load', markLoaded, { once: true });
+      else img.addEventListener('load', markLoaded);
 
-      img.addEventListener('error', () => img.remove(), { once: true });
+      img.addEventListener('error', () => {
+        candidateIndex += 1;
+
+        if (candidateIndex < candidates.length) {
+          img.classList.remove('is-loaded');
+          img.src = candidates[candidateIndex];
+          return;
+        }
+
+        img.remove();
+      });
     }
 
     return button;
@@ -653,22 +686,35 @@
     return groups;
   }
 
-  function matchesSearch(item, query) {
-    const fields = [
+  function searchableText(item) {
+    return normalizeSearch([
       itemName(item),
       itemComposition(item),
       itemCategory(item),
       item?.name_ru, item?.name_kz, item?.name_en,
       item?.composition_ru, item?.composition_kz, item?.composition_en,
-      item?.category_ru, item?.category_kz, item?.category_en
-    ];
+      item?.category_ru, item?.category_kz, item?.category_en,
+      item?.note_ru, item?.note_kz, item?.note_en, item?.note,
+      item?.weight
+    ].filter(Boolean).join(' '));
+  }
 
-    return fields.some(field => normalize(field, currentLocale()).includes(query));
+  function matchesSearch(item, query) {
+    const normalizedQuery = normalizeSearch(query);
+    if (!normalizedQuery) return true;
+
+    const haystack = searchableText(item);
+    const tokens = normalizedQuery.split(' ').filter(Boolean);
+
+    // Every typed token may be only a fragment: "лим", "том я", "крев рук" etc.
+    return tokens.every(token => haystack.includes(token));
   }
 
   function filteredItems() {
-    const query = normalize(state.query, currentLocale());
+    const query = normalizeSearch(state.query);
     if (!query) return itemsForType();
+
+    // Search is intentionally GLOBAL across Kitchen + Bar.
     return visibleMenu().filter(item => matchesSearch(item, query));
   }
 
@@ -680,20 +726,28 @@
 
     disconnectCategoryObserver();
 
-    const query = normalize(state.query, currentLocale());
+    const query = normalizeSearch(state.query);
     const items = filteredItems();
+    const menuShell = $('.menu-shell');
+    const menuControls = $('#menuControls');
 
     if (categoryNav) categoryNav.hidden = Boolean(query);
+    menuShell?.classList.toggle('is-searching', Boolean(query));
+    menuControls?.classList.toggle('is-searching', Boolean(query));
 
     if (searchNote) {
       searchNote.hidden = !query;
-      searchNote.textContent = query
-        ? state.lang === 'EN'
-          ? 'Search across Kitchen and Bar'
+
+      if (!query) {
+        searchNote.textContent = '';
+      } else {
+        const count = items.length;
+        searchNote.textContent = state.lang === 'EN'
+          ? `Search across Kitchen and Bar · ${count} found`
           : state.lang === 'KZ'
-            ? 'Асхана мен Бар бойынша іздеу'
-            : 'Поиск по Кухне и Бару'
-        : '';
+            ? `Асхана мен Бар бойынша іздеу · ${count} нәтиже`
+            : `Поиск по Кухне и Бару · найдено: ${count}`;
+      }
     }
 
     if (!items.length) {
@@ -739,8 +793,7 @@
 
     if (query) {
       container.classList.remove('search-results-enter');
-      void container.offsetWidth;
-      container.classList.add('search-results-enter');
+      requestAnimationFrame(() => container.classList.add('search-results-enter'));
     }
 
     if (motion === 'type' || motion === 'language') {
@@ -777,9 +830,43 @@
     button.hidden = !normalize($('#searchInput')?.value, currentLocale());
   }
 
+  function searchStickyTop() {
+    const header = $('.site-header');
+    return Math.max(0, Math.round(header?.getBoundingClientRect().bottom || 0));
+  }
+
+  function keepSearchVisible({ force = false } = {}) {
+    const controls = $('#menuControls');
+    const input = $('#searchInput');
+    if (!controls || !input || !normalizeSearch(input.value)) return;
+
+    requestAnimationFrame(() => {
+      const rect = controls.getBoundingClientRect();
+      const desiredTop = searchStickyTop();
+      const inputRect = input.getBoundingClientRect();
+
+      const inputVisible =
+        inputRect.top >= desiredTop - 2 &&
+        inputRect.bottom <= window.innerHeight - 8;
+
+      if (force || !inputVisible || rect.top > desiredTop + 6) {
+        const delta = rect.top - desiredTop;
+        if (Math.abs(delta) > 2) {
+          window.scrollBy({ top: delta, left: 0, behavior: 'auto' });
+        }
+      }
+    });
+  }
+
   function setSearch(value) {
+    const wasSearching = Boolean(normalizeSearch(state.query));
     state.query = value;
+    state.suppressCategorySpyUntil = Date.now() + 350;
     renderMenu();
+
+    // When search starts from deep inside Kitchen/Bar, the page height may shrink
+    // dramatically. Keep the input and the first results in the viewport.
+    keepSearchVisible({ force: !wasSearching && Boolean(normalizeSearch(value)) });
   }
 
   function clearSearch({ focus = true } = {}) {
@@ -795,7 +882,7 @@
     renderMenu({ motion: 'language' });
 
     requestAnimationFrame(() => {
-      scrollToCategory(state.categoryId, prefersReducedMotion() ? 'auto' : 'smooth');
+      scrollToCategory(state.categoryId, 'auto');
     });
 
     if (focus && input) {
@@ -1114,11 +1201,12 @@
     });
 
     $('#searchInput')?.addEventListener('input', event => {
-      updateSearchClear();
-      clearTimeout(state.searchTimer);
       const value = event.currentTarget.value;
+      updateSearchClear();
 
-      state.searchTimer = window.setTimeout(() => setSearch(value), SEARCH_DEBOUNCE_MS);
+      // 81 items are tiny for modern browsers: render immediately on every input.
+      // No debounce = premium "search as you type" behavior.
+      setSearch(value);
     });
 
     $('#searchInput')?.addEventListener('keydown', event => {
@@ -1148,6 +1236,10 @@
     });
 
     window.addEventListener('scroll', onWindowScroll, { passive: true });
+
+    window.visualViewport?.addEventListener('resize', () => {
+      if (normalizeSearch($('#searchInput')?.value)) keepSearchVisible();
+    }, { passive: true });
 
     window.addEventListener('resize', () => {
       if (state.modal.open || state.modal.closing) return;

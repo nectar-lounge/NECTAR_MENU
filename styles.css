@@ -1711,6 +1711,39 @@ input:focus-visible {
   }
 }
 
+
+/* ======================================================
+   v1.4 LIVE SEARCH STABILITY
+   ====================================================== */
+
+.menu-shell.is-searching {
+  min-height: calc(100dvh + var(--header-h) + 40px);
+}
+
+.menu-controls.is-searching {
+  z-index: 95;
+}
+
+.menu-controls.is-searching .search-box {
+  box-shadow:
+    0 0 0 1px rgba(23,63,43,.04),
+    0 8px 26px rgba(23,63,43,.055);
+}
+
+.search-results-enter {
+  animation: searchResultIn .16s var(--ease-soft);
+}
+
+@media (max-width: 768px) {
+  .menu-shell.is-searching {
+    min-height: calc(100dvh + var(--header-h) + 80px);
+  }
+
+  .menu-controls.is-searching {
+    background: rgba(251,249,246,.995);
+  }
+}
+
 /* ======================================================
    REDUCED MOTION
    ====================================================== */

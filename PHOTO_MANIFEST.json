@@ -1,0 +1,407 @@
+[
+  {
+    "id": "1-1",
+    "name_ru": "Мясное плато (казы, жая, жал)",
+    "path": "assets/menu/items/1-1.webp"
+  },
+  {
+    "id": "1-2",
+    "name_ru": "Домашние соленья",
+    "path": "assets/menu/items/1-2.webp"
+  },
+  {
+    "id": "1-3",
+    "name_ru": "Овощная нарезка",
+    "path": "assets/menu/items/1-3.webp"
+  },
+  {
+    "id": "1-4",
+    "name_ru": "Рыбное ассорти",
+    "path": "assets/menu/items/1-4.webp"
+  },
+  {
+    "id": "1-5",
+    "name_ru": "Капрезе",
+    "path": "assets/menu/items/1-5.webp"
+  },
+  {
+    "id": "1-6",
+    "name_ru": "Сырное плато",
+    "path": "assets/menu/items/1-6.webp"
+  },
+  {
+    "id": "2-1",
+    "name_ru": "Свежий овощной салат",
+    "path": "assets/menu/items/2-1.webp"
+  },
+  {
+    "id": "2-2",
+    "name_ru": "Аччик-чучук",
+    "path": "assets/menu/items/2-2.webp"
+  },
+  {
+    "id": "2-3",
+    "name_ru": "Цезарь с курицей",
+    "path": "assets/menu/items/2-3.webp"
+  },
+  {
+    "id": "2-4",
+    "name_ru": "Хрустящие баклажаны",
+    "path": "assets/menu/items/2-4.webp"
+  },
+  {
+    "id": "2-5",
+    "name_ru": "Греческий салат",
+    "path": "assets/menu/items/2-5.webp"
+  },
+  {
+    "id": "2-6",
+    "name_ru": "Теплый салат с кониной",
+    "path": "assets/menu/items/2-6.webp"
+  },
+  {
+    "id": "2-7",
+    "name_ru": "Салат с креветками и рукколой",
+    "path": "assets/menu/items/2-7.webp"
+  },
+  {
+    "id": "3-1",
+    "name_ru": "Креветки темпура",
+    "path": "assets/menu/items/3-1.webp"
+  },
+  {
+    "id": "3-2",
+    "name_ru": "Клаб-сэндвич с курицей",
+    "path": "assets/menu/items/3-2.webp"
+  },
+  {
+    "id": "3-3",
+    "name_ru": "Кесадилья с курицей",
+    "path": "assets/menu/items/3-3.webp"
+  },
+  {
+    "id": "3-4",
+    "name_ru": "Чебуреки",
+    "path": "assets/menu/items/3-4.webp"
+  },
+  {
+    "id": "3-5",
+    "name_ru": "Наггетсы куриные",
+    "path": "assets/menu/items/3-5.webp"
+  },
+  {
+    "id": "4-1",
+    "name_ru": "Большой сет закусок (креветки, гренки, чечил, фри, сосиски, луковые кольца)",
+    "path": "assets/menu/items/4-1.webp"
+  },
+  {
+    "id": "4-2",
+    "name_ru": "Креветки пивные",
+    "path": "assets/menu/items/4-2.webp"
+  },
+  {
+    "id": "4-3",
+    "name_ru": "Фисташки",
+    "path": "assets/menu/items/4-3.webp"
+  },
+  {
+    "id": "4-4",
+    "name_ru": "Чесночные гренки",
+    "path": "assets/menu/items/4-4.webp"
+  },
+  {
+    "id": "4-5",
+    "name_ru": "Чечил копченый",
+    "path": "assets/menu/items/4-5.webp"
+  },
+  {
+    "id": "4-6",
+    "name_ru": "Арахис",
+    "path": "assets/menu/items/4-6.webp"
+  },
+  {
+    "id": "5-1",
+    "name_ru": "Окрошка с мясом (сезонная)",
+    "path": "assets/menu/items/5-1.webp"
+  },
+  {
+    "id": "5-2",
+    "name_ru": "Куриный суп с лапшой",
+    "path": "assets/menu/items/5-2.webp"
+  },
+  {
+    "id": "5-3",
+    "name_ru": "Солянка мясная",
+    "path": "assets/menu/items/5-3.webp"
+  },
+  {
+    "id": "5-4",
+    "name_ru": "Том Ям",
+    "path": "assets/menu/items/5-4.webp"
+  },
+  {
+    "id": "5-5",
+    "name_ru": "Рамен с говядиной",
+    "path": "assets/menu/items/5-5.webp"
+  },
+  {
+    "id": "5-6",
+    "name_ru": "Рамен с курицей",
+    "path": "assets/menu/items/5-6.webp"
+  },
+  {
+    "id": "5-7",
+    "name_ru": "Чечевичный крем-суп",
+    "path": "assets/menu/items/5-7.webp"
+  },
+  {
+    "id": "5-8",
+    "name_ru": "Шорпа",
+    "path": "assets/menu/items/5-8.webp"
+  },
+  {
+    "id": "5-9",
+    "name_ru": "Пельмени (с бульоном / без)",
+    "path": "assets/menu/items/5-9.webp"
+  },
+  {
+    "id": "6-1",
+    "name_ru": "Пицца Пепперони",
+    "path": "assets/menu/items/6-1.webp"
+  },
+  {
+    "id": "6-2",
+    "name_ru": "Пицца Маргарита",
+    "path": "assets/menu/items/6-2.webp"
+  },
+  {
+    "id": "6-3",
+    "name_ru": "Пицца с курицей и грибами",
+    "path": "assets/menu/items/6-3.webp"
+  },
+  {
+    "id": "6-4",
+    "name_ru": "Пицца Болоньезе",
+    "path": "assets/menu/items/6-4.webp"
+  },
+  {
+    "id": "6-5",
+    "name_ru": "Мексиканская пицца с халапеньо",
+    "path": "assets/menu/items/6-5.webp"
+  },
+  {
+    "id": "6-6",
+    "name_ru": "Хачапури по-мегрельски",
+    "path": "assets/menu/items/6-6.webp"
+  },
+  {
+    "id": "6-7",
+    "name_ru": "Хлебная корзина",
+    "path": "assets/menu/items/6-7.webp"
+  },
+  {
+    "id": "6-8",
+    "name_ru": "Лепешка",
+    "path": "assets/menu/items/6-8.webp"
+  },
+  {
+    "id": "7-1",
+    "name_ru": "Фарфалле с морепродуктами (креветки, мидии, кальмары)",
+    "path": "assets/menu/items/7-1.webp"
+  },
+  {
+    "id": "7-2",
+    "name_ru": "Карбонара",
+    "path": "assets/menu/items/7-2.webp"
+  },
+  {
+    "id": "7-3",
+    "name_ru": "Болоньезе",
+    "path": "assets/menu/items/7-3.webp"
+  },
+  {
+    "id": "7-4",
+    "name_ru": "Фетучини с курицей и грибами",
+    "path": "assets/menu/items/7-4.webp"
+  },
+  {
+    "id": "8-1",
+    "name_ru": "Куырдак",
+    "path": "assets/menu/items/8-1.webp"
+  },
+  {
+    "id": "8-2",
+    "name_ru": "Плов",
+    "path": "assets/menu/items/8-2.webp"
+  },
+  {
+    "id": "8-3",
+    "name_ru": "Бургер с курицей",
+    "path": "assets/menu/items/8-3.webp"
+  },
+  {
+    "id": "8-4",
+    "name_ru": "Бургер с говядиной",
+    "path": "assets/menu/items/8-4.webp"
+  },
+  {
+    "id": "8-5",
+    "name_ru": "Бургер, грибной стаут",
+    "path": "assets/menu/items/8-5.webp"
+  },
+  {
+    "id": "8-6",
+    "name_ru": "Колбаски говяжьи / бараньи",
+    "path": "assets/menu/items/8-6.webp"
+  },
+  {
+    "id": "8-7",
+    "name_ru": "Колбаски куриные",
+    "path": "assets/menu/items/8-7.webp"
+  },
+  {
+    "id": "8-8",
+    "name_ru": "Говядина по-тайски с рисом",
+    "path": "assets/menu/items/8-8.webp"
+  },
+  {
+    "id": "8-9",
+    "name_ru": "Бефстроганов с пюре",
+    "path": "assets/menu/items/8-9.webp"
+  },
+  {
+    "id": "8-10",
+    "name_ru": "Куриная грудка в сырно-сливочном соусе",
+    "path": "assets/menu/items/8-10.webp"
+  },
+  {
+    "id": "8-11",
+    "name_ru": "Картофель по-домашнему с мясом",
+    "path": "assets/menu/items/8-11.webp"
+  },
+  {
+    "id": "9-1",
+    "name_ru": "Антрекот",
+    "path": "assets/menu/items/9-1.webp"
+  },
+  {
+    "id": "9-2",
+    "name_ru": "Баранина",
+    "path": "assets/menu/items/9-2.webp"
+  },
+  {
+    "id": "9-3",
+    "name_ru": "Люля-кебаб",
+    "path": "assets/menu/items/9-3.webp"
+  },
+  {
+    "id": "9-4",
+    "name_ru": "Куриное филе",
+    "path": "assets/menu/items/9-4.webp"
+  },
+  {
+    "id": "9-5",
+    "name_ru": "Куриные крылышки",
+    "path": "assets/menu/items/9-5.webp"
+  },
+  {
+    "id": "9-6",
+    "name_ru": "Утка",
+    "path": "assets/menu/items/9-6.webp"
+  },
+  {
+    "id": "9-7",
+    "name_ru": "Куриные окорочка",
+    "path": "assets/menu/items/9-7.webp"
+  },
+  {
+    "id": "9-8",
+    "name_ru": "Овощи гриль на шпажке",
+    "path": "assets/menu/items/9-8.webp"
+  },
+  {
+    "id": "9-9",
+    "name_ru": "Шампиньоны на мангале",
+    "path": "assets/menu/items/9-9.webp"
+  },
+  {
+    "id": "10-1",
+    "name_ru": "Овощи гриль",
+    "path": "assets/menu/items/10-1.webp"
+  },
+  {
+    "id": "10-2",
+    "name_ru": "Брокколи",
+    "path": "assets/menu/items/10-2.webp"
+  },
+  {
+    "id": "10-3",
+    "name_ru": "Картофельные дольки",
+    "path": "assets/menu/items/10-3.webp"
+  },
+  {
+    "id": "10-4",
+    "name_ru": "Картофель фри",
+    "path": "assets/menu/items/10-4.webp"
+  },
+  {
+    "id": "10-5",
+    "name_ru": "Рис",
+    "path": "assets/menu/items/10-5.webp"
+  },
+  {
+    "id": "11-1",
+    "name_ru": "Сырный",
+    "path": "assets/menu/items/11-1.webp"
+  },
+  {
+    "id": "11-2",
+    "name_ru": "Красный",
+    "path": "assets/menu/items/11-2.webp"
+  },
+  {
+    "id": "11-3",
+    "name_ru": "Белый",
+    "path": "assets/menu/items/11-3.webp"
+  },
+  {
+    "id": "11-4",
+    "name_ru": "Кетчуп",
+    "path": "assets/menu/items/11-4.webp"
+  },
+  {
+    "id": "11-5",
+    "name_ru": "Тартар",
+    "path": "assets/menu/items/11-5.webp"
+  },
+  {
+    "id": "12-1",
+    "name_ru": "Восточные сладости",
+    "path": "assets/menu/items/12-1.webp"
+  },
+  {
+    "id": "12-2",
+    "name_ru": "Пирожное в ассортименте",
+    "path": "assets/menu/items/12-2.webp"
+  },
+  {
+    "id": "13-1",
+    "name_ru": "Фирменные лимонады",
+    "path": "assets/menu/items/13-1.webp"
+  },
+  {
+    "id": "14-1",
+    "name_ru": "Авторский чай",
+    "path": "assets/menu/items/14-1.webp"
+  },
+  {
+    "id": "14-2",
+    "name_ru": "Листовой чай",
+    "path": "assets/menu/items/14-2.webp"
+  },
+  {
+    "id": "15-1",
+    "name_ru": "Пепси",
+    "path": "assets/menu/items/15-1.webp"
+  }
+]
