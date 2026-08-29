@@ -414,62 +414,87 @@
      LANGUAGE SWITCH
      ===================================================== */
 
-  function switchLang(lang) {
-    if (
-      !getTranslations()[lang] ||
-      lang === state.lang ||
-      state.modal.open
-    ) {
-      return;
-    }
-
-    state.lang =
-      lang;
-
-    state.query =
-      '';
-
-    const input =
-      $('#searchInput');
-
-    if (input) {
-      input.value = '';
-    }
-
-    clearTimeout(
-      state.searchTimer
-    );
-
-    applyTranslations();
-
-    updateSearchClear();
-
-    updateMainTabs();
-
-    renderCategories();
-
-    state.categoryId =
-      firstCategoryId(
-        state.type
-      );
-
-    renderCategories();
-
-    renderMenu();
-
-
-    /*
-      После смены языка
-      показываем первую категорию.
-    */
-
-    requestAnimationFrame(() => {
-      scrollToCategory(
-        state.categoryId,
-        'auto'
-      );
-    });
+ function switchLang(lang) {
+  if (
+    !getTranslations()[lang] ||
+    lang === state.lang ||
+    state.modal.open ||
+    state.modal.closing
+  ) {
+    return;
   }
+
+  /*
+    Меняем язык.
+    При этом сохраняем текущий основной раздел:
+    kitchen остаётся kitchen,
+    bar остаётся bar.
+  */
+  state.lang = lang;
+
+  /*
+    Поиск сбрасываем,
+    потому что старый поисковый запрос
+    мог быть введён на другом языке.
+  */
+  state.query = '';
+
+  clearTimeout(state.searchTimer);
+
+  const input = $('#searchInput');
+
+  if (input) {
+    input.value = '';
+  }
+
+  /*
+    Применяем переводы интерфейса.
+  */
+  applyTranslations();
+
+  updateSearchClear();
+
+  /*
+    Kitchen / Bar НЕ переключаем.
+    Просто обновляем визуальное состояние
+    текущего раздела.
+  */
+  updateMainTabs();
+
+  /*
+    После смены языка всегда выбираем
+    первую категорию ТЕКУЩЕГО раздела.
+
+    Например:
+    Kitchen -> Cold Appetizers
+    Bar -> Lemonades
+  */
+  state.categoryId =
+    firstCategoryId(state.type);
+
+  /*
+    Сначала категории,
+    затем само меню.
+  */
+  renderCategories();
+  renderMenu();
+
+  /*
+    Ждём, пока DOM полностью обновится,
+    затем перемещаем пользователя
+    к первой категории текущего раздела.
+
+    Используем auto, а не smooth,
+    чтобы при переключении языка
+    не было длинного пролёта по странице.
+  */
+  requestAnimationFrame(() => {
+    scrollToCategory(
+      state.categoryId,
+      'auto'
+    );
+  });
+}
 
 
   /* =====================================================
