@@ -2,7 +2,7 @@
   'use strict';
 
   /* =====================================================
-     DOM HELPERS
+     HELPERS
      ===================================================== */
 
   const $ = (selector, root = document) =>
@@ -35,13 +35,9 @@
     modal: {
       open: false,
       closing: false,
-
       scrollY: 0,
-
       previousFocus: null,
-
       closeTimer: 0,
-
       restoreToken: 0
     },
 
@@ -53,7 +49,9 @@
 
     suppressCategorySpyUntil: 0,
 
-    categoryObserver: null
+    categoryObserver: null,
+
+    categoryRevealTimer: 0
   };
 
 
@@ -63,18 +61,12 @@
 
   const SEARCH_DEBOUNCE_MS = 180;
 
-  const MODAL_ANIMATION_MS = 260;
+  const MODAL_ANIMATION_MS = 280;
 
   const SCROLL_RESTORE_TOLERANCE = 3;
 
   const SCROLL_RESTORE_MAX_ATTEMPTS = 8;
 
-
-  /*
-    BAR:
-    отображаем только разрешённые категории
-    безалкогольного меню.
-  */
 
   const ALLOWED_BAR_CATEGORY_IDS =
     new Set([
@@ -95,8 +87,41 @@
     ]);
 
 
+  /*
+    DEMO IMAGES
+
+    ВАЖНО:
+    если в menu-data.js у блюда есть собственное:
+
+    image: 'assets/menu/example.jpg'
+
+    оно имеет приоритет.
+
+    Эти две картинки нужны только
+    для демонстрации Tom Yum и Lemonades.
+  */
+
+  const DEMO_IMAGE_MAP = {
+    tomYum:
+      'assets/menu/tom-yum-demo.jpg',
+
+    lemonades:
+      'assets/menu/lemonades-demo.jpg'
+  };
+
+
   /* =====================================================
-     DATA HELPERS
+     MOTION
+     ===================================================== */
+
+  const prefersReducedMotion = () =>
+    window.matchMedia?.(
+      '(prefers-reduced-motion: reduce)'
+    ).matches === true;
+
+
+  /* =====================================================
+     DATA
      ===================================================== */
 
   function getMenu() {
@@ -162,15 +187,33 @@
   }
 
 
+  function itemDescription(item) {
+    return (
+      itemComposition(item) ||
+      item?.description ||
+      item?.note ||
+      ''
+    );
+  }
+
+
   function currentLocale() {
-    if (state.lang === 'KZ') return 'kk';
-    if (state.lang === 'EN') return 'en';
+    if (state.lang === 'KZ') {
+      return 'kk';
+    }
+
+    if (state.lang === 'EN') {
+      return 'en';
+    }
 
     return 'ru';
   }
 
 
-  function normalize(value, locale = 'ru') {
+  function normalize(
+    value,
+    locale = 'ru'
+  ) {
     return String(value ?? '')
       .toLocaleLowerCase(locale)
       .normalize('NFKC')
@@ -190,11 +233,15 @@
 
 
   function formatPrice(value) {
-    const number = Number(value);
+    const number =
+      Number(value);
 
-    if (!Number.isFinite(number)) {
+    if (
+      !Number.isFinite(number)
+    ) {
       return escapeHtml(value);
     }
+
 
     const locale =
       state.lang === 'KZ'
@@ -203,28 +250,28 @@
           ? 'en-US'
           : 'ru-RU';
 
-    return new Intl.NumberFormat(locale)
-      .format(number);
+
+    return new Intl.NumberFormat(
+      locale
+    ).format(number);
   }
 
 
-  /*
-    Стабильный ID категории.
-
-    Если category_id отсутствует,
-    создаём fallback на основе RU/EN названия.
-
-    Важно:
-    ID не зависит от текущего языка интерфейса.
-  */
+  /* =====================================================
+     STABLE IDS
+     ===================================================== */
 
   function categoryIdOf(item) {
     const explicit =
-      String(item?.category_id || '').trim();
+      String(
+        item?.category_id || ''
+      ).trim();
+
 
     if (explicit) {
       return explicit;
     }
+
 
     const seed =
       item?.category_ru ||
@@ -232,20 +279,117 @@
       itemCategory(item) ||
       'uncategorized';
 
-    return `legacy-${normalize(seed, 'ru')
-      .replace(/[^a-zа-яё0-9]+/gi, '-')
-      .replace(/^-+|-+$/g, '')}`;
+
+    return `legacy-${normalize(
+      seed,
+      'ru'
+    )
+      .replace(
+        /[^a-zа-яё0-9]+/gi,
+        '-'
+      )
+      .replace(
+        /^-+|-+$/g,
+        ''
+      )}`;
+  }
+
+
+  function itemKey(item) {
+    if (
+      item?.id !== undefined &&
+      item?.id !== null &&
+      String(item.id) !== ''
+    ) {
+      return String(item.id);
+    }
+
+
+    return [
+      item?.type,
+      categoryIdOf(item),
+      item?.name_ru ||
+        item?.name_en ||
+        '',
+      item?.price || ''
+    ].join('::');
   }
 
 
   /* =====================================================
-     MENU FILTERING
+     IMAGE RESOLUTION
+     ===================================================== */
+
+  function itemImage(item) {
+
+    /*
+      Реальная фотография из menu-data.js
+      всегда имеет приоритет.
+    */
+
+    if (item?.image) {
+      return item.image;
+    }
+
+
+    /*
+      DEMO TOM YUM
+    */
+
+    const allNames = [
+      item?.name_ru,
+      item?.name_kz,
+      item?.name_en
+    ]
+      .map(value =>
+        normalize(
+          value,
+          'ru'
+        )
+      )
+      .join(' ');
+
+
+    if (
+      allNames.includes('том ям') ||
+      allNames.includes('tom yum')
+    ) {
+      return DEMO_IMAGE_MAP.tomYum;
+    }
+
+
+    /*
+      DEMO LEMONADES
+    */
+
+    if (
+      categoryIdOf(item) ===
+      'lemonades'
+    ) {
+      return DEMO_IMAGE_MAP.lemonades;
+    }
+
+
+    /*
+      Нет фото =
+      показываем CSS-placeholder.
+    */
+
+    return '';
+  }
+
+
+  /* =====================================================
+     MENU VISIBILITY
      ===================================================== */
 
   function isAllowedBarItem(item) {
-    if (item?.type !== 'bar') {
+    if (
+      item?.type !== 'bar'
+    ) {
       return false;
     }
+
 
     const explicitId =
       normalize(
@@ -253,45 +397,55 @@
         'en'
       );
 
+
     if (
-      ALLOWED_BAR_CATEGORY_IDS.has(
-        explicitId
-      )
+      ALLOWED_BAR_CATEGORY_IDS
+        .has(explicitId)
     ) {
       return true;
     }
 
-    const names = [
+
+    const categoryNames = [
       item.category_ru,
       item.category_kz,
       item.category_en
     ]
       .map(value =>
-        normalize(value, 'ru')
+        normalize(
+          value,
+          'ru'
+        )
       )
       .filter(Boolean);
 
-    return names.some(name =>
-      ALLOWED_BAR_CATEGORY_NAMES.has(name)
+
+    return categoryNames.some(
+      name =>
+        ALLOWED_BAR_CATEGORY_NAMES
+          .has(name)
     );
   }
 
 
   function visibleMenu() {
-    return getMenu().filter(item =>
-      item?.type === 'kitchen' ||
-      isAllowedBarItem(item)
-    );
+    return getMenu()
+      .filter(
+        item =>
+          item?.type === 'kitchen' ||
+          isAllowedBarItem(item)
+      );
   }
 
 
   function itemsForType(
     type = state.type
   ) {
-    return visibleMenu().filter(
-      item =>
-        item?.type === type
-    );
+    return visibleMenu()
+      .filter(
+        item =>
+          item?.type === type
+      );
   }
 
 
@@ -301,7 +455,9 @@
     const seen =
       new Set();
 
-    const categories = [];
+    const categories =
+      [];
+
 
     for (
       const item of itemsForType(type)
@@ -309,19 +465,26 @@
       const id =
         categoryIdOf(item);
 
-      if (seen.has(id)) {
+
+      if (
+        seen.has(id)
+      ) {
         continue;
       }
 
+
       seen.add(id);
+
 
       categories.push({
         id,
+
         name:
           itemCategory(item) ||
           id
       });
     }
+
 
     return categories;
   }
@@ -364,6 +527,7 @@
             element.dataset.i18n
           );
 
+
         if (
           value !== undefined &&
           value !== ''
@@ -382,6 +546,7 @@
               .i18nPlaceholder
           );
 
+
         if (value) {
           element.setAttribute(
             'placeholder',
@@ -397,10 +562,12 @@
           button.dataset.lang ===
           state.lang;
 
+
         button.classList.toggle(
           'is-active',
           active
         );
+
 
         button.setAttribute(
           'aria-pressed',
@@ -414,87 +581,80 @@
      LANGUAGE SWITCH
      ===================================================== */
 
- function switchLang(lang) {
-  if (
-    !getTranslations()[lang] ||
-    lang === state.lang ||
-    state.modal.open ||
-    state.modal.closing
-  ) {
-    return;
-  }
-
   /*
-    Меняем язык.
-    При этом сохраняем текущий основной раздел:
-    kitchen остаётся kitchen,
-    bar остаётся bar.
+    Логика, которую мы выбрали:
+
+    Kitchen -> EN
+    = остаёмся Kitchen,
+      но переходим к первой категории Kitchen.
+
+    Bar -> EN
+    = остаёмся Bar,
+      но переходим к первой категории Bar.
   */
-  state.lang = lang;
 
-  /*
-    Поиск сбрасываем,
-    потому что старый поисковый запрос
-    мог быть введён на другом языке.
-  */
-  state.query = '';
+  function switchLang(lang) {
+    if (
+      !getTranslations()[lang] ||
+      lang === state.lang ||
+      state.modal.open ||
+      state.modal.closing
+    ) {
+      return;
+    }
 
-  clearTimeout(state.searchTimer);
 
-  const input = $('#searchInput');
+    state.lang =
+      lang;
 
-  if (input) {
-    input.value = '';
-  }
 
-  /*
-    Применяем переводы интерфейса.
-  */
-  applyTranslations();
+    state.query =
+      '';
 
-  updateSearchClear();
 
-  /*
-    Kitchen / Bar НЕ переключаем.
-    Просто обновляем визуальное состояние
-    текущего раздела.
-  */
-  updateMainTabs();
-
-  /*
-    После смены языка всегда выбираем
-    первую категорию ТЕКУЩЕГО раздела.
-
-    Например:
-    Kitchen -> Cold Appetizers
-    Bar -> Lemonades
-  */
-  state.categoryId =
-    firstCategoryId(state.type);
-
-  /*
-    Сначала категории,
-    затем само меню.
-  */
-  renderCategories();
-  renderMenu();
-
-  /*
-    Ждём, пока DOM полностью обновится,
-    затем перемещаем пользователя
-    к первой категории текущего раздела.
-
-    Используем auto, а не smooth,
-    чтобы при переключении языка
-    не было длинного пролёта по странице.
-  */
-  requestAnimationFrame(() => {
-    scrollToCategory(
-      state.categoryId,
-      'auto'
+    clearTimeout(
+      state.searchTimer
     );
-  });
-}
+
+
+    const input =
+      $('#searchInput');
+
+
+    if (input) {
+      input.value = '';
+    }
+
+
+    applyTranslations();
+
+    updateSearchClear();
+
+    updateMainTabs();
+
+
+    state.categoryId =
+      firstCategoryId(
+        state.type
+      );
+
+
+    renderCategories();
+
+    renderMenu({
+      motion: 'language'
+    });
+
+
+    requestAnimationFrame(
+      () => {
+        scrollToCategory(
+          state.categoryId,
+          'auto'
+        );
+      }
+    );
+  }
 
 
   /* =====================================================
@@ -508,10 +668,12 @@
           button.dataset.type ===
           state.type;
 
+
         button.classList.toggle(
           'is-active',
           active
         );
+
 
         button.setAttribute(
           'aria-selected',
@@ -522,6 +684,7 @@
 
     const indicator =
       $('#mainTabsIndicator');
+
 
     if (indicator) {
       indicator.style.transform =
@@ -534,10 +697,16 @@
 
   function setType(type) {
     if (
-      !['kitchen', 'bar']
-        .includes(type) ||
+      ![
+        'kitchen',
+        'bar'
+      ].includes(type) ||
+
       type === state.type ||
-      state.modal.open
+
+      state.modal.open ||
+
+      state.modal.closing
     ) {
       return;
     }
@@ -546,24 +715,27 @@
     state.type =
       type;
 
+
     state.query =
       '';
+
 
     state.categoryId =
       firstCategoryId(type);
 
 
+    clearTimeout(
+      state.searchTimer
+    );
+
+
     const input =
       $('#searchInput');
+
 
     if (input) {
       input.value = '';
     }
-
-
-    clearTimeout(
-      state.searchTimer
-    );
 
 
     updateSearchClear();
@@ -572,25 +744,33 @@
 
     renderCategories();
 
-    renderMenu();
-
-
-    requestAnimationFrame(() => {
-      scrollToCategory(
-        state.categoryId,
-        'smooth'
-      );
+    renderMenu({
+      motion: 'type'
     });
+
+
+    requestAnimationFrame(
+      () => {
+        scrollToCategory(
+          state.categoryId,
+
+          prefersReducedMotion()
+            ? 'auto'
+            : 'smooth'
+        );
+      }
+    );
   }
 
 
   /* =====================================================
-     CATEGORY NAVIGATION
+     CATEGORIES
      ===================================================== */
 
   function renderCategories() {
     const strip =
       $('#categoryStrip');
+
 
     if (!strip) {
       return;
@@ -618,6 +798,38 @@
       document.createDocumentFragment();
 
 
+    /*
+      Один физический gold-indicator.
+      Он двигается между категориями,
+      а не создаётся отдельно
+      под каждой кнопкой.
+    */
+
+    const indicator =
+      document.createElement(
+        'span'
+      );
+
+
+    indicator.className =
+      'category-strip__indicator';
+
+
+    indicator.id =
+      'categoryIndicator';
+
+
+    indicator.setAttribute(
+      'aria-hidden',
+      'true'
+    );
+
+
+    fragment.appendChild(
+      indicator
+    );
+
+
     for (
       const category of categories
     ) {
@@ -626,22 +838,28 @@
           'button'
         );
 
+
       button.type =
         'button';
+
 
       button.className =
         'category-tab';
 
+
       button.dataset.categoryId =
         category.id;
 
+
       button.textContent =
         category.name;
+
 
       button.setAttribute(
         'role',
         'tab'
       );
+
 
       button.setAttribute(
         'aria-selected',
@@ -650,6 +868,7 @@
           state.categoryId
         )
       );
+
 
       fragment.appendChild(
         button
@@ -662,19 +881,111 @@
     );
 
 
-    updateCategoryTabs(
-      state.categoryId,
-      false
+    requestAnimationFrame(
+      () => {
+        updateCategoryTabs(
+          state.categoryId,
+          false
+        );
+
+
+        updateCategoryEdgeFades();
+      }
     );
   }
 
 
-  /*
-    Только горизонтальный scroll.
+  function activeCategoryButton(
+    categoryId
+  ) {
+    return (
+      $$(
+        '.category-tab',
+        $('#categoryStrip')
+      )
+        .find(
+          button =>
+            button.dataset
+              .categoryId ===
+            String(categoryId)
+        ) ||
+      null
+    );
+  }
 
-    НЕ используем scrollIntoView(),
-    потому что на мобильных браузерах
-    он способен сдвинуть всю страницу.
+
+  /* =====================================================
+     GOLD CATEGORY INDICATOR
+     ===================================================== */
+
+  function moveCategoryIndicator(
+    button
+  ) {
+    const indicator =
+      $('#categoryIndicator');
+
+
+    if (
+      !indicator ||
+      !button
+    ) {
+      return;
+    }
+
+
+    /*
+      Не делаем линию на всю
+      ширину длинного названия.
+
+      Максимум 64px.
+    */
+
+    const width =
+      Math.max(
+        18,
+
+        Math.min(
+          button.offsetWidth,
+          64
+        )
+      );
+
+
+    const left =
+      button.offsetLeft +
+      (
+        button.offsetWidth -
+        width
+      ) / 2;
+
+
+    indicator.style.width =
+      `${width}px`;
+
+
+    indicator.style.transform =
+      `translateX(${left}px)`;
+
+
+    indicator.style.opacity =
+      '1';
+  }
+
+
+  /* =====================================================
+     CATEGORY HORIZONTAL SCROLL
+     ===================================================== */
+
+  /*
+    ВАЖНО:
+
+    здесь НЕТ scrollIntoView().
+
+    scrollIntoView() на мобильном
+    может прокрутить всю страницу
+    вертикально.
+
+    Мы двигаем только scrollLeft.
   */
 
   function centerCategoryTab(
@@ -683,6 +994,7 @@
   ) {
     const strip =
       $('#categoryStrip');
+
 
     if (
       !strip ||
@@ -695,6 +1007,7 @@
     const maxLeft =
       Math.max(
         0,
+
         strip.scrollWidth -
         strip.clientWidth
       );
@@ -711,6 +1024,7 @@
     const left =
       Math.max(
         0,
+
         Math.min(
           maxLeft,
           desiredLeft
@@ -720,7 +1034,11 @@
 
     strip.scrollTo({
       left,
-      behavior
+
+      behavior:
+        prefersReducedMotion()
+          ? 'auto'
+          : behavior
     });
   }
 
@@ -733,21 +1051,28 @@
       null;
 
 
-    $$('.category-tab')
+    $$(
+      '.category-tab',
+      $('#categoryStrip')
+    )
       .forEach(button => {
         const active =
-          button.dataset.categoryId ===
-          categoryId;
+          button.dataset
+            .categoryId ===
+          String(categoryId);
+
 
         button.classList.toggle(
           'is-active',
           active
         );
 
+
         button.setAttribute(
           'aria-selected',
           String(active)
         );
+
 
         if (active) {
           activeButton =
@@ -756,17 +1081,71 @@
       });
 
 
-    if (
-      center &&
-      activeButton
-    ) {
-      centerCategoryTab(
-        activeButton,
-        'smooth'
+    if (activeButton) {
+      moveCategoryIndicator(
+        activeButton
       );
+
+
+      if (center) {
+        centerCategoryTab(
+          activeButton,
+          'smooth'
+        );
+      }
     }
   }
 
+
+  /* =====================================================
+     CATEGORY EDGE FADES
+     ===================================================== */
+
+  function updateCategoryEdgeFades() {
+    const strip =
+      $('#categoryStrip');
+
+
+    const nav =
+      $('#categoryNav');
+
+
+    if (
+      !strip ||
+      !nav
+    ) {
+      return;
+    }
+
+
+    const max =
+      Math.max(
+        0,
+
+        strip.scrollWidth -
+        strip.clientWidth
+      );
+
+
+    nav.classList.toggle(
+      'has-left-fade',
+
+      strip.scrollLeft > 5
+    );
+
+
+    nav.classList.toggle(
+      'has-right-fade',
+
+      strip.scrollLeft <
+        max - 5
+    );
+  }
+
+
+  /* =====================================================
+     STICKY OFFSET
+     ===================================================== */
 
   function controlsOffset() {
     const headerHeight =
@@ -774,10 +1153,12 @@
         ?.getBoundingClientRect()
         .height || 0;
 
+
     const controlsHeight =
       $('#menuControls')
         ?.getBoundingClientRect()
         .height || 0;
+
 
     return (
       headerHeight +
@@ -786,6 +1167,29 @@
     );
   }
 
+
+  function categorySection(
+    categoryId
+  ) {
+    return (
+      $$(
+        '[data-category-section]',
+        $('#menuContainer')
+      )
+        .find(
+          section =>
+            section.dataset
+              .categorySection ===
+            String(categoryId)
+        ) ||
+      null
+    );
+  }
+
+
+  /* =====================================================
+     SCROLL TO CATEGORY
+     ===================================================== */
 
   function scrollToCategory(
     categoryId,
@@ -802,20 +1206,10 @@
     }
 
 
-    const container =
-      $('#menuContainer');
-
-
     const target =
-      $$(
-        '[data-category-section]',
-        container
-      )
-        .find(section =>
-          section.dataset
-            .categorySection ===
-          String(categoryId)
-        );
+      categorySection(
+        categoryId
+      );
 
 
     if (!target) {
@@ -841,15 +1235,107 @@
       Date.now() +
       (
         behavior === 'smooth'
-          ? 1000
-          : 200
+          ? 900
+          : 180
       );
 
 
     window.scrollTo({
       top,
-      behavior
+
+      behavior:
+        prefersReducedMotion()
+          ? 'auto'
+          : behavior
     });
+  }
+
+
+  /* =====================================================
+     TAP CATEGORY REVEAL
+     ===================================================== */
+
+  function animateCategorySection(
+    categoryId
+  ) {
+    if (
+      prefersReducedMotion()
+    ) {
+      return;
+    }
+
+
+    const section =
+      categorySection(
+        categoryId
+      );
+
+
+    if (!section) {
+      return;
+    }
+
+
+    /*
+      Перезапускаем animation.
+    */
+
+    section.classList.remove(
+      'category-tap-reveal'
+    );
+
+
+    void section.offsetWidth;
+
+
+    $$(
+      '.menu-card',
+      section
+    )
+      .forEach(
+        (
+          card,
+          index
+        ) => {
+          card.style.setProperty(
+            '--card-delay',
+
+            `${Math.min(
+              index * 32,
+              180
+            )}ms`
+          );
+        }
+      );
+
+
+    section.classList.add(
+      'category-tap-reveal'
+    );
+
+
+    window.setTimeout(
+      () => {
+        section.classList.remove(
+          'category-tap-reveal'
+        );
+
+
+        $$(
+          '.menu-card',
+          section
+        )
+          .forEach(
+            card =>
+              card.style
+                .removeProperty(
+                  '--card-delay'
+                )
+          );
+      },
+
+      720
+    );
   }
 
 
@@ -857,7 +1343,8 @@
     categoryId
   ) {
     if (
-      state.modal.open
+      state.modal.open ||
+      state.modal.closing
     ) {
       return;
     }
@@ -891,6 +1378,32 @@
       categoryId,
       'smooth'
     );
+
+
+    /*
+      Reveal запускается только
+      при осознанном тапе пользователя.
+
+      При обычном вертикальном scroll
+      он НЕ запускается.
+    */
+
+    clearTimeout(
+      state.categoryRevealTimer
+    );
+
+
+    state.categoryRevealTimer =
+      window.setTimeout(
+        () =>
+          animateCategorySection(
+            categoryId
+          ),
+
+        prefersReducedMotion()
+          ? 0
+          : 360
+      );
   }
 
 
@@ -899,14 +1412,9 @@
      ===================================================== */
 
   function disconnectCategoryObserver() {
-    if (
-      !state.categoryObserver
-    ) {
-      return;
-    }
-
     state.categoryObserver
-      .disconnect();
+      ?.disconnect();
+
 
     state.categoryObserver =
       null;
@@ -922,6 +1430,7 @@
         'IntersectionObserver'
         in window
       ) ||
+
       normalize(
         state.query,
         currentLocale()
@@ -945,18 +1454,20 @@
 
     state.categoryObserver =
       new IntersectionObserver(
-        () => {
-          scheduleCategorySpy();
-        },
+        () =>
+          scheduleCategorySpy(),
+
         {
-          root: null,
+          root:
+            null,
 
           rootMargin:
             `-${Math.round(
               controlsOffset()
             )}px 0px -55% 0px`,
 
-          threshold: 0
+          threshold:
+            0
         }
       );
 
@@ -968,6 +1479,10 @@
     );
   }
 
+
+  /* =====================================================
+     ACTIVE CATEGORY FROM PAGE SCROLL
+     ===================================================== */
 
   function updateActiveCategoryFromScroll() {
     if (
@@ -989,14 +1504,10 @@
     }
 
 
-    const container =
-      $('#menuContainer');
-
-
     const sections =
       $$(
         '[data-category-section]',
-        container
+        $('#menuContainer')
       );
 
 
@@ -1006,7 +1517,8 @@
 
 
     const marker =
-      controlsOffset() + 10;
+      controlsOffset() +
+      10;
 
 
     let activeId =
@@ -1014,11 +1526,6 @@
         .dataset
         .categorySection;
 
-
-    /*
-      Берём последнюю категорию,
-      чей верх уже прошёл marker.
-    */
 
     for (
       const section of sections
@@ -1045,6 +1552,7 @@
       state.categoryId =
         activeId;
 
+
       updateCategoryTabs(
         activeId,
         true
@@ -1067,6 +1575,7 @@
           state.scrollRaf =
             0;
 
+
           updateActiveCategoryFromScroll();
         }
       );
@@ -1074,7 +1583,35 @@
 
 
   /* =====================================================
-     MENU CARD
+     PLACEHOLDER
+     ===================================================== */
+
+  function makePlaceholder() {
+    return `
+      <span
+        class="menu-card__placeholder"
+        aria-hidden="true"
+      >
+        <span class="menu-card__placeholder-inner">
+
+          <span class="menu-card__monogram">
+            N
+          </span>
+
+          <span class="menu-card__brand">
+            NECTAR
+          </span>
+
+          <span class="menu-card__dot"></span>
+
+        </span>
+      </span>
+    `;
+  }
+
+
+  /* =====================================================
+     DISH CARD
      ===================================================== */
 
   function makeMenuCard(item) {
@@ -1087,13 +1624,13 @@
     button.type =
       'button';
 
+
     button.className =
       'menu-card';
 
-    button.dataset.itemId =
-      String(
-        item?.id ?? ''
-      );
+
+    button.dataset.itemKey =
+      itemKey(item);
 
 
     button.setAttribute(
@@ -1101,6 +1638,14 @@
       itemName(item) ||
       'Menu item'
     );
+
+
+    const image =
+      itemImage(item);
+
+
+    const description =
+      itemDescription(item);
 
 
     const spicy =
@@ -1112,36 +1657,81 @@
 
     button.innerHTML = `
 
-      <span class="menu-card__title-wrap">
+      <span class="menu-card__media">
 
-        <span class="menu-card__title">
-          ${escapeHtml(
-            itemName(item) ||
-            '—'
-          )}
-        </span>
+        ${makePlaceholder()}
 
         ${
-          spicy
+          image
             ? `
-              <span
-                class="material-symbols-outlined menu-card__spicy"
-                aria-label="spicy"
+              <img
+                class="menu-card__image"
+                src="${escapeHtml(image)}"
+                alt=""
+                loading="lazy"
+                decoding="async"
               >
-                local_fire_department
+            `
+            : ''
+        }
+
+      </span>
+
+
+      <span class="menu-card__body">
+
+        <span class="menu-card__title-row">
+
+          <span class="menu-card__title">
+            ${escapeHtml(
+              itemName(item) ||
+              '—'
+            )}
+          </span>
+
+          ${
+            spicy
+              ? `
+                <span
+                  class="material-symbols-outlined menu-card__spicy"
+                  aria-label="spicy"
+                >
+                  local_fire_department
+                </span>
+              `
+              : ''
+          }
+
+        </span>
+
+
+        ${
+          description
+            ? `
+              <span class="menu-card__desc">
+                ${escapeHtml(
+                  description
+                )}
               </span>
             `
             : ''
         }
 
-        <span
-          class="material-symbols-outlined menu-card__info"
-          aria-hidden="true"
-        >
-          info
-        </span>
+
+        ${
+          item?.weight
+            ? `
+              <span class="menu-card__weight">
+                ${escapeHtml(
+                  item.weight
+                )}
+              </span>
+            `
+            : ''
+        }
 
       </span>
+
 
       <span class="menu-card__price">
 
@@ -1156,17 +1746,74 @@
     `;
 
 
+    /*
+      Фото появляется мягко,
+      когда реально загрузилось.
+    */
+
+    const img =
+      $(
+        '.menu-card__image',
+        button
+      );
+
+
+    if (img) {
+      const markLoaded =
+        () =>
+          img.classList.add(
+            'is-loaded'
+          );
+
+
+      if (
+        img.complete &&
+        img.naturalWidth > 0
+      ) {
+        markLoaded();
+      } else {
+        img.addEventListener(
+          'load',
+          markLoaded,
+          {
+            once: true
+          }
+        );
+      }
+
+
+      /*
+        Если изображение не найдено,
+        оно удаляется.
+
+        Под ним остаётся
+        наш NECTAR placeholder.
+      */
+
+      img.addEventListener(
+        'error',
+        () =>
+          img.remove(),
+
+        {
+          once: true
+        }
+      );
+    }
+
+
     return button;
   }
 
 
   /* =====================================================
-     MENU GROUPING
+     GROUPING
      ===================================================== */
 
   function normalGroups(items) {
     const groups =
       [];
+
 
     const map =
       new Map();
@@ -1183,9 +1830,11 @@
         !map.has(id)
       ) {
         const group = {
-          key: id,
+          key:
+            id,
 
-          categoryId: id,
+          categoryId:
+            id,
 
           type:
             item.type,
@@ -1194,7 +1843,8 @@
             itemCategory(item) ||
             id,
 
-          items: []
+          items:
+            []
         };
 
 
@@ -1224,6 +1874,7 @@
     const groups =
       [];
 
+
     const map =
       new Map();
 
@@ -1238,7 +1889,7 @@
       /*
         type входит в key,
         чтобы одинаковые category_id
-        кухни и бара не склеились.
+        Kitchen и Bar не объединились.
       */
 
       const key =
@@ -1264,7 +1915,8 @@
               categoryId
             }`,
 
-          items: []
+          items:
+            []
         };
 
 
@@ -1338,8 +1990,8 @@
 
 
     /*
-      Без поиска:
-      только текущая вкладка.
+      Без search:
+      только текущий Kitchen / Bar.
     */
 
     if (!query) {
@@ -1348,8 +2000,9 @@
 
 
     /*
-      С поиском:
-      глобально Kitchen + Bar.
+      С search:
+      поиск глобально
+      Kitchen + Bar.
     */
 
     return visibleMenu()
@@ -1368,13 +2021,18 @@
      ===================================================== */
 
   function renderMenu(
-    { reveal = false } = {}
+    {
+      reveal = false,
+      motion = ''
+    } = {}
   ) {
     const container =
       $('#menuContainer');
 
-    const categoryStrip =
-      $('#categoryStrip');
+
+    const categoryNav =
+      $('#categoryNav');
+
 
     const searchNote =
       $('#searchModeNote');
@@ -1400,14 +2058,16 @@
 
 
     /*
-      При глобальном поиске
-      category tabs скрываем,
-      чтобы они не создавали
-      ложное состояние фильтра.
+      Во время поиска категории
+      скрываем.
+
+      Search глобальный,
+      поэтому category tabs
+      больше не являются фильтром.
     */
 
-    if (categoryStrip) {
-      categoryStrip.hidden =
+    if (categoryNav) {
+      categoryNav.hidden =
         Boolean(query);
     }
 
@@ -1422,15 +2082,19 @@
           ? (
               state.lang === 'EN'
                 ? 'Search across Kitchen and Bar'
+
                 : state.lang === 'KZ'
                   ? 'Асхана мен Бар бойынша іздеу'
+
                   : 'Поиск по Кухне и Бару'
             )
           : '';
     }
 
 
-    /* EMPTY */
+    /* =================================================
+       EMPTY SEARCH
+       ================================================= */
 
     if (!items.length) {
       const empty =
@@ -1518,8 +2182,10 @@
 
 
         /*
-          Первый reveal.
-          Только один раз.
+          INTRO REVEAL
+
+          Только один раз
+          при первом входе.
         */
 
         if (
@@ -1536,8 +2202,8 @@
               '--reveal-delay',
 
               `${Math.min(
-                groupIndex * 70,
-                350
+                groupIndex * 65,
+                280
               )}ms`
             );
         }
@@ -1605,6 +2271,61 @@
     );
 
 
+    /* =================================================
+       SEARCH MOTION
+       ================================================= */
+
+    if (query) {
+      container.classList.remove(
+        'search-results-enter'
+      );
+
+
+      void container.offsetWidth;
+
+
+      container.classList.add(
+        'search-results-enter'
+      );
+    }
+
+
+    /* =================================================
+       KITCHEN / BAR + LANGUAGE MOTION
+       ================================================= */
+
+    if (
+      motion === 'type' ||
+      motion === 'language'
+    ) {
+      container.classList.remove(
+        'type-enter'
+      );
+
+
+      void container.offsetWidth;
+
+
+      container.classList.add(
+        'type-enter'
+      );
+
+
+      window.setTimeout(
+        () =>
+          container.classList.remove(
+            'type-enter'
+          ),
+
+        480
+      );
+    }
+
+
+    /* =================================================
+       INITIAL REVEAL
+       ================================================= */
+
     if (
       reveal &&
       !state.revealPlayed
@@ -1629,6 +2350,10 @@
       );
     }
 
+
+    /* =================================================
+       SCROLL SPY
+       ================================================= */
 
     if (!query) {
       requestAnimationFrame(
@@ -1665,75 +2390,18 @@
 
 
   function setSearch(value) {
-    const wasSearching =
-      Boolean(
-        normalize(
-          state.query,
-          currentLocale()
-        )
-      );
-
-
     state.query =
       value;
 
 
-    const isSearching =
-      Boolean(
-        normalize(
-          state.query,
-          currentLocale()
-        )
-      );
-
-
     renderMenu();
-
-
-    /*
-      Если пользователь начал поиск,
-      первый результат не должен
-      оказаться под sticky controls.
-    */
-
-    if (
-      !wasSearching &&
-      isSearching
-    ) {
-      requestAnimationFrame(
-        () => {
-          const menuTop =
-            $('#menuContainer')
-              ?.getBoundingClientRect()
-              .top ?? 0;
-
-
-          const marker =
-            controlsOffset();
-
-
-          if (
-            menuTop <
-            marker - 4
-          ) {
-            window.scrollBy({
-              top:
-                menuTop -
-                marker +
-                4,
-
-              behavior:
-                'auto'
-            });
-          }
-        }
-      );
-    }
   }
 
 
   function clearSearch(
-    { focus = true } = {}
+    {
+      focus = true
+    } = {}
   ) {
     const input =
       $('#searchInput');
@@ -1763,14 +2431,19 @@
 
     renderCategories();
 
-    renderMenu();
+    renderMenu({
+      motion: 'language'
+    });
 
 
     requestAnimationFrame(
       () => {
         scrollToCategory(
           state.categoryId,
-          'smooth'
+
+          prefersReducedMotion()
+            ? 'auto'
+            : 'smooth'
         );
       }
     );
@@ -1785,14 +2458,14 @@
           preventScroll: true
         });
       } catch {
-        // Ничего не делаем.
+        /* noop */
       }
     }
   }
 
 
   /* =====================================================
-     MENU / INFO SECTION STATE
+     MENU / INFO SCROLL MEMORY
      ===================================================== */
 
   function rememberSectionScroll() {
@@ -1817,7 +2490,10 @@
 
     window.scrollTo(
       0,
-      Math.max(0, y)
+      Math.max(
+        0,
+        y
+      )
     );
 
 
@@ -1832,8 +2508,10 @@
 
   function switchSection(section) {
     if (
-      !['menu', 'info']
-        .includes(section) ||
+      ![
+        'menu',
+        'info'
+      ].includes(section) ||
 
       section === state.section ||
 
@@ -1913,28 +2591,20 @@
      MODAL SCROLL LOCK
 
      ВАЖНО:
-     Здесь находится исправление бага:
-
-     scroll menu
-       -> open modal
-       -> close modal
-       -> page jumps to header
-
-     Мы не доверяем одному scrollTo().
-     Реальную позицию проверяем
-     несколько animation frames.
+     Swipe-to-close отсутствует.
      ===================================================== */
 
-
   function lockPageAtCurrentScroll() {
+
     /*
-      Сохраняем scroll ДО изменения
-      position у body.
+      Сохраняем положение ДО
+      изменения position у body.
     */
 
     const y =
       Math.max(
         0,
+
         window.scrollY ||
         window.pageYOffset ||
         0
@@ -1951,13 +2621,14 @@
 
 
     /*
-      Запоминаем scrollbar width,
-      чтобы desktop layout не прыгал.
+      На desktop компенсируем
+      исчезновение scrollbar.
     */
 
     const scrollbarWidth =
       Math.max(
         0,
+
         window.innerWidth -
         document.documentElement
           .clientWidth
@@ -1971,22 +2642,21 @@
     }
 
 
-    /*
-      Body остаётся визуально
-      ровно на текущем месте.
-    */
-
     document.body.style.position =
       'fixed';
+
 
     document.body.style.top =
       `-${y}px`;
 
+
     document.body.style.left =
       '0';
 
+
     document.body.style.right =
       '0';
+
 
     document.body.style.width =
       '100%';
@@ -1998,8 +2668,7 @@
 
 
     /*
-      Пока modal открыт,
-      category spy не работает.
+      ScrollSpy временно выключен.
     */
 
     state.suppressCategorySpyUntil =
@@ -2016,33 +2685,31 @@
     document.body.style.position =
       '';
 
+
     document.body.style.top =
       '';
+
 
     document.body.style.left =
       '';
 
+
     document.body.style.right =
       '';
 
+
     document.body.style.width =
       '';
+
 
     document.body.style.paddingRight =
       '';
   }
 
 
-  /*
-    Проверяем, что браузер
-    ДЕЙСТВИТЕЛЬНО вернулся
-    к сохранённой позиции.
-
-    Особенно важно для:
-    - iOS Safari
-    - Chrome Android
-    - WebView
-  */
+  /* =====================================================
+     ROBUST SCROLL RESTORE
+     ===================================================== */
 
   function restoreScrollPosition(
     targetY,
@@ -2070,11 +2737,6 @@
 
     const restore =
       () => {
-        /*
-          Если уже началось другое
-          восстановление — это отменяем.
-        */
-
         if (
           token !==
           state.modal.restoreToken
@@ -2115,66 +2777,25 @@
               );
 
 
-            /*
-              Успешно восстановили.
-            */
-
-            if (
+            const done =
               difference <=
-              SCROLL_RESTORE_TOLERANCE
-            ) {
-              root.style.scrollBehavior =
-                oldScrollBehavior;
+                SCROLL_RESTORE_TOLERANCE ||
 
-
-              state.sectionScroll[
-                state.section
-              ] = targetY;
-
-
-              state.suppressCategorySpyUntil =
-                Date.now() + 250;
-
-
-              if (
-                typeof callback ===
-                'function'
-              ) {
-                callback();
-              }
-
-
-              requestAnimationFrame(
-                scheduleCategorySpy
-              );
-
-
-              return;
-            }
+              attempt >=
+                SCROLL_RESTORE_MAX_ATTEMPTS;
 
 
             /*
               Браузер ещё не успел
-              восстановить layout.
-
-              Повторяем на следующем frame.
+              вернуть layout.
             */
 
-            if (
-              attempt <
-              SCROLL_RESTORE_MAX_ATTEMPTS
-            ) {
+            if (!done) {
               restore();
 
               return;
             }
 
-
-            /*
-              Даже если браузер не дал
-              идеальное совпадение,
-              оставляем последнюю попытку.
-            */
 
             root.style.scrollBehavior =
               oldScrollBehavior;
@@ -2186,12 +2807,13 @@
 
 
             state.suppressCategorySpyUntil =
-              Date.now() + 250;
+              Date.now() +
+              250;
 
 
             if (
               typeof callback ===
-                'function'
+              'function'
             ) {
               callback();
             }
@@ -2206,9 +2828,8 @@
 
 
     /*
-      Первый restore выполняем
-      только после того, как browser
-      получил frame с normal body flow.
+      Первый restore только
+      на следующем layout frame.
     */
 
     requestAnimationFrame(
@@ -2217,24 +2838,24 @@
   }
 
 
+  /* =====================================================
+     SAFE FOCUS RESTORE
+     ===================================================== */
+
   function safelyRestoreFocus(
     element,
     expectedScrollY
   ) {
     if (
-      !(element instanceof HTMLElement) ||
+      !(
+        element instanceof
+        HTMLElement
+      ) ||
+
       !document.contains(element)
     ) {
       return;
     }
-
-
-    /*
-      Сначала запоминаем Y.
-    */
-
-    const beforeFocus =
-      window.scrollY;
 
 
     try {
@@ -2243,12 +2864,9 @@
       });
     } catch {
       /*
-        Старый browser:
-        focus без options может
+        Не вызываем обычный focus(),
+        потому что Safari может
         прокрутить страницу.
-
-        Лучше вообще не фокусировать,
-        чем отправить пользователя вверх.
       */
 
       return;
@@ -2256,36 +2874,23 @@
 
 
     /*
-      Некоторые mobile browsers
-      способны проигнорировать
+      Дополнительная защита:
+      некоторые мобильные браузеры
+      могут проигнорировать
       preventScroll.
-
-      Проверяем ещё один frame.
     */
 
     requestAnimationFrame(
       () => {
-        const currentY =
-          window.scrollY;
-
-
-        const target =
-          Number.isFinite(
-            expectedScrollY
-          )
-            ? expectedScrollY
-            : beforeFocus;
-
-
         if (
           Math.abs(
-            currentY -
-            target
+            window.scrollY -
+            expectedScrollY
           ) >
           SCROLL_RESTORE_TOLERANCE
         ) {
           instantScrollTo(
-            target
+            expectedScrollY
           );
         }
       }
@@ -2294,13 +2899,128 @@
 
 
   /* =====================================================
-     MODAL OPEN
+     MODAL IMAGE
+     ===================================================== */
+
+  function setModalImage(item) {
+    const wrap =
+      $('#modalImageContainer');
+
+
+    const image =
+      $('#modalImage');
+
+
+    const skeleton =
+      wrap
+        ? $(
+            '.image-skeleton',
+            wrap
+          )
+        : null;
+
+
+    if (
+      !wrap ||
+      !image
+    ) {
+      return;
+    }
+
+
+    const src =
+      itemImage(item);
+
+
+    image.classList.remove(
+      'is-loaded'
+    );
+
+
+    /*
+      Нет фото:
+      просто скрываем image area.
+
+      Modal остаётся компактным.
+    */
+
+    if (!src) {
+      image.removeAttribute(
+        'src'
+      );
+
+
+      image.alt =
+        '';
+
+
+      wrap.hidden =
+        true;
+
+
+      return;
+    }
+
+
+    wrap.hidden =
+      false;
+
+
+    if (skeleton) {
+      skeleton.hidden =
+        false;
+    }
+
+
+    image.src =
+      src;
+
+
+    image.alt =
+      itemName(item);
+
+
+    const loaded =
+      () => {
+        image.classList.add(
+          'is-loaded'
+        );
+
+
+        if (skeleton) {
+          skeleton.hidden =
+            true;
+        }
+      };
+
+
+    if (
+      image.complete &&
+      image.naturalWidth > 0
+    ) {
+      loaded();
+    } else {
+      image.addEventListener(
+        'load',
+        loaded,
+        {
+          once: true
+        }
+      );
+    }
+  }
+
+
+  /* =====================================================
+     OPEN MODAL
      ===================================================== */
 
   function openModal(item) {
     if (
       state.modal.open ||
+
       state.modal.closing ||
+
       !item
     ) {
       return;
@@ -2316,10 +3036,6 @@
     }
 
 
-    /*
-      Сначала запоминаем focus.
-    */
-
     state.modal.previousFocus =
       document.activeElement
         instanceof HTMLElement
@@ -2327,12 +3043,9 @@
           : null;
 
 
-    /*
-      Затем заполняем modal.
-    */
-
     const title =
       $('#modalTitle');
+
 
     if (title) {
       title.textContent =
@@ -2344,21 +3057,18 @@
     const price =
       $('#modalPrice');
 
+
     if (price) {
-      price.innerHTML = `
-
-        ${formatPrice(
+      price.innerHTML =
+        `${formatPrice(
           item?.price
-        )}
-
-        <small>₸</small>
-
-      `;
+        )} <small>₸</small>`;
     }
 
 
     const weight =
       $('#modalWeight');
+
 
     if (weight) {
       weight.textContent =
@@ -2392,53 +3102,16 @@
 
 
     /*
-      IMAGE
+      Фото устанавливаем
+      ДО lock body.
     */
 
-    const imageWrap =
-      $('#modalImageContainer');
-
-    const image =
-      $('#modalImage');
-
-
-    if (
-      item?.image &&
-      image &&
-      imageWrap
-    ) {
-      image.src =
-        item.image;
-
-      image.alt =
-        itemName(item);
-
-      imageWrap.hidden =
-        false;
-    } else if (
-      image &&
-      imageWrap
-    ) {
-      image.removeAttribute(
-        'src'
-      );
-
-      image.alt =
-        '';
-
-      imageWrap.hidden =
-        true;
-    }
+    setModalImage(item);
 
 
     /*
-      КРИТИЧЕСКИ ВАЖНЫЙ ПОРЯДОК:
-
-      1. сохраняем scroll
-      2. lock body
-      3. показываем modal
-
-      Не наоборот.
+      Сохраняем scroll
+      ДО показа modal.
     */
 
     lockPageAtCurrentScroll();
@@ -2446,6 +3119,7 @@
 
     state.modal.open =
       true;
+
 
     state.modal.closing =
       false;
@@ -2463,26 +3137,16 @@
 
 
         /*
-          Focus внутри modal.
-          preventScroll обязателен.
+          Focus с preventScroll.
         */
 
-        const closeButton =
-          $('#modalCloseButton');
-
-
-        if (closeButton) {
-          try {
-            closeButton.focus({
+        try {
+          $('#modalCloseButton')
+            ?.focus({
               preventScroll: true
             });
-          } catch {
-            /*
-              Не используем обычный
-              focus(), потому что он
-              способен сдвинуть viewport.
-            */
-          }
+        } catch {
+          /* noop */
         }
       }
     );
@@ -2490,7 +3154,7 @@
 
 
   /* =====================================================
-     MODAL CLOSE
+     CLOSE MODAL
      ===================================================== */
 
   function closeModal() {
@@ -2500,7 +3164,9 @@
 
     if (
       !modal ||
+
       !state.modal.open ||
+
       state.modal.closing
     ) {
       return;
@@ -2512,11 +3178,8 @@
 
 
     /*
-      Координату копируем сейчас.
-
-      Даже если state позже изменится,
-      этот close-cycle знает,
-      куда именно возвращаться.
+      Эти значения фиксируем
+      для конкретного close-cycle.
     */
 
     const restoreY =
@@ -2528,7 +3191,7 @@
 
 
     /*
-      Сначала проигрываем
+      Запускаем premium
       close animation.
     */
 
@@ -2545,9 +3208,10 @@
     state.modal.closeTimer =
       window.setTimeout(
         () => {
+
           /*
             1.
-            Убираем modal.
+            Modal скрываем.
           */
 
           modal.hidden =
@@ -2556,15 +3220,8 @@
 
           /*
             2.
-            Возвращаем body
-            в normal document flow.
-
-            Здесь browser может
-            временно оказаться на Y=0.
-            Это нормально —
-            пользователь modal уже
-            не увидит, а следующий frame
-            восстановит позицию.
+            Возвращаем нормальный
+            document flow.
           */
 
           releasePageLock();
@@ -2572,17 +3229,16 @@
 
           /*
             3.
-            Modal уже логически закрыт.
-
-            Но category observer пока
-            остаётся подавленным.
+            Modal логически закрыт.
           */
 
           state.modal.open =
             false;
 
+
           state.modal.closing =
             false;
+
 
           state.modal.previousFocus =
             null;
@@ -2590,18 +3246,19 @@
 
           /*
             4.
-            Надёжно восстанавливаем
-            исходную координату.
+            Возвращаем пользователя
+            ровно туда, где он был.
           */
 
           restoreScrollPosition(
             restoreY,
+
             () => {
+
               /*
                 5.
-                Только ПОСЛЕ успешного
-                scroll restore
-                возвращаем focus карточке.
+                Только после восстановления
+                координаты возвращаем focus.
               */
 
               safelyRestoreFocus(
@@ -2618,12 +3275,13 @@
 
 
   /* =====================================================
-     MODAL FOCUS TRAP
+     FOCUS TRAP
      ===================================================== */
 
   function trapModalFocus(event) {
     if (
       !state.modal.open ||
+
       event.key !== 'Tab'
     ) {
       return;
@@ -2647,12 +3305,14 @@
           input:not([disabled]),
           [tabindex]:not([tabindex="-1"])
         `,
+
         dialog
       )
         .filter(
           element =>
             !element.hidden &&
-            element.offsetParent !== null
+            element.offsetParent !==
+              null
         );
 
 
@@ -2663,6 +3323,7 @@
 
     const first =
       focusables[0];
+
 
     const last =
       focusables[
@@ -2702,13 +3363,8 @@
   function toggleAccordion(
     button
   ) {
-    if (!button) {
-      return;
-    }
-
-
     const panel =
-      button.nextElementSibling;
+      button?.nextElementSibling;
 
 
     if (!panel) {
@@ -2744,15 +3400,13 @@
      ===================================================== */
 
   function onWindowScroll() {
-    /*
-      Во время modal scroll state
-      НЕ обновляем.
 
-      Это важно:
-      body: fixed может временно
-      давать window.scrollY = 0.
-      Если записать это в state,
-      мы потеряем исходную позицию.
+    /*
+      Никогда не записываем
+      window.scrollY пока body fixed.
+
+      Иначе могли бы сохранить 0
+      вместо реальной позиции.
     */
 
     if (
@@ -2777,9 +3431,8 @@
      ===================================================== */
 
   function initEvents() {
-    /*
-      LANGUAGE
-    */
+
+    /* LANGUAGE */
 
     $$('.lang-btn')
       .forEach(button => {
@@ -2793,9 +3446,7 @@
       });
 
 
-    /*
-      KITCHEN / BAR
-    */
+    /* KITCHEN / BAR */
 
     $$('.main-tab')
       .forEach(button => {
@@ -2809,9 +3460,7 @@
       });
 
 
-    /*
-      BOTTOM NAV
-    */
+    /* BOTTOM NAV */
 
     $$('.bottom-nav__button')
       .forEach(button => {
@@ -2825,9 +3474,7 @@
       });
 
 
-    /*
-      INFO
-    */
+    /* INFO */
 
     $$('.accordion-trigger')
       .forEach(button => {
@@ -2841,9 +3488,7 @@
       });
 
 
-    /*
-      MODAL CLOSE
-    */
+    /* MODAL CLOSE */
 
     $$('[data-modal-close]')
       .forEach(element => {
@@ -2854,9 +3499,7 @@
       });
 
 
-    /*
-      CATEGORY EVENT DELEGATION
-    */
+    /* CATEGORY CLICK */
 
     $('#categoryStrip')
       ?.addEventListener(
@@ -2874,15 +3517,26 @@
 
 
           selectCategory(
-            button.dataset.categoryId
+            button.dataset
+              .categoryId
           );
         }
       );
 
 
-    /*
-      MENU EVENT DELEGATION
-    */
+    /* CATEGORY HORIZONTAL SCROLL */
+
+    $('#categoryStrip')
+      ?.addEventListener(
+        'scroll',
+        updateCategoryEdgeFades,
+        {
+          passive: true
+        }
+      );
+
+
+    /* MENU CARD CLICK */
 
     $('#menuContainer')
       ?.addEventListener(
@@ -2903,10 +3557,8 @@
             visibleMenu()
               .find(
                 entry =>
-                  String(
-                    entry?.id ?? ''
-                  ) ===
-                  card.dataset.itemId
+                  itemKey(entry) ===
+                  card.dataset.itemKey
               );
 
 
@@ -2917,9 +3569,7 @@
       );
 
 
-    /*
-      CLEAR SEARCH
-    */
+    /* CLEAR SEARCH */
 
     $('#clearSearchBtn')
       ?.addEventListener(
@@ -2929,12 +3579,7 @@
       );
 
 
-    /*
-      BRAND HOME
-
-      Только осознанный tap
-      на логотип прокручивает вверх.
-    */
+    /* BRAND HOME */
 
     $('#brandHome')
       ?.addEventListener(
@@ -2965,7 +3610,11 @@
             () => {
               window.scrollTo({
                 top: 0,
-                behavior: 'smooth'
+
+                behavior:
+                  prefersReducedMotion()
+                    ? 'auto'
+                    : 'smooth'
               });
             }
           );
@@ -2973,9 +3622,7 @@
       );
 
 
-    /*
-      SEARCH INPUT
-    */
+    /* SEARCH */
 
     $('#searchInput')
       ?.addEventListener(
@@ -2990,16 +3637,16 @@
 
 
           const value =
-            event.currentTarget.value;
+            event.currentTarget
+              .value;
 
 
           state.searchTimer =
             window.setTimeout(
-              () => {
+              () =>
                 setSearch(
                   value
-                );
-              },
+                ),
 
               SEARCH_DEBOUNCE_MS
             );
@@ -3014,7 +3661,9 @@
           if (
             event.key ===
               'Escape' &&
-            event.currentTarget.value
+
+            event.currentTarget
+              .value
           ) {
             clearSearch({
               focus: false
@@ -3024,9 +3673,7 @@
       );
 
 
-    /*
-      MODAL IMAGE ERROR
-    */
+    /* MODAL IMAGE ERROR */
 
     $('#modalImage')
       ?.addEventListener(
@@ -3044,9 +3691,7 @@
       );
 
 
-    /*
-      HERO FALLBACK
-    */
+    /* HERO FALLBACK */
 
     $('.hero__image')
       ?.addEventListener(
@@ -3066,9 +3711,7 @@
       );
 
 
-    /*
-      KEYBOARD
-    */
+    /* KEYBOARD */
 
     document.addEventListener(
       'keydown',
@@ -3076,6 +3719,7 @@
         if (
           event.key ===
             'Escape' &&
+
           state.modal.open
         ) {
           closeModal();
@@ -3089,9 +3733,7 @@
     );
 
 
-    /*
-      SCROLL
-    */
+    /* VERTICAL SCROLL */
 
     window.addEventListener(
       'scroll',
@@ -3102,9 +3744,7 @@
     );
 
 
-    /*
-      RESIZE / ORIENTATION
-    */
+    /* RESIZE */
 
     window.addEventListener(
       'resize',
@@ -3122,23 +3762,24 @@
             setupCategoryObserver();
 
             updateActiveCategoryFromScroll();
+
+            updateCategoryTabs(
+              state.categoryId,
+              false
+            );
+
+            updateCategoryEdgeFades();
           }
         );
       },
+
       {
         passive: true
       }
     );
 
 
-    /*
-      Pageshow нужен для Safari BFCache.
-
-      Если пользователь ушёл со страницы
-      и вернулся Back,
-      Safari может восстановить DOM
-      из памяти.
-    */
+    /* SAFARI BFCache */
 
     window.addEventListener(
       'pageshow',
@@ -3153,6 +3794,7 @@
         state.modal.open =
           false;
 
+
         state.modal.closing =
           false;
 
@@ -3165,6 +3807,8 @@
             setupCategoryObserver();
 
             scheduleCategorySpy();
+
+            updateCategoryEdgeFades();
           }
         );
       }
@@ -3190,119 +3834,35 @@
     }
 
 
-    const ids =
-      menu
-        .map(
-          item =>
-            String(
-              item?.id ?? ''
-            )
-        )
-        .filter(Boolean);
+    const keys =
+      menu.map(
+        itemKey
+      );
 
 
-    const duplicateIds =
-      ids.filter(
+    const duplicates =
+      keys.filter(
         (
-          id,
+          key,
           index,
           all
         ) =>
-          all.indexOf(id) !==
+          all.indexOf(key) !==
           index
       );
 
 
     if (
-      duplicateIds.length
+      duplicates.length
     ) {
       console.warn(
-        'NECTAR: duplicate menu item ids detected:',
+        'NECTAR: duplicate menu item keys detected:',
+
         [
           ...new Set(
-            duplicateIds
+            duplicates
           )
         ]
-      );
-    }
-
-
-    /*
-      Проверяем обязательные поля.
-      Не ломаем приложение,
-      только предупреждаем разработчика.
-    */
-
-    menu.forEach(
-      (
-        item,
-        index
-      ) => {
-        if (!item?.type) {
-          console.warn(
-            `NECTAR: MENU[${index}] has no type.`
-          );
-        }
-
-
-        if (!item?.id) {
-          console.warn(
-            `NECTAR: MENU[${index}] has no id.`
-          );
-        }
-
-
-        if (
-          !item?.name_ru &&
-          !item?.name_en &&
-          !item?.name_kz
-        ) {
-          console.warn(
-            `NECTAR: MENU[${index}] has no name.`
-          );
-        }
-      }
-    );
-  }
-
-
-  /* =====================================================
-     DOM VALIDATION
-     ===================================================== */
-
-  function validateDOM() {
-    const requiredIds = [
-      'siteHeader',
-      'menuControls',
-      'categoryStrip',
-      'menuContainer',
-      'searchInput',
-      'clearSearchBtn',
-      'itemModal',
-      'modalDialog',
-      'modalTitle',
-      'modalPrice',
-      'modalWeight',
-      'modalIngredients',
-      'modalIngredientsContainer',
-      'modalImage',
-      'modalImageContainer'
-    ];
-
-
-    const missing =
-      requiredIds.filter(
-        id =>
-          !document.getElementById(id)
-      );
-
-
-    if (
-      missing.length
-    ) {
-      console.warn(
-        'NECTAR: missing DOM elements:',
-        missing
       );
     }
   }
@@ -3315,24 +3875,10 @@
   function init() {
     validateData();
 
-    validateDOM();
-
 
     /*
-      Не заставляем browser
-      автоматически менять scroll.
+      Стартуем с Kitchen.
     */
-
-    if (
-      'scrollRestoration'
-      in history
-    ) {
-      /*
-        Оставляем browser default.
-        Не ставим manual.
-      */
-    }
-
 
     state.categoryId =
       firstCategoryId(
@@ -3350,9 +3896,16 @@
 
     renderCategories();
 
+
+    /*
+      Первоначальный красивый
+      reveal запускается один раз.
+    */
+
     renderMenu({
       reveal: true
     });
+
 
     initEvents();
 
@@ -3362,38 +3915,45 @@
         setupCategoryObserver();
 
         updateActiveCategoryFromScroll();
+
+        updateCategoryEdgeFades();
       }
     );
 
 
     /*
-      После загрузки web-fonts
-      размеры текста могут измениться.
+      После загрузки web fonts
+      геометрия текста может
+      немного измениться.
 
-      Observer пересчитываем,
-      но страницу НЕ скроллим.
+      Поэтому пересчитываем
+      indicator и observer,
+      но НЕ трогаем scroll.
     */
 
-    if (
-      document.fonts?.ready
-    ) {
-      document.fonts.ready
-        .then(
-          () => {
-            if (
-              !state.modal.open &&
-              !state.modal.closing
-            ) {
-              setupCategoryObserver();
+    document.fonts?.ready
+      ?.then(
+        () => {
+          if (
+            !state.modal.open &&
+            !state.modal.closing
+          ) {
+            setupCategoryObserver();
 
-              updateActiveCategoryFromScroll();
-            }
+            updateActiveCategoryFromScroll();
+
+            updateCategoryTabs(
+              state.categoryId,
+              false
+            );
+
+            updateCategoryEdgeFades();
           }
-        )
-        .catch(
-          () => {}
-        );
-    }
+        }
+      )
+      .catch(
+        () => {}
+      );
   }
 
 
