@@ -33,10 +33,11 @@
   const SCROLL_RESTORE_TOLERANCE = 3;
   const SCROLL_RESTORE_MAX_ATTEMPTS = 8;
 
-  const ALLOWED_BAR_CATEGORY_IDS = new Set(['lemonades', 'tea']);
+  const ALLOWED_BAR_CATEGORY_IDS = new Set(['lemonades', 'tea', 'soft-drinks']);
   const ALLOWED_BAR_CATEGORY_NAMES = new Set([
     'лимонады', 'лимонадтар', 'lemonades',
-    'чай', 'шай', 'tea'
+    'чай', 'шай', 'tea',
+    'безалкогольные напитки', 'алкогольсіз сусындар', 'soft drinks'
   ]);
 
   /*
@@ -1143,10 +1144,21 @@
     window.addEventListener('pageshow', event => {
       if (!event.persisted) return;
 
+      clearTimeout(state.modal.closeTimer);
+      state.modal.closeTimer = 0;
       state.modal.open = false;
       state.modal.closing = false;
+      state.modal.previousFocus = null;
       state.modal.restoreToken += 1;
       state.suppressCategorySpyUntil = 0;
+      state.interactionLockedUntil = 0;
+
+      const modal = $('#itemModal');
+      if (modal) {
+        modal.classList.remove('is-open');
+        modal.hidden = true;
+      }
+
       releasePageLock();
 
       requestAnimationFrame(() => {
