@@ -199,10 +199,8 @@ a {
   object-fit: cover;
   object-position: center 47%;
   opacity: 0;
-  transform: scale(1.03);
-  animation:
-    heroIntro .75s var(--ease-soft) .05s forwards,
-    heroBreath 14s ease-in-out .8s infinite alternate;
+  transform: scale(1.012);
+  animation: heroIntro .68s var(--ease-soft) .04s forwards;
 }
 
 .hero__image.is-missing {
@@ -272,7 +270,7 @@ a {
 @keyframes heroIntro {
   to {
     opacity: .94;
-    transform: scale(1.015);
+    transform: scale(1.005);
   }
 }
 
@@ -283,14 +281,6 @@ a {
   }
 }
 
-@keyframes heroBreath {
-  from {
-    transform: scale(1.015);
-  }
-  to {
-    transform: scale(1.045);
-  }
-}
 
 /* ======================================================
    MENU SHELL
@@ -1418,6 +1408,28 @@ body.modal-open {
   background: var(--gold);
 }
 
+
+/* ======================================================
+   KEYBOARD / ACCESSIBILITY
+   ====================================================== */
+
+.lang-btn:focus-visible,
+.main-tab:focus-visible,
+.category-tab:focus-visible,
+.menu-card:focus-visible,
+.search-box__clear:focus-visible,
+.modal__close:focus-visible,
+.modal__close-wide:focus-visible,
+.bottom-nav__button:focus-visible,
+.accordion-trigger:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+#searchInput:focus-visible {
+  outline: 0;
+}
+
 /* ======================================================
    MOBILE
    ====================================================== */
@@ -1595,6 +1607,51 @@ body.modal-open {
 
   .menu-card__price {
     font-size: 18px;
+  }
+}
+
+
+/* ======================================================
+   KEYBOARD / ACCESSIBILITY POLISH
+   ====================================================== */
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 2px solid rgba(169, 121, 53, .72);
+  outline-offset: 3px;
+}
+
+.menu-card__image,
+.hero__image,
+.modal__image-wrap img {
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+
+@media (max-width:350px) {
+  .menu-card {
+    grid-template-columns: 64px minmax(0,1fr);
+    align-items: center;
+  }
+
+  .menu-card__media {
+    width: 64px;
+    grid-row: 1 / span 2;
+  }
+
+  .menu-card__body {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .menu-card__price {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: end;
+    align-self: end;
+    margin-top: 4px;
   }
 }
 
