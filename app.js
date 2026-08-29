@@ -1,187 +1,101 @@
 (() => {
   'use strict';
 
+  /* =====================================================
+     DOM helpers
+     ===================================================== */
+
+  const $ = (selector, root = document) => root.querySelector(selector);
+  const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
+
+  /* =====================================================
+     Single source of UI state
+     ===================================================== */
+
   const state = {
     lang: 'RU',
     section: 'menu',
     type: 'kitchen',
     categoryId: null,
     query: '',
-    modalItemId: null,
-    searchTimer: null,
-    scrollLockY: 0,
-    previousFocus: null
+
+    sectionScroll: {
+      menu: 0,
+      info: 0
+    },
+
+    modal: {
+      open: false,
+      closing: false,
+      scrollY: 0,
+      previousFocus: null,
+      closeTimer: 0
+    },
+
+    searchTimer: 0,
+    revealPlayed: false,
+    scrollRaf: 0,
+    suppressCategorySpyUntil: 0,
+    categoryObserver: null
   };
 
+  const SEARCH_DEBOUNCE_MS = 180;
+  const MODAL_ANIMATION_MS = 260;
 
-  /* =====================================================
-     HELPERS
-     ===================================================== */
-
-  const $ = (selector, root = document) =>
-    root.querySelector(selector);
-
-  const $$ = (selector, root = document) =>
-    Array.from(root.querySelectorAll(selector));
-
-
-  const getKey = (prefix) =>
-    `${prefix}_${state.lang.toLowerCase()}`;
-
-
-  /*
-    В BAR сознательно показываем только две категории:
-    lemonades + tea.
-  */
-
-  const SAFE_BAR_CATEGORIES = new Set([
-    'lemonades',
-    'tea'
+  // Bar is intentionally limited to the non-alcoholic categories requested.
+  const ALLOWED_BAR_CATEGORY_IDS = new Set(['lemonades', 'tea']);
+  const ALLOWED_BAR_CATEGORY_NAMES = new Set([
+    'лимонады', 'лимонадтар', 'lemonades',
+    'чай', 'шай', 'tea'
   ]);
 
+  /* =====================================================
+     Data helpers
+     ===================================================== */
 
-  function getMenuSource() {
-
-    /*
-      menu-data.js использует:
-
-      const MENU = [...]
-
-      а не window.MENU.
-
-      Поэтому обращаемся к глобальному lexical scope.
-    */
-
-    return (
-      typeof MENU !== 'undefined' &&
-      Array.isArray(MENU)
-    )
-      ? MENU
-      : [];
+  function getMenu() {
+    return typeof MENU !== 'undefined' && Array.isArray(MENU) ? MENU : [];
   }
 
-
-  function getVisibleMenu() {
-
-    return getMenuSource().filter(item => {
-
-      if (item.type === 'kitchen') {
-        return true;
-      }
-
-      if (item.type !== 'bar') {
-        return false;
-      }
-
-      return SAFE_BAR_CATEGORIES.has(
-        String(item.category_id || '').toLowerCase()
-      );
-    });
+  function getTranslations() {
+    return typeof TRANSLATIONS !== 'undefined' && TRANSLATIONS ? TRANSLATIONS : {};
   }
 
-
-  function getItemsForType(type = state.type) {
-
-    return getVisibleMenu().filter(
-      item => item.type === type
-    );
+  function t(key, fallback = '') {
+    return getTranslations()?.[state.lang]?.[key] ?? fallback;
   }
 
-
-  function getCategoryKey() {
-    return getKey('category');
+  function langKey(prefix) {
+    return `${prefix}_${state.lang.toLowerCase()}`;
   }
 
-
-  function getNameKey() {
-    return getKey('name');
+  function itemName(item) {
+    return item?.[langKey('name')] || item?.name_ru || item?.name_en || '';
   }
 
-
-  function getCompositionKey() {
-    return getKey('composition');
+  function itemCategory(item) {
+    return item?.[langKey('category')] || item?.category_ru || item?.category_en || '';
   }
 
-
-  function getCategoryList(type = state.type) {
-
-    const categoryKey = getCategoryKey();
-
-    const seen = new Set();
-    const categories = [];
-
-    getItemsForType(type).forEach(item => {
-
-      const id =
-        item.category_id ||
-        item[categoryKey] ||
-        'uncategorized';
-
-      if (seen.has(id)) {
-        return;
-      }
-
-      seen.add(id);
-
-      categories.push({
-        id,
-        name:
-          item[categoryKey] ||
-          item.category_ru ||
-          '—'
-      });
-
-    });
-
-    return categories;
+  function itemComposition(item) {
+    return item?.[langKey('composition')] || item?.composition_ru || item?.composition_en || '';
   }
 
-
-  function firstCategoryId(type = state.type) {
-
-    return getCategoryList(type)[0]?.id || null;
-  }
-
-
-  function categoryName(
-    categoryId,
-    type = state.type
-  ) {
-
-    const categoryKey = getCategoryKey();
-
-    const item =
-      getItemsForType(type)
-        .find(
-          entry =>
-            entry.category_id === categoryId
-        );
-
-    return (
-      item?.[categoryKey] ||
-      item?.category_ru ||
-      categoryId
-    );
-  }
-
-
-  function normalizeText(value) {
-
+  function normalize(value, locale = 'ru') {
     return String(value ?? '')
-      .toLocaleLowerCase(
-        state.lang === 'KZ'
-          ? 'kk'
-          : state.lang === 'RU'
-            ? 'ru'
-            : 'en'
-      )
+      .toLocaleLowerCase(locale)
       .normalize('NFKC')
+      .replace(/\s+/g, ' ')
       .trim();
   }
 
+  function currentLocale() {
+    if (state.lang === 'KZ') return 'kk';
+    if (state.lang === 'EN') return 'en';
+    return 'ru';
+  }
 
   function escapeHtml(value) {
-
     return String(value ?? '')
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
@@ -190,1874 +104,862 @@
       .replace(/'/g, '&#039;');
   }
 
-
   function formatPrice(value) {
-
     const number = Number(value);
+    if (!Number.isFinite(number)) return escapeHtml(value);
 
-    if (!Number.isFinite(number)) {
-      return escapeHtml(value);
+    const locale = state.lang === 'KZ'
+      ? 'kk-KZ'
+      : state.lang === 'EN'
+        ? 'en-US'
+        : 'ru-RU';
+
+    return new Intl.NumberFormat(locale).format(number);
+  }
+
+  function categoryIdOf(item) {
+    const explicit = String(item?.category_id || '').trim();
+    if (explicit) return explicit;
+
+    // Stable fallback for legacy data without category_id.
+    const seed = item?.category_ru || item?.category_en || itemCategory(item) || 'uncategorized';
+    return `legacy-${normalize(seed, 'ru')
+      .replace(/[^a-zа-яё0-9]+/gi, '-')
+      .replace(/^-+|-+$/g, '')}`;
+  }
+
+  function isAllowedBarItem(item) {
+    if (item?.type !== 'bar') return false;
+
+    const explicitId = normalize(item.category_id, 'en');
+    if (ALLOWED_BAR_CATEGORY_IDS.has(explicitId)) return true;
+
+    const categoryNames = [item.category_ru, item.category_kz, item.category_en]
+      .map(value => normalize(value, 'ru'))
+      .filter(Boolean);
+
+    return categoryNames.some(name => ALLOWED_BAR_CATEGORY_NAMES.has(name));
+  }
+
+  function visibleMenu() {
+    return getMenu().filter(item => item?.type === 'kitchen' || isAllowedBarItem(item));
+  }
+
+  function itemsForType(type = state.type) {
+    return visibleMenu().filter(item => item?.type === type);
+  }
+
+  function categoriesForType(type = state.type) {
+    const seen = new Set();
+    const categories = [];
+
+    for (const item of itemsForType(type)) {
+      const id = categoryIdOf(item);
+      if (seen.has(id)) continue;
+      seen.add(id);
+      categories.push({ id, name: itemCategory(item) || id });
     }
 
-    return new Intl.NumberFormat(
-      state.lang === 'KZ'
-        ? 'kk-KZ'
-        : state.lang === 'EN'
-          ? 'en-US'
-          : 'ru-RU'
-    ).format(number);
+    return categories;
   }
 
-
-  function translate(key, fallback = '') {
-
-    const dictionary =
-      typeof TRANSLATIONS !== 'undefined'
-        ? TRANSLATIONS
-        : {};
-
-    return (
-      dictionary?.[state.lang]?.[key] ??
-      fallback
-    );
+  function firstCategoryId(type = state.type) {
+    return categoriesForType(type)[0]?.id || null;
   }
 
+  function typeLabel(type) {
+    return type === 'bar' ? t('nav_bar', 'БАР') : t('nav_kitchen', 'КУХНЯ');
+  }
 
   /* =====================================================
-     LANGUAGE
+     Translation + language UI
      ===================================================== */
 
-  function setLanguageUI() {
-
-    document.documentElement.lang =
-      state.lang === 'KZ'
-        ? 'kk'
-        : state.lang.toLowerCase();
-
+  function applyTranslations() {
+    document.documentElement.lang = state.lang === 'KZ' ? 'kk' : state.lang.toLowerCase();
 
     $$('[data-i18n]').forEach(element => {
-
-      const key = element.dataset.i18n;
-
-      const value = translate(key);
-
-      if (value) {
-        element.textContent = value;
-      }
-
+      const value = t(element.dataset.i18n);
+      if (value !== undefined && value !== '') element.textContent = value;
     });
 
-
-    $$('[data-i18n-placeholder]')
-      .forEach(element => {
-
-        const value =
-          translate(
-            element.dataset.i18nPlaceholder
-          );
-
-        if (value) {
-          element.setAttribute(
-            'placeholder',
-            value
-          );
-        }
-
-      });
-
+    $$('[data-i18n-placeholder]').forEach(element => {
+      const value = t(element.dataset.i18nPlaceholder);
+      if (value) element.setAttribute('placeholder', value);
+    });
 
     $$('.lang-btn').forEach(button => {
-
-      const active =
-        button.dataset.lang === state.lang;
-
-      button.classList.toggle(
-        'is-active',
-        active
-      );
-
-      button.setAttribute(
-        'aria-pressed',
-        String(active)
-      );
-
+      const active = button.dataset.lang === state.lang;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-pressed', String(active));
     });
-
-
-    $$('.bottom-nav-btn')
-      .forEach(button => {
-
-        const active =
-          button.dataset.path === state.section;
-
-        button.classList.toggle(
-          'is-active',
-          active
-        );
-
-        button.setAttribute(
-          'aria-current',
-          active
-            ? 'page'
-            : 'false'
-        );
-
-      });
-
   }
-
 
   function switchLang(lang) {
-
-    const dictionary =
-      typeof TRANSLATIONS !== 'undefined'
-        ? TRANSLATIONS
-        : {};
-
-    if (!dictionary[lang]) {
-      return;
-    }
-
+    if (!getTranslations()[lang] || lang === state.lang) return;
 
     state.lang = lang;
-
-    /*
-      Поиск сбрасываем.
-      Иначе клиент мог искать старый запрос,
-      а визуально уже видеть другой язык.
-    */
-
     state.query = '';
+    state.categoryId = firstCategoryId(state.type);
 
+    const input = $('#searchInput');
+    if (input) input.value = '';
 
-    /*
-      ВАЖНО:
-
-      После смены языка всегда открываем
-      первую категорию текущего типа.
-
-      Кухня → Холодные закуски
-      Бар → первая категория бара.
-    */
-
-    state.categoryId =
-      firstCategoryId(
-        state.type
-      );
-
-
-    const input =
-      $('#searchInput');
-
-    if (input) {
-      input.value = '';
-    }
-
-
-    updateSearchClearButton();
-
-    setLanguageUI();
-
+    clearTimeout(state.searchTimer);
+    updateSearchClear();
+    applyTranslations();
+    updateMainTabs();
     renderCategories();
-
     renderMenu();
 
-
-    observerSuppressedUntil =
-      Date.now() + 700;
-
-
     requestAnimationFrame(() => {
-
-      scrollToCategory(
-        state.categoryId,
-        'auto'
-      );
-
+      scrollToCategory(state.categoryId, 'auto');
     });
-
   }
 
-
   /* =====================================================
-     MENU / INFO
+     Main Kitchen / Bar tabs
      ===================================================== */
 
-  function switchSection(sectionId) {
-
-    if (
-      !['menu', 'info']
-        .includes(sectionId)
-    ) {
-      return;
-    }
-
-
-    state.section = sectionId;
-
-
-    $('#menu-section')
-      ?.classList.toggle(
-        'is-active',
-        sectionId === 'menu'
-      );
-
-
-    $('#info-section')
-      ?.classList.toggle(
-        'is-active',
-        sectionId === 'info'
-      );
-
-
-    setLanguageUI();
-
-
-    window.scrollTo({
-      top: 0,
-      behavior: 'auto'
+  function updateMainTabs() {
+    $$('.main-tab').forEach(button => {
+      const active = button.dataset.type === state.type;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-selected', String(active));
     });
 
-
-    if (sectionId === 'menu') {
-
-      requestAnimationFrame(() => {
-        renderMenu();
-      });
-
+    const indicator = $('#mainTabsIndicator');
+    if (indicator) {
+      indicator.style.transform = state.type === 'bar' ? 'translateX(100%)' : 'translateX(0)';
     }
-
   }
 
-
-  /* =====================================================
-     KITCHEN / BAR
-     ===================================================== */
-
-  function setMainType(type) {
-
-    if (
-      !['kitchen', 'bar']
-        .includes(type)
-    ) {
-      return;
-    }
-
-
-    if (state.type === type) {
-      return;
-    }
-
+  function setType(type) {
+    if (!['kitchen', 'bar'].includes(type) || type === state.type) return;
 
     state.type = type;
-
     state.query = '';
+    state.categoryId = firstCategoryId(type);
 
-    state.categoryId =
-      firstCategoryId(type);
+    const input = $('#searchInput');
+    if (input) input.value = '';
 
-
-    const input =
-      $('#searchInput');
-
-    if (input) {
-      input.value = '';
-    }
-
-
-    updateSearchClearButton();
-
-    updateMainTypeUI();
-
+    clearTimeout(state.searchTimer);
+    updateSearchClear();
+    updateMainTabs();
     renderCategories();
-
     renderMenu();
 
-
-    observerSuppressedUntil =
-      Date.now() + 900;
-
-
     requestAnimationFrame(() => {
-
-      scrollToCategory(
-        state.categoryId,
-        'smooth'
-      );
-
+      scrollToCategory(state.categoryId, 'smooth');
     });
-
   }
-
-
-  function updateMainTypeUI() {
-
-    const indicator =
-      $('#nav-indicator');
-
-
-    if (indicator) {
-
-      indicator.style.transform =
-        state.type === 'bar'
-          ? 'translateX(100%)'
-          : 'translateX(0)';
-
-    }
-
-
-    $$('.nav-btn').forEach(button => {
-
-      const active =
-        button.dataset.type === state.type;
-
-
-      button.classList.toggle(
-        'is-active',
-        active
-      );
-
-
-      button.setAttribute(
-        'aria-selected',
-        String(active)
-      );
-
-    });
-
-  }
-
 
   /* =====================================================
-     CATEGORY NAVIGATION
+     Category navigation
      ===================================================== */
 
   function renderCategories() {
+    const strip = $('#categoryStrip');
+    if (!strip) return;
 
-    const container =
-      $('#categoryContainer');
+    const categories = categoriesForType();
 
-    if (!container) {
-      return;
+    if (!categories.some(category => category.id === state.categoryId)) {
+      state.categoryId = categories[0]?.id || null;
     }
 
+    const fragment = document.createDocumentFragment();
 
-    const categories =
-      getCategoryList(
-        state.type
-      );
-
-
-    if (
-      !state.categoryId ||
-      !categories.some(
-        category =>
-          category.id === state.categoryId
-      )
-    ) {
-
-      state.categoryId =
-        categories[0]?.id || null;
-
-    }
-
-
-    container.innerHTML = '';
-
-
-    const fragment =
-      document.createDocumentFragment();
-
-
-    categories.forEach(category => {
-
-      const button =
-        document.createElement('button');
-
-
+    for (const category of categories) {
+      const button = document.createElement('button');
       button.type = 'button';
-
-      button.className =
-        'category-btn';
-
-
-      button.dataset.category =
-        category.id;
-
-
-      button.textContent =
-        category.name;
-
-
-      button.setAttribute(
-        'aria-label',
-        category.name
-      );
-
-
-      button.setAttribute(
-        'aria-selected',
-        String(
-          category.id === state.categoryId
-        )
-      );
-
-
-      button.addEventListener(
-        'click',
-        () =>
-          selectCategory(
-            category.id
-          )
-      );
-
-
+      button.className = 'category-tab';
+      button.dataset.categoryId = category.id;
+      button.textContent = category.name;
+      button.setAttribute('role', 'tab');
+      button.setAttribute('aria-selected', String(category.id === state.categoryId));
       fragment.appendChild(button);
+    }
 
+    strip.replaceChildren(fragment);
+    updateCategoryTabs(state.categoryId, false);
+  }
+
+  function centerCategoryTab(button, behavior = 'smooth') {
+    const strip = $('#categoryStrip');
+    if (!strip || !button) return;
+
+    const maxLeft = Math.max(0, strip.scrollWidth - strip.clientWidth);
+    const desiredLeft = button.offsetLeft - (strip.clientWidth - button.offsetWidth) / 2;
+    const left = Math.max(0, Math.min(maxLeft, desiredLeft));
+
+    // Horizontal-only scroll avoids scrollIntoView moving the whole page vertically.
+    strip.scrollTo({ left, behavior });
+  }
+
+  function updateCategoryTabs(categoryId, center = true) {
+    let activeButton = null;
+
+    $$('.category-tab').forEach(button => {
+      const active = button.dataset.categoryId === categoryId;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-selected', String(active));
+      if (active) activeButton = button;
     });
 
+    if (center && activeButton) centerCategoryTab(activeButton, 'smooth');
+  }
 
-    container.appendChild(
-      fragment
+  function controlsOffset() {
+    const headerHeight = $('#siteHeader')?.getBoundingClientRect().height || 0;
+    const controlsHeight = $('#menuControls')?.getBoundingClientRect().height || 0;
+    return headerHeight + controlsHeight + 14;
+  }
+
+  function scrollToCategory(categoryId, behavior = 'smooth') {
+    if (!categoryId || normalize(state.query, currentLocale())) return;
+
+    const target = $$('[data-category-section]', $('#menuContainer'))
+      .find(section => section.dataset.categorySection === String(categoryId));
+
+    if (!target) return;
+
+    const top = Math.max(
+      0,
+      target.getBoundingClientRect().top + window.scrollY - controlsOffset()
     );
 
-
-    updateCategoryButtons();
-
+    state.suppressCategorySpyUntil = Date.now() + (behavior === 'smooth' ? 900 : 160);
+    window.scrollTo({ top, behavior });
   }
-
-
-  function updateCategoryButtons(
-    activeId = state.categoryId
-  ) {
-
-    $$('.category-btn')
-      .forEach(button => {
-
-        const active =
-          button.dataset.category === activeId;
-
-
-        button.classList.toggle(
-          'is-active',
-          active
-        );
-
-
-        button.setAttribute(
-          'aria-selected',
-          String(active)
-        );
-
-      });
-
-  }
-
 
   function selectCategory(categoryId) {
+    if (!categoriesForType().some(category => category.id === categoryId)) return;
 
-    const valid =
-      getCategoryList(
-        state.type
-      ).some(
-        category =>
-          category.id === categoryId
-      );
-
-
-    if (!valid) {
-      return;
-    }
-
-
-    state.categoryId =
-      categoryId;
-
-
-    /*
-      Не позволяем IntersectionObserver
-      перехватывать состояние во время
-      smooth scroll.
-    */
-
-    observerSuppressedUntil =
-      Date.now() + 800;
-
-
-    updateCategoryButtons(
-      categoryId
-    );
-
-
-    scrollToCategory(
-      categoryId,
-      'smooth'
-    );
-
+    state.categoryId = categoryId;
+    updateCategoryTabs(categoryId, true);
+    scrollToCategory(categoryId, 'smooth');
   }
 
-
-  function scrollToCategory(
-    categoryId,
-    behavior = 'smooth'
-  ) {
-
-    if (
-      !categoryId ||
-      state.query
-    ) {
-      return;
-    }
-
-
-    const section =
-      document.querySelector(
-        `[data-category-section="${CSS.escape(
-          String(categoryId)
-        )}"]`
-      );
-
-
-    if (!section) {
-      return;
-    }
-
-
-    const header =
-      $('.site-header');
-
-    const sticky =
-      $('.menu-sticky');
-
-
-    const offset =
-      (
-        header?.getBoundingClientRect()
-          .height || 0
-      ) +
-      (
-        sticky?.getBoundingClientRect()
-          .height || 0
-      ) +
-      18;
-
-
-    const top =
-      Math.max(
-        0,
-        section.getBoundingClientRect()
-          .top +
-          window.scrollY -
-          offset
-      );
-
-
-    if (
-      behavior === 'smooth'
-    ) {
-
-      observerSuppressedUntil =
-        Math.max(
-          observerSuppressedUntil,
-          Date.now() + 800
-        );
-
-    }
-
-
-    window.scrollTo({
-      top,
-      behavior
-    });
-
+  function disconnectCategoryObserver() {
+    if (!state.categoryObserver) return;
+    state.categoryObserver.disconnect();
+    state.categoryObserver = null;
   }
-
-
-  /* =====================================================
-     SEARCH
-     ===================================================== */
-
-  function searchMatches(
-    item,
-    query
-  ) {
-
-    if (!query) {
-      return true;
-    }
-
-
-    const nameKey =
-      getNameKey();
-
-    const compositionKey =
-      getCompositionKey();
-
-    const categoryKey =
-      getCategoryKey();
-
-
-    const fields = [
-
-      item[nameKey],
-
-      item[compositionKey],
-
-      item[categoryKey],
-
-      /*
-        Ищем также по всем языкам.
-
-        Это важно:
-
-        клиент на RU может ввести
-        английское название,
-        а клиент на EN —
-        русское.
-      */
-
-      item.name_ru,
-      item.name_kz,
-      item.name_en,
-
-      item.composition_ru,
-      item.composition_kz,
-      item.composition_en,
-
-      item.category_ru,
-      item.category_kz,
-      item.category_en
-
-    ];
-
-
-    return fields.some(
-      field =>
-        normalizeText(field)
-          .includes(query)
-    );
-
-  }
-
-
-  function getFilteredItems() {
-
-    const query =
-      normalizeText(
-        state.query
-      );
-
-
-    /*
-      Обычный режим:
-
-      только текущая секция
-      Kitchen / Bar.
-    */
-
-    let items =
-      getItemsForType(
-        state.type
-      );
-
-
-    /*
-      Поиск:
-
-      ГЛОБАЛЬНЫЙ.
-
-      Kitchen + safe Bar.
-    */
-
-    if (query) {
-
-      items =
-        getVisibleMenu()
-          .filter(
-            item =>
-              searchMatches(
-                item,
-                query
-              )
-          );
-
-    }
-
-
-    return items;
-
-  }
-
-
-  /* =====================================================
-     MENU RENDER
-     ===================================================== */
-
-  function renderMenu() {
-
-    const container =
-      $('#menuContainer');
-
-    if (!container) {
-      return;
-    }
-
-
-    const items =
-      getFilteredItems();
-
-
-    const categoryKey =
-      getCategoryKey();
-
-    const nameKey =
-      getNameKey();
-
-    const compositionKey =
-      getCompositionKey();
-
-    const query =
-      normalizeText(
-        state.query
-      );
-
-
-    container.innerHTML = '';
-
-
-    const fragment =
-      document.createDocumentFragment();
-
-
-    /* EMPTY */
-
-    if (!items.length) {
-
-      const empty =
-        document.createElement('div');
-
-
-      empty.className =
-        'empty-state';
-
-
-      empty.innerHTML = `
-
-        <strong>
-          ${escapeHtml(
-            translate(
-              'nothing_found',
-              'Ничего не найдено'
-            )
-          )}
-        </strong>
-
-        <span>
-          ${escapeHtml(
-            translate(
-              'try_another_search',
-              'Попробуйте изменить запрос.'
-            )
-          )}
-        </span>
-
-      `;
-
-
-      fragment.appendChild(
-        empty
-      );
-
-
-      container.appendChild(
-        fragment
-      );
-
-
-      updateCategoryButtons(null);
-
-      return;
-
-    }
-
-
-    /*
-      Получаем категории в порядке
-      появления в MENU.
-    */
-
-    const categoryIds = [];
-
-    const seen =
-      new Set();
-
-
-    items.forEach(item => {
-
-      const id =
-        item.category_id ||
-        item[categoryKey] ||
-        'uncategorized';
-
-
-      if (!seen.has(id)) {
-
-        seen.add(id);
-
-        categoryIds.push(id);
-
-      }
-
-    });
-
-
-    categoryIds.forEach(
-      categoryId => {
-
-        const categoryItems =
-          items.filter(
-            item =>
-              (
-                item.category_id ||
-                item[categoryKey] ||
-                'uncategorized'
-              ) === categoryId
-          );
-
-
-        if (!categoryItems.length) {
-          return;
-        }
-
-
-        const section =
-          document.createElement(
-            'section'
-          );
-
-
-        section.className =
-          'category-section';
-
-
-        section.dataset.categorySection =
-          categoryId;
-
-
-        section.dataset.type =
-          state.type;
-
-
-        /*
-          CATEGORY TITLE
-        */
-
-        const title =
-          document.createElement(
-            'div'
-          );
-
-
-        title.className =
-          'category-heading';
-
-
-        title.innerHTML = `
-
-          <span></span>
-
-          <h2>
-            ${escapeHtml(
-              categoryName(
-                categoryId,
-                state.type
-              )
-            )}
-          </h2>
-
-          <span></span>
-
-        `;
-
-
-        section.appendChild(
-          title
-        );
-
-
-        /*
-          ITEMS
-        */
-
-        const list =
-          document.createElement(
-            'div'
-          );
-
-
-        list.className =
-          'menu-list';
-
-
-        categoryItems.forEach(
-          item => {
-
-            const card =
-              document.createElement(
-                'button'
-              );
-
-
-            card.type = 'button';
-
-            card.className =
-              'menu-card';
-
-
-            card.dataset.itemId =
-              item.id;
-
-
-            card.setAttribute(
-              'aria-label',
-              item[nameKey] ||
-              item.name_ru ||
-              'Menu item'
-            );
-
-
-            const spicy =
-              item.note &&
-              normalizeText(
-                item.note
-              ).includes('остр');
-
-
-            const composition =
-              item[compositionKey] ||
-              '';
-
-
-            card.innerHTML = `
-
-              <span class="menu-card-main">
-
-                <span class="menu-card-title">
-                  ${escapeHtml(
-                    item[nameKey] ||
-                    item.name_ru ||
-                    '—'
-                  )}
-                </span>
-
-                ${
-                  spicy
-                    ? `
-                      <span
-                        class="spicy-mark"
-                        aria-label="spicy"
-                      >
-                        ●
-                      </span>
-                    `
-                    : ''
-                }
-
-                <span
-                  class="menu-card-hint"
-                  aria-hidden="true"
-                >
-                  info
-                </span>
-
-              </span>
-
-
-              <span class="menu-card-meta">
-
-                <span class="menu-card-price">
-
-                  ${formatPrice(
-                    item.price
-                  )}
-
-                  <small>₸</small>
-
-                </span>
-
-              </span>
-
-
-              <span class="sr-only">
-
-                ${escapeHtml(
-                  composition
-                )}
-
-              </span>
-
-            `;
-
-
-            card.addEventListener(
-              'click',
-              () =>
-                openModal(item)
-            );
-
-
-            list.appendChild(
-              card
-            );
-
-          }
-        );
-
-
-        section.appendChild(
-          list
-        );
-
-
-        fragment.appendChild(
-          section
-        );
-
-      }
-    );
-
-
-    container.appendChild(
-      fragment
-    );
-
-
-    /*
-      При поиске IntersectionObserver
-      не нужен.
-    */
-
-    if (query) {
-
-      updateCategoryButtons(
-        null
-      );
-
-    } else {
-
-      updateCategoryButtons(
-        state.categoryId
-      );
-
-      setupCategoryObserver();
-
-    }
-
-  }
-
-
-  /* =====================================================
-     INTERSECTION OBSERVER
-     ===================================================== */
-
-  let categoryObserver = null;
-
-  let observerSuppressedUntil = 0;
-
 
   function setupCategoryObserver() {
+    disconnectCategoryObserver();
 
-    if (categoryObserver) {
+    if (!('IntersectionObserver' in window) || normalize(state.query, currentLocale())) return;
 
-      categoryObserver.disconnect();
+    const sections = $$('[data-category-section]', $('#menuContainer'));
+    if (!sections.length) return;
 
-      categoryObserver = null;
+    // The observer is used as a lightweight signal. The final active section
+    // is calculated by the deterministic marker-based function below.
+    state.categoryObserver = new IntersectionObserver(
+      () => scheduleCategorySpy(),
+      {
+        root: null,
+        rootMargin: `-${Math.round(controlsOffset())}px 0px -55% 0px`,
+        threshold: 0
+      }
+    );
 
-    }
+    sections.forEach(section => state.categoryObserver.observe(section));
+  }
 
-
+  function updateActiveCategoryFromScroll() {
     if (
-      !('IntersectionObserver' in window) ||
-      state.query
+      state.section !== 'menu' ||
+      normalize(state.query, currentLocale()) ||
+      state.modal.open ||
+      Date.now() < state.suppressCategorySpyUntil
     ) {
       return;
     }
 
+    const container = $('#menuContainer');
+    const sections = $$('[data-category-section]', container);
+    if (!sections.length) return;
 
-    const sections =
-      $$('.category-section', $('#menuContainer'));
+    const marker = controlsOffset() + 10;
+    let activeId = sections[0].dataset.categorySection;
 
-
-    if (!sections.length) {
-      return;
+    // Pick the last section whose heading has crossed the marker.
+    for (const section of sections) {
+      if (section.getBoundingClientRect().top <= marker) {
+        activeId = section.dataset.categorySection;
+      } else {
+        break;
+      }
     }
 
-
-    categoryObserver =
-      new IntersectionObserver(
-        entries => {
-
-          if (
-            Date.now() <
-            observerSuppressedUntil
-          ) {
-            return;
-          }
-
-
-          const visible =
-            entries
-
-              .filter(
-                entry =>
-                  entry.isIntersecting
-              )
-
-              .sort(
-                (a, b) =>
-                  a.boundingClientRect.top -
-                  b.boundingClientRect.top
-              );
-
-
-          const first =
-            visible[0];
-
-
-          if (!first) {
-            return;
-          }
-
-
-          const id =
-            first.target
-              .dataset
-              .categorySection;
-
-
-          if (
-            id &&
-            id !== state.categoryId
-          ) {
-
-            state.categoryId =
-              id;
-
-
-            updateCategoryButtons(
-              id
-            );
-
-
-            centerCategoryButton(
-              id
-            );
-
-          }
-
-        },
-        {
-
-          root: null,
-
-          /*
-            Активной становится категория,
-            когда она находится примерно
-            в верхней центральной зоне.
-          */
-
-          rootMargin:
-            '-30% 0px -55% 0px',
-
-          threshold: 0
-
-        }
-      );
-
-
-    sections.forEach(
-      section =>
-        categoryObserver.observe(
-          section
-        )
-    );
-
+    if (activeId && activeId !== state.categoryId) {
+      state.categoryId = activeId;
+      updateCategoryTabs(activeId, true);
+    }
   }
 
+  function scheduleCategorySpy() {
+    if (state.scrollRaf) return;
 
-  function centerCategoryButton(
-    categoryId
-  ) {
-
-    const button =
-      document.querySelector(
-        `.category-btn[data-category="${CSS.escape(
-          String(categoryId)
-        )}"]`
-      );
-
-
-    if (!button) {
-      return;
-    }
-
-
-    button.scrollIntoView({
-      behavior: 'smooth',
-      block: 'nearest',
-      inline: 'center'
+    state.scrollRaf = requestAnimationFrame(() => {
+      state.scrollRaf = 0;
+      updateActiveCategoryFromScroll();
     });
-
   }
-
 
   /* =====================================================
-     SEARCH STATE
+     Menu rendering
      ===================================================== */
 
-  function setSearch(query) {
+  function makeMenuCard(item) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'menu-card';
+    button.dataset.itemId = String(item?.id ?? '');
+    button.setAttribute('aria-label', itemName(item) || 'Menu item');
 
-    state.query = query;
+    const spicy = normalize(item?.note, 'ru').includes('остр');
 
-    renderMenu();
-
-  }
-
-
-  function updateSearchClearButton() {
-
-    const button =
-      $('#clearSearchBtn');
-
-
-    if (!button) {
-      return;
-    }
-
-
-    const hasValue =
-      Boolean(
-        normalizeText(
-          $('#searchInput')?.value
-        )
-      );
-
-
-    button.hidden =
-      !hasValue;
-
-  }
-
-
-  function clearSearch() {
-
-    const input =
-      $('#searchInput');
-
-
-    if (input) {
-      input.value = '';
-    }
-
-
-    state.query = '';
-
-
-    updateSearchClearButton();
-
-
-    state.categoryId =
-      firstCategoryId(
-        state.type
-      );
-
-
-    renderMenu();
-
-
-    observerSuppressedUntil =
-      Date.now() + 900;
-
-
-    requestAnimationFrame(() => {
-
-      scrollToCategory(
-        state.categoryId,
-        'smooth'
-      );
-
-    });
-
-  }
-
-
-  /* =====================================================
-     MODAL
-     ===================================================== */
-
-  function openModal(item) {
-
-    const modal =
-      $('#itemModal');
-
-
-    if (!modal || !item) {
-      return;
-    }
-
-
-    state.modalItemId =
-      item.id;
-
-
-    state.previousFocus =
-      document.activeElement
-        instanceof HTMLElement
-          ? document.activeElement
-          : null;
-
-
-    const nameKey =
-      getNameKey();
-
-
-    const compositionKey =
-      getCompositionKey();
-
-
-    $('#modalTitle').textContent =
-      item[nameKey] ||
-      item.name_ru ||
-      '—';
-
-
-    $('#modalPrice').innerHTML = `
-
-      ${escapeHtml(
-        formatPrice(
-          item.price
-        )
-      )}
-
-      <small>₸</small>
-
+    button.innerHTML = `
+      <span class="menu-card__title-wrap">
+        <span class="menu-card__title">${escapeHtml(itemName(item) || '—')}</span>
+        ${spicy ? '<span class="material-symbols-outlined menu-card__spicy" aria-label="spicy">local_fire_department</span>' : ''}
+        <span class="material-symbols-outlined menu-card__info" aria-hidden="true">info</span>
+      </span>
+      <span class="menu-card__price">${formatPrice(item?.price)} <small>₸</small></span>
     `;
 
+    return button;
+  }
 
-    $('#modalWeight').textContent =
-      item.weight || '';
+  function normalGroups(items) {
+    const groups = [];
+    const map = new Map();
 
+    for (const item of items) {
+      const id = categoryIdOf(item);
 
-    $('#modalIngredients').textContent =
-      item[compositionKey] || '';
+      if (!map.has(id)) {
+        const group = {
+          key: id,
+          categoryId: id,
+          type: item.type,
+          title: itemCategory(item) || id,
+          items: []
+        };
 
+        map.set(id, group);
+        groups.push(group);
+      }
 
-    const ingredients =
-      $('#modalIngredientsContainer');
-
-
-    ingredients.hidden =
-      !item[compositionKey];
-
-
-    const imageContainer =
-      $('#modalImageContainer');
-
-
-    const image =
-      $('#modalImage');
-
-
-    if (item.image) {
-
-      image.src =
-        item.image;
-
-      image.alt =
-        item[nameKey] || '';
-
-      imageContainer.hidden =
-        false;
-
-    } else {
-
-      image.removeAttribute(
-        'src'
-      );
-
-      image.alt = '';
-
-      imageContainer.hidden =
-        true;
-
+      map.get(id).items.push(item);
     }
 
+    return groups;
+  }
 
-    modal.hidden =
-      false;
+  function searchGroups(items) {
+    const groups = [];
+    const map = new Map();
 
+    for (const item of items) {
+      const categoryId = categoryIdOf(item);
+      const key = `${item.type}::${categoryId}`;
 
-    document.body.classList.add(
-      'modal-open'
-    );
+      if (!map.has(key)) {
+        const group = {
+          key,
+          categoryId,
+          type: item.type,
+          title: `${typeLabel(item.type)} · ${itemCategory(item) || categoryId}`,
+          items: []
+        };
 
+        map.set(key, group);
+        groups.push(group);
+      }
 
-    state.scrollLockY =
-      window.scrollY;
+      map.get(key).items.push(item);
+    }
 
+    return groups;
+  }
 
-    document.body.style.top =
-      `-${state.scrollLockY}px`;
+  function matchesSearch(item, query) {
+    const fields = [
+      itemName(item), itemComposition(item), itemCategory(item),
+      item?.name_ru, item?.name_kz, item?.name_en,
+      item?.composition_ru, item?.composition_kz, item?.composition_en,
+      item?.category_ru, item?.category_kz, item?.category_en
+    ];
 
+    return fields.some(field => normalize(field, currentLocale()).includes(query));
+  }
 
-    requestAnimationFrame(() => {
+  function filteredItems() {
+    const query = normalize(state.query, currentLocale());
+    if (!query) return itemsForType();
+    return visibleMenu().filter(item => matchesSearch(item, query));
+  }
 
-      modal.classList.add(
-        'is-open'
-      );
+  function renderMenu({ reveal = false } = {}) {
+    const container = $('#menuContainer');
+    const categoryStrip = $('#categoryStrip');
+    const searchNote = $('#searchModeNote');
 
+    if (!container) return;
+
+    disconnectCategoryObserver();
+
+    const query = normalize(state.query, currentLocale());
+    const items = filteredItems();
+
+    if (categoryStrip) categoryStrip.hidden = Boolean(query);
+
+    if (searchNote) {
+      searchNote.hidden = !query;
+      searchNote.textContent = query
+        ? state.lang === 'EN'
+          ? 'Search across Kitchen and Bar'
+          : state.lang === 'KZ'
+            ? 'Асхана мен Бар бойынша іздеу'
+            : 'Поиск по Кухне и Бару'
+        : '';
+    }
+
+    if (!items.length) {
+      const empty = document.createElement('div');
+      empty.className = 'empty-state';
+      empty.innerHTML = `
+        <strong>${escapeHtml(t('nothing_found', 'Ничего не найдено'))}</strong>
+        <span>${escapeHtml(t('try_another_search', 'Попробуйте изменить запрос.'))}</span>
+      `;
+      container.replaceChildren(empty);
+      updateCategoryTabs(null, false);
+      return;
+    }
+
+    const groups = query ? searchGroups(items) : normalGroups(items);
+    const fragment = document.createDocumentFragment();
+
+    groups.forEach((group, groupIndex) => {
+      const section = document.createElement('section');
+      section.className = 'category-section';
+      section.dataset.groupType = group.type;
+
+      if (!query) {
+        section.dataset.categorySection = group.categoryId;
+      }
+
+      if (reveal && !state.revealPlayed) {
+        section.classList.add('reveal-once');
+        section.style.setProperty('--reveal-delay', `${Math.min(groupIndex * 70, 350)}ms`);
+      }
+
+      const heading = document.createElement('div');
+      heading.className = 'category-heading';
+      heading.innerHTML = `<span></span><h2>${escapeHtml(group.title)}</h2><span></span>`;
+
+      const list = document.createElement('div');
+      list.className = 'menu-list';
+
+      for (const item of group.items) {
+        list.appendChild(makeMenuCard(item));
+      }
+
+      section.append(heading, list);
+      fragment.appendChild(section);
     });
 
+    container.replaceChildren(fragment);
 
-    $('#modalCloseButton')
-      ?.focus({
-        preventScroll: true
+    if (reveal && !state.revealPlayed) {
+      requestAnimationFrame(() => {
+        $$('.reveal-once', container).forEach(section => section.classList.add('is-revealed'));
+        state.revealPlayed = true;
       });
-
-  }
-
-
-  function closeModal() {
-
-    const modal =
-      $('#itemModal');
-
-
-    if (
-      !modal ||
-      modal.hidden
-    ) {
-      return;
     }
 
-
-    modal.classList.remove(
-      'is-open'
-    );
-
-
-    window.setTimeout(
-      () => {
-
-        modal.hidden =
-          true;
-
-
-        document.body.classList.remove(
-          'modal-open'
-        );
-
-
-        document.body.style.top =
-          '';
-
-
-        window.scrollTo(
-          0,
-          state.scrollLockY
-        );
-
-
-        state.modalItemId =
-          null;
-
-
-        state.previousFocus
-          ?.focus?.({
-            preventScroll: true
-          });
-
-
-        state.previousFocus =
-          null;
-
-      },
-      220
-    );
-
+    if (!query) {
+      requestAnimationFrame(() => {
+        setupCategoryObserver();
+        updateActiveCategoryFromScroll();
+      });
+    }
   }
-
 
   /* =====================================================
-     INFO ACCORDION
+     Search
      ===================================================== */
 
-  function toggleInfo(button) {
-
-    if (!button) {
-      return;
-    }
-
-
-    const content =
-      button.nextElementSibling;
-
-
-    if (!content) {
-      return;
-    }
-
-
-    const expanded =
-      button.getAttribute(
-        'aria-expanded'
-      ) === 'true';
-
-
-    button.setAttribute(
-      'aria-expanded',
-      String(!expanded)
-    );
-
-
-    content.hidden =
-      expanded;
-
-
-    button.classList.toggle(
-      'is-open',
-      !expanded
-    );
-
+  function updateSearchClear() {
+    const button = $('#clearSearchBtn');
+    if (!button) return;
+    button.hidden = !normalize($('#searchInput')?.value, currentLocale());
   }
 
-
-  /* =====================================================
-     INITIALIZATION
-     ===================================================== */
-
-  function initSearch() {
-
-    const input =
-      $('#searchInput');
-
-
-    if (!input) {
-      return;
-    }
-
-
-    input.addEventListener(
-      'input',
-      event => {
-
-        const value =
-          event.target.value;
-
-
-        updateSearchClearButton();
-
-
-        window.clearTimeout(
-          state.searchTimer
-        );
-
-
-        state.searchTimer =
-          window.setTimeout(
-            () =>
-              setSearch(value),
-            180
-          );
-
-      }
-    );
-
-
-    input.addEventListener(
-      'keydown',
-      event => {
-
-        if (
-          event.key === 'Escape' &&
-          input.value
-        ) {
-
-          clearSearch();
-
-        }
-
-      }
-    );
-
-  }
-
-
-  function initModal() {
-
-    const modal =
-      $('#itemModal');
-
-
-    if (!modal) {
-      return;
-    }
-
-
-    $('.modal-backdrop', modal)
-      ?.addEventListener(
-        'click',
-        closeModal
-      );
-
-
-    $$('[data-modal-close]', modal)
-      .forEach(button => {
-
-        button.addEventListener(
-          'click',
-          closeModal
-        );
-
-      });
-
-
-    $('#modalImage')
-      ?.addEventListener(
-        'error',
-        event => {
-
-          event.currentTarget
-            .removeAttribute(
-              'src'
-            );
-
-
-          $('#modalImageContainer')
-            .hidden = true;
-
-        }
-      );
-
-  }
-
-
-  function initInfo() {
-
-    $$('.info-btn')
-      .forEach(button => {
-
-        button.addEventListener(
-          'click',
-          () =>
-            toggleInfo(
-              button
-            )
-        );
-
-      });
-
-  }
-
-
-  function initNavigation() {
-
-    $$('.lang-btn')
-      .forEach(button => {
-
-        button.addEventListener(
-          'click',
-          () =>
-            switchLang(
-              button.dataset.lang
-            )
-        );
-
-      });
-
-
-    $$('.nav-btn')
-      .forEach(button => {
-
-        button.addEventListener(
-          'click',
-          () =>
-            setMainType(
-              button.dataset.type
-            )
-        );
-
-      });
-
-
-    $$('.bottom-nav-btn')
-      .forEach(button => {
-
-        button.addEventListener(
-          'click',
-          () =>
-            switchSection(
-              button.dataset.path
-            )
-        );
-
-      });
-
-
-    $('#clearSearchBtn')
-      ?.addEventListener(
-        'click',
-        clearSearch
-      );
-
-  }
-
-
-  function initKeyboard() {
-
-    document.addEventListener(
-      'keydown',
-      event => {
-
-        if (
-          event.key === 'Escape'
-        ) {
-
-          closeModal();
-
-        }
-
-      }
-    );
-
-  }
-
-
-  function init() {
-
-    if (
-      !(
-        typeof MENU !== 'undefined' &&
-        Array.isArray(MENU)
-      )
-    ) {
-
-      console.error(
-        'NECTAR: MENU data is missing or invalid.'
-      );
-
-    }
-
-
-    state.categoryId =
-      firstCategoryId(
-        'kitchen'
-      );
-
-
-    setLanguageUI();
-
-    updateMainTypeUI();
-
-    renderCategories();
+  function setSearch(value) {
+    const wasSearching = Boolean(normalize(state.query, currentLocale()));
+    state.query = value;
+    const isSearching = Boolean(normalize(state.query, currentLocale()));
 
     renderMenu();
 
-    initSearch();
-
-    initModal();
-
-    initInfo();
-
-    initNavigation();
-
-    initKeyboard();
-
-
-    /*
-      После загрузки шрифтов
-      пересобираем observer,
-      потому что высота элементов
-      могла измениться.
-    */
-
-    if (
-      document.fonts?.ready
-    ) {
-
-      document.fonts.ready
-        .then(
-          () =>
-            setupCategoryObserver()
-        );
-
-    }
-
-
-    /*
-      Hero fallback.
-    */
-
-    $('.hero-image')
-      ?.addEventListener(
-        'error',
-        event => {
-
-          event.currentTarget
-            .style.display =
-              'none';
-
+    // When a search starts, keep the controls stable and make sure result 1
+    // is not hidden behind the sticky controls. This is an instant correction,
+    // not a page reset.
+    if (!wasSearching && isSearching) {
+      requestAnimationFrame(() => {
+        const menuTop = $('#menuContainer')?.getBoundingClientRect().top ?? 0;
+        const marker = controlsOffset();
+        if (menuTop < marker - 4) {
+          window.scrollBy({ top: menuTop - marker + 4, behavior: 'auto' });
         }
-      );
-
+      });
+    }
   }
 
+  function clearSearch({ focus = true } = {}) {
+    const input = $('#searchInput');
+    if (input) input.value = '';
+
+    clearTimeout(state.searchTimer);
+    state.query = '';
+    state.categoryId = firstCategoryId(state.type);
+
+    updateSearchClear();
+    renderCategories();
+    renderMenu();
+
+    requestAnimationFrame(() => scrollToCategory(state.categoryId, 'smooth'));
+
+    if (focus) input?.focus({ preventScroll: true });
+  }
 
   /* =====================================================
-     PUBLIC COMPATIBILITY API
+     Menu / Info section switching
      ===================================================== */
 
-  /*
-    Оставляем эти функции глобально доступными,
-    чтобы старые ссылки/вызовы не ломали страницу.
-  */
+  function rememberSectionScroll() {
+    state.sectionScroll[state.section] = window.scrollY;
+  }
 
-  Object.assign(
-    window,
-    {
+  function switchSection(section) {
+    if (!['menu', 'info'].includes(section) || section === state.section || state.modal.open) return;
 
-      switchLang,
+    rememberSectionScroll();
+    state.section = section;
 
-      switchSection,
+    $('#menu-section')?.classList.toggle('is-active', section === 'menu');
+    $('#info-section')?.classList.toggle('is-active', section === 'info');
 
-      switchMainTab:
-        (index, button) =>
-          setMainType(
-            button?.dataset?.type ||
-            (
-              index === 1
-                ? 'bar'
-                : 'kitchen'
-            )
-          ),
+    $$('.bottom-nav__button').forEach(button => {
+      const active = button.dataset.path === section;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-current', active ? 'page' : 'false');
+    });
 
-      selectCategory,
+    const y = state.sectionScroll[section] || 0;
 
-      clearSearch,
+    requestAnimationFrame(() => {
+      instantScrollTo(y);
+      if (section === 'menu') scheduleCategorySpy();
+    });
+  }
 
-      openModal,
+  /* =====================================================
+     Modal: reliable body lock + exact scroll restore
+     ===================================================== */
 
-      closeModal,
+  function instantScrollTo(y) {
+    const root = document.documentElement;
+    const previous = root.style.scrollBehavior;
+    root.style.scrollBehavior = 'auto';
+    window.scrollTo(0, Math.max(0, y));
 
-      toggleInfo
+    requestAnimationFrame(() => {
+      root.style.scrollBehavior = previous;
+    });
+  }
 
+  function lockPageAtCurrentScroll() {
+    const y = window.scrollY;
+    state.modal.scrollY = y;
+
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${y}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+    document.body.classList.add('modal-open');
+  }
+
+  function unlockPageAndRestoreScroll() {
+    const y = state.modal.scrollY;
+
+    document.body.classList.remove('modal-open');
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+
+    // Restored before focus to prevent iOS/Chrome from deciding where to scroll.
+    instantScrollTo(y);
+    state.sectionScroll[state.section] = y;
+  }
+
+  function openModal(item) {
+    if (state.modal.open || state.modal.closing || !item) return;
+
+    const modal = $('#itemModal');
+    if (!modal) return;
+
+    state.modal.open = true;
+    state.modal.previousFocus = document.activeElement instanceof HTMLElement
+      ? document.activeElement
+      : null;
+
+    $('#modalTitle').textContent = itemName(item) || '—';
+    $('#modalPrice').innerHTML = `${formatPrice(item?.price)} <small>₸</small>`;
+    $('#modalWeight').textContent = item?.weight || '';
+
+    const composition = itemComposition(item);
+    const ingredients = $('#modalIngredientsContainer');
+    const ingredientsText = $('#modalIngredients');
+
+    if (ingredientsText) ingredientsText.textContent = composition;
+    if (ingredients) ingredients.hidden = !composition;
+
+    const imageWrap = $('#modalImageContainer');
+    const image = $('#modalImage');
+
+    if (item?.image && image && imageWrap) {
+      image.src = item.image;
+      image.alt = itemName(item);
+      imageWrap.hidden = false;
+    } else if (image && imageWrap) {
+      image.removeAttribute('src');
+      image.alt = '';
+      imageWrap.hidden = true;
     }
-  );
 
+    lockPageAtCurrentScroll();
+    modal.hidden = false;
 
-  document.addEventListener(
-    'DOMContentLoaded',
-    init
-  );
+    requestAnimationFrame(() => {
+      modal.classList.add('is-open');
+      $('#modalCloseButton')?.focus({ preventScroll: true });
+    });
+  }
 
+  function closeModal() {
+    const modal = $('#itemModal');
+    if (!modal || !state.modal.open || state.modal.closing) return;
+
+    state.modal.closing = true;
+    modal.classList.remove('is-open');
+
+    clearTimeout(state.modal.closeTimer);
+    state.modal.closeTimer = window.setTimeout(() => {
+      modal.hidden = true;
+      unlockPageAndRestoreScroll();
+
+      const previousFocus = state.modal.previousFocus;
+      state.modal.previousFocus = null;
+      state.modal.open = false;
+      state.modal.closing = false;
+
+      requestAnimationFrame(() => {
+        previousFocus?.focus?.({ preventScroll: true });
+      });
+    }, MODAL_ANIMATION_MS);
+  }
+
+  function trapModalFocus(event) {
+    if (!state.modal.open || event.key !== 'Tab') return;
+
+    const dialog = $('#modalDialog');
+    if (!dialog) return;
+
+    const focusables = $$(
+      'button:not([disabled]), [href], input:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      dialog
+    ).filter(element => !element.hidden && element.offsetParent !== null);
+
+    if (!focusables.length) return;
+
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+
+  /* =====================================================
+     Info accordion
+     ===================================================== */
+
+  function toggleAccordion(button) {
+    const panel = button.nextElementSibling;
+    if (!panel) return;
+
+    const wasOpen = button.getAttribute('aria-expanded') === 'true';
+    button.setAttribute('aria-expanded', String(!wasOpen));
+    button.classList.toggle('is-open', !wasOpen);
+    panel.hidden = wasOpen;
+  }
+
+  /* =====================================================
+     Event handling
+     ===================================================== */
+
+  function onWindowScroll() {
+    if (state.modal.open) return;
+
+    state.sectionScroll[state.section] = window.scrollY;
+    scheduleCategorySpy();
+  }
+
+  function initEvents() {
+    // Static controls
+    $$('.lang-btn').forEach(button => {
+      button.addEventListener('click', () => switchLang(button.dataset.lang));
+    });
+
+    $$('.main-tab').forEach(button => {
+      button.addEventListener('click', () => setType(button.dataset.type));
+    });
+
+    $$('.bottom-nav__button').forEach(button => {
+      button.addEventListener('click', () => switchSection(button.dataset.path));
+    });
+
+    $$('.accordion-trigger').forEach(button => {
+      button.addEventListener('click', () => toggleAccordion(button));
+    });
+
+    $$('[data-modal-close]').forEach(element => {
+      element.addEventListener('click', closeModal);
+    });
+
+    // Delegated category tabs — survives renderCategories().
+    $('#categoryStrip')?.addEventListener('click', event => {
+      const button = event.target.closest('.category-tab');
+      if (button) selectCategory(button.dataset.categoryId);
+    });
+
+    // Delegated menu cards — survives renderMenu().
+    $('#menuContainer')?.addEventListener('click', event => {
+      const card = event.target.closest('.menu-card');
+      if (!card) return;
+
+      const item = visibleMenu().find(entry => String(entry?.id ?? '') === card.dataset.itemId);
+      if (item) openModal(item);
+    });
+
+    $('#clearSearchBtn')?.addEventListener('click', () => clearSearch());
+
+    $('#brandHome')?.addEventListener('click', event => {
+      event.preventDefault();
+
+      if (state.modal.open) return;
+
+      if (state.section !== 'menu') {
+        switchSection('menu');
+      }
+
+      requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    });
+
+    $('#searchInput')?.addEventListener('input', event => {
+      updateSearchClear();
+      clearTimeout(state.searchTimer);
+
+      state.searchTimer = window.setTimeout(() => {
+        setSearch(event.currentTarget.value);
+      }, SEARCH_DEBOUNCE_MS);
+    });
+
+    $('#searchInput')?.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && event.currentTarget.value) {
+        clearSearch({ focus: false });
+      }
+    });
+
+    $('#modalImage')?.addEventListener('error', () => {
+      const wrap = $('#modalImageContainer');
+      if (wrap) wrap.hidden = true;
+    });
+
+    $('.hero__image')?.addEventListener('error', event => {
+      event.currentTarget.classList.add('is-missing');
+      $('.hero')?.classList.add('hero--fallback');
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && state.modal.open) closeModal();
+      trapModalFocus(event);
+    });
+
+    window.addEventListener('scroll', onWindowScroll, { passive: true });
+
+    window.addEventListener('resize', () => {
+      requestAnimationFrame(() => {
+        setupCategoryObserver();
+        updateActiveCategoryFromScroll();
+      });
+    }, { passive: true });
+  }
+
+  /* =====================================================
+     Initialization
+     ===================================================== */
+
+  function validateData() {
+    const menu = getMenu();
+
+    if (!menu.length) {
+      console.error('NECTAR: MENU data is missing or empty.');
+      return;
+    }
+
+    const duplicateIds = menu
+      .map(item => String(item?.id ?? ''))
+      .filter(Boolean)
+      .filter((id, index, all) => all.indexOf(id) !== index);
+
+    if (duplicateIds.length) {
+      console.warn('NECTAR: duplicate menu item ids detected:', [...new Set(duplicateIds)]);
+    }
+  }
+
+  function init() {
+    validateData();
+
+    state.categoryId = firstCategoryId('kitchen');
+    state.sectionScroll.menu = window.scrollY;
+
+    applyTranslations();
+    updateMainTabs();
+    renderCategories();
+    renderMenu({ reveal: true });
+    initEvents();
+
+    requestAnimationFrame(() => {
+      setupCategoryObserver();
+      updateActiveCategoryFromScroll();
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
 })();
