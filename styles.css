@@ -572,13 +572,13 @@ a {
 }
 
 .menu-content.type-enter {
-  animation: typeEnter .38s var(--ease-soft);
+  animation: typeEnter .24s var(--ease-soft);
 }
 
 @keyframes typeEnter {
   from {
-    opacity: .35;
-    transform: translateY(8px);
+    opacity: .72;
+    transform: translateY(3px);
   }
   to {
     opacity: 1;
@@ -1682,6 +1682,32 @@ input:focus-visible {
 
   .menu-card__desc {
     -webkit-line-clamp: 3;
+  }
+}
+
+
+/* ======================================================
+   MOBILE SCROLL PERFORMANCE
+   Heavy backdrop-filter on two sticky layers can cause
+   repaint/compositing jank while the Hero re-enters view.
+   ====================================================== */
+
+@media (max-width: 768px) {
+  .site-header {
+    background: rgba(251,249,246,.985);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .menu-controls {
+    background: rgba(251,249,246,.985);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .hero__image {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 }
 
