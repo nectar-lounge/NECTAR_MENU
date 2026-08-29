@@ -1,906 +1,813 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-
 <head>
-    <meta charset="UTF-8">
+  <meta charset="utf-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-    >
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700&display=swap"
-        rel="stylesheet"
-    >
+  <meta
+    name="theme-color"
+    content="#fbf9f6"
+  >
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
+  <meta
+    name="description"
+    content="NECTAR — Lounge · Kitchen · Bar. Меню."
+  >
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
-        rel="stylesheet"
-    >
+  <title>NECTAR — Меню</title>
 
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <script>
-        tailwind.config = {
-            darkMode: "class",
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&display=swap"
+    rel="stylesheet"
+  >
 
-            theme: {
-                extend: {
-                    colors: {
-                        "on-primary-container": "#819986",
-                        "on-background": "#1b1c1a",
-                        "secondary-fixed-dim": "#c9c6bd",
-                        "surface": "#fbf9f6",
-                        "on-secondary-fixed-variant": "#484740",
-                        "background": "#fbf9f6",
-                        "primary-container": "#1b3022",
-                        "primary": "#061b0e",
-                        "primary-fixed": "#d0e9d4",
-                        "surface-container": "#efeeeb",
-                        "on-secondary": "#ffffff",
-                        "secondary": "#5f5f57",
-                        "inverse-on-surface": "#f2f1ee",
-                        "on-surface": "#1b1c1a",
-                        "error": "#ba1a1a",
-                        "outline": "#737973",
-                        "on-surface-variant": "#434843",
-                        "surface-tint": "#4d6453",
-                        "surface-container-lowest": "#ffffff",
-                        "secondary-fixed": "#e5e2d9",
-                        "surface-bright": "#fbf9f6",
-                        "secondary-container": "#e2e0d6",
-                        "outline-variant": "#c3c8c1",
-                        "forest-green": "#1b3022",
-                        "warm-gold": "#a97935",
-                        "cream": "#fbf9f6"
-                    },
-
-                    borderRadius: {
-                        DEFAULT: "0.25rem",
-                        lg: "0.5rem",
-                        xl: "0.75rem",
-                        full: "9999px"
-                    },
-
-                    spacing: {
-                        unit: "8px",
-                        gutter: "16px",
-                        "container-padding": "24px",
-                        "safe-area-bottom": "80px",
-                        "section-gap": "64px"
-                    },
-
-                    fontFamily: {
-                        "label-caps": ["Manrope"],
-                        "body-md": ["Manrope"],
-                        "body-lg": ["Manrope"],
-                        "serif": ["Cormorant Garamond", "serif"]
-                    },
-
-                    fontSize: {
-                        "label-caps": [
-                            "12px",
-                            {
-                                lineHeight: "1",
-                                letterSpacing: "0.1em",
-                                fontWeight: "700"
-                            }
-                        ],
-
-                        "body-md": [
-                            "16px",
-                            {
-                                lineHeight: "1.6",
-                                fontWeight: "400"
-                            }
-                        ],
-
-                        "body-lg": [
-                            "18px",
-                            {
-                                lineHeight: "1.6",
-                                fontWeight: "400"
-                            }
-                        ]
-                    }
-                }
-            }
-        };
-    </script>
-
-    <link rel="stylesheet" href="styles.css">
-
-    <title>NECTAR — Меню</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-<header class="fixed top-0 inset-x-0 z-50 glass-effect pt-safe border-b border-forest-green/5">
+  <!-- =====================================================
+       HEADER
+       ===================================================== -->
 
-    <div class="px-container-padding flex items-center justify-between relative h-20">
+  <header class="site-header">
 
-        <div class="min-w-[80px]"></div>
+    <div class="site-header-inner">
 
-        <div class="absolute left-1/2 -translate-x-1/2 flex flex-col items-center">
-            <h1 class="font-serif text-[28px] text-forest-green tracking-tighter font-semibold">
-                NECTAR
-            </h1>
+      <div
+        class="header-spacer"
+        aria-hidden="true"
+      ></div>
 
-            <p
-                class="font-label-caps text-[10px] text-outline tracking-widest uppercase mt-[-2px]"
-                data-i18n="header_subtitle"
-            >
-                Lounge · Bar · Kitchen
-            </p>
-        </div>
+      <a
+        class="brand"
+        href="#menu"
+        aria-label="NECTAR"
+      >
+        <span class="brand-name">
+          NECTAR
+        </span>
 
-        <div class="flex items-center gap-3 justify-end min-w-[80px]">
+        <span
+          class="brand-subtitle"
+          data-i18n="header_subtitle"
+        >
+          Lounge · Bar · Kitchen
+        </span>
+      </a>
 
-            <button
-                class="lang-btn text-[10px] font-label-caps tracking-[0.2em] lang-active font-bold"
-                data-lang="RU"
-                onclick="switchLang('RU')"
-            >
-                RU
-            </button>
+      <!-- LANGUAGE -->
 
-            <button
-                class="lang-btn text-[10px] font-label-caps tracking-[0.2em] opacity-60"
-                data-lang="KZ"
-                onclick="switchLang('KZ')"
-            >
-                KZ
-            </button>
+      <div
+        class="language-switcher"
+        role="group"
+        aria-label="Language"
+      >
 
-            <button
-                class="lang-btn text-[10px] font-label-caps tracking-[0.2em] opacity-60"
-                data-lang="EN"
-                onclick="switchLang('EN')"
-            >
-                EN
-            </button>
+        <button
+          class="lang-btn is-active"
+          type="button"
+          data-lang="RU"
+          aria-pressed="true"
+        >
+          RU
+        </button>
 
-        </div>
+        <button
+          class="lang-btn"
+          type="button"
+          data-lang="KZ"
+          aria-pressed="false"
+        >
+          KZ
+        </button>
+
+        <button
+          class="lang-btn"
+          type="button"
+          data-lang="EN"
+          aria-pressed="false"
+        >
+          EN
+        </button>
+
+      </div>
 
     </div>
 
-</header>
+  </header>
 
 
-<main class="flex flex-col relative w-full bg-cream pt-20 pb-safe-area-bottom">
+  <!-- =====================================================
+       MAIN
+       ===================================================== -->
 
-    <!-- =========================================
-         MENU
-         ========================================= -->
+  <main id="menu">
+
+    <!-- ===================================================
+         MENU SECTION
+         =================================================== -->
 
     <section
-        class="spa-section active flex-col w-full"
-        id="menu-section"
+      class="spa-section is-active"
+      id="menu-section"
+      aria-label="Menu"
     >
 
-        <!-- HERO -->
+      <!-- =================================================
+           HERO
+           ================================================= -->
 
-        <div class="hero-wrapper">
+      <div class="hero-wrapper">
 
-            <img
-                src="assets/nectar-hero.jpg"
-                alt="NECTAR"
-                class="hero-image hero-float"
+        <img
+          class="hero-image"
+          src="assets/nectar-hero.jpg"
+          alt="NECTAR"
+          width="1200"
+          height="700"
+          fetchpriority="high"
+        >
+
+        <div
+          class="hero-overlay"
+          aria-hidden="true"
+        ></div>
+
+        <div class="hero-content">
+
+          <div class="hero-brand">
+            NECTAR
+          </div>
+
+          <div
+            class="hero-subtitle"
+            data-i18n="hero_subtitle"
+          >
+            LOUNGE · KITCHEN · BAR
+          </div>
+
+          <h1
+            class="hero-title"
+            data-i18n="hero_title"
+          >
+            Меню
+          </h1>
+
+          <p
+            class="hero-description"
+            data-i18n="hero_description"
+          >
+            Кухня, мангал и напитки
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- =================================================
+           MENU SHELL
+           ================================================= -->
+
+      <div class="menu-shell">
+
+        <!-- =================================================
+             STICKY NAVIGATION
+             ================================================= -->
+
+        <div class="menu-sticky">
+
+          <!-- SEARCH -->
+
+          <div class="search-container">
+
+            <span
+              class="material-symbols-outlined search-icon"
+              aria-hidden="true"
+            >
+              search
+            </span>
+
+            <input
+              id="searchInput"
+              type="search"
+              autocomplete="off"
+              spellcheck="false"
+              inputmode="search"
+              data-i18n-placeholder="search_placeholder"
+              placeholder="Поиск блюд, напитков..."
+              aria-label="Поиск"
             >
 
-            <div class="hero-overlay"></div>
+            <button
+              id="clearSearchBtn"
+              class="clear-search"
+              type="button"
+              hidden
+              aria-label="Очистить поиск"
+            >
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                close
+              </span>
+            </button>
 
-            <div class="hero-content">
+          </div>
 
-                <div class="hero-brand">
-                    NECTAR
-                </div>
 
-                <div
-                    class="hero-subtitle"
-                    data-i18n="hero_subtitle"
-                >
-                    LOUNGE · KITCHEN · BAR
-                </div>
+          <!-- KITCHEN / BAR -->
 
-                <h2
-                    class="hero-title"
-                    data-i18n="hero_title"
-                >
-                    Меню
-                </h2>
+          <div
+            class="main-tabs"
+            role="tablist"
+            aria-label="Menu type"
+          >
 
-                <p
-                    class="hero-description"
-                    data-i18n="hero_description"
-                >
-                    Кухня, мангал и напитки
-                </p>
+            <div
+              class="main-tab-indicator"
+              id="nav-indicator"
+              aria-hidden="true"
+            ></div>
 
-            </div>
+            <button
+              class="nav-btn is-active"
+              type="button"
+              role="tab"
+              data-type="kitchen"
+              aria-selected="true"
+              data-i18n="nav_kitchen"
+            >
+              КУХНЯ
+            </button>
+
+            <button
+              class="nav-btn"
+              type="button"
+              role="tab"
+              data-type="bar"
+              aria-selected="false"
+              data-i18n="nav_bar"
+            >
+              БАР
+            </button>
+
+          </div>
+
+
+          <!-- CATEGORIES -->
+
+          <div
+            class="category-scroller"
+            id="categoryContainer"
+            role="tablist"
+            aria-label="Категории меню"
+          ></div>
 
         </div>
 
 
         <!-- MENU CONTENT -->
 
-        <div class="flex flex-col w-full px-container-padding relative z-10">
+        <div
+          id="menuContainer"
+          class="menu-container"
+          aria-live="polite"
+        ></div>
 
-            <div class="menu-sticky">
-
-                <!-- SEARCH -->
-
-                <div class="flex items-center gap-3 bg-white shadow-[0_2px_12px_rgba(27,48,34,0.03)]
-                            border border-forest-green/10 px-5 py-3.5 rounded-2xl
-                            transition-all duration-300 focus-within:ring-1
-                            focus-within:ring-forest-green/20 focus-within:border-forest-green/30
-                            relative search-container">
-
-                    <span class="material-symbols-outlined text-outline/60">
-                        search
-                    </span>
-
-                    <input
-                        type="text"
-                        id="searchInput"
-                        class="flex-1 bg-transparent border-none outline-none text-body-md
-                               text-on-surface placeholder:text-outline-variant
-                               font-body-md search-input"
-                        data-i18n-placeholder="search_placeholder"
-                        placeholder="Поиск блюд, напитков..."
-                        autocomplete="off"
-                        spellcheck="false"
-                    >
-
-                    <button
-                        id="clearSearchBtn"
-                        class="hidden items-center justify-center text-outline
-                               hover:text-forest-green transition-all
-                               absolute right-4 h-full px-2"
-                        onclick="clearSearch()"
-                        aria-label="Очистить поиск"
-                    >
-                        <span class="material-symbols-outlined text-[20px]">
-                            close
-                        </span>
-                    </button>
-
-                </div>
-
-
-                <!-- KITCHEN / BAR -->
-
-                <div class="flex justify-center mt-3">
-
-                    <div
-                        class="flex items-center bg-white border border-forest-green/5
-                               rounded-2xl p-1 shadow-[0_2px_8px_rgba(27,48,34,0.02)]
-                               relative w-full max-w-sm"
-                        role="tablist"
-                    >
-
-                        <div
-                            class="absolute left-1 top-1 bottom-1
-                                   w-[calc(50%-4px)] bg-forest-green rounded-xl
-                                   transition-transform duration-300
-                                   ease-[cubic-bezier(0.16,1,0.3,1)]
-                                   shadow-sm"
-                            id="nav-indicator"
-                        ></div>
-
-                        <button
-                            class="nav-btn flex-1 relative z-10 px-8 py-2.5
-                                   text-label-caps font-label-caps text-cream
-                                   transition-colors active:scale-95 tracking-widest"
-                            data-index="0"
-                            data-type="kitchen"
-                            onclick="switchMainTab(0, this)"
-                            role="tab"
-                            aria-selected="true"
-                        >
-                            КУХНЯ
-                        </button>
-
-                        <button
-                            class="nav-btn flex-1 relative z-10 px-8 py-2.5
-                                   text-label-caps font-label-caps
-                                   text-on-surface-variant
-                                   transition-colors active:scale-95 tracking-widest"
-                            data-index="1"
-                            data-type="bar"
-                            onclick="switchMainTab(1, this)"
-                            role="tab"
-                            aria-selected="false"
-                        >
-                            БАР
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <!-- CATEGORIES -->
-
-                <div
-                    class="flex overflow-x-auto gap-3 pb-2 mt-3 snap-x
-                           snap-mandatory hide-scrollbar"
-                    id="categoryContainer"
-                    aria-label="Категории меню"
-                ></div>
-
-            </div>
-
-
-            <!-- MENU -->
-
-            <div
-                class="flex flex-col pb-16 mt-2"
-                id="menuContainer"
-            ></div>
-
-        </div>
+      </div>
 
     </section>
 
 
-    <!-- =========================================
-         INFO
-         ========================================= -->
+    <!-- ===================================================
+         INFO SECTION
+         =================================================== -->
 
     <section
-        class="spa-section flex-col w-full px-container-padding
-               pb-section-gap gap-section-gap pt-12"
-        id="info-section"
+      class="spa-section info-section"
+      id="info-section"
+      aria-label="Info"
     >
 
-        <div class="flex flex-col gap-6">
+      <div class="info-head">
 
-            <div class="flex flex-col gap-2 items-center text-center">
+        <h1 data-i18n="info_title">
+          Информация
+        </h1>
 
-                <h1
-                    class="font-serif text-[40px] text-forest-green
-                           tracking-tight font-semibold"
-                    data-i18n="info_title"
-                >
-                    Информация
-                </h1>
+        <p data-i18n="info_subtitle">
+          Свяжитесь с нами или найдите важные детали
+        </p>
 
-                <p
-                    class="font-body-md text-body-md text-secondary"
-                    data-i18n="info_subtitle"
-                >
-                    Свяжитесь с нами или найдите важные детали
-                </p>
-
-            </div>
-
-        </div>
+      </div>
 
 
-        <!-- CONTACTS -->
+      <!-- CONTACT CARD -->
 
-        <div class="flex flex-col gap-4">
+      <div class="info-card">
 
-            <div
-                class="bg-white rounded-2xl p-6 soft-shadow
-                       border border-forest-green/5 flex flex-col gap-6
-                       relative overflow-hidden"
+        <!-- ADDRESS -->
+
+        <div class="info-row">
+
+          <div class="info-icon">
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              location_on
+            </span>
+          </div>
+
+          <div>
+
+            <h2 data-i18n="info_address_label">
+              Адрес
+            </h2>
+
+            <p data-i18n="info_address">
+              Проспект Дулати 1а, мкр. Архат, Алматы
+            </p>
+
+            <a
+              href="https://go.2gis.com/iV3rq"
+              target="_blank"
+              rel="noopener noreferrer"
             >
 
-                <div
-                    class="absolute -right-12 -top-12 w-32 h-32
-                           bg-warm-gold/5 rounded-full blur-3xl
-                           mix-blend-multiply opacity-50"
-                ></div>
-
-
-                <!-- ADDRESS -->
-
-                <div class="flex items-start gap-4 relative z-10">
-
-                    <div
-                        class="w-10 h-10 rounded-full bg-forest-green/5
-                               flex items-center justify-center shrink-0
-                               border border-forest-green/10"
-                    >
-                        <span
-                            class="material-symbols-outlined text-forest-green text-[20px]"
-                        >
-                            location_on
-                        </span>
-                    </div>
-
-                    <div class="flex flex-col gap-1">
-
-                        <h3
-                            class="font-label-caps text-label-caps
-                                   text-forest-green/70 tracking-wider uppercase"
-                            data-i18n="info_address_label"
-                        >
-                            Адрес
-                        </h3>
-
-                        <p
-                            class="font-body-lg text-body-lg text-forest-green"
-                            data-i18n="info_address"
-                        >
-                            Проспект Дулати 1а, мкр. Архат, Алматы
-                        </p>
-
-                        <a
-                            class="inline-flex items-center gap-1 mt-1
-                                   text-warm-gold font-body-md text-sm"
-                            href="https://go.2gis.com/iV3rq"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <span data-i18n="info_open_map">
-                                Открыть в 2GIS
-                            </span>
-
-                            <span class="material-symbols-outlined text-[16px]">
-                                arrow_forward
-                            </span>
-                        </a>
-
-                    </div>
-
-                </div>
-
-
-                <div class="w-full h-px bg-forest-green/5"></div>
-
-
-                <!-- PHONE -->
-
-                <div class="flex items-start gap-4 relative z-10">
-
-                    <div
-                        class="w-10 h-10 rounded-full bg-forest-green/5
-                               flex items-center justify-center shrink-0
-                               border border-forest-green/10"
-                    >
-                        <span class="material-symbols-outlined text-forest-green text-[20px]">
-                            call
-                        </span>
-                    </div>
-
-                    <div class="flex flex-col gap-1">
-
-                        <h3
-                            class="font-label-caps text-label-caps
-                                   text-forest-green/70 tracking-wider uppercase"
-                            data-i18n="info_phone_label"
-                        >
-                            Телефон
-                        </h3>
-
-                        <a
-                            class="font-body-lg text-body-lg text-forest-green lining-nums"
-                            href="tel:+77001234567"
-                        >
-                            +7 (700) 123 45 67
-                        </a>
-
-                        <p
-                            class="font-body-md text-sm text-secondary mt-1 lining-nums"
-                            data-i18n="info_hours"
-                        >
-                            Ежедневно, 14:00 - 01:00
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <div class="w-full h-px bg-forest-green/5"></div>
-
-
-                <!-- INSTAGRAM -->
-
-                <div class="flex items-start gap-4 relative z-10">
-
-                    <div
-                        class="w-10 h-10 rounded-full bg-forest-green/5
-                               flex items-center justify-center shrink-0
-                               border border-forest-green/10"
-                    >
-                        <span class="material-symbols-outlined text-forest-green text-[20px]">
-                            camera_alt
-                        </span>
-                    </div>
-
-                    <div class="flex flex-col gap-1">
-
-                        <h3
-                            class="font-label-caps text-label-caps
-                                   text-forest-green/70 tracking-wider uppercase"
-                        >
-                            Instagram
-                        </h3>
-
-                        <a
-                            class="font-body-lg text-body-lg text-forest-green"
-                            href="https://www.instagram.com/nectar.lounge.almaty"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            @nectar.lounge.almaty
-                        </a>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- CONSUMER CORNER -->
-
-            <div class="flex flex-col gap-6">
-
-                <div class="flex items-center justify-between">
-
-                    <h2
-                        class="font-serif text-[24px]
-                               text-forest-green font-medium"
-                        data-i18n="info_consumer"
-                    >
-                        Уголок потребителя
-                    </h2>
-
-                    <div class="flex-1 h-px bg-forest-green/10 ml-4"></div>
-
-                </div>
-
-
-                <div class="flex flex-col gap-3">
-
-                    <button
-                        class="info-btn w-full bg-white rounded-2xl p-4
-                               flex items-center justify-between
-                               text-left border border-forest-green/5"
-                        onclick="toggleInfo(this)"
-                        aria-expanded="false"
-                    >
-
-                        <div class="flex items-center gap-3">
-
-                            <span class="material-symbols-outlined text-warm-gold/70">
-                                verified_user
-                            </span>
-
-                            <span
-                                class="font-body-lg text-body-lg text-forest-green"
-                                data-i18n="info_license"
-                            >
-                                Лицензия и регистрация
-                            </span>
-
-                        </div>
-
-                        <span class="material-symbols-outlined chevron text-outline/60">
-                            expand_more
-                        </span>
-
-                    </button>
-
-                    <div class="info-content hidden px-4 pb-4">
-                        <p
-                            class="font-body-md text-body-md text-secondary leading-relaxed"
-                            data-i18n="info_license_desc"
-                        >
-                            Информация о регистрации и разрешительных документах
-                            предоставляется гостям по запросу.
-                        </p>
-                    </div>
-
-
-                    <button
-                        class="info-btn w-full bg-white rounded-2xl p-4
-                               flex items-center justify-between
-                               text-left border border-forest-green/5"
-                        onclick="toggleInfo(this)"
-                        aria-expanded="false"
-                    >
-
-                        <div class="flex items-center gap-3">
-
-                            <span class="material-symbols-outlined text-warm-gold/70">
-                                menu_book
-                            </span>
-
-                            <span
-                                class="font-body-lg text-body-lg text-forest-green"
-                                data-i18n="info_rules"
-                            >
-                                Правила обслуживания
-                            </span>
-
-                        </div>
-
-                        <span class="material-symbols-outlined chevron text-outline/60">
-                            expand_more
-                        </span>
-
-                    </button>
-
-                    <div class="info-content hidden px-4 pb-4">
-                        <p
-                            class="font-body-md text-body-md text-secondary leading-relaxed"
-                            data-i18n="info_rules_desc"
-                        >
-                            Мы заботимся о комфортной атмосфере и просим гостей
-                            соблюдать правила заведения.
-                        </p>
-                    </div>
-
-
-                    <button
-                        class="info-btn w-full bg-white rounded-2xl p-4
-                               flex items-center justify-between
-                               text-left border border-forest-green/5"
-                        onclick="toggleInfo(this)"
-                        aria-expanded="false"
-                    >
-
-                        <div class="flex items-center gap-3">
-
-                            <span class="material-symbols-outlined text-warm-gold/70">
-                                forum
-                            </span>
-
-                            <span
-                                class="font-body-lg text-body-lg text-forest-green"
-                                data-i18n="info_feedback"
-                            >
-                                Книга отзывов
-                            </span>
-
-                        </div>
-
-                        <span class="material-symbols-outlined chevron text-outline/60">
-                            expand_more
-                        </span>
-
-                    </button>
-
-                    <div class="info-content hidden px-4 pb-4">
-                        <p
-                            class="font-body-md text-body-md text-secondary leading-relaxed"
-                            data-i18n="info_feedback_desc"
-                        >
-                            Книга отзывов и предложений предоставляется
-                            по запросу у менеджера.
-                        </p>
-                    </div>
-
-                </div>
-
-            </div>
+              <span data-i18n="info_open_map">
+                Открыть в 2GIS
+              </span>
+
+              <span
+                class="material-symbols-outlined"
+                aria-hidden="true"
+              >
+                arrow_forward
+              </span>
+
+            </a>
+
+          </div>
 
         </div>
+
+
+        <div class="info-divider"></div>
+
+
+        <!-- PHONE -->
+
+        <div class="info-row">
+
+          <div class="info-icon">
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              call
+            </span>
+          </div>
+
+          <div>
+
+            <h2 data-i18n="info_phone_label">
+              Телефон
+            </h2>
+
+            <a
+              class="phone-link"
+              href="tel:+77001234567"
+            >
+              +7 (700) 123 45 67
+            </a>
+
+            <p data-i18n="info_hours">
+              Ежедневно, 14:00 - 01:00
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="info-divider"></div>
+
+
+        <!-- INSTAGRAM -->
+
+        <div class="info-row">
+
+          <div class="info-icon">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
+            >
+              camera_alt
+            </span>
+
+          </div>
+
+          <div>
+
+            <h2>
+              Instagram
+            </h2>
+
+            <a
+              href="https://www.instagram.com/nectar.lounge.almaty"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              @nectar.lounge.almaty
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- CONSUMER CORNER -->
+
+      <div class="consumer-section">
+
+        <div class="section-title-line">
+
+          <h2 data-i18n="info_consumer">
+            Уголок потребителя
+          </h2>
+
+          <span></span>
+
+        </div>
+
+
+        <div class="info-accordion-list">
+
+
+          <!-- LICENSE -->
+
+          <div class="info-accordion">
+
+            <button
+              class="info-btn"
+              type="button"
+              aria-expanded="false"
+            >
+
+              <span>
+
+                <span
+                  class="material-symbols-outlined"
+                  aria-hidden="true"
+                >
+                  verified_user
+                </span>
+
+                <strong data-i18n="info_license">
+                  Лицензия и регистрация
+                </strong>
+
+              </span>
+
+              <span
+                class="material-symbols-outlined chevron"
+                aria-hidden="true"
+              >
+                expand_more
+              </span>
+
+            </button>
+
+            <div
+              class="info-content"
+              hidden
+            >
+
+              <p data-i18n="info_license_desc">
+                Информация о регистрации и разрешительных документах предоставляется гостям по запросу.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <!-- RULES -->
+
+          <div class="info-accordion">
+
+            <button
+              class="info-btn"
+              type="button"
+              aria-expanded="false"
+            >
+
+              <span>
+
+                <span
+                  class="material-symbols-outlined"
+                  aria-hidden="true"
+                >
+                  menu_book
+                </span>
+
+                <strong data-i18n="info_rules">
+                  Правила обслуживания
+                </strong>
+
+              </span>
+
+              <span
+                class="material-symbols-outlined chevron"
+                aria-hidden="true"
+              >
+                expand_more
+              </span>
+
+            </button>
+
+            <div
+              class="info-content"
+              hidden
+            >
+
+              <p data-i18n="info_rules_desc">
+                Мы заботимся о комфортной атмосфере и просим гостей соблюдать правила заведения.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <!-- FEEDBACK -->
+
+          <div class="info-accordion">
+
+            <button
+              class="info-btn"
+              type="button"
+              aria-expanded="false"
+            >
+
+              <span>
+
+                <span
+                  class="material-symbols-outlined"
+                  aria-hidden="true"
+                >
+                  forum
+                </span>
+
+                <strong data-i18n="info_feedback">
+                  Книга отзывов
+                </strong>
+
+              </span>
+
+              <span
+                class="material-symbols-outlined chevron"
+                aria-hidden="true"
+              >
+                expand_more
+              </span>
+
+            </button>
+
+            <div
+              class="info-content"
+              hidden
+            >
+
+              <p data-i18n="info_feedback_desc">
+                Книга отзывов и предложений предоставляется по запросу у менеджера.
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
 
     </section>
 
-</main>
+  </main>
 
 
-<!-- =========================================
-     MODAL
-     ========================================= -->
+  <!-- =====================================================
+       MODAL
+       ===================================================== -->
 
-<div
-    class="fixed inset-0 z-[100] hidden items-center justify-center px-4"
+  <div
+    class="modal"
     id="itemModal"
+    hidden
     role="dialog"
     aria-modal="true"
     aria-labelledby="modalTitle"
->
+  >
 
-    <div
-        class="absolute inset-0 bg-forest-green/60 backdrop-blur-sm"
-    ></div>
+    <div class="modal-backdrop"></div>
+
+    <div class="modal-dialog">
 
 
-    <div
-        class="relative modal-glass w-full max-w-md rounded-[32px]
-               overflow-hidden flex flex-col max-h-[85vh]
-               border border-white/40"
-    >
+      <!-- IMAGE -->
 
-        <div
-            class="relative w-full h-48 bg-forest-green/5
-                   overflow-hidden"
-            id="modalImageContainer"
-            style="display:none;"
-        >
-
-            <img
-                id="modalImage"
-                class="w-full h-full object-cover"
-                src=""
-                alt=""
-            >
-
-            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-
-        </div>
-
+      <div
+        class="modal-image-wrap"
+        id="modalImageContainer"
+        hidden
+      >
 
         <div
-            class="sticky top-0 bg-transparent p-5
-                   flex justify-between items-start z-10
-                   border-b border-forest-green/10 gap-4"
+          class="modal-image-glow"
+          aria-hidden="true"
+        ></div>
+
+        <img
+          id="modalImage"
+          src=""
+          alt=""
         >
 
-            <h3
-                class="font-serif text-[24px] text-forest-green
-                       font-semibold leading-tight break-words pr-4"
-                id="modalTitle"
-            >
-                Название
-            </h3>
+      </div>
 
-            <button
-                class="w-8 h-8 flex-shrink-0 flex items-center
-                       justify-center rounded-full
-                       bg-forest-green/5 text-forest-green
-                       hover:bg-forest-green/15 transition-colors"
-                onclick="closeModal()"
-                data-modal-close
-                aria-label="Закрыть"
+
+      <!-- HEADER -->
+
+      <div class="modal-header">
+
+        <h2 id="modalTitle">
+          Название
+        </h2>
+
+        <button
+          id="modalCloseButton"
+          class="modal-close"
+          type="button"
+          data-modal-close
+          aria-label="Закрыть"
+        >
+
+          <span
+            class="material-symbols-outlined"
+            aria-hidden="true"
+          >
+            close
+          </span>
+
+        </button>
+
+      </div>
+
+
+      <!-- BODY -->
+
+      <div class="modal-body">
+
+        <div class="modal-price-block">
+
+          <div
+            class="modal-price"
+            id="modalPrice"
+          >
+            0 <small>₸</small>
+          </div>
+
+          <div class="modal-weight">
+
+            <span
+              class="material-symbols-outlined"
+              aria-hidden="true"
             >
-                <span class="material-symbols-outlined text-[20px]">
-                    close
-                </span>
-            </button>
+              scale
+            </span>
+
+            <span id="modalWeight"></span>
+
+          </div>
 
         </div>
 
 
-        <div class="overflow-y-auto p-6 flex flex-col gap-6">
+        <div
+          class="modal-ingredients"
+          id="modalIngredientsContainer"
+          hidden
+        >
 
-            <div class="flex flex-col gap-1 border-b border-warm-gold/30 pb-4">
+          <h3 data-i18n="modal_ingredients">
+            Ингредиенты
+          </h3>
 
-                <span
-                    class="font-serif text-[32px] text-warm-gold
-                           font-medium lining-nums"
-                    id="modalPrice"
-                >
-                    0 ₸
-                </span>
-
-                <div class="flex items-center gap-2 opacity-50">
-
-                    <span class="material-symbols-outlined text-[14px]">
-                        scale
-                    </span>
-
-                    <span
-                        class="font-label-caps text-[10px]
-                               tracking-widest uppercase lining-nums"
-                        id="modalWeight"
-                    ></span>
-
-                </div>
-
-            </div>
-
-
-            <div
-                class="hidden flex-col gap-3"
-                id="modalIngredientsContainer"
-            >
-
-                <h4
-                    class="font-label-caps text-[11px]
-                           text-forest-green/50
-                           tracking-[0.2em] uppercase"
-                    data-i18n="modal_ingredients"
-                >
-                    Ингредиенты
-                </h4>
-
-                <div
-                    class="font-serif text-[20px]
-                           text-forest-green leading-relaxed"
-                    id="modalIngredients"
-                ></div>
-
-            </div>
+          <p id="modalIngredients"></p>
 
         </div>
 
+      </div>
 
-        <div class="p-5 bg-transparent border-t border-forest-green/10">
 
-            <button
-                class="w-full py-3.5 bg-forest-green text-cream
-                       rounded-xl font-label-caps tracking-widest
-                       text-sm active:scale-[0.98]
-                       transition-transform shadow-lg
-                       shadow-forest-green/20"
-                data-i18n="modal_close"
-                onclick="closeModal()"
-            >
-                ЗАКРЫТЬ
-            </button>
+      <!-- FOOTER -->
 
-        </div>
+      <div class="modal-footer">
+
+        <button
+          class="modal-close-wide"
+          type="button"
+          data-modal-close
+          data-i18n="modal_close"
+        >
+          ЗАКРЫТЬ
+        </button>
+
+      </div>
 
     </div>
 
-</div>
+  </div>
 
 
-<!-- =========================================
-     BOTTOM NAVIGATION
-     ========================================= -->
+  <!-- =====================================================
+       BOTTOM NAVIGATION
+       ===================================================== -->
 
-<nav
-    class="fixed bottom-0 inset-x-0 z-50 pb-safe
-           glass-effect border-t border-forest-green/10"
->
+  <nav
+    class="bottom-nav"
+    aria-label="Main navigation"
+  >
 
-    <div class="flex justify-around items-center h-[72px] px-8">
+    <div class="bottom-nav-inner">
 
-        <button
-            class="bottom-nav-btn flex flex-col items-center
-                   justify-center gap-1 transition-all
-                   text-forest-green active:scale-95"
-            data-path="menu"
-            onclick="switchSection('menu')"
+      <button
+        class="bottom-nav-btn is-active"
+        type="button"
+        data-path="menu"
+        aria-current="page"
+      >
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
         >
-            <span class="material-symbols-outlined text-[24px]">
-                restaurant_menu
-            </span>
+          restaurant_menu
+        </span>
 
-            <span
-                class="text-[10px] font-label-caps
-                       tracking-widest uppercase"
-                data-i18n="tab_menu"
-            >
-                Меню
-            </span>
-        </button>
+        <span data-i18n="tab_menu">
+          Меню
+        </span>
+
+      </button>
 
 
-        <button
-            class="bottom-nav-btn flex flex-col items-center
-                   justify-center gap-1 transition-all
-                   text-outline active:scale-95"
-            data-path="info"
-            onclick="switchSection('info')"
+      <button
+        class="bottom-nav-btn"
+        type="button"
+        data-path="info"
+        aria-current="false"
+      >
+
+        <span
+          class="material-symbols-outlined"
+          aria-hidden="true"
         >
-            <span class="material-symbols-outlined text-[24px]">
-                info
-            </span>
+          info
+        </span>
 
-            <span
-                class="text-[10px] font-label-caps
-                       tracking-widest uppercase"
-                data-i18n="tab_info"
-            >
-                Инфо
-            </span>
-        </button>
+        <span data-i18n="tab_info">
+          Инфо
+        </span>
+
+      </button>
 
     </div>
 
-</nav>
+  </nav>
 
 
-<script src="menu-data.js"></script>
-<script src="app.js"></script>
+  <!-- =====================================================
+       DATA + APP
+       ===================================================== -->
+
+  <script src="menu-data.js" defer></script>
+  <script src="app.js" defer></script>
 
 </body>
 </html>
