@@ -2,812 +2,182 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
-  >
-
-  <meta
-    name="theme-color"
-    content="#fbf9f6"
-  >
-
-  <meta
-    name="description"
-    content="NECTAR — Lounge · Kitchen · Bar. Меню."
-  >
-
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fbf9f6">
+  <meta name="description" content="NECTAR — Lounge · Bar · Kitchen. Digital menu.">
   <title>NECTAR — Меню</title>
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&display=swap"
-    rel="stylesheet"
-  >
-
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-
-  <!-- =====================================================
-       HEADER
-       ===================================================== -->
-
-  <header class="site-header">
-
-    <div class="site-header-inner">
-
-      <div
-        class="header-spacer"
-        aria-hidden="true"
-      ></div>
-
-      <a
-        class="brand"
-        href="#menu"
-        aria-label="NECTAR"
-      >
-        <span class="brand-name">
-          NECTAR
-        </span>
-
-        <span
-          class="brand-subtitle"
-          data-i18n="header_subtitle"
-        >
-          Lounge · Bar · Kitchen
-        </span>
+  <header class="site-header" id="siteHeader">
+    <div class="site-header__inner">
+      <div class="header-balance" aria-hidden="true"></div>
+      <a class="brand" href="#" id="brandHome" aria-label="NECTAR">
+        <span class="brand__name">NECTAR</span>
+        <span class="brand__subtitle" data-i18n="header_subtitle">Lounge · Bar · Kitchen</span>
       </a>
-
-      <!-- LANGUAGE -->
-
-      <div
-        class="language-switcher"
-        role="group"
-        aria-label="Language"
-      >
-
-        <button
-          class="lang-btn is-active"
-          type="button"
-          data-lang="RU"
-          aria-pressed="true"
-        >
-          RU
-        </button>
-
-        <button
-          class="lang-btn"
-          type="button"
-          data-lang="KZ"
-          aria-pressed="false"
-        >
-          KZ
-        </button>
-
-        <button
-          class="lang-btn"
-          type="button"
-          data-lang="EN"
-          aria-pressed="false"
-        >
-          EN
-        </button>
-
+      <div class="language-switcher" role="group" aria-label="Language">
+        <button class="lang-btn is-active" type="button" data-lang="RU" aria-pressed="true">RU</button>
+        <button class="lang-btn" type="button" data-lang="KZ" aria-pressed="false">KZ</button>
+        <button class="lang-btn" type="button" data-lang="EN" aria-pressed="false">EN</button>
       </div>
-
     </div>
-
   </header>
 
-
-  <!-- =====================================================
-       MAIN
-       ===================================================== -->
-
-  <main id="menu">
-
-    <!-- ===================================================
-         MENU SECTION
-         =================================================== -->
-
-    <section
-      class="spa-section is-active"
-      id="menu-section"
-      aria-label="Menu"
-    >
-
-      <!-- =================================================
-           HERO
-           ================================================= -->
-
-      <div class="hero-wrapper">
-
-        <img
-          class="hero-image"
-          src="assets/nectar-hero.jpg"
-          alt="NECTAR"
-          width="1200"
-          height="700"
-          fetchpriority="high"
-        >
-
-        <div
-          class="hero-overlay"
-          aria-hidden="true"
-        ></div>
-
-        <div class="hero-content">
-
-          <div class="hero-brand">
-            NECTAR
-          </div>
-
-          <div
-            class="hero-subtitle"
-            data-i18n="hero_subtitle"
-          >
-            LOUNGE · KITCHEN · BAR
-          </div>
-
-          <h1
-            class="hero-title"
-            data-i18n="hero_title"
-          >
-            Меню
-          </h1>
-
-          <p
-            class="hero-description"
-            data-i18n="hero_description"
-          >
-            Кухня, мангал и напитки
-          </p>
-
+  <main>
+    <section class="spa-section is-active" id="menu-section" aria-label="Menu">
+      <section class="hero" aria-labelledby="heroTitle">
+        <img class="hero__image" src="assets/nectar-hero.jpg" alt="Интерьер NECTAR" width="1600" height="900" fetchpriority="high">
+        <div class="hero__veil" aria-hidden="true"></div>
+        <div class="hero__content">
+          <p class="hero__eyebrow" data-i18n="hero_description">Кухня, мангал и напитки</p>
+          <h1 class="hero__title" id="heroTitle" data-i18n="hero_title">Меню</h1>
         </div>
-
-      </div>
-
-
-      <!-- =================================================
-           MENU SHELL
-           ================================================= -->
+      </section>
 
       <div class="menu-shell">
-
-        <!-- =================================================
-             STICKY NAVIGATION
-             ================================================= -->
-
-        <div class="menu-sticky">
-
-          <!-- SEARCH -->
-
-          <div class="search-container">
-
-            <span
-              class="material-symbols-outlined search-icon"
-              aria-hidden="true"
-            >
-              search
-            </span>
-
-            <input
-              id="searchInput"
-              type="search"
-              autocomplete="off"
-              spellcheck="false"
-              inputmode="search"
-              data-i18n-placeholder="search_placeholder"
-              placeholder="Поиск блюд, напитков..."
-              aria-label="Поиск"
-            >
-
-            <button
-              id="clearSearchBtn"
-              class="clear-search"
-              type="button"
-              hidden
-              aria-label="Очистить поиск"
-            >
-              <span
-                class="material-symbols-outlined"
-                aria-hidden="true"
-              >
-                close
-              </span>
+        <div class="menu-controls" id="menuControls">
+          <label class="search-box" for="searchInput">
+            <span class="material-symbols-outlined search-box__icon" aria-hidden="true">search</span>
+            <input id="searchInput" type="search" autocomplete="off" spellcheck="false" inputmode="search" data-i18n-placeholder="search_placeholder" placeholder="Поиск блюд, напитков...">
+            <button class="search-box__clear" id="clearSearchBtn" type="button" hidden aria-label="Очистить поиск">
+              <span class="material-symbols-outlined" aria-hidden="true">close</span>
             </button>
+          </label>
 
+          <div class="main-tabs" role="tablist" aria-label="Menu type">
+            <span class="main-tabs__indicator" id="mainTabsIndicator" aria-hidden="true"></span>
+            <button class="main-tab is-active" type="button" role="tab" data-type="kitchen" aria-selected="true" data-i18n="nav_kitchen">КУХНЯ</button>
+            <button class="main-tab" type="button" role="tab" data-type="bar" aria-selected="false" data-i18n="nav_bar">БАР</button>
           </div>
 
-
-          <!-- KITCHEN / BAR -->
-
-          <div
-            class="main-tabs"
-            role="tablist"
-            aria-label="Menu type"
-          >
-
-            <div
-              class="main-tab-indicator"
-              id="nav-indicator"
-              aria-hidden="true"
-            ></div>
-
-            <button
-              class="nav-btn is-active"
-              type="button"
-              role="tab"
-              data-type="kitchen"
-              aria-selected="true"
-              data-i18n="nav_kitchen"
-            >
-              КУХНЯ
-            </button>
-
-            <button
-              class="nav-btn"
-              type="button"
-              role="tab"
-              data-type="bar"
-              aria-selected="false"
-              data-i18n="nav_bar"
-            >
-              БАР
-            </button>
-
-          </div>
-
-
-          <!-- CATEGORIES -->
-
-          <div
-            class="category-scroller"
-            id="categoryContainer"
-            role="tablist"
-            aria-label="Категории меню"
-          ></div>
-
+          <div class="category-strip" id="categoryStrip" role="tablist" aria-label="Категории меню"></div>
+          <div class="search-mode-note" id="searchModeNote" hidden></div>
         </div>
 
-
-        <!-- MENU CONTENT -->
-
-        <div
-          id="menuContainer"
-          class="menu-container"
-          aria-live="polite"
-        ></div>
-
+        <div class="menu-content" id="menuContainer" aria-live="polite"></div>
       </div>
-
     </section>
 
-
-    <!-- ===================================================
-         INFO SECTION
-         =================================================== -->
-
-    <section
-      class="spa-section info-section"
-      id="info-section"
-      aria-label="Info"
-    >
-
-      <div class="info-head">
-
-        <h1 data-i18n="info_title">
-          Информация
-        </h1>
-
-        <p data-i18n="info_subtitle">
-          Свяжитесь с нами или найдите важные детали
-        </p>
-
+    <section class="spa-section info-section" id="info-section" aria-label="Info">
+      <div class="info-heading">
+        <h1 data-i18n="info_title">Информация</h1>
+        <p data-i18n="info_subtitle">Свяжитесь с нами или найдите важные детали</p>
       </div>
-
-
-      <!-- CONTACT CARD -->
 
       <div class="info-card">
-
-        <!-- ADDRESS -->
-
         <div class="info-row">
-
-          <div class="info-icon">
-            <span
-              class="material-symbols-outlined"
-              aria-hidden="true"
-            >
-              location_on
-            </span>
-          </div>
-
+          <span class="info-row__icon material-symbols-outlined" aria-hidden="true">location_on</span>
           <div>
-
-            <h2 data-i18n="info_address_label">
-              Адрес
-            </h2>
-
-            <p data-i18n="info_address">
-              Проспект Дулати 1а, мкр. Архат, Алматы
-            </p>
-
-            <a
-              href="https://go.2gis.com/iV3rq"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-
-              <span data-i18n="info_open_map">
-                Открыть в 2GIS
-              </span>
-
-              <span
-                class="material-symbols-outlined"
-                aria-hidden="true"
-              >
-                arrow_forward
-              </span>
-
+            <h2 data-i18n="info_address_label">Адрес</h2>
+            <p data-i18n="info_address">Проспект Дулати 1а, мкр. Архат, Алматы</p>
+            <a href="https://go.2gis.com/iV3rq" target="_blank" rel="noopener noreferrer">
+              <span data-i18n="info_open_map">Открыть в 2GIS</span>
+              <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
             </a>
-
           </div>
-
         </div>
-
-
         <div class="info-divider"></div>
-
-
-        <!-- PHONE -->
-
         <div class="info-row">
-
-          <div class="info-icon">
-            <span
-              class="material-symbols-outlined"
-              aria-hidden="true"
-            >
-              call
-            </span>
-          </div>
-
+          <span class="info-row__icon material-symbols-outlined" aria-hidden="true">call</span>
           <div>
-
-            <h2 data-i18n="info_phone_label">
-              Телефон
-            </h2>
-
-            <a
-              class="phone-link"
-              href="tel:+77001234567"
-            >
-              +7 (700) 123 45 67
-            </a>
-
-            <p data-i18n="info_hours">
-              Ежедневно, 14:00 - 01:00
-            </p>
-
+            <h2 data-i18n="info_phone_label">Телефон</h2>
+            <a class="phone-link" href="tel:+77001234567">+7 (700) 123 45 67</a>
+            <p data-i18n="info_hours">Ежедневно, 14:00 - 01:00</p>
           </div>
-
         </div>
-
-
         <div class="info-divider"></div>
-
-
-        <!-- INSTAGRAM -->
-
         <div class="info-row">
-
-          <div class="info-icon">
-
-            <span
-              class="material-symbols-outlined"
-              aria-hidden="true"
-            >
-              camera_alt
-            </span>
-
-          </div>
-
+          <span class="info-row__icon material-symbols-outlined" aria-hidden="true">camera_alt</span>
           <div>
-
-            <h2>
-              Instagram
-            </h2>
-
-            <a
-              href="https://www.instagram.com/nectar.lounge.almaty"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              @nectar.lounge.almaty
-            </a>
-
+            <h2>Instagram</h2>
+            <a href="https://www.instagram.com/nectar.lounge.almaty" target="_blank" rel="noopener noreferrer">@nectar.lounge.almaty</a>
           </div>
-
         </div>
-
       </div>
 
-
-      <!-- CONSUMER CORNER -->
-
-      <div class="consumer-section">
-
-        <div class="section-title-line">
-
-          <h2 data-i18n="info_consumer">
-            Уголок потребителя
-          </h2>
-
-          <span></span>
-
+      <div class="consumer-corner">
+        <div class="section-line-title">
+          <h2 data-i18n="info_consumer">Уголок потребителя</h2>
+          <span aria-hidden="true"></span>
         </div>
 
-
-        <div class="info-accordion-list">
-
-
-          <!-- LICENSE -->
-
-          <div class="info-accordion">
-
-            <button
-              class="info-btn"
-              type="button"
-              aria-expanded="false"
-            >
-
-              <span>
-
-                <span
-                  class="material-symbols-outlined"
-                  aria-hidden="true"
-                >
-                  verified_user
-                </span>
-
-                <strong data-i18n="info_license">
-                  Лицензия и регистрация
-                </strong>
-
-              </span>
-
-              <span
-                class="material-symbols-outlined chevron"
-                aria-hidden="true"
-              >
-                expand_more
-              </span>
-
+        <div class="accordion-list">
+          <article class="accordion-item">
+            <button class="accordion-trigger" type="button" aria-expanded="false">
+              <span class="accordion-trigger__label"><span class="material-symbols-outlined" aria-hidden="true">verified_user</span><strong data-i18n="info_license">Лицензия и регистрация</strong></span>
+              <span class="material-symbols-outlined accordion-chevron" aria-hidden="true">expand_more</span>
             </button>
+            <div class="accordion-panel" hidden><p data-i18n="info_license_desc">Информация о регистрации и разрешительных документах предоставляется гостям по запросу.</p></div>
+          </article>
 
-            <div
-              class="info-content"
-              hidden
-            >
-
-              <p data-i18n="info_license_desc">
-                Информация о регистрации и разрешительных документах предоставляется гостям по запросу.
-              </p>
-
-            </div>
-
-          </div>
-
-
-          <!-- RULES -->
-
-          <div class="info-accordion">
-
-            <button
-              class="info-btn"
-              type="button"
-              aria-expanded="false"
-            >
-
-              <span>
-
-                <span
-                  class="material-symbols-outlined"
-                  aria-hidden="true"
-                >
-                  menu_book
-                </span>
-
-                <strong data-i18n="info_rules">
-                  Правила обслуживания
-                </strong>
-
-              </span>
-
-              <span
-                class="material-symbols-outlined chevron"
-                aria-hidden="true"
-              >
-                expand_more
-              </span>
-
+          <article class="accordion-item">
+            <button class="accordion-trigger" type="button" aria-expanded="false">
+              <span class="accordion-trigger__label"><span class="material-symbols-outlined" aria-hidden="true">menu_book</span><strong data-i18n="info_rules">Правила обслуживания</strong></span>
+              <span class="material-symbols-outlined accordion-chevron" aria-hidden="true">expand_more</span>
             </button>
+            <div class="accordion-panel" hidden><p data-i18n="info_rules_desc">Мы заботимся о комфортной атмосфере и просим гостей соблюдать правила заведения.</p></div>
+          </article>
 
-            <div
-              class="info-content"
-              hidden
-            >
-
-              <p data-i18n="info_rules_desc">
-                Мы заботимся о комфортной атмосфере и просим гостей соблюдать правила заведения.
-              </p>
-
-            </div>
-
-          </div>
-
-
-          <!-- FEEDBACK -->
-
-          <div class="info-accordion">
-
-            <button
-              class="info-btn"
-              type="button"
-              aria-expanded="false"
-            >
-
-              <span>
-
-                <span
-                  class="material-symbols-outlined"
-                  aria-hidden="true"
-                >
-                  forum
-                </span>
-
-                <strong data-i18n="info_feedback">
-                  Книга отзывов
-                </strong>
-
-              </span>
-
-              <span
-                class="material-symbols-outlined chevron"
-                aria-hidden="true"
-              >
-                expand_more
-              </span>
-
+          <article class="accordion-item">
+            <button class="accordion-trigger" type="button" aria-expanded="false">
+              <span class="accordion-trigger__label"><span class="material-symbols-outlined" aria-hidden="true">forum</span><strong data-i18n="info_feedback">Книга отзывов</strong></span>
+              <span class="material-symbols-outlined accordion-chevron" aria-hidden="true">expand_more</span>
             </button>
-
-            <div
-              class="info-content"
-              hidden
-            >
-
-              <p data-i18n="info_feedback_desc">
-                Книга отзывов и предложений предоставляется по запросу у менеджера.
-              </p>
-
-            </div>
-
-          </div>
-
+            <div class="accordion-panel" hidden><p data-i18n="info_feedback_desc">Книга отзывов и предложений предоставляется по запросу у менеджера.</p></div>
+          </article>
         </div>
-
       </div>
-
     </section>
-
   </main>
 
-
-  <!-- =====================================================
-       MODAL
-       ===================================================== -->
-
-  <div
-    class="modal"
-    id="itemModal"
-    hidden
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="modalTitle"
-  >
-
-    <div class="modal-backdrop"></div>
-
-    <div class="modal-dialog">
-
-
-      <!-- IMAGE -->
-
-      <div
-        class="modal-image-wrap"
-        id="modalImageContainer"
-        hidden
-      >
-
-        <div
-          class="modal-image-glow"
-          aria-hidden="true"
-        ></div>
-
-        <img
-          id="modalImage"
-          src=""
-          alt=""
-        >
-
+  <div class="modal" id="itemModal" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal__backdrop" data-modal-close aria-hidden="true"></div>
+    <article class="modal__dialog" id="modalDialog">
+      <div class="modal__image-wrap" id="modalImageContainer" hidden>
+        <span class="modal__glow" aria-hidden="true"></span>
+        <img id="modalImage" src="" alt="">
       </div>
-
-
-      <!-- HEADER -->
-
-      <div class="modal-header">
-
-        <h2 id="modalTitle">
-          Название
-        </h2>
-
-        <button
-          id="modalCloseButton"
-          class="modal-close"
-          type="button"
-          data-modal-close
-          aria-label="Закрыть"
-        >
-
-          <span
-            class="material-symbols-outlined"
-            aria-hidden="true"
-          >
-            close
-          </span>
-
+      <header class="modal__header">
+        <h2 id="modalTitle">Название</h2>
+        <button class="modal__close" id="modalCloseButton" type="button" data-modal-close aria-label="Закрыть">
+          <span class="material-symbols-outlined" aria-hidden="true">close</span>
         </button>
-
-      </div>
-
-
-      <!-- BODY -->
-
-      <div class="modal-body">
-
-        <div class="modal-price-block">
-
-          <div
-            class="modal-price"
-            id="modalPrice"
-          >
-            0 <small>₸</small>
-          </div>
-
-          <div class="modal-weight">
-
-            <span
-              class="material-symbols-outlined"
-              aria-hidden="true"
-            >
-              scale
-            </span>
-
-            <span id="modalWeight"></span>
-
-          </div>
-
+      </header>
+      <div class="modal__body" id="modalBody">
+        <div class="modal__price-block">
+          <div class="modal__price" id="modalPrice">0 <small>₸</small></div>
+          <div class="modal__weight"><span class="material-symbols-outlined" aria-hidden="true">scale</span><span id="modalWeight"></span></div>
         </div>
-
-
-        <div
-          class="modal-ingredients"
-          id="modalIngredientsContainer"
-          hidden
-        >
-
-          <h3 data-i18n="modal_ingredients">
-            Ингредиенты
-          </h3>
-
+        <div class="modal__ingredients" id="modalIngredientsContainer" hidden>
+          <h3 data-i18n="modal_ingredients">Ингредиенты</h3>
           <p id="modalIngredients"></p>
-
         </div>
-
       </div>
-
-
-      <!-- FOOTER -->
-
-      <div class="modal-footer">
-
-        <button
-          class="modal-close-wide"
-          type="button"
-          data-modal-close
-          data-i18n="modal_close"
-        >
-          ЗАКРЫТЬ
-        </button>
-
-      </div>
-
-    </div>
-
+      <footer class="modal__footer">
+        <button class="modal__close-wide" type="button" data-modal-close data-i18n="modal_close">ЗАКРЫТЬ</button>
+      </footer>
+    </article>
   </div>
 
-
-  <!-- =====================================================
-       BOTTOM NAVIGATION
-       ===================================================== -->
-
-  <nav
-    class="bottom-nav"
-    aria-label="Main navigation"
-  >
-
-    <div class="bottom-nav-inner">
-
-      <button
-        class="bottom-nav-btn is-active"
-        type="button"
-        data-path="menu"
-        aria-current="page"
-      >
-
-        <span
-          class="material-symbols-outlined"
-          aria-hidden="true"
-        >
-          restaurant_menu
-        </span>
-
-        <span data-i18n="tab_menu">
-          Меню
-        </span>
-
+  <nav class="bottom-nav" aria-label="Main navigation">
+    <div class="bottom-nav__inner">
+      <button class="bottom-nav__button is-active" type="button" data-path="menu" aria-current="page">
+        <span class="material-symbols-outlined" aria-hidden="true">restaurant_menu</span>
+        <span data-i18n="tab_menu">Меню</span>
       </button>
-
-
-      <button
-        class="bottom-nav-btn"
-        type="button"
-        data-path="info"
-        aria-current="false"
-      >
-
-        <span
-          class="material-symbols-outlined"
-          aria-hidden="true"
-        >
-          info
-        </span>
-
-        <span data-i18n="tab_info">
-          Инфо
-        </span>
-
+      <button class="bottom-nav__button" type="button" data-path="info" aria-current="false">
+        <span class="material-symbols-outlined" aria-hidden="true">info</span>
+        <span data-i18n="tab_info">Инфо</span>
       </button>
-
     </div>
-
   </nav>
-
-
-  <!-- =====================================================
-       DATA + APP
-       ===================================================== -->
 
   <script src="menu-data.js" defer></script>
   <script src="app.js" defer></script>
-
 </body>
 </html>
