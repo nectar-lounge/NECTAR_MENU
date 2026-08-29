@@ -1,688 +1,1389 @@
-// ============================================
-// NECTAR MENU DATA
-// ============================================
-
 const MENU = [
-
-    // =========================================
-    // КУХНЯ
-    // =========================================
-
-    // Холодные закуски
-
-    {
-        id: "1-1",
-        type: "kitchen",
-        category_id: "cold-appetizers",
-        category_ru: "Холодные закуски",
-        category_kz: "Салқын тіскебасарлар",
-        category_en: "Cold Appetizers",
-
-        name_ru: "Мясное плато (казы, жая, жал)",
-        name_kz: "Ет ассортиі (қазы, жая, жал)",
-        name_en: "Meat platter (kazy, zhaya, zhal)",
-
-        price: 4990,
-        weight: "250g",
-
-        composition_ru: "Традиционные мясные деликатесы",
-        composition_kz: "Дәстүрлі ет деликатестері",
-        composition_en: "Traditional meat delicacies",
-
-        note: "",
-        image: ""
-    },
-
-    {
-        id: "1-2",
-        type: "kitchen",
-        category_id: "cold-appetizers",
-        category_ru: "Холодные закуски",
-        category_kz: "Салқын тіскебасарлар",
-        category_en: "Cold Appetizers",
-
-        name_ru: "Домашние соленья",
-        name_kz: "Үй тұздықтары",
-        name_en: "Homemade pickles",
-
-        price: 2890,
-        weight: "300g",
-
-        composition_ru: "Ассорти из домашних солений",
-        composition_kz: "Үй тұздықтарының ассортиі",
-        composition_en: "Assorted homemade pickles",
-
-        note: "",
-        image: ""
-    },
-
-    {
-        id: "1-3",
-        type: "kitchen",
-        category_id: "cold-appetizers",
-        category_ru: "Холодные закуски",
-        category_kz: "Салқын тіскебасарлар",
-        category_en: "Cold Appetizers",
-
-        name_ru: "Овощная нарезка",
-        name_kz: "Көкөніс тілімі",
-        name_en: "Vegetable platter",
-
-        price: 2890,
-        weight: "350g",
-
-        composition_ru: "Свежие сезонные овощи",
-        composition_kz: "Балғын маусымдық көкөністер",
-        composition_en: "Fresh seasonal vegetables",
-
-        note: "",
-        image: ""
-    },
-
-    {
-        id: "1-4",
-        type: "kitchen",
-        category_id: "cold-appetizers",
-        category_ru: "Холодные закуски",
-        category_kz: "Салқын тіскебасарлар",
-        category_en: "Cold Appetizers",
-
-        name_ru: "Рыбное ассорти",
-        name_kz: "Балық ассортиі",
-        name_en: "Fish platter",
-
-        price: 5590,
-        weight: "250g",
-
-        composition_ru: "Ассорти из благородных видов рыб",
-        composition_kz: "Асыл балық түрлерінің ассортиі",
-        composition_en: "Assorted noble fish species",
-
-        note: "",
-        image: ""
-    },
-
-    {
-        id: "1-5",
-        type: "kitchen",
-        category_id: "cold-appetizers",
-        category_ru: "Холодные закуски",
-        category_kz: "Салқын тіскебасарлар",
-        category_en: "Cold Appetizers",
-
-        name_ru: "Капрезе",
-        name_kz: "Капрезе",
-        name_en: "Caprese",
-
-        price: 2790,
-        weight: "220g",
-
-        composition_ru: "Моцарелла, томаты, соус песто",
-        composition_kz: "Моцарелла, қызанақ, песто соусы",
-        composition_en: "Mozzarella, tomatoes, pesto sauce",
-
-        note: "",
-        image: ""
-    },
-
-    {
-        id: "1-6",
-        type: "kitchen",
-        category_id: "cold-appetizers",
-        category_ru: "Холодные закуски",
-        category_kz: "Салқын тіскебасарлар",
-        category_en: "Cold Appetizers",
-
-        name_ru: "Сырное плато",
-        name_kz: "Ірімшік ассортиі",
-        name_en: "Cheese platter",
-
-        price: 4990,
-        weight: "250g",
-
-        composition_ru: "Ассорти из изысканных сортов сыра",
-        composition_kz: "Тіскебасар ірімшіктер ассортиі",
-        composition_en: "Assorted exquisite cheeses",
-
-        note: "",
-        image: ""
-    },
-
-
-    // =========================================
-    // САЛАТЫ
-    // =========================================
-
-    {
-        id: "2-1",
-        type: "kitchen",
-        category_id: "salads",
-        category_ru: "Салаты",
-        category_kz: "Салаттар",
-        category_en: "Salads",
-
-        name_ru: "Свежий овощной салат",
-        name_kz: "Балғын көкөніс салаты",
-        name_en: "Fresh vegetable salad",
-
-        price: 1990,
-        weight: "250g",
-
-        composition_ru: "Сезонные овощи с зеленью",
-        composition_kz: "Маусымдық көкөністер мен көкшөп",
-        composition_en: "Seasonal vegetables with herbs",
-
-        note: "",
-        image: ""
-    },
-
-    {
-        id: "2-2",
-        type: "kitchen",
-        category_id: "salads",
-        category_ru: "Салаты",
-        category_kz: "Салаттар",
-        category_en: "Salads",
-
-        name_ru: "Аччик-чучук",
-        name_kz: "Аччик-чучук",
-        name_en: "Achichuk",
-
-        price: 1790,
-        weight: "200g",
-
-        composition_ru: "Традиционный салат из томатов и лука",
-        composition_kz: "Қызанақ пен пияздан жасалған дәстүрлі салат",
-        composition_en: "Traditional tomato and onion salad",
-
-        note: "",
-        image: ""
-    },
-
-    {
-        id: "2-3",
-        type: "kitchen",
-        category_id: "salads",
-        category_ru: "Салаты",
-        category_kz: "Салаттар",
-        category_en: "Salads",
-
-        name_ru: "Цезарь с курицей",
-        name_kz: "Тауық еті қосылған Цезарь",
-        name_en: "Chicken Caesar",
-
-        price: 2590,
-        weight: "280g",
-
-        composition_ru: "Айсберг, куриное филе, соус цезарь, пармезан, гренки",
-        composition_kz: "Айсберг, тауық филесі, цезарь соусы, пармезан, кептірілген нан",
-        composition_en: "Iceberg, chicken fillet, Caesar sauce, parmesan, croutons",
-
-        note: "",
-        image: ""
-    },
-
-    {
-        id: "2-4",
-        type: "kitchen",
-        category_id: "salads",
-        category_ru: "Салаты",
-        category_kz: "Салаттар",
-        category_en: "Salads",
-
-        name_ru: "Хрустящие баклажаны",
-        name_kz: "Қытырлақ баклажандар",
-        name_en: "Crispy Eggplant",
-
-        price: 2790,
-        weight: "250g",
-
-        composition_ru: "Баклажаны, томаты, соус сладкий чили",
-        composition_kz: "Баклажандар, қызанақтар, тәтті чили соусы",
-        composition_en: "Eggplant, tomatoes, sweet chili sauce",
-
-        note: "",
-        image: ""
-    },
-
-    {
-        id: "2-5",
-        type: "kitchen",
-        category_id: "salads",
-        category_ru: "Салаты",
-        category_kz: "Салаттар",
-        category_en: "Salads",
-
-        name_ru: "Греческий салат",
-        name_kz: "Грек салаты",
-        name_en: "Greek Salad",
-
-        price: 2490,
-        weight: "280g",
-
-        composition_ru: "Овощи, фета, маслины, оливковое масло",
-        composition_kz: "Көкөністер, фета, зәйтүн, зәйтүн майы",
-        composition_en: "Vegetables, feta, olives, olive oil",
-
-        note: "",
-        image: ""
-    },
-
-    {
-        id: "2-6",
-        type: "kitchen",
-        category_id: "salads",
-        category_ru: "Салаты",
-        category_kz: "Салаттар",
-        category_en: "Salads",
-
-        name_ru: "Теплый салат с кониной",
-        name_kz: "Жылқы етінен жасалған жылы салат",
-        name_en: "Warm horse meat salad",
-
-        price: 2990,
-        weight: "260g",
-
-        composition_ru: "Конина, микс салата, фирменная заправка",
-        composition_kz: "Жылқы еті, салат миксі, фирмалық тұздық",
-        composition_en: "Horse meat, salad mix, signature dressing",
-
-        note: "",
-        image: ""
-    },
-
-    {
-        id: "2-7",
-        type: "kitchen",
-        category_id: "salads",
-        category_ru: "Салаты",
-        category_kz: "Салаттар",
-        category_en: "Salads",
-
-        name_ru: "Салат с креветками и рукколой",
-        name_kz: "Креветкалар мен руккола қосылған салат",
-        name_en: "Shrimp and arugula salad",
-
-        price: 3990,
-        weight: "220g",
-
-        composition_ru: "Креветки, руккола, черри, кедровые орехи, пармезан",
-        composition_kz: "Креветкалар, руккола, черри, балқарағай жаңғақтары, пармезан",
-        composition_en: "Shrimp, arugula, cherry tomatoes, pine nuts, parmesan",
-
-        note: "",
-        image: ""
-    },
-
-
-    // =========================================
-    // ГОРЯЧИЕ ЗАКУСКИ
-    // =========================================
-
-    {
-        id: "3-1",
-        type: "kitchen",
-        category_id: "hot-appetizers",
-        category_ru: "Горячие закуски",
-        category_kz: "Ыстық тіскебасарлар",
-        category_en: "Hot Appetizers",
-
-        name_ru: "Креветки темпура",
-        name_kz: "Темпура креветкалары",
-        name_en: "Shrimp Tempura",
-
-        price: 3290,
-        weight: "180g",
-
-        composition_ru: "Тигровые креветки в хрустящем кляре",
-        composition_kz: "Қытырлақ клярдағы тигр креветкалары",
-        composition_en: "Tiger shrimp in crispy batter",
-
-        note: "",
-        image: ""
-    },
-
-    {
-        id: "3-2",
-        type: "kitchen",
-        category_id: "hot-appetizers",
-        category_ru: "Горячие закуски",
-        category_kz: "Ыстық тіскебасарлар",
-        category_en: "Hot Appetizers",
-
-        name_ru: "Клаб-сэндвич с курицей (подается с картофелем фри)",
-        name_kz: "Тауық еті қосылған клаб-сэндвич (фри картобымен)",
-        name_en: "Chicken Club Sandwich (served with fries)",
-
-        price: 3190,
-        weight: "350g",
-
-        composition_ru: "Курица, бекон, яйцо, салат, картофель фри",
-        composition_kz: "Тауық еті, бекон, жұмыртқа, салат, фри картобы",
-        composition_en: "Chicken, bacon, egg, salad, fries",
-
-        note: "",
-        image: ""
-    },
-
-
-    // =========================================
-    // СУПЫ
-    // =========================================
-
-    {
-        id: "5-4",
-        type: "kitchen",
-        category_id: "soups",
-        category_ru: "Супы",
-        category_kz: "Сорпалар",
-        category_en: "Soups",
-
-        name_ru: "Том Ям",
-        name_kz: "Том Ям",
-        name_en: "Tom Yum",
-
-        price: 3590,
-        weight: "350ml",
-
-        composition_ru: "Креветки, кальмары, грибы, кокосовое молоко, рис",
-        composition_kz: "Креветкалар, кальмарлар, саңырауқұлақтар, кокос сүті, күріш",
-        composition_en: "Shrimp, squid, mushrooms, coconut milk, rice",
-
-        note: "Острое блюдо",
-        image: ""
-    },
-
-
-    // =========================================
-    // ГОРЯЧИЕ БЛЮДА
-    // =========================================
-
-    {
-        id: "8-2",
-        type: "kitchen",
-        category_id: "main-courses",
-        category_ru: "Горячие блюда",
-        category_kz: "Ыстық тағамдар",
-        category_en: "Main Courses",
-
-        name_ru: "Плов",
-        name_kz: "Палау",
-        name_en: "Plov",
-
-        price: 3090,
-        weight: "350g",
-
-        composition_ru: "Традиционный плов с говядиной",
-        composition_kz: "Сиыр етінен жасалған дәстүрлі палау",
-        composition_en: "Traditional beef plov",
-
-        note: "",
-        image: ""
-    },
-
-
-    // =========================================
-    // БАР — БЕЗАЛКОГОЛЬНЫЕ НАПИТКИ
-    // =========================================
-
-    {
-        id: "13-1",
-        type: "bar",
-        category_id: "lemonades",
-
-        category_ru: "Лимонады",
-        category_kz: "Лимонадтар",
-        category_en: "Lemonades",
-
-        name_ru: "Фирменные лимонады",
-        name_kz: "Фирменді лимонадтар",
-        name_en: "Signature lemonades",
-
-        price: 2990,
-        weight: "1L",
-
-        composition_ru: "Вишня-Виноград / Киви-Грейпфрут / Маракуйя-Ананас / Нектар",
-        composition_kz: "Шие-Жүзім / Киви-Грейпфрут / Маракуйя-Ананас / Нектар",
-        composition_en: "Cherry-Grape / Kiwi-Grapefruit / Passion fruit-Pineapple / Nectar",
-
-        note: "",
-        image: ""
-    },
-
-
-    // =========================================
-    // ЧАЙ
-    //
-    // ВАЖНО:
-    // Ниже примерные позиции.
-    // Замени названия/цены на реальные,
-    // когда определишь чайную карту.
-    // =========================================
-
-    {
-        id: "14-1",
-        type: "bar",
-        category_id: "tea",
-
-        category_ru: "Чай",
-        category_kz: "Шай",
-        category_en: "Tea",
-
-        name_ru: "Ассам",
-        name_kz: "Ассам",
-        name_en: "Assam",
-
-        price: 1490,
-        weight: "700ml",
-
-        composition_ru: "Черный чай",
-        composition_kz: "Қара шай",
-        composition_en: "Black tea",
-
-        note: "",
-        image: ""
-    },
-
-    {
-        id: "14-2",
-        type: "bar",
-        category_id: "tea",
-
-        category_ru: "Чай",
-        category_kz: "Шай",
-        category_en: "Tea",
-
-        name_ru: "Эрл Грей",
-        name_kz: "Эрл Грей",
-        name_en: "Earl Grey",
-
-        price: 1490,
-        weight: "700ml",
-
-        composition_ru: "Черный чай с бергамотом",
-        composition_kz: "Бергамот қосылған қара шай",
-        composition_en: "Black tea with bergamot",
-
-        note: "",
-        image: ""
-    },
-
-    {
-        id: "14-3",
-        type: "bar",
-        category_id: "tea",
-
-        category_ru: "Чай",
-        category_kz: "Шай",
-        category_en: "Tea",
-
-        name_ru: "Травяной чай",
-        name_kz: "Шөп шайы",
-        name_en: "Herbal tea",
-
-        price: 1690,
-        weight: "700ml",
-
-        composition_ru: "Ароматный травяной чай",
-        composition_kz: "Хош иісті шөп шайы",
-        composition_en: "Aromatic herbal tea",
-
-        note: "",
-        image: ""
-    }
-
+  {
+  id: "1-1",
+  type: "kitchen",
+  category_id: "cold",
+  category_ru: "Холодные закуски",
+  category_kz: "Салқын тіскебасарлар",
+  category_en: "Cold Appetizers",
+  name_ru: "Мясное плато (казы, жая, жал)",
+  name_kz: "Ет табағы (қазы, жая, жал)",
+  name_en: "Kazakh Meat Platter (Kazy, Zhaya, Zhal)",
+  price: 4990,
+  weight: "250g",
+  composition_ru: "Казы, жая, жал, маринованный лук и зелень",
+  composition_kz: "Қазы, жая, жал, маринадталған пияз және көк шөптер",
+  composition_en: "Kazy, zhaya and zhal with pickled onion and fresh herbs"
+  },
+  {
+  id: "1-2",
+  type: "kitchen",
+  category_id: "cold",
+  category_ru: "Холодные закуски",
+  category_kz: "Салқын тіскебасарлар",
+  category_en: "Cold Appetizers",
+  name_ru: "Домашние соленья",
+  name_kz: "Үй тұздықтары",
+  name_en: "Homemade Pickles",
+  price: 2890,
+  weight: "300g",
+  composition_ru: "Солёные огурцы, томаты, капуста и сезонные домашние соленья",
+  composition_kz: "Тұздалған қияр, қызанақ, қырыққабат және маусымдық үй тұздықтары",
+  composition_en: "Pickled cucumbers, tomatoes, cabbage and seasonal house pickles"
+  },
+  {
+  id: "1-3",
+  type: "kitchen",
+  category_id: "cold",
+  category_ru: "Холодные закуски",
+  category_kz: "Салқын тіскебасарлар",
+  category_en: "Cold Appetizers",
+  name_ru: "Овощная нарезка",
+  name_kz: "Көкөніс ассортиі",
+  name_en: "Fresh Vegetable Platter",
+  price: 2890,
+  weight: "350g",
+  composition_ru: "Свежие томаты, огурцы, сладкий перец, редис и зелень",
+  composition_kz: "Балғын қызанақ, қияр, тәтті бұрыш, шалғам және көк шөптер",
+  composition_en: "Fresh tomatoes, cucumbers, sweet peppers, radish and herbs"
+  },
+  {
+  id: "1-4",
+  type: "kitchen",
+  category_id: "cold",
+  category_ru: "Холодные закуски",
+  category_kz: "Салқын тіскебасарлар",
+  category_en: "Cold Appetizers",
+  name_ru: "Рыбное ассорти",
+  name_kz: "Балық ассортиі",
+  name_en: "Fish Platter",
+  price: 5590,
+  weight: "250g",
+  composition_ru: "Ассорти рыбы, лимон, маслины и зелень",
+  composition_kz: "Балық ассортиі, лимон, зәйтүн және көк шөптер",
+  composition_en: "Assorted fish, lemon, olives and fresh herbs"
+  },
+  {
+  id: "1-5",
+  type: "kitchen",
+  category_id: "cold",
+  category_ru: "Холодные закуски",
+  category_kz: "Салқын тіскебасарлар",
+  category_en: "Cold Appetizers",
+  name_ru: "Капрезе",
+  name_kz: "Капрезе",
+  name_en: "Caprese",
+  price: 2790,
+  weight: "220g",
+  composition_ru: "Томаты, моцарелла, базилик и соус песто",
+  composition_kz: "Қызанақ, моцарелла, базилик және песто соусы",
+  composition_en: "Tomatoes, mozzarella, basil and pesto"
+  },
+  {
+  id: "1-6",
+  type: "kitchen",
+  category_id: "cold",
+  category_ru: "Холодные закуски",
+  category_kz: "Салқын тіскебасарлар",
+  category_en: "Cold Appetizers",
+  name_ru: "Сырное плато",
+  name_kz: "Ірімшік табағы",
+  name_en: "Cheese Platter",
+  price: 4990,
+  weight: "250g",
+  composition_ru: "Ассорти сыров, орехи, виноград и мёд",
+  composition_kz: "Ірімшіктер ассортиі, жаңғақ, жүзім және бал",
+  composition_en: "Assorted cheeses, nuts, grapes and honey"
+  },
+  {
+  id: "2-1",
+  type: "kitchen",
+  category_id: "salads",
+  category_ru: "Салаты",
+  category_kz: "Салаттар",
+  category_en: "Salads",
+  name_ru: "Свежий овощной салат",
+  name_kz: "Балғын көкөніс салаты",
+  name_en: "Fresh Vegetable Salad",
+  price: 1990,
+  weight: "250g",
+  composition_ru: "Томаты, огурцы, сладкий перец, зелень и лёгкая заправка",
+  composition_kz: "Қызанақ, қияр, тәтті бұрыш, көк шөптер және жеңіл тұздық",
+  composition_en: "Tomatoes, cucumbers, sweet peppers, herbs and a light dressing"
+  },
+  {
+  id: "2-2",
+  type: "kitchen",
+  category_id: "salads",
+  category_ru: "Салаты",
+  category_kz: "Салаттар",
+  category_en: "Salads",
+  name_ru: "Аччик-чучук",
+  name_kz: "Аччик-чучук",
+  name_en: "Achichuk",
+  price: 1790,
+  weight: "200g",
+  composition_ru: "Томаты, репчатый лук, зелень и специи",
+  composition_kz: "Қызанақ, пияз, көк шөптер және дәмдеуіштер",
+  composition_en: "Tomatoes, onions, fresh herbs and spices"
+  },
+  {
+  id: "2-3",
+  type: "kitchen",
+  category_id: "salads",
+  category_ru: "Салаты",
+  category_kz: "Салаттар",
+  category_en: "Salads",
+  name_ru: "Цезарь с курицей",
+  name_kz: "Тауық еті қосылған Цезарь",
+  name_en: "Chicken Caesar Salad",
+  price: 2590,
+  weight: "280g",
+  composition_ru: "Куриное филе, салат романо, томаты, пармезан, крутоны и соус Цезарь",
+  composition_kz: "Тауық филесі, романо салаты, қызанақ, пармезан, крутондар және Цезарь соусы",
+  composition_en: "Chicken fillet, romaine lettuce, tomatoes, Parmesan, croutons and Caesar dressing"
+  },
+  {
+  id: "2-4",
+  type: "kitchen",
+  category_id: "salads",
+  category_ru: "Салаты",
+  category_kz: "Салаттар",
+  category_en: "Salads",
+  name_ru: "Хрустящие баклажаны",
+  name_kz: "Қытырлақ баялды",
+  name_en: "Crispy Eggplant Salad",
+  price: 2790,
+  weight: "250g",
+  composition_ru: "Хрустящие баклажаны, томаты, зелень и кисло-сладкий соус",
+  composition_kz: "Қытырлақ баялды, қызанақ, көк шөптер және тәтті-қышқыл соус",
+  composition_en: "Crispy eggplant, tomatoes, fresh herbs and sweet-and-sour sauce"
+  },
+  {
+  id: "2-5",
+  type: "kitchen",
+  category_id: "salads",
+  category_ru: "Салаты",
+  category_kz: "Салаттар",
+  category_en: "Salads",
+  name_ru: "Греческий салат",
+  name_kz: "Грек салаты",
+  name_en: "Greek Salad",
+  price: 2490,
+  weight: "280g",
+  composition_ru: "Томаты, огурцы, сладкий перец, фета, маслины и оливковая заправка",
+  composition_kz: "Қызанақ, қияр, тәтті бұрыш, фета, зәйтүн және зәйтүн майлы тұздық",
+  composition_en: "Tomatoes, cucumbers, sweet peppers, feta, olives and olive-oil dressing"
+  },
+  {
+  id: "2-6",
+  type: "kitchen",
+  category_id: "salads",
+  category_ru: "Салаты",
+  category_kz: "Салаттар",
+  category_en: "Salads",
+  name_ru: "Теплый салат с кониной",
+  name_kz: "Жылқы еті қосылған жылы салат",
+  name_en: "Warm Horse Meat Salad",
+  price: 2990,
+  weight: "260g",
+  composition_ru: "Конина, микс салатов, томаты, овощи и фирменная заправка",
+  composition_kz: "Жылқы еті, салат миксі, қызанақ, көкөністер және фирмалық тұздық",
+  composition_en: "Horse meat, mixed greens, tomatoes, vegetables and house dressing"
+  },
+  {
+  id: "2-7",
+  type: "kitchen",
+  category_id: "salads",
+  category_ru: "Салаты",
+  category_kz: "Салаттар",
+  category_en: "Salads",
+  name_ru: "Салат с креветками и рукколой",
+  name_kz: "Асшаян мен руккола салаты",
+  name_en: "Shrimp & Arugula Salad",
+  price: 3990,
+  weight: "220g",
+  composition_ru: "Креветки, руккола, томаты черри, пармезан и цитрусовая заправка",
+  composition_kz: "Асшаян, руккола, черри қызанағы, пармезан және цитрусты тұздық",
+  composition_en: "Shrimp, arugula, cherry tomatoes, Parmesan and citrus dressing"
+  },
+  {
+  id: "3-1",
+  type: "kitchen",
+  category_id: "hot-appetizers",
+  category_ru: "Горячие закуски",
+  category_kz: "Ыстық тіскебасарлар",
+  category_en: "Hot Appetizers",
+  name_ru: "Креветки темпура",
+  name_kz: "Темпура асшаяндары",
+  name_en: "Shrimp Tempura",
+  price: 3290,
+  weight: "180g",
+  composition_ru: "Креветки в хрустящем кляре темпура с соусом",
+  composition_kz: "Қытырлақ темпура қамырындағы асшаяндар, соуспен беріледі",
+  composition_en: "Shrimp in crisp tempura batter, served with dipping sauce"
+  },
+  {
+  id: "3-2",
+  type: "kitchen",
+  category_id: "hot-appetizers",
+  category_ru: "Горячие закуски",
+  category_kz: "Ыстық тіскебасарлар",
+  category_en: "Hot Appetizers",
+  name_ru: "Клаб-сэндвич с курицей",
+  name_kz: "Тауық еті қосылған клаб-сэндвич",
+  name_en: "Chicken Club Sandwich",
+  price: 3190,
+  weight: "350g",
+  composition_ru: "Куриное филе, тостовый хлеб, овощи, сыр, соус и картофель фри",
+  composition_kz: "Тауық филесі, тост наны, көкөністер, ірімшік, соус және фри",
+  composition_en: "Chicken fillet, toasted bread, vegetables, cheese, sauce and fries"
+  },
+  {
+  id: "3-3",
+  type: "kitchen",
+  category_id: "hot-appetizers",
+  category_ru: "Горячие закуски",
+  category_kz: "Ыстық тіскебасарлар",
+  category_en: "Hot Appetizers",
+  name_ru: "Кесадилья с курицей",
+  name_kz: "Тауық еті қосылған кесадилья",
+  name_en: "Chicken Quesadilla",
+  price: 2990,
+  weight: "300g",
+  composition_ru: "Тортилья, куриное филе, сыр, сладкий перец, томаты и соус",
+  composition_kz: "Тортилья, тауық филесі, ірімшік, тәтті бұрыш, қызанақ және соус",
+  composition_en: "Tortilla, chicken fillet, cheese, sweet peppers, tomatoes and sauce"
+  },
+  {
+  id: "3-4",
+  type: "kitchen",
+  category_id: "hot-appetizers",
+  category_ru: "Горячие закуски",
+  category_kz: "Ыстық тіскебасарлар",
+  category_en: "Hot Appetizers",
+  name_ru: "Чебуреки",
+  name_kz: "Чебурек",
+  name_en: "Chebureki",
+  price: 2590,
+  weight: "250g",
+  composition_ru: "Хрустящее тесто с сочной мясной начинкой",
+  composition_kz: "Қытырлақ қамыр және шырынды ет салмасы",
+  composition_en: "Crisp pastry filled with seasoned minced meat"
+  },
+  {
+  id: "3-5",
+  type: "kitchen",
+  category_id: "hot-appetizers",
+  category_ru: "Горячие закуски",
+  category_kz: "Ыстық тіскебасарлар",
+  category_en: "Hot Appetizers",
+  name_ru: "Наггетсы куриные",
+  name_kz: "Тауық наггетстары",
+  name_en: "Chicken Nuggets",
+  price: 1690,
+  weight: "200g",
+  composition_ru: "Куриное филе в хрустящей панировке с соусом",
+  composition_kz: "Қытырлақ панировкадағы тауық филесі, соуспен беріледі",
+  composition_en: "Breaded chicken pieces served with dipping sauce"
+  },
+  {
+  id: "4-1",
+  type: "kitchen",
+  category_id: "snacks",
+  category_ru: "Снэки",
+  category_kz: "Снэктер",
+  category_en: "Snacks",
+  name_ru: "Большой сет закусок (креветки, гренки, чечил, фри, сосиски, луковые кольца)",
+  name_kz: "Үлкен тіскебасар сеті (асшаян, гренки, чечил, фри, шұжық, пияз сақиналары)",
+  name_en: "Large Snack Platter (Shrimp, Croutons, Chechil, Fries, Sausages, Onion Rings)",
+  price: 6990,
+  weight: "850g",
+  composition_ru: "Креветки, чесночные гренки, копчёный чечил, картофель фри, сосиски и луковые кольца",
+  composition_kz: "Асшаян, сарымсақты гренки, ысталған чечил, фри, шұжық және пияз сақиналары",
+  composition_en: "Shrimp, garlic croutons, smoked Chechil cheese, fries, sausages and onion rings"
+  },
+  {
+  id: "4-2",
+  type: "kitchen",
+  category_id: "snacks",
+  category_ru: "Снэки",
+  category_kz: "Снэктер",
+  category_en: "Snacks",
+  name_ru: "Креветки пивные",
+  name_kz: "Дәмдеуішті асшаяндар",
+  name_en: "Spiced Shrimp",
+  price: 3990,
+  weight: "250g",
+  composition_ru: "Обжаренные креветки с чесноком, специями, лимоном и зеленью",
+  composition_kz: "Сарымсақ, дәмдеуіштер, лимон және көк шөптермен қуырылған асшаяндар",
+  composition_en: "Pan-fried shrimp with garlic, spices, lemon and fresh herbs"
+  },
+  {
+  id: "4-3",
+  type: "kitchen",
+  category_id: "snacks",
+  category_ru: "Снэки",
+  category_kz: "Снэктер",
+  category_en: "Snacks",
+  name_ru: "Фисташки",
+  name_kz: "Пісте",
+  name_en: "Pistachios",
+  price: 1590,
+  weight: "100g",
+  composition_ru: "Обжаренные солёные фисташки",
+  composition_kz: "Қуырылған тұзды пісте",
+  composition_en: "Roasted salted pistachios"
+  },
+  {
+  id: "4-4",
+  type: "kitchen",
+  category_id: "snacks",
+  category_ru: "Снэки",
+  category_kz: "Снэктер",
+  category_en: "Snacks",
+  name_ru: "Чесночные гренки",
+  name_kz: "Сарымсақты гренки",
+  name_en: "Garlic Croutons",
+  price: 1590,
+  weight: "180g",
+  composition_ru: "Ржаные гренки с чесноком и фирменным соусом",
+  composition_kz: "Сарымсақ қосылған қара нан гренкиі және фирмалық соус",
+  composition_en: "Rye bread croutons with garlic and house sauce"
+  },
+  {
+  id: "4-5",
+  type: "kitchen",
+  category_id: "snacks",
+  category_ru: "Снэки",
+  category_kz: "Снэктер",
+  category_en: "Snacks",
+  name_ru: "Чечил копченый",
+  name_kz: "Ысталған чечил",
+  name_en: "Smoked Chechil Cheese",
+  price: 1390,
+  weight: "100g",
+  composition_ru: "Копчёный рассольный сыр чечил",
+  composition_kz: "Ысталған тұзды чечил ірімшігі",
+  composition_en: "Smoked brined Chechil string cheese"
+  },
+  {
+  id: "4-6",
+  type: "kitchen",
+  category_id: "snacks",
+  category_ru: "Снэки",
+  category_kz: "Снэктер",
+  category_en: "Snacks",
+  name_ru: "Арахис",
+  name_kz: "Жержаңғақ",
+  name_en: "Peanuts",
+  price: 1390,
+  weight: "120g",
+  composition_ru: "Обжаренный солёный арахис",
+  composition_kz: "Қуырылған тұзды жержаңғақ",
+  composition_en: "Roasted salted peanuts"
+  },
+  {
+  id: "5-1",
+  type: "kitchen",
+  category_id: "soups",
+  category_ru: "Супы",
+  category_kz: "Сорпалар",
+  category_en: "Soups",
+  name_ru: "Окрошка с мясом (сезонная)",
+  name_kz: "Ет қосылған окрошка (маусымдық)",
+  name_en: "Okroshka with Meat (Seasonal)",
+  price: 2390,
+  weight: "350ml",
+  composition_ru: "Мясо, картофель, огурцы, яйцо, зелень и охлаждённая кисломолочная основа",
+  composition_kz: "Ет, картоп, қияр, жұмыртқа, көк шөптер және салқын қышқыл сүтті негіз",
+  composition_en: "Meat, potatoes, cucumbers, egg, herbs and a chilled cultured-dairy base"
+  },
+  {
+  id: "5-2",
+  type: "kitchen",
+  category_id: "soups",
+  category_ru: "Супы",
+  category_kz: "Сорпалар",
+  category_en: "Soups",
+  name_ru: "Куриный суп с лапшой",
+  name_kz: "Кеспелі тауық сорпасы",
+  name_en: "Chicken Noodle Soup",
+  price: 1590,
+  weight: "350ml",
+  composition_ru: "Куриный бульон, куриное филе, домашняя лапша, морковь и зелень",
+  composition_kz: "Тауық сорпасы, тауық филесі, үй кеспесі, сәбіз және көк шөптер",
+  composition_en: "Chicken broth, chicken fillet, homemade noodles, carrots and herbs"
+  },
+  {
+  id: "5-3",
+  type: "kitchen",
+  category_id: "soups",
+  category_ru: "Супы",
+  category_kz: "Сорпалар",
+  category_en: "Soups",
+  name_ru: "Солянка мясная",
+  name_kz: "Етті солянка",
+  name_en: "Meat Solyanka",
+  price: 3590,
+  weight: "350ml",
+  composition_ru: "Мясное ассорти, насыщенный бульон, солёные огурцы, маслины, лимон и сметана",
+  composition_kz: "Ет ассортиі, қою сорпа, тұздалған қияр, зәйтүн, лимон және қаймақ",
+  composition_en: "Assorted meats, rich broth, pickles, olives, lemon and sour cream"
+  },
+  {
+  id: "5-4",
+  type: "kitchen",
+  category_id: "soups",
+  category_ru: "Супы",
+  category_kz: "Сорпалар",
+  category_en: "Soups",
+  name_ru: "Том Ям",
+  name_kz: "Том Ям",
+  name_en: "Tom Yum",
+  price: 3590,
+  weight: "350ml",
+  composition_ru: "Креветки, грибы, томаты, лайм, кокосовое молоко и пряный бульон",
+  composition_kz: "Асшаян, саңырауқұлақ, қызанақ, лайм, кокос сүті және ащы хош иісті сорпа",
+  composition_en: "Shrimp, mushrooms, tomatoes, lime, coconut milk and aromatic spicy broth",
+  note: "Острое блюдо",
+  image: "assets/menu/tom-yum-demo.jpg"
+  },
+  {
+  id: "5-5",
+  type: "kitchen",
+  category_id: "soups",
+  category_ru: "Супы",
+  category_kz: "Сорпалар",
+  category_en: "Soups",
+  name_ru: "Рамен с говядиной",
+  name_kz: "Сиыр еті қосылған рамен",
+  name_en: "Beef Ramen",
+  price: 3590,
+  weight: "450ml",
+  composition_ru: "Лапша рамен, говядина, насыщенный бульон, яйцо, овощи и зелень",
+  composition_kz: "Рамен кеспесі, сиыр еті, қою сорпа, жұмыртқа, көкөністер және көк шөптер",
+  composition_en: "Ramen noodles, beef, rich broth, egg, vegetables and herbs"
+  },
+  {
+  id: "5-6",
+  type: "kitchen",
+  category_id: "soups",
+  category_ru: "Супы",
+  category_kz: "Сорпалар",
+  category_en: "Soups",
+  name_ru: "Рамен с курицей",
+  name_kz: "Тауық еті қосылған рамен",
+  name_en: "Chicken Ramen",
+  price: 3290,
+  weight: "450ml",
+  composition_ru: "Лапша рамен, куриное филе, насыщенный бульон, яйцо, овощи и зелень",
+  composition_kz: "Рамен кеспесі, тауық филесі, қою сорпа, жұмыртқа, көкөністер және көк шөптер",
+  composition_en: "Ramen noodles, chicken fillet, rich broth, egg, vegetables and herbs"
+  },
+  {
+  id: "5-7",
+  type: "kitchen",
+  category_id: "soups",
+  category_ru: "Супы",
+  category_kz: "Сорпалар",
+  category_en: "Soups",
+  name_ru: "Чечевичный крем-суп",
+  name_kz: "Жасымық крем-сорпасы",
+  name_en: "Creamy Lentil Soup",
+  price: 1990,
+  weight: "350ml",
+  composition_ru: "Красная чечевица, овощи, сливки и ароматные специи",
+  composition_kz: "Қызыл жасымық, көкөністер, кілегей және хош иісті дәмдеуіштер",
+  composition_en: "Red lentils, vegetables, cream and aromatic spices"
+  },
+  {
+  id: "5-8",
+  type: "kitchen",
+  category_id: "soups",
+  category_ru: "Супы",
+  category_kz: "Сорпалар",
+  category_en: "Soups",
+  name_ru: "Шорпа",
+  name_kz: "Сорпа",
+  name_en: "Shorpa",
+  price: 3290,
+  weight: "400ml",
+  composition_ru: "Мясо, картофель, морковь, лук, томаты и наваристый бульон",
+  composition_kz: "Ет, картоп, сәбіз, пияз, қызанақ және қою сорпа",
+  composition_en: "Meat, potatoes, carrots, onions, tomatoes and hearty broth"
+  },
+  {
+  id: "5-9",
+  type: "kitchen",
+  category_id: "soups",
+  category_ru: "Супы",
+  category_kz: "Сорпалар",
+  category_en: "Soups",
+  name_ru: "Пельмени (с бульоном / без)",
+  name_kz: "Тұшпара (сорпамен / сорпасыз)",
+  name_en: "Pelmeni (With or Without Broth)",
+  price: 1990,
+  weight: "300g",
+  composition_ru: "Домашние пельмени с мясной начинкой, подаются с бульоном или без",
+  composition_kz: "Ет салмасы бар үй тұшпарасы, сорпамен немесе сорпасыз беріледі",
+  composition_en: "Homemade meat-filled dumplings, served with or without broth"
+  },
+  {
+  id: "6-1",
+  type: "kitchen",
+  category_id: "pizza-bakery",
+  category_ru: "Пицца и выпечка",
+  category_kz: "Пицца және нан өнімдері",
+  category_en: "Pizza & Bakery",
+  name_ru: "Пицца Пепперони",
+  name_kz: "Пепперони пиццасы",
+  name_en: "Pepperoni Pizza",
+  price: 3090,
+  weight: "500g",
+  composition_ru: "Томатный соус, моцарелла и пепперони",
+  composition_kz: "Қызанақ соусы, моцарелла және пепперони",
+  composition_en: "Tomato sauce, mozzarella and pepperoni"
+  },
+  {
+  id: "6-2",
+  type: "kitchen",
+  category_id: "pizza-bakery",
+  category_ru: "Пицца и выпечка",
+  category_kz: "Пицца және нан өнімдері",
+  category_en: "Pizza & Bakery",
+  name_ru: "Пицца Маргарита",
+  name_kz: "Маргарита пиццасы",
+  name_en: "Margherita Pizza",
+  price: 2590,
+  weight: "450g",
+  composition_ru: "Томатный соус, моцарелла, томаты и базилик",
+  composition_kz: "Қызанақ соусы, моцарелла, қызанақ және базилик",
+  composition_en: "Tomato sauce, mozzarella, tomatoes and basil"
+  },
+  {
+  id: "6-3",
+  type: "kitchen",
+  category_id: "pizza-bakery",
+  category_ru: "Пицца и выпечка",
+  category_kz: "Пицца және нан өнімдері",
+  category_en: "Pizza & Bakery",
+  name_ru: "Пицца с курицей и грибами",
+  name_kz: "Тауық еті мен саңырауқұлақ қосылған пицца",
+  name_en: "Chicken & Mushroom Pizza",
+  price: 3090,
+  weight: "520g",
+  composition_ru: "Томатный соус, моцарелла, куриное филе, шампиньоны и зелень",
+  composition_kz: "Қызанақ соусы, моцарелла, тауық филесі, шампиньон және көк шөптер",
+  composition_en: "Tomato sauce, mozzarella, chicken fillet, mushrooms and herbs"
+  },
+  {
+  id: "6-4",
+  type: "kitchen",
+  category_id: "pizza-bakery",
+  category_ru: "Пицца и выпечка",
+  category_kz: "Пицца және нан өнімдері",
+  category_en: "Pizza & Bakery",
+  name_ru: "Пицца Болоньезе",
+  name_kz: "Болоньезе пиццасы",
+  name_en: "Bolognese Pizza",
+  price: 2990,
+  weight: "520g",
+  composition_ru: "Томатный соус, моцарелла, мясной соус Болоньезе и зелень",
+  composition_kz: "Қызанақ соусы, моцарелла, Болоньезе ет соусы және көк шөптер",
+  composition_en: "Tomato sauce, mozzarella, Bolognese meat sauce and herbs"
+  },
+  {
+  id: "6-5",
+  type: "kitchen",
+  category_id: "pizza-bakery",
+  category_ru: "Пицца и выпечка",
+  category_kz: "Пицца және нан өнімдері",
+  category_en: "Pizza & Bakery",
+  name_ru: "Мексиканская пицца с халапеньо",
+  name_kz: "Халапеньо қосылған мексикалық пицца",
+  name_en: "Mexican Jalapeño Pizza",
+  price: 3590,
+  weight: "540g",
+  composition_ru: "Томатный соус, моцарелла, мясная начинка, сладкий перец, кукуруза и халапеньо",
+  composition_kz: "Қызанақ соусы, моцарелла, ет салмасы, тәтті бұрыш, жүгері және халапеньо",
+  composition_en: "Tomato sauce, mozzarella, seasoned meat, sweet peppers, corn and jalapeño",
+  note: "Острое блюдо"
+  },
+  {
+  id: "6-6",
+  type: "kitchen",
+  category_id: "pizza-bakery",
+  category_ru: "Пицца и выпечка",
+  category_kz: "Пицца және нан өнімдері",
+  category_en: "Pizza & Bakery",
+  name_ru: "Хачапури по-мегрельски",
+  name_kz: "Мегрелше хачапури",
+  name_en: "Megrelian Khachapuri",
+  price: 2790,
+  weight: "450g",
+  composition_ru: "Дрожжевое тесто и сырная начинка с запечённым сыром сверху",
+  composition_kz: "Ашытқылы қамыр, ірімшік салмасы және үстіне пісірілген ірімшік",
+  composition_en: "Yeast dough with a cheese filling and an extra layer of baked cheese on top"
+  },
+  {
+  id: "6-7",
+  type: "kitchen",
+  category_id: "pizza-bakery",
+  category_ru: "Пицца и выпечка",
+  category_kz: "Пицца және нан өнімдері",
+  category_en: "Pizza & Bakery",
+  name_ru: "Хлебная корзина",
+  name_kz: "Нан себеті",
+  name_en: "Bread Basket",
+  price: 890,
+  weight: "250g",
+  composition_ru: "Ассорти свежего хлеба",
+  composition_kz: "Балғын нан ассортиі",
+  composition_en: "Assorted fresh bread"
+  },
+  {
+  id: "6-8",
+  type: "kitchen",
+  category_id: "pizza-bakery",
+  category_ru: "Пицца и выпечка",
+  category_kz: "Пицца және нан өнімдері",
+  category_en: "Pizza & Bakery",
+  name_ru: "Лепешка",
+  name_kz: "Табан нан",
+  name_en: "Flatbread",
+  price: 590,
+  weight: "180g",
+  composition_ru: "Свежая лепёшка из пшеничного теста",
+  composition_kz: "Бидай қамырынан пісірілген балғын таба нан",
+  composition_en: "Freshly baked wheat flatbread"
+  },
+  {
+  id: "7-1",
+  type: "kitchen",
+  category_id: "pasta",
+  category_ru: "Паста",
+  category_kz: "Паста",
+  category_en: "Pasta",
+  name_ru: "Фарфалле с морепродуктами (креветки, мидии, кальмары)",
+  name_kz: "Теңіз өнімдері қосылған фарфалле (асшаян, мидия, кальмар)",
+  name_en: "Seafood Farfalle (Shrimp, Mussels, Calamari)",
+  price: 4990,
+  weight: "350g",
+  composition_ru: "Фарфалле, креветки, мидии, кальмары, сливочный соус, чеснок и зелень",
+  composition_kz: "Фарфалле, асшаян, мидия, кальмар, кілегейлі соус, сарымсақ және көк шөптер",
+  composition_en: "Farfalle, shrimp, mussels, calamari, cream sauce, garlic and herbs"
+  },
+  {
+  id: "7-2",
+  type: "kitchen",
+  category_id: "pasta",
+  category_ru: "Паста",
+  category_kz: "Паста",
+  category_en: "Pasta",
+  name_ru: "Карбонара",
+  name_kz: "Карбонара",
+  name_en: "Carbonara",
+  price: 3590,
+  weight: "320g",
+  composition_ru: "Паста, сливочный соус, бекон, яичный желток и пармезан",
+  composition_kz: "Паста, кілегейлі соус, бекон, жұмыртқа сарысы және пармезан",
+  composition_en: "Pasta, creamy sauce, bacon, egg yolk and Parmesan"
+  },
+  {
+  id: "7-3",
+  type: "kitchen",
+  category_id: "pasta",
+  category_ru: "Паста",
+  category_kz: "Паста",
+  category_en: "Pasta",
+  name_ru: "Болоньезе",
+  name_kz: "Болоньезе",
+  name_en: "Bolognese",
+  price: 3290,
+  weight: "350g",
+  composition_ru: "Паста, мясной соус Болоньезе, томаты и пармезан",
+  composition_kz: "Паста, Болоньезе ет соусы, қызанақ және пармезан",
+  composition_en: "Pasta with Bolognese meat sauce, tomatoes and Parmesan"
+  },
+  {
+  id: "7-4",
+  type: "kitchen",
+  category_id: "pasta",
+  category_ru: "Паста",
+  category_kz: "Паста",
+  category_en: "Pasta",
+  name_ru: "Фетучини с курицей и грибами",
+  name_kz: "Тауық еті мен саңырауқұлақ қосылған фетучини",
+  name_en: "Fettuccine with Chicken & Mushrooms",
+  price: 2990,
+  weight: "350g",
+  composition_ru: "Фетучини, куриное филе, шампиньоны, сливочный соус и пармезан",
+  composition_kz: "Фетучини, тауық филесі, шампиньон, кілегейлі соус және пармезан",
+  composition_en: "Fettuccine, chicken fillet, mushrooms, cream sauce and Parmesan"
+  },
+  {
+  id: "8-1",
+  type: "kitchen",
+  category_id: "mains",
+  category_ru: "Горячие блюда",
+  category_kz: "Негізгі ыстық тағамдар",
+  category_en: "Main Courses",
+  name_ru: "Куырдак",
+  name_kz: "Қуырдақ",
+  name_en: "Kuyrdak",
+  price: 4090,
+  weight: "400g",
+  composition_ru: "Мясо, картофель, лук и традиционные специи",
+  composition_kz: "Ет, картоп, пияз және дәстүрлі дәмдеуіштер",
+  composition_en: "Meat, potatoes, onions and traditional spices"
+  },
+  {
+  id: "8-2",
+  type: "kitchen",
+  category_id: "mains",
+  category_ru: "Горячие блюда",
+  category_kz: "Негізгі ыстық тағамдар",
+  category_en: "Main Courses",
+  name_ru: "Плов",
+  name_kz: "Палау",
+  name_en: "Plov",
+  price: 3090,
+  weight: "350g",
+  composition_ru: "Рис, мясо, морковь, лук и ароматные специи",
+  composition_kz: "Күріш, ет, сәбіз, пияз және хош иісті дәмдеуіштер",
+  composition_en: "Rice, meat, carrots, onions and aromatic spices"
+  },
+  {
+  id: "8-3",
+  type: "kitchen",
+  category_id: "mains",
+  category_ru: "Горячие блюда",
+  category_kz: "Негізгі ыстық тағамдар",
+  category_en: "Main Courses",
+  name_ru: "Бургер с курицей",
+  name_kz: "Тауық бургері",
+  name_en: "Chicken Burger",
+  price: 3290,
+  weight: "400g",
+  composition_ru: "Булочка, куриная котлета, сыр, салат, томаты, соус и картофель фри",
+  composition_kz: "Тоқаш, тауық котлеті, ірімшік, салат, қызанақ, соус және фри",
+  composition_en: "Bun, chicken patty, cheese, lettuce, tomatoes, sauce and fries"
+  },
+  {
+  id: "8-4",
+  type: "kitchen",
+  category_id: "mains",
+  category_ru: "Горячие блюда",
+  category_kz: "Негізгі ыстық тағамдар",
+  category_en: "Main Courses",
+  name_ru: "Бургер с говядиной",
+  name_kz: "Сиыр еті қосылған бургер",
+  name_en: "Beef Burger",
+  price: 3590,
+  weight: "420g",
+  composition_ru: "Булочка, говяжья котлета, сыр, салат, томаты, соус и картофель фри",
+  composition_kz: "Тоқаш, сиыр етінен котлет, ірімшік, салат, қызанақ, соус және фри",
+  composition_en: "Bun, beef patty, cheese, lettuce, tomatoes, sauce and fries"
+  },
+  {
+  id: "8-5",
+  type: "kitchen",
+  category_id: "mains",
+  category_ru: "Горячие блюда",
+  category_kz: "Негізгі ыстық тағамдар",
+  category_en: "Main Courses",
+  name_ru: "Бургер, грибной стаут",
+  name_kz: "«Грибной стаут» бургері",
+  name_en: "Mushroom Stout Burger",
+  price: 4390,
+  weight: "430g",
+  composition_ru: "Булочка, говяжья котлета, шампиньоны, сыр, фирменный грибной соус и картофель фри",
+  composition_kz: "Тоқаш, сиыр етінен котлет, шампиньон, ірімшік, фирмалық саңырауқұлақ соусы және фри",
+  composition_en: "Bun, beef patty, mushrooms, cheese, house mushroom sauce and fries"
+  },
+  {
+  id: "8-6",
+  type: "kitchen",
+  category_id: "mains",
+  category_ru: "Горячие блюда",
+  category_kz: "Негізгі ыстық тағамдар",
+  category_en: "Main Courses",
+  name_ru: "Колбаски говяжьи / бараньи",
+  name_kz: "Сиыр / қой етінен шұжықтар",
+  name_en: "Beef / Lamb Sausages",
+  price: 3390,
+  weight: "350g",
+  composition_ru: "Говяжьи или бараньи колбаски, гарнир и соус",
+  composition_kz: "Сиыр немесе қой етінен шұжықтар, гарнир және соус",
+  composition_en: "Beef or lamb sausages served with a side and sauce"
+  },
+  {
+  id: "8-7",
+  type: "kitchen",
+  category_id: "mains",
+  category_ru: "Горячие блюда",
+  category_kz: "Негізгі ыстық тағамдар",
+  category_en: "Main Courses",
+  name_ru: "Колбаски куриные",
+  name_kz: "Тауық шұжықтары",
+  name_en: "Chicken Sausages",
+  price: 2990,
+  weight: "350g",
+  composition_ru: "Куриные колбаски, гарнир и соус",
+  composition_kz: "Тауық шұжықтары, гарнир және соус",
+  composition_en: "Chicken sausages served with a side and sauce"
+  },
+  {
+  id: "8-8",
+  type: "kitchen",
+  category_id: "mains",
+  category_ru: "Горячие блюда",
+  category_kz: "Негізгі ыстық тағамдар",
+  category_en: "Main Courses",
+  name_ru: "Говядина по-тайски с рисом",
+  name_kz: "Күрішпен берілетін тайша сиыр еті",
+  name_en: "Thai-Style Beef with Rice",
+  price: 3290,
+  weight: "380g",
+  composition_ru: "Говядина, овощи, пряный азиатский соус и рис",
+  composition_kz: "Сиыр еті, көкөністер, дәмдеуішті азиялық соус және күріш",
+  composition_en: "Beef, vegetables, aromatic Asian-style sauce and rice"
+  },
+  {
+  id: "8-9",
+  type: "kitchen",
+  category_id: "mains",
+  category_ru: "Горячие блюда",
+  category_kz: "Негізгі ыстық тағамдар",
+  category_en: "Main Courses",
+  name_ru: "Бефстроганов с пюре",
+  name_kz: "Картоп езбесімен бефстроганов",
+  name_en: "Beef Stroganoff with Mashed Potatoes",
+  price: 3290,
+  weight: "380g",
+  composition_ru: "Говядина, шампиньоны, сливочный соус и картофельное пюре",
+  composition_kz: "Сиыр еті, шампиньон, кілегейлі соус және картоп езбесі",
+  composition_en: "Beef, mushrooms, creamy sauce and mashed potatoes"
+  },
+  {
+  id: "8-10",
+  type: "kitchen",
+  category_id: "mains",
+  category_ru: "Горячие блюда",
+  category_kz: "Негізгі ыстық тағамдар",
+  category_en: "Main Courses",
+  name_ru: "Куриная грудка в сырно-сливочном соусе",
+  name_kz: "Ірімшік-кілегей соусындағы тауық төсі",
+  name_en: "Chicken Breast in Creamy Cheese Sauce",
+  price: 3290,
+  weight: "350g",
+  composition_ru: "Куриная грудка, сырно-сливочный соус, овощи и зелень",
+  composition_kz: "Тауық төсі, ірімшік-кілегей соусы, көкөністер және көк шөптер",
+  composition_en: "Chicken breast, creamy cheese sauce, vegetables and herbs"
+  },
+  {
+  id: "8-11",
+  type: "kitchen",
+  category_id: "mains",
+  category_ru: "Горячие блюда",
+  category_kz: "Негізгі ыстық тағамдар",
+  category_en: "Main Courses",
+  name_ru: "Картофель по-домашнему с мясом",
+  name_kz: "Ет қосылған үй стиліндегі картоп",
+  name_en: "Homestyle Potatoes with Meat",
+  price: 3990,
+  weight: "450g",
+  composition_ru: "Картофель, мясо, репчатый лук, чеснок и зелень",
+  composition_kz: "Картоп, ет, пияз, сарымсақ және көк шөптер",
+  composition_en: "Potatoes, meat, onions, garlic and fresh herbs"
+  },
+  {
+  id: "9-1",
+  type: "kitchen",
+  category_id: "grill",
+  category_ru: "Шашлык на мангале",
+  category_kz: "Мангалдағы кәуап",
+  category_en: "Charcoal Grill",
+  name_ru: "Антрекот",
+  name_kz: "Антрекот",
+  name_en: "Entrecôte",
+  price: 3990,
+  weight: "300g",
+  composition_ru: "Антрекот на углях, маринованный лук и зелень",
+  composition_kz: "Шоқта піскен антрекот, маринадталған пияз және көк шөптер",
+  composition_en: "Charcoal-grilled entrecôte with pickled onions and herbs"
+  },
+  {
+  id: "9-2",
+  type: "kitchen",
+  category_id: "grill",
+  category_ru: "Шашлык на мангале",
+  category_kz: "Мангалдағы кәуап",
+  category_en: "Charcoal Grill",
+  name_ru: "Баранина",
+  name_kz: "Қой еті",
+  name_en: "Lamb Skewers",
+  price: 3190,
+  weight: "250g",
+  composition_ru: "Маринованная баранина на углях, лук и зелень",
+  composition_kz: "Шоқта піскен маринадталған қой еті, пияз және көк шөптер",
+  composition_en: "Marinated lamb grilled over charcoal, served with onions and herbs"
+  },
+  {
+  id: "9-3",
+  type: "kitchen",
+  category_id: "grill",
+  category_ru: "Шашлык на мангале",
+  category_kz: "Мангалдағы кәуап",
+  category_en: "Charcoal Grill",
+  name_ru: "Люля-кебаб",
+  name_kz: "Люля-кебаб",
+  name_en: "Lula Kebab",
+  price: 3190,
+  weight: "250g",
+  composition_ru: "Рубленое мясо со специями, приготовленное на углях, с луком и зеленью",
+  composition_kz: "Дәмдеуіштер қосылған тартылған ет, шоқта пісіріліп, пияз және көк шөптермен беріледі",
+  composition_en: "Seasoned minced meat grilled over charcoal, served with onions and herbs"
+  },
+  {
+  id: "9-4",
+  type: "kitchen",
+  category_id: "grill",
+  category_ru: "Шашлык на мангале",
+  category_kz: "Мангалдағы кәуап",
+  category_en: "Charcoal Grill",
+  name_ru: "Куриное филе",
+  name_kz: "Тауық филесі",
+  name_en: "Chicken Fillet Skewers",
+  price: 2990,
+  weight: "250g",
+  composition_ru: "Маринованное куриное филе на углях, лук и зелень",
+  composition_kz: "Шоқта піскен маринадталған тауық филесі, пияз және көк шөптер",
+  composition_en: "Marinated chicken fillet grilled over charcoal, served with onions and herbs"
+  },
+  {
+  id: "9-5",
+  type: "kitchen",
+  category_id: "grill",
+  category_ru: "Шашлык на мангале",
+  category_kz: "Мангалдағы кәуап",
+  category_en: "Charcoal Grill",
+  name_ru: "Куриные крылышки",
+  name_kz: "Тауық қанаттары",
+  name_en: "Chicken Wings",
+  price: 2890,
+  weight: "300g",
+  composition_ru: "Маринованные куриные крылышки на углях, соус и зелень",
+  composition_kz: "Шоқта піскен маринадталған тауық қанаттары, соус және көк шөптер",
+  composition_en: "Marinated chicken wings grilled over charcoal, served with sauce and herbs"
+  },
+  {
+  id: "9-6",
+  type: "kitchen",
+  category_id: "grill",
+  category_ru: "Шашлык на мангале",
+  category_kz: "Мангалдағы кәуап",
+  category_en: "Charcoal Grill",
+  name_ru: "Утка",
+  name_kz: "Үйрек еті",
+  name_en: "Duck Skewers",
+  price: 2790,
+  weight: "250g",
+  composition_ru: "Маринованное утиное мясо на углях, лук и зелень",
+  composition_kz: "Шоқта піскен маринадталған үйрек еті, пияз және көк шөптер",
+  composition_en: "Marinated duck grilled over charcoal, served with onions and herbs"
+  },
+  {
+  id: "9-7",
+  type: "kitchen",
+  category_id: "grill",
+  category_ru: "Шашлык на мангале",
+  category_kz: "Мангалдағы кәуап",
+  category_en: "Charcoal Grill",
+  name_ru: "Куриные окорочка",
+  name_kz: "Тауық саны",
+  name_en: "Chicken Leg Quarters",
+  price: 2590,
+  weight: "320g",
+  composition_ru: "Маринованные куриные окорочка на углях, соус и зелень",
+  composition_kz: "Шоқта піскен маринадталған тауық саны, соус және көк шөптер",
+  composition_en: "Marinated chicken leg quarters grilled over charcoal, served with sauce and herbs"
+  },
+  {
+  id: "9-8",
+  type: "kitchen",
+  category_id: "grill",
+  category_ru: "Шашлык на мангале",
+  category_kz: "Мангалдағы кәуап",
+  category_en: "Charcoal Grill",
+  name_ru: "Овощи гриль на шпажке",
+  name_kz: "Істіктегі гриль көкөністері",
+  name_en: "Grilled Vegetable Skewer",
+  price: 1990,
+  weight: "250g",
+  composition_ru: "Сладкий перец, кабачок, баклажан, томаты и шампиньоны",
+  composition_kz: "Тәтті бұрыш, кәді, баялды, қызанақ және шампиньон",
+  composition_en: "Sweet peppers, zucchini, eggplant, tomatoes and mushrooms"
+  },
+  {
+  id: "9-9",
+  type: "kitchen",
+  category_id: "grill",
+  category_ru: "Шашлык на мангале",
+  category_kz: "Мангалдағы кәуап",
+  category_en: "Charcoal Grill",
+  name_ru: "Шампиньоны на мангале",
+  name_kz: "Мангалдағы шампиньондар",
+  name_en: "Charcoal-Grilled Mushrooms",
+  price: 1790,
+  weight: "200g",
+  composition_ru: "Шампиньоны, приготовленные на углях с лёгкими специями",
+  composition_kz: "Жеңіл дәмдеуіштермен шоқта піскен шампиньондар",
+  composition_en: "Mushrooms grilled over charcoal with light seasoning"
+  },
+  {
+  id: "10-1",
+  type: "kitchen",
+  category_id: "sides",
+  category_ru: "Гарниры",
+  category_kz: "Гарнирлер",
+  category_en: "Side Dishes",
+  name_ru: "Овощи гриль",
+  name_kz: "Гриль көкөністері",
+  name_en: "Grilled Vegetables",
+  price: 1990,
+  weight: "250g",
+  composition_ru: "Баклажан, кабачок, сладкий перец, томаты и шампиньоны",
+  composition_kz: "Баялды, кәді, тәтті бұрыш, қызанақ және шампиньон",
+  composition_en: "Eggplant, zucchini, sweet peppers, tomatoes and mushrooms"
+  },
+  {
+  id: "10-2",
+  type: "kitchen",
+  category_id: "sides",
+  category_ru: "Гарниры",
+  category_kz: "Гарнирлер",
+  category_en: "Side Dishes",
+  name_ru: "Брокколи",
+  name_kz: "Брокколи",
+  name_en: "Broccoli",
+  price: 1790,
+  weight: "180g",
+  composition_ru: "Брокколи, приготовленная до лёгкой хрусткости",
+  composition_kz: "Жеңіл қытырлақ күйге дейін дайындалған брокколи",
+  composition_en: "Broccoli cooked until lightly crisp"
+  },
+  {
+  id: "10-3",
+  type: "kitchen",
+  category_id: "sides",
+  category_ru: "Гарниры",
+  category_kz: "Гарнирлер",
+  category_en: "Side Dishes",
+  name_ru: "Картофельные дольки",
+  name_kz: "Картоп тілімдері",
+  name_en: "Potato Wedges",
+  price: 1390,
+  weight: "200g",
+  composition_ru: "Запечённые картофельные дольки со специями",
+  composition_kz: "Дәмдеуіштермен пісірілген картоп тілімдері",
+  composition_en: "Seasoned baked potato wedges"
+  },
+  {
+  id: "10-4",
+  type: "kitchen",
+  category_id: "sides",
+  category_ru: "Гарниры",
+  category_kz: "Гарнирлер",
+  category_en: "Side Dishes",
+  name_ru: "Картофель фри",
+  name_kz: "Картоп фри",
+  name_en: "French Fries",
+  price: 1190,
+  weight: "180g",
+  composition_ru: "Хрустящий картофель фри",
+  composition_kz: "Қытырлақ картоп фри",
+  composition_en: "Crispy French fries"
+  },
+  {
+  id: "10-5",
+  type: "kitchen",
+  category_id: "sides",
+  category_ru: "Гарниры",
+  category_kz: "Гарнирлер",
+  category_en: "Side Dishes",
+  name_ru: "Рис",
+  name_kz: "Күріш",
+  name_en: "Rice",
+  price: 790,
+  weight: "180g",
+  composition_ru: "Отварной рис",
+  composition_kz: "Пісірілген күріш",
+  composition_en: "Steamed rice"
+  },
+  {
+  id: "11-1",
+  type: "kitchen",
+  category_id: "sauces",
+  category_ru: "Соусы",
+  category_kz: "Соустар",
+  category_en: "Sauces",
+  name_ru: "Сырный",
+  name_kz: "Ірімшік соусы",
+  name_en: "Cheese Sauce",
+  price: 590,
+  weight: "50g",
+  composition_ru: "Сливочно-сырный соус",
+  composition_kz: "Кілегейлі ірімшік соусы",
+  composition_en: "Creamy cheese sauce"
+  },
+  {
+  id: "11-2",
+  type: "kitchen",
+  category_id: "sauces",
+  category_ru: "Соусы",
+  category_kz: "Соустар",
+  category_en: "Sauces",
+  name_ru: "Красный",
+  name_kz: "Қызыл соус",
+  name_en: "Red Sauce",
+  price: 590,
+  weight: "50g",
+  composition_ru: "Томатный соус со специями и зеленью",
+  composition_kz: "Дәмдеуіштер мен көк шөптер қосылған қызанақ соусы",
+  composition_en: "Tomato-based sauce with spices and herbs"
+  },
+  {
+  id: "11-3",
+  type: "kitchen",
+  category_id: "sauces",
+  category_ru: "Соусы",
+  category_kz: "Соустар",
+  category_en: "Sauces",
+  name_ru: "Белый",
+  name_kz: "Ақ соус",
+  name_en: "White Sauce",
+  price: 590,
+  weight: "50g",
+  composition_ru: "Нежный сливочно-чесночный соус",
+  composition_kz: "Жұмсақ кілегейлі-сарымсақ соусы",
+  composition_en: "Mild creamy garlic sauce"
+  },
+  {
+  id: "11-4",
+  type: "kitchen",
+  category_id: "sauces",
+  category_ru: "Соусы",
+  category_kz: "Соустар",
+  category_en: "Sauces",
+  name_ru: "Кетчуп",
+  name_kz: "Кетчуп",
+  name_en: "Ketchup",
+  price: 590,
+  weight: "50g",
+  composition_ru: "Классический томатный кетчуп",
+  composition_kz: "Классикалық қызанақ кетчупы",
+  composition_en: "Classic tomato ketchup"
+  },
+  {
+  id: "11-5",
+  type: "kitchen",
+  category_id: "sauces",
+  category_ru: "Соусы",
+  category_kz: "Соустар",
+  category_en: "Sauces",
+  name_ru: "Тартар",
+  name_kz: "Тартар соусы",
+  name_en: "Tartar Sauce",
+  price: 590,
+  weight: "50g",
+  composition_ru: "Сливочный соус с маринованными огурцами и зеленью",
+  composition_kz: "Маринадталған қияр мен көк шөптер қосылған кілегейлі соус",
+  composition_en: "Creamy sauce with pickled cucumbers and herbs"
+  },
+  {
+  id: "12-1",
+  type: "kitchen",
+  category_id: "desserts",
+  category_ru: "Десерты",
+  category_kz: "Десерттер",
+  category_en: "Desserts",
+  name_ru: "Восточные сладости",
+  name_kz: "Шығыс тәттілері",
+  name_en: "Oriental Sweets Platter",
+  price: 5490,
+  weight: "450g",
+  composition_ru: "Ассорти восточных сладостей, орехов и сухофруктов",
+  composition_kz: "Шығыс тәттілері, жаңғақтар және кептірілген жемістер ассортиі",
+  composition_en: "Assorted oriental sweets, nuts and dried fruits"
+  },
+  {
+  id: "12-2",
+  type: "kitchen",
+  category_id: "desserts",
+  category_ru: "Десерты",
+  category_kz: "Десерттер",
+  category_en: "Desserts",
+  name_ru: "Пирожное в ассортименте",
+  name_kz: "Ассортименттегі бәліштер",
+  name_en: "Assorted Cakes",
+  price: 2590,
+  weight: "150g",
+  composition_ru: "Десерт из ассортимента витрины; состав зависит от выбранной позиции",
+  composition_kz: "Витринадан таңдалатын десерт; құрамы таңдалған түріне байланысты",
+  composition_en: "Dessert selected from the display; ingredients vary by item"
+  },
+  {
+  id: "13-1",
+  type: "bar",
+  category_id: "lemonades",
+  category_ru: "Лимонады",
+  category_kz: "Лимонадтар",
+  category_en: "Lemonades",
+  name_ru: "Фирменные лимонады",
+  name_kz: "Фирмалық лимонадтар",
+  name_en: "Signature Lemonades",
+  price: 2990,
+  weight: "1L",
+  composition_ru: "Вишня — виноград / Киви — грейпфрут — жасмин / Маракуйя — ананас / Нектар",
+  composition_kz: "Шие — жүзім / Киви — грейпфрут — жасмин / Маракуйя — ананас / Нектар",
+  composition_en: "Cherry & Grape / Kiwi, Grapefruit & Jasmine / Passion Fruit & Pineapple / Nectar",
+  image: "assets/menu/lemonades-demo.jpg"
+  },
+  {
+  id: "14-1",
+  type: "bar",
+  category_id: "tea",
+  category_ru: "Чай",
+  category_kz: "Шай",
+  category_en: "Tea",
+  name_ru: "Авторский чай",
+  name_kz: "Авторлық шай",
+  name_en: "Signature Tea",
+  price: 2590,
+  weight: "700ml",
+  composition_ru: "Алматинский / Ташкентский / Малина — лайм / Персик — жасмин",
+  composition_kz: "Алматылық / Ташкенттік / Таңқурай — лайм / Шабдалы — жасмин",
+  composition_en: "Almaty Style / Tashkent Style / Raspberry & Lime / Peach & Jasmine"
+  },
+  {
+  id: "14-2",
+  type: "bar",
+  category_id: "tea",
+  category_ru: "Чай",
+  category_kz: "Шай",
+  category_en: "Tea",
+  name_ru: "Листовой чай",
+  name_kz: "Жапырақты шай",
+  name_en: "Loose-Leaf Tea",
+  price: 1590,
+  weight: "700ml",
+  composition_ru: "Ассам / Сенча / Жасмин / Эрл Грей / Ройбуш / Султан",
+  composition_kz: "Ассам / Сенча / Жасмин / Эрл Грей / Ройбуш / Сұлтан",
+  composition_en: "Assam / Sencha / Jasmine / Earl Grey / Rooibos / Sultan"
+  },
+  {
+  id: "15-1",
+  type: "bar",
+  category_id: "soft-drinks",
+  category_ru: "Безалкогольные напитки",
+  category_kz: "Алкогольсіз сусындар",
+  category_en: "Soft Drinks",
+  name_ru: "Пепси",
+  name_kz: "Pepsi",
+  name_en: "Pepsi",
+  price: 1790,
+  weight: "1L",
+  composition_ru: "Газированный безалкогольный напиток",
+  composition_kz: "Газдалған алкогольсіз сусын",
+  composition_en: "Carbonated soft drink"
+  },
 ];
 
-
-// ============================================
-// TRANSLATIONS
-// ============================================
-
 const TRANSLATIONS = {
-
-    RU: {
-        header_subtitle: "Lounge · Bar · Kitchen",
-
-        hero_title: "Меню",
-        hero_subtitle: "LOUNGE · KITCHEN · BAR",
-        hero_description: "Кухня, мангал и напитки",
-
-        search_placeholder: "Поиск блюд, напитков...",
-
-        nav_kitchen: "КУХНЯ",
-        nav_bar: "БАР",
-
-        modal_ingredients: "Ингредиенты",
-        modal_close: "ЗАКРЫТЬ",
-
-        tab_menu: "Меню",
-        tab_info: "Инфо",
-
-        info_title: "Информация",
-        info_subtitle: "Свяжитесь с нами или найдите важные детали",
-
-        info_address_label: "Адрес",
-        info_address: "Проспект Дулати 1а, мкр. Архат, Алматы",
-        info_open_map: "Открыть в 2GIS",
-
-        info_phone_label: "Телефон",
-        info_hours: "Ежедневно, 14:00 - 01:00",
-
-        info_consumer: "Уголок потребителя",
-
-        info_license: "Лицензия и регистрация",
-        info_license_desc:
-            "Информация о регистрации и разрешительных документах предоставляется гостям по запросу.",
-
-        info_rules: "Правила обслуживания",
-        info_rules_desc:
-            "Мы заботимся о комфортной атмосфере и просим гостей соблюдать правила заведения.",
-
-        info_feedback: "Книга отзывов",
-        info_feedback_desc:
-            "Книга отзывов и предложений предоставляется по запросу у менеджера.",
-
-        nothing_found: "Ничего не найдено",
-        try_another_search: "Попробуйте изменить запрос."
-    },
-
-
-    KZ: {
-        header_subtitle: "Lounge · Bar · Kitchen",
-
-        hero_title: "Мәзір",
-        hero_subtitle: "LOUNGE · KITCHEN · BAR",
-        hero_description: "Асхана, мангал және сусындар",
-
-        search_placeholder: "Тағамдарды, сусындарды іздеу...",
-
-        nav_kitchen: "АСХАНА",
-        nav_bar: "БАР",
-
-        modal_ingredients: "Құрамы",
-        modal_close: "ЖАБУ",
-
-        tab_menu: "Мәзір",
-        tab_info: "Ақпарат",
-
-        info_title: "Ақпарат",
-        info_subtitle:
-            "Бізбен хабарласыңыз немесе маңызды мәліметтерді табыңыз",
-
-        info_address_label: "Мекен-жайы",
-        info_address:
-            "Дулати даңғылы 1а, Архат ықшамауданы, Алматы",
-        info_open_map: "2GIS-те ашу",
-
-        info_phone_label: "Телефон",
-        info_hours: "Күн сайын, 14:00 - 01:00",
-
-        info_consumer: "Тұтынушы бұрышы",
-
-        info_license: "Лицензия және тіркеу",
-        info_license_desc:
-            "Тіркеу және рұқсат құжаттары туралы ақпарат қонақтарға сұраныс бойынша беріледі.",
-
-        info_rules: "Қызмет көрсету ережелері",
-        info_rules_desc:
-            "Біз жайлы атмосфераны сақтауға тырысамыз және қонақтардан мекеме ережелерін сақтауды сұраймыз.",
-
-        info_feedback: "Пікірлер кітабы",
-        info_feedback_desc:
-            "Пікірлер мен ұсыныстар кітабы менеджердің сұрауы бойынша беріледі.",
-
-        nothing_found: "Ештеңе табылмады",
-        try_another_search: "Іздеу сұрауын өзгертіп көріңіз."
-    },
-
-
-    EN: {
-        header_subtitle: "Lounge · Bar · Kitchen",
-
-        hero_title: "Menu",
-        hero_subtitle: "LOUNGE · KITCHEN · BAR",
-        hero_description: "Kitchen, grill and drinks",
-
-        search_placeholder: "Search dishes, drinks...",
-
-        nav_kitchen: "KITCHEN",
-        nav_bar: "BAR",
-
-        modal_ingredients: "Ingredients",
-        modal_close: "CLOSE",
-
-        tab_menu: "Menu",
-        tab_info: "Info",
-
-        info_title: "Information",
-        info_subtitle:
-            "Get in touch or find essential details",
-
-        info_address_label: "Address",
-        info_address:
-            "Prospect Dulati, 1a, Arhat district, Almaty",
-        info_open_map: "Open in 2GIS",
-
-        info_phone_label: "Phone",
-        info_hours: "Every day, 14:00 - 01:00",
-
-        info_consumer: "Consumer Corner",
-
-        info_license: "License & Registration",
-        info_license_desc:
-            "Registration and permit information is available to guests upon request.",
-
-        info_rules: "Rules of Service",
-        info_rules_desc:
-            "We care about a comfortable atmosphere and ask guests to follow the venue rules.",
-
-        info_feedback: "Feedback Book",
-        info_feedback_desc:
-            "The feedback and suggestions book is available upon request from the manager.",
-
-        nothing_found: "Nothing found",
-        try_another_search: "Try changing your search."
-    }
-
+  "RU": {
+    "header_subtitle": "Lounge · Bar · Kitchen",
+    "hero_title": "Меню",
+    "hero_description": "Кухня, мангал и напитки",
+    "search_placeholder": "Поиск блюд и напитков...",
+    "nav_kitchen": "КУХНЯ",
+    "nav_bar": "БАР",
+    "modal_ingredients": "Состав",
+    "modal_close": "ЗАКРЫТЬ",
+    "tab_menu": "Меню",
+    "tab_info": "Инфо",
+    "info_title": "Информация",
+    "info_subtitle": "Контакты и важная информация",
+    "info_address_label": "Адрес",
+    "info_address": "Алматы",
+    "info_open_map": "Открыть в 2GIS",
+    "info_phone_label": "Телефон",
+    "info_hours": "Ежедневно",
+    "info_consumer": "Уголок потребителя",
+    "info_license": "Лицензия и регистрация",
+    "info_license_desc": "Информация",
+    "info_rules": "Правила обслуживания",
+    "info_rules_desc": "Правила",
+    "info_feedback": "Книга отзывов",
+    "info_feedback_desc": "Отзывы",
+    "nothing_found": "Ничего не найдено",
+    "try_another_search": "Попробуйте изменить запрос."
+  },
+  "KZ": {
+    "header_subtitle": "Lounge · Bar · Kitchen",
+    "hero_title": "Мәзір",
+    "hero_description": "Асхана, мангал және сусындар",
+    "search_placeholder": "Тағамдар мен сусындарды іздеу...",
+    "nav_kitchen": "АСХАНА",
+    "nav_bar": "БАР",
+    "modal_ingredients": "Құрамы",
+    "modal_close": "ЖАБУ",
+    "tab_menu": "Мәзір",
+    "tab_info": "Ақпарат",
+    "info_title": "Ақпарат",
+    "info_subtitle": "Байланыс деректері және маңызды ақпарат",
+    "info_address_label": "Мекенжай",
+    "info_address": "Алматы",
+    "info_open_map": "2GIS картасынан ашу",
+    "info_phone_label": "Телефон",
+    "info_hours": "Күн сайын",
+    "info_consumer": "Тұтынушы бұрышы",
+    "info_license": "Лицензия және тіркеу",
+    "info_license_desc": "Ақпарат",
+    "info_rules": "Қызмет көрсету ережелері",
+    "info_rules_desc": "Ережелер",
+    "info_feedback": "Пікірлер кітабы",
+    "info_feedback_desc": "Пікірлер",
+    "nothing_found": "Ештеңе табылмады",
+    "try_another_search": "Іздеу сұрауын өзгертіп көріңіз."
+  },
+  "EN": {
+    "header_subtitle": "Lounge · Bar · Kitchen",
+    "hero_title": "Menu",
+    "hero_description": "Kitchen, charcoal grill and drinks",
+    "search_placeholder": "Search dishes and drinks...",
+    "nav_kitchen": "KITCHEN",
+    "nav_bar": "BAR",
+    "modal_ingredients": "Ingredients",
+    "modal_close": "CLOSE",
+    "tab_menu": "Menu",
+    "tab_info": "Info",
+    "info_title": "Information",
+    "info_subtitle": "Contact details and useful information",
+    "info_address_label": "Address",
+    "info_address": "Almaty",
+    "info_open_map": "Open in 2GIS",
+    "info_phone_label": "Phone",
+    "info_hours": "Open daily",
+    "info_consumer": "Consumer Information",
+    "info_license": "License & Registration",
+    "info_license_desc": "Information",
+    "info_rules": "Service Rules",
+    "info_rules_desc": "Rules",
+    "info_feedback": "Guest Feedback",
+    "info_feedback_desc": "Feedback",
+    "nothing_found": "Nothing found",
+    "try_another_search": "Try a different search."
+  }
 };
