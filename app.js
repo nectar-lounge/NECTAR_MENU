@@ -295,19 +295,32 @@
 
     state.type = type;
     state.query = '';
-    state.categoryId = firstCategoryId(type);
     clearTimeout(state.searchTimer);
 
     const input = $('#searchInput');
     if (input) input.value = '';
+
+    // Lock the intended destination before the DOM is replaced.
+    // Without this, the scroll spy can read the old deep scroll position against
+    // the newly rendered short Bar menu and change Lemonades -> Tea before our RAF.
+    const targetCategoryId = firstCategoryId(type);
+    state.categoryId = targetCategoryId;
+    state.suppressCategorySpyUntil = Date.now() + 500;
 
     updateSearchClear();
     updateMainTabs();
     renderCategories();
     renderMenu({ motion: 'type' });
 
+    // The new sections already exist synchronously after renderMenu().
+    // Jump immediately to the first category; a smooth programmatic scroll here
+    // only makes the switch feel slower and gives observers time to compete.
+    scrollToCategory(targetCategoryId, 'auto');
+    updateCategoryTabs(targetCategoryId, true);
+
     requestAnimationFrame(() => {
-      scrollToCategory(state.categoryId, prefersReducedMotion() ? 'auto' : 'smooth');
+      setupCategoryObserver();
+      updateCategoryEdgeFades();
     });
   }
 
@@ -732,9 +745,13 @@
 
     if (motion === 'type' || motion === 'language') {
       container.classList.remove('type-enter');
-      void container.offsetWidth;
-      container.classList.add('type-enter');
-      window.setTimeout(() => container.classList.remove('type-enter'), 480);
+
+      // Restart the lightweight transition on the next frame without forcing
+      // a synchronous layout via offsetWidth.
+      requestAnimationFrame(() => {
+        container.classList.add('type-enter');
+        window.setTimeout(() => container.classList.remove('type-enter'), 360);
+      });
     }
 
     if (reveal && !state.revealPlayed) {
@@ -747,7 +764,9 @@
     if (!query) {
       requestAnimationFrame(() => {
         setupCategoryObserver();
-        updateActiveCategoryFromScroll();
+        if (Date.now() >= state.suppressCategorySpyUntil) {
+          updateActiveCategoryFromScroll();
+        }
       });
     }
   }
