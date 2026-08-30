@@ -68,18 +68,10 @@
         <p class="menu-card-hint" data-i18n="card_hint">Нажмите на блюдо, чтобы посмотреть полный состав</p>
         <div class="menu-content" id="menuContainer" aria-live="polite"></div>
       </div>
-        <section class="banquet-entry" aria-labelledby="banquetEntryTitle">
-          <span class="banquet-entry__ornament" aria-hidden="true">N</span>
-          <p class="banquet-entry__eyebrow" data-banquet-i18n="eyebrow">PRIVATE DINING</p>
-          <h2 id="banquetEntryTitle" data-banquet-i18n="title">Банкетное меню</h2>
-          <p data-banquet-i18n="subtitle">Для особых событий и больших компаний</p>
-          <button type="button" class="banquet-entry__button" id="openBanquet"><span data-banquet-i18n="open">Посмотреть</span><span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span></button>
-        </section>
     </section>
 
     <section class="spa-section banquet-section" id="banquet-section" aria-label="Banquet menu">
       <div class="banquet-shell">
-        <button class="banquet-back" id="closeBanquet" type="button"><span class="material-symbols-outlined" aria-hidden="true">arrow_back</span><span data-banquet-i18n="back">Основное меню</span></button>
         <header class="banquet-hero">
           <span class="banquet-hero__ornament" aria-hidden="true">N</span>
           <p class="banquet-hero__eyebrow" data-banquet-i18n="eyebrow">PRIVATE DINING</p>
@@ -124,20 +116,18 @@
         <div class="info-divider"></div>
 
         <div class="info-row">
-          <span class="info-row__icon material-symbols-outlined" aria-hidden="true">percent</span>
-          <div>
-            <h2 data-i18n="info_service">Обслуживание</h2>
-            <p class="info-service-value" data-i18n="info_service_value">10%</p>
-          </div>
-        </div>
-
-        <div class="info-divider"></div>
-
-        <div class="info-row">
           <span class="info-row__icon material-symbols-outlined" aria-hidden="true">camera_alt</span>
           <div>
             <h2>Instagram</h2>
             <a href="https://www.instagram.com/nectar.lounge.almaty" target="_blank" rel="noopener noreferrer">@nectar.lounge.almaty</a>
+          </div>
+        </div>
+        <div class="info-divider info-divider--service"></div>
+        <div class="info-row info-row--service">
+          <span class="info-row__icon material-symbols-outlined" aria-hidden="true">percent</span>
+          <div>
+            <h2 data-i18n="info_service">Обслуживание</h2>
+            <p class="info-service-value" data-i18n="info_service_value">10%</p>
           </div>
         </div>
       </div>
@@ -233,6 +223,10 @@
       <button class="bottom-nav__button is-active" type="button" data-path="menu" aria-current="page">
         <span class="material-symbols-outlined" aria-hidden="true">restaurant_menu</span>
         <span data-i18n="tab_menu">Меню</span>
+      </button>
+      <button class="bottom-nav__button" type="button" data-path="banquet" aria-current="false">
+        <span class="material-symbols-outlined" aria-hidden="true">celebration</span>
+        <span data-banquet-i18n="nav">Банкеты</span>
       </button>
       <button class="bottom-nav__button" type="button" data-path="info" aria-current="false">
         <span class="material-symbols-outlined" aria-hidden="true">info</span>

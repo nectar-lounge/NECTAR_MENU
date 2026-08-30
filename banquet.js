@@ -2,14 +2,13 @@
   'use strict';
 
   const I18N = {
-    RU: { eyebrow:'PRIVATE DINING', title:'Банкетное меню', subtitle:'Для особых событий и больших компаний', open:'Посмотреть', back:'Основное меню', price:'Цена уточняется', includes:'В составе', close:'ЗАКРЫТЬ' },
-    KZ: { eyebrow:'PRIVATE DINING', title:'Банкет мәзірі', subtitle:'Ерекше іс-шаралар мен үлкен компанияларға арналған', open:'Қарау', back:'Негізгі мәзір', price:'Бағасы нақтылануда', includes:'Құрамы', close:'ЖАБУ' },
-    EN: { eyebrow:'PRIVATE DINING', title:'Banquet Menu', subtitle:'For special occasions and large groups', open:'View menu', back:'Main menu', price:'Price upon confirmation', includes:'Includes', close:'CLOSE' }
+    RU: { eyebrow:'PRIVATE DINING', title:'Банкетное меню', subtitle:'Для особых событий и больших компаний', nav:'Банкеты', open:'Посмотреть', back:'Основное меню', price:'Цена уточняется', includes:'В составе', close:'ЗАКРЫТЬ' },
+    KZ: { eyebrow:'PRIVATE DINING', title:'Банкет мәзірі', subtitle:'Ерекше іс-шаралар мен үлкен компанияларға арналған', nav:'Банкеттер', open:'Қарау', back:'Негізгі мәзір', price:'Бағасы нақтылануда', includes:'Құрамы', close:'ЖАБУ' },
+    EN: { eyebrow:'PRIVATE DINING', title:'Banquet Menu', subtitle:'For special occasions and large groups', nav:'Banquets', open:'View menu', back:'Main menu', price:'Price upon confirmation', includes:'Includes', close:'CLOSE' }
   };
 
   let activeCategory = null;
   let modalOpen = false;
-  let menuReturnY = 0;
   let modalReturnY = 0;
   let modalPreviousFocus = null;
   let scrollRaf = 0;
@@ -87,40 +86,6 @@
         updateActiveFromScroll();
         centerActiveCategory('auto');
       });
-    }
-  }
-
-  function activateMenuNav() {
-    $$('.bottom-nav__button').forEach(btn => {
-      const active = btn.dataset.path === 'menu';
-      btn.classList.toggle('is-active', active);
-      btn.setAttribute('aria-current', active ? 'page' : 'false');
-    });
-  }
-
-  function openSection() {
-    const menu = $('#menu-section');
-    const banquet = $('#banquet-section');
-    if (!menu || !banquet || modalOpen) return;
-    menuReturnY = window.scrollY || 0;
-    menu.classList.remove('is-active');
-    $('#info-section')?.classList.remove('is-active');
-    banquet.classList.add('is-active');
-    activeCategory = categories()[0]?.id || null;
-    apply();
-    window.scrollTo({ top: 0, behavior: 'auto' });
-  }
-
-  function closeSection({ restore = true, activateMenu = true } = {}) {
-    const menu = $('#menu-section');
-    const banquet = $('#banquet-section');
-    if (!menu || !banquet) return;
-    if (modalOpen) closeModal({ immediate: true });
-    banquet.classList.remove('is-active');
-    if (activateMenu) {
-      menu.classList.add('is-active');
-      activateMenuNav();
-      requestAnimationFrame(() => window.scrollTo({ top: restore ? menuReturnY : 0, behavior: 'auto' }));
     }
   }
 
@@ -221,28 +186,6 @@
   }
 
   document.addEventListener('click', event => {
-    if (event.target.closest('#openBanquet')) {
-      openSection();
-      return;
-    }
-    if (event.target.closest('#closeBanquet')) {
-      closeSection();
-      return;
-    }
-
-    // Keep the global bottom navigation coherent with the separate banquet mode.
-    const bottom = event.target.closest('.bottom-nav__button');
-    if (bottom && isActive()) {
-      if (bottom.dataset.path === 'menu') closeSection({ restore: true, activateMenu: true });
-      else closeSection({ restore: false, activateMenu: false }); // app.js activates Info after this handler
-      return;
-    }
-
-    if (event.target.closest('#brandHome') && isActive()) {
-      closeSection({ restore: false, activateMenu: true });
-      return;
-    }
-
     const cat = event.target.closest('[data-bcat]');
     if (cat) {
       const id = cat.dataset.bcat;
@@ -265,6 +208,14 @@
 
     // app.js updates .lang-btn synchronously in its click handler; run after that.
     if (event.target.closest('.lang-btn')) requestAnimationFrame(apply);
+  });
+
+  document.addEventListener('nectar:sectionchange', event => {
+    if (event.detail?.section !== 'banquet') return;
+    requestAnimationFrame(() => {
+      updateActiveFromScroll();
+      centerActiveCategory('auto');
+    });
   });
 
   document.addEventListener('keydown', event => {

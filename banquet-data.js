@@ -6,7 +6,7 @@ const BANQUET_MENU = [
   {id:"b-4",category_id:"banquet-appetizers",category_ru:"Закуски",category_kz:"Тіскебасарлар",category_en:"Appetizers",name_ru:"Домашние соленья",name_kz:"Үй тұздықтары",name_en:"Homemade Pickles",price:null,weight:null},
   {id:"b-5",category_id:"banquet-appetizers",category_ru:"Закуски",category_kz:"Тіскебасарлар",category_en:"Appetizers",name_ru:"Куриное ассорти",name_kz:"Тауық еті ассортиі",name_en:"Chicken Platter",price:null,weight:null},
   {id:"b-6",category_id:"banquet-salads",category_ru:"Салаты",category_kz:"Салаттар",category_en:"Salads",name_ru:"Хрустящий баклажан",name_kz:"Қытырлақ баялды",name_en:"Crispy Eggplant Salad",price:null,weight:null},
-  {id:"b-7",category_id:"banquet-salads",category_ru:"Салаты",category_kz:"Салаттар",category_en:"Salads",name_ru:"Теплый салат",name_kz:"Жылы салат",name_en:"Warm Salad",price:null,weight:null},
+  {id:"b-7",category_id:"banquet-salads",category_ru:"Салаты",category_kz:"Салаттар",category_en:"Salads",name_ru:"Тёплый салат",name_kz:"Жылы салат",name_en:"Warm Salad",price:null,weight:null},
   {id:"b-8",category_id:"banquet-salads",category_ru:"Салаты",category_kz:"Салаттар",category_en:"Salads",name_ru:"Греческий салат",name_kz:"Грек салаты",name_en:"Greek Salad",price:null,weight:null},
   {id:"b-9",category_id:"banquet-salads",category_ru:"Салаты",category_kz:"Салаттар",category_en:"Salads",name_ru:"Салат Цезарь",name_kz:"Цезарь салаты",name_en:"Caesar Salad",price:null,weight:null},
   {id:"b-10",category_id:"banquet-salads",category_ru:"Салаты",category_kz:"Салаттар",category_en:"Salads",name_ru:"Пикантный салат",name_kz:"Ащылау салат",name_en:"Savory Salad",price:null,weight:null},
@@ -30,5 +30,5 @@ const BANQUET_MENU = [
   {id:"b-28",category_id:"banquet-bakery",category_ru:"Хлеб и выпечка",category_kz:"Нан және пісірмелер",category_en:"Bread & Bakery",name_ru:"Самса",name_kz:"Самса",name_en:"Samsa",price:null,weight:null,summary_ru:"5 шт · красный соус",summary_kz:"5 дана · қызыл соус",summary_en:"5 pcs · red sauce"},
   {id:"b-29",category_id:"banquet-bakery",category_ru:"Хлеб и выпечка",category_kz:"Нан және пісірмелер",category_en:"Bread & Bakery",name_ru:"Баурсаки",name_kz:"Бауырсақ",name_en:"Baursak",price:null,weight:null,summary_ru:"8 шт",summary_kz:"8 дана",summary_en:"8 pcs"},
   {id:"b-30",category_id:"banquet-desserts",category_ru:"Десерт",category_kz:"Десерт",category_en:"Dessert",name_ru:"Фруктовая ваза",name_kz:"Жеміс вазасы",name_en:"Fruit Platter",price:null,weight:null},
-  {id:"b-31",category_id:"banquet-desserts",category_ru:"Десерт",category_kz:"Десерт",category_en:"Dessert",name_ru:"Торт / пирожное в ассортименте",name_kz:"Ассортименттегі торт / пирожное",name_en:"Assorted Cake / Pastry",price:null,weight:null}
+  {id:"b-31",category_id:"banquet-desserts",category_ru:"Десерт",category_kz:"Десерт",category_en:"Dessert",name_ru:"Торт / пирожное в ассортименте",name_kz:"Ассортименттегі торттар мен бәліштер",name_en:"Assorted Cakes & Pastries",price:null,weight:null}
 ];

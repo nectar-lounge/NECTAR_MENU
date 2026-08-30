@@ -10,7 +10,7 @@
     type: 'kitchen',
     categoryId: null,
     query: '',
-    sectionScroll: { menu: 0, info: 0 },
+    sectionScroll: { menu: 0, banquet: 0, info: 0 },
     modal: {
       open: false,
       closing: false,
@@ -657,14 +657,15 @@
       <span class="menu-card__body">
         <span class="menu-card__title-row">
           <span class="menu-card__title">${escapeHtml(itemName(item) || '—')}</span>
-          ${compactTagIcons(item)}
         </span>
 
         ${description ? `<span class="menu-card__desc">${escapeHtml(description)}</span>` : ''}
-        ${item?.weight ? `<span class="menu-card__weight">${escapeHtml(formatWeight(item.weight))}</span>` : ''}
+        <span class="menu-card__meta">
+          ${item?.weight ? `<span class="menu-card__weight">${escapeHtml(formatWeight(item.weight))}</span>` : '<span class="menu-card__weight menu-card__weight--empty" aria-hidden="true"></span>'}
+          ${compactTagIcons(item)}
+        </span>
+        ${!available ? `<span class="menu-card__unavailable">${escapeHtml(t('unavailable', 'Временно недоступно'))}</span>` : ''}
       </span>
-
-      ${!available ? `<span class="menu-card__unavailable">${escapeHtml(t('unavailable', 'Временно недоступно'))}</span>` : ''}
       <span class="menu-card__price">
         ${formatPrice(item?.price)} <small>₸</small>
       </span>
@@ -806,7 +807,7 @@
         searchNote.textContent = state.lang === 'EN'
           ? `Search across Kitchen and Bar · ${count} found`
           : state.lang === 'KZ'
-            ? `Асхана мен Бар бойынша іздеу · ${count} нәтиже`
+            ? `Асхана мен бар бойынша іздеу · ${count} нәтиже`
             : `Поиск по Кухне и Бару · найдено: ${count}`;
       }
     }
@@ -825,23 +826,6 @@
 
     const groups = query ? searchGroups(items) : normalGroups(items);
     const fragment = document.createDocumentFragment();
-
-    if (!query && state.type === 'kitchen') {
-      const featured = itemsForType('kitchen').filter(item => item?.featured === true);
-      if (featured.length) {
-        const section = document.createElement('section');
-        section.className = 'featured-section';
-        section.innerHTML = `
-          <div class="featured-heading">
-            <span class="featured-heading__ornament" aria-hidden="true">N</span>
-            <div><h2>${escapeHtml(t('featured_title', 'Выбор NECTAR'))}</h2><p>${escapeHtml(t('featured_subtitle', 'То, что мы рекомендуем попробовать'))}</p></div>
-          </div>
-          <div class="featured-list"></div>`;
-        const list = $('.featured-list', section);
-        featured.forEach(item => list?.appendChild(makeMenuCard(item)));
-        fragment.appendChild(section);
-      }
-    }
 
     groups.forEach((group, groupIndex) => {
       const section = document.createElement('section');
@@ -982,7 +966,7 @@
 
   function switchSection(section) {
     if (
-      !['menu', 'info'].includes(section) ||
+      !['menu', 'banquet', 'info'].includes(section) ||
       section === state.section ||
       state.modal.open ||
       state.modal.closing
@@ -992,6 +976,7 @@
     state.section = section;
 
     $('#menu-section')?.classList.toggle('is-active', section === 'menu');
+    $('#banquet-section')?.classList.toggle('is-active', section === 'banquet');
     $('#info-section')?.classList.toggle('is-active', section === 'info');
 
     $$('.bottom-nav__button').forEach(button => {
@@ -1004,6 +989,7 @@
     requestAnimationFrame(() => {
       instantScrollTo(y);
       if (section === 'menu') scheduleCategorySpy();
+      document.dispatchEvent(new CustomEvent('nectar:sectionchange', { detail: { section } }));
     });
   }
 
@@ -1256,7 +1242,7 @@
   function onWindowScroll() {
     if (state.modal.open || state.modal.closing) return;
     state.sectionScroll[state.section] = window.scrollY;
-    scheduleCategorySpy();
+    if (state.section === 'menu') scheduleCategorySpy();
   }
 
   function initEvents() {
@@ -1309,7 +1295,7 @@
       const value = event.currentTarget.value;
       updateSearchClear();
 
-      // 81 items are tiny for modern browsers: render immediately on every input.
+      // This menu is small enough for immediate client-side filtering on every input.
       // No debounce = premium "search as you type" behavior.
       setSearch(value);
     });
