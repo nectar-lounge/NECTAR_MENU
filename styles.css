@@ -1988,3 +1988,131 @@ body.banquet-modal-open { overflow: hidden; }
   .bottom-nav__button { font-size: 9px; }
   .bottom-nav__button > .material-symbols-outlined { font-size: 20px; }
 }
+
+/* ======================================================
+   NECTAR v1.7.1 — VISUAL CONSISTENCY POLISH
+   ====================================================== */
+
+/* One dietary icon language everywhere: the modal uses the exact same
+   recognizable chili glyph as menu cards. */
+.modal-tag--spicy::before {
+  content: '🌶';
+  font-size: 14px;
+  line-height: 1;
+  filter: saturate(.72);
+  flex: 0 0 auto;
+}
+.modal-tag--spicy svg { display: none; }
+
+/* Main and banquet destinations share one horizontal grid. */
+.menu-shell,
+.banquet-shell {
+  width: min(100%, 920px);
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.menu-content,
+.banquet-list,
+.banquet-group,
+.banquet-card,
+.menu-card { width: 100%; box-sizing: border-box; }
+.banquet-list { grid-template-columns: minmax(0, 1fr); }
+
+/* Compact editorial banquet subhero: same brand photography, different crop,
+   while text stays in normal flow so RU/KZ/EN cannot overlap. */
+.banquet-shell { padding-top: 18px; }
+.banquet-hero {
+  position: relative;
+  min-height: 158px;
+  margin: 0 0 18px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 22px;
+  background: var(--forest-deep);
+  isolation: isolate;
+}
+.banquet-hero__image,
+.banquet-hero__veil {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.banquet-hero__image {
+  object-fit: cover;
+  object-position: 50% 39%;
+  z-index: -3;
+}
+.banquet-hero__veil {
+  z-index: -2;
+  background: linear-gradient(90deg, rgba(12,34,23,.88), rgba(12,34,23,.62) 62%, rgba(12,34,23,.46));
+}
+.banquet-hero__content {
+  min-height: 158px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 22px 24px;
+  text-align: left;
+}
+.banquet-hero__ornament {
+  width: 30px;
+  height: 30px;
+  margin: 0 0 8px;
+  color: #d7b276;
+  border-color: rgba(215,178,118,.55);
+  font-size: 18px;
+}
+.banquet-hero__eyebrow { margin: 0 0 5px; color: #d7b276; }
+.banquet-hero h1 {
+  margin: 0;
+  color: #fffdf8;
+  font-size: clamp(32px, 7vw, 44px);
+  line-height: .98;
+  text-wrap: balance;
+}
+.banquet-hero > p:not(.banquet-hero__eyebrow),
+.banquet-hero__content > p:not(.banquet-hero__eyebrow) {
+  margin: 7px 0 0;
+  max-width: 440px;
+  color: rgba(255,253,248,.82);
+  font-size: 12px;
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+/* Service is information, not a promotion: exactly the same row treatment as
+   address, phone and Instagram. */
+.info-row--service {
+  background: transparent !important;
+  border-radius: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+.info-service-value {
+  color: inherit !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  letter-spacing: inherit !important;
+}
+.info-divider--service { margin-top: 0 !important; }
+
+@media (max-width: 600px) {
+  .menu-shell,
+  .banquet-shell { padding-left: 14px; padding-right: 14px; }
+  .banquet-hero { min-height: 150px; border-radius: 20px; }
+  .banquet-hero__content { min-height: 150px; padding: 19px 20px; }
+  .banquet-hero h1 { font-size: clamp(31px, 9vw, 39px); }
+}
+
+@media (max-width: 340px) {
+  .banquet-hero { min-height: 156px; }
+  .banquet-hero__content { min-height: 156px; padding: 18px 17px; }
+  .banquet-hero h1 { font-size: 30px; }
+  .banquet-hero__content > p:not(.banquet-hero__eyebrow) { font-size: 11px; max-width: 250px; }
+}
