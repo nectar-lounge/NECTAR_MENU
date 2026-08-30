@@ -58,6 +58,19 @@
     if (center) centerActiveCategory('smooth');
   }
 
+  function menuControlsOffset() {
+    const headerHeight = $('#siteHeader')?.getBoundingClientRect().height || $('.site-header')?.getBoundingClientRect().height || 0;
+    const controlsHeight = $('#menuControls')?.getBoundingClientRect().height || 0;
+    return headerHeight + controlsHeight + 14;
+  }
+
+  function scrollToBanquetCategory(id, behavior = 'smooth') {
+    const target = document.getElementById(`banquet-${id}`);
+    if (!target) return;
+    const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - menuControlsOffset());
+    window.scrollTo({ top, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : behavior });
+  }
+
   function render() {
     const items = data();
     const cs = categories();
@@ -166,9 +179,7 @@
     if (!isActive() || modalOpen) return;
     const groups = $$('.banquet-group');
     if (!groups.length) return;
-    const header = document.querySelector('.site-header');
-    const nav = $('#banquetCategories');
-    const marker = (header?.offsetHeight || 0) + (nav?.offsetHeight || 0) + 26;
+    const marker = menuControlsOffset() + 10;
     let id = groups[0].dataset.bgroup;
     for (const group of groups) {
       if (group.getBoundingClientRect().top <= marker) id = group.dataset.bgroup;
@@ -190,7 +201,7 @@
     if (cat) {
       const id = cat.dataset.bcat;
       setActiveCategory(id, true);
-      document.getElementById(`banquet-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      scrollToBanquetCategory(id, 'smooth');
       return;
     }
 
@@ -212,11 +223,11 @@
 
   document.addEventListener('nectar:modechange', event => {
     if (event.detail?.mode !== 'banquet') return;
+    const first = categories()[0]?.id || null;
+    activeCategory = first;
     render();
-    requestAnimationFrame(() => {
-      updateActiveFromScroll();
-      centerActiveCategory('auto');
-    });
+    if (first) setActiveCategory(first, false);
+    requestAnimationFrame(() => centerActiveCategory('auto'));
   });
 
   document.addEventListener('keydown', event => {

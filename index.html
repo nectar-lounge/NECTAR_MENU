@@ -63,6 +63,9 @@
             <div class="category-strip" id="categoryStrip" role="group" aria-label="Категории меню"></div>
           </div>
 
+          <!-- Banquet submenu uses the SAME sticky menu-controls layer as Kitchen / Bar. -->
+          <nav class="banquet-categories" id="banquetCategories" aria-label="Banquet categories" hidden></nav>
+
           <div class="search-mode-note" id="searchModeNote" hidden></div>
         </div>
 
@@ -72,7 +75,6 @@
              It intentionally shares the hero, selector, page scroll and background
              with Kitchen / Bar instead of behaving like a separate SPA section. -->
         <div class="banquet-mode" id="banquetMode" hidden>
-          <nav class="banquet-categories" id="banquetCategories" aria-label="Banquet categories"></nav>
           <div id="banquetContainer"></div>
         </div>
       </div>

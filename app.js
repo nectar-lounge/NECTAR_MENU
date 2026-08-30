@@ -372,12 +372,14 @@
     const searchNote = $('#searchModeNote');
     const menuContainer = $('#menuContainer');
     const banquetMode = $('#banquetMode');
+    const banquetCategories = $('#banquetCategories');
 
     if (search) search.hidden = banquet;
     if (categoryNav) categoryNav.hidden = banquet;
     if (searchNote && banquet) searchNote.hidden = true;
     if (menuContainer) menuContainer.hidden = banquet;
     if (banquetMode) banquetMode.hidden = !banquet;
+    if (banquetCategories) banquetCategories.hidden = !banquet;
 
     document.documentElement.dataset.menuMode = state.mode;
   }
@@ -385,9 +387,8 @@
   function scrollBanquetModeToFirstCategory() {
     const target = $('#banquetContainer .banquet-group');
     if (!target) return;
-    const headerHeight = $('.site-header')?.getBoundingClientRect().height || 0;
-    const categoriesHeight = $('#banquetCategories')?.getBoundingClientRect().height || 0;
-    const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - headerHeight - categoriesHeight - 14);
+    const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - controlsOffset());
+    state.suppressCategorySpyUntil = Date.now() + 180;
     instantScrollTo(top);
   }
 

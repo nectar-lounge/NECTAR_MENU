@@ -2562,3 +2562,47 @@ body.banquet-modal-open { overflow: hidden; }
 #banquetMode .banquet-categories {
   margin-top: 0;
 }
+
+
+/* ======================================================
+   v1.11.8 — SUBMENU BEHAVIOR PARITY
+   Banquet categories now live inside the same sticky menu-controls as
+   Kitchen / Bar. No palette, typography or card redesign.
+   ====================================================== */
+#menuControls > .banquet-categories {
+  position: relative;
+  top: auto;
+  z-index: auto;
+  margin: 0 -4px;
+  padding: 5px 5px 8px;
+  border-bottom: 0;
+  background: transparent;
+  overflow-x: auto;
+  overflow-y: hidden;
+  gap: 19px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-inline: contain;
+  scroll-snap-type: x proximity;
+}
+#menuControls > .banquet-categories::-webkit-scrollbar { display: none; }
+#menuControls > .banquet-categories .banquet-category {
+  flex: 0 0 auto;
+  min-height: 33px;
+  padding: 0 1px 8px;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: rgba(27,48,34,.57);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .085em;
+  white-space: nowrap;
+  scroll-snap-align: center;
+  transition: color .25s ease, transform .2s var(--ease), border-color .25s ease;
+}
+#menuControls > .banquet-categories .banquet-category.is-active {
+  color: var(--forest);
+  border-color: var(--gold);
+}
+#menuControls > .banquet-categories .banquet-category:active { transform: scale(.97); }
+#banquetCategories[hidden] { display: none !important; }
