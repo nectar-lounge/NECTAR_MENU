@@ -25,7 +25,8 @@
     suppressCategorySpyUntil: 0,
     categoryObserver: null,
     categoryRevealTimer: 0,
-    interactionLockedUntil: 0
+    interactionLockedUntil: 0,
+    languageSwitchToken: 0
   };
 
   const MODAL_ANIMATION_MS = 280;
@@ -106,7 +107,7 @@
       .normalize('NFKD')
       .replace(/[\u0300-\u036f]/g, '')
       .replace(/ё/g, 'е')
-      .replace(/[^a-zа-я0-9]+/gi, ' ')
+      .replace(/[^\p{L}\p{N}]+/gu, ' ')
       .replace(/\s+/g, ' ')
       .trim();
   }
@@ -173,13 +174,26 @@
     ].join('::');
   }
 
-  function itemImageCandidates(item) {
+  function itemImageCandidates(item, variant = 'card') {
     const candidates = [];
 
+    // Production photo pipeline:
+    // - thumb_image: lightweight image for the list card
+    // - full_image: larger image loaded only when the modal opens
+    // - image: universal fallback/source used by both contexts
+    if (variant === 'modal' && item?.full_image) candidates.push(item.full_image);
+    if (variant === 'card' && item?.thumb_image) candidates.push(item.thumb_image);
     if (item?.image) candidates.push(item.image);
 
+    // Optional beginner-friendly auto mode. It is OFF by default so dishes without
+    // photos do not generate dozens of useless 404 requests. To enable for one item,
+    // add image_auto: true and upload files with the item's ID.
     const id = String(item?.id ?? '').trim();
-    if (id) candidates.push(`assets/menu/items/${id}.webp`);
+    if (id && item?.image_auto === true) {
+      if (variant === 'modal') candidates.push(`assets/menu/full/${id}.webp`);
+      if (variant === 'card') candidates.push(`assets/menu/thumbs/${id}.webp`);
+      candidates.push(`assets/menu/items/${id}.webp`);
+    }
 
     const allNames = [item?.name_ru, item?.name_kz, item?.name_en]
       .map(value => normalize(value, 'ru'))
@@ -196,8 +210,8 @@
     return [...new Set(candidates.filter(Boolean))];
   }
 
-  function itemImage(item) {
-    return itemImageCandidates(item)[0] || '';
+  function itemImage(item, variant = 'card') {
+    return itemImageCandidates(item, variant)[0] || '';
   }
 
   function isAllowedBarItem(item) {
@@ -263,7 +277,9 @@
     });
   }
 
-  /* LANGUAGE: сохраняем Kitchen/Bar, но идём в первую категорию текущего раздела */
+  /* LANGUAGE: сохраняем Kitchen/Bar и детерминированно открываем первую категорию.
+     Без анимации всего списка: при быстрых RU/KZ/EN она создавала конкурирующие RAF/timers
+     и визуальное подёргивание карточек. */
   function switchLang(lang) {
     if (
       !getTranslations()[lang] ||
@@ -272,23 +288,38 @@
       state.modal.closing
     ) return;
 
+    const token = ++state.languageSwitchToken;
+
     state.lang = lang;
     state.query = '';
     clearTimeout(state.searchTimer);
+    state.suppressCategorySpyUntil = Date.now() + 450;
 
     const input = $('#searchInput');
     if (input) input.value = '';
 
+    // Stable category IDs do not depend on language. Resolve destination before render.
+    const targetCategoryId = firstCategoryId(state.type);
+    state.categoryId = targetCategoryId;
+
     applyTranslations();
     updateSearchClear();
     updateMainTabs();
-
-    state.categoryId = firstCategoryId(state.type);
     renderCategories();
-    renderMenu({ motion: 'language' });
+
+    // Do not animate/reflow the entire 81-item menu for a language-only text change.
+    const container = $('#menuContainer');
+    container?.classList.remove('type-enter', 'search-results-enter');
+    renderMenu();
+
+    // renderMenu() is synchronous, so the destination section already exists.
+    scrollToCategory(targetCategoryId, 'auto');
+    updateCategoryTabs(targetCategoryId, true);
 
     requestAnimationFrame(() => {
-      scrollToCategory(state.categoryId, 'auto');
+      if (token !== state.languageSwitchToken) return;
+      setupCategoryObserver();
+      updateCategoryEdgeFades();
     });
   }
 
@@ -578,16 +609,44 @@
     `;
   }
 
+  function itemTags(item) {
+    return Array.isArray(item?.tags) ? item.tags.filter(tag => ['spicy', 'vegetarian'].includes(tag)) : [];
+  }
+
+  function tagLabel(tag) {
+    return tag === 'spicy' ? t('tag_spicy', 'Острое') : t('tag_vegetarian', 'Вегетарианское');
+  }
+
+  function tagIcon(tag) {
+    if (tag === 'spicy') {
+      return `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.2 5.2c.8-1.7 2.2-2.5 3.3-2.7-.2 1.7-1.2 3.1-2.8 3.8M18.4 6.4c-1.5 6.2-5.5 10.9-12.8 12.9-1.9.5-3.3-1.8-1.9-3.2 2.6-2.6 4.5-5.4 5.8-8.6 1.4-3.4 5.2-4.3 8-2.1.4.3.7.6.9 1z"/></svg>`;
+    }
+    return `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5C12.8 3.8 6.4 6.4 4.1 11c-1.5 3-.7 6 1.2 7.7 2.1-4.3 5.6-7.6 10.6-10-4.3 3.1-7.2 6.5-8.8 10.5 2.2.8 4.9.2 6.9-1.7 3.8-3.7 5.3-9 6.5-14z"/></svg>`;
+  }
+
+  function compactTagIcons(item) {
+    const tags = itemTags(item);
+    if (!tags.length) return '';
+    return `<span class="menu-card__tags">${tags.map(tag => `<span class="dish-tag-icon dish-tag-icon--${tag}" role="img" aria-label="${escapeHtml(tagLabel(tag))}" title="${escapeHtml(tagLabel(tag))}">${tagIcon(tag)}</span>`).join('')}</span>`;
+  }
+
+  function modalTags(item) {
+    const tags = itemTags(item);
+    if (!tags.length) return '';
+    return tags.map(tag => `<span class="modal-tag modal-tag--${tag}">${tagIcon(tag)}<span>${escapeHtml(tagLabel(tag))}</span></span>`).join('');
+  }
+
   function makeMenuCard(item) {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'menu-card';
+    if (item?.available === false) button.classList.add('is-unavailable');
     button.dataset.itemKey = itemKey(item);
     button.setAttribute('aria-label', itemName(item) || 'Menu item');
 
     const image = itemImage(item);
     const description = itemDescription(item);
-    const spicy = normalize(item?.note, 'ru').includes('остр');
+    const available = item?.available !== false;
 
     button.innerHTML = `
       <span class="menu-card__media">
@@ -598,21 +657,23 @@
       <span class="menu-card__body">
         <span class="menu-card__title-row">
           <span class="menu-card__title">${escapeHtml(itemName(item) || '—')}</span>
-          ${spicy ? `<span class="material-symbols-outlined menu-card__spicy" aria-label="spicy">local_fire_department</span>` : ''}
+          ${compactTagIcons(item)}
         </span>
 
         ${description ? `<span class="menu-card__desc">${escapeHtml(description)}</span>` : ''}
         ${item?.weight ? `<span class="menu-card__weight">${escapeHtml(formatWeight(item.weight))}</span>` : ''}
       </span>
 
+      ${!available ? `<span class="menu-card__unavailable">${escapeHtml(t('unavailable', 'Временно недоступно'))}</span>` : ''}
       <span class="menu-card__price">
         ${formatPrice(item?.price)} <small>₸</small>
       </span>
+      <span class="menu-card__chevron" aria-hidden="true">›</span>
     `;
 
     const img = $('.menu-card__image', button);
     if (img) {
-      const candidates = itemImageCandidates(item);
+      const candidates = itemImageCandidates(item, 'card');
       let candidateIndex = 0;
 
       const markLoaded = () => img.classList.add('is-loaded');
@@ -765,6 +826,23 @@
     const groups = query ? searchGroups(items) : normalGroups(items);
     const fragment = document.createDocumentFragment();
 
+    if (!query && state.type === 'kitchen') {
+      const featured = itemsForType('kitchen').filter(item => item?.featured === true);
+      if (featured.length) {
+        const section = document.createElement('section');
+        section.className = 'featured-section';
+        section.innerHTML = `
+          <div class="featured-heading">
+            <span class="featured-heading__ornament" aria-hidden="true">N</span>
+            <div><h2>${escapeHtml(t('featured_title', 'Выбор NECTAR'))}</h2><p>${escapeHtml(t('featured_subtitle', 'То, что мы рекомендуем попробовать'))}</p></div>
+          </div>
+          <div class="featured-list"></div>`;
+        const list = $('.featured-list', section);
+        featured.forEach(item => list?.appendChild(makeMenuCard(item)));
+        fragment.appendChild(section);
+      }
+    }
+
     groups.forEach((group, groupIndex) => {
       const section = document.createElement('section');
       section.className = 'category-section';
@@ -796,7 +874,7 @@
       requestAnimationFrame(() => container.classList.add('search-results-enter'));
     }
 
-    if (motion === 'type' || motion === 'language') {
+    if (motion === 'type') {
       container.classList.remove('type-enter');
 
       // Restart the lightweight transition on the next frame without forcing
@@ -879,7 +957,7 @@
 
     updateSearchClear();
     renderCategories();
-    renderMenu({ motion: 'language' });
+    renderMenu();
 
     requestAnimationFrame(() => {
       scrollToCategory(state.categoryId, 'auto');
@@ -1016,10 +1094,11 @@
     const skeleton = $('.image-skeleton', wrap);
     if (!wrap || !image) return;
 
-    const src = itemImage(item);
+    const candidates = itemImageCandidates(item, 'modal');
+    let candidateIndex = 0;
     image.classList.remove('is-loaded');
 
-    if (!src) {
+    if (!candidates.length) {
       image.removeAttribute('src');
       image.alt = '';
       wrap.hidden = true;
@@ -1028,8 +1107,6 @@
 
     wrap.hidden = false;
     if (skeleton) skeleton.hidden = false;
-
-    image.src = src;
     image.alt = itemName(item);
 
     const loaded = () => {
@@ -1037,8 +1114,24 @@
       if (skeleton) skeleton.hidden = true;
     };
 
-    if (image.complete && image.naturalWidth > 0) loaded();
-    else image.addEventListener('load', loaded, { once: true });
+    const tryCandidate = () => {
+      if (candidateIndex >= candidates.length) {
+        image.removeAttribute('src');
+        image.alt = '';
+        wrap.hidden = true;
+        if (skeleton) skeleton.hidden = true;
+        return;
+      }
+      image.classList.remove('is-loaded');
+      image.src = candidates[candidateIndex];
+    };
+
+    image.onload = loaded;
+    image.onerror = () => {
+      candidateIndex += 1;
+      tryCandidate();
+    };
+    tryCandidate();
   }
 
   function openModal(item) {
@@ -1071,6 +1164,18 @@
 
     if (ingredientsText) ingredientsText.textContent = composition;
     if (ingredients) ingredients.hidden = !composition;
+
+    const tagsContainer = $('#modalTags');
+    if (tagsContainer) {
+      const tagsHtml = modalTags(item);
+      tagsContainer.innerHTML = tagsHtml;
+      tagsContainer.hidden = !tagsHtml;
+    }
+    const unavailable = $('#modalUnavailable');
+    if (unavailable) {
+      unavailable.textContent = t('unavailable', 'Временно недоступно');
+      unavailable.hidden = item?.available !== false;
+    }
 
     setModalImage(item);
 
@@ -1220,10 +1325,6 @@
       }
     });
 
-    $('#modalImage')?.addEventListener('error', () => {
-      const wrap = $('#modalImageContainer');
-      if (wrap) wrap.hidden = true;
-    });
 
     $('.hero__image')?.addEventListener('error', event => {
       event.currentTarget.classList.add('is-missing');
@@ -1263,6 +1364,7 @@
       state.modal.restoreToken += 1;
       state.suppressCategorySpyUntil = 0;
       state.interactionLockedUntil = 0;
+      state.languageSwitchToken += 1;
 
       const modal = $('#itemModal');
       if (modal) {
