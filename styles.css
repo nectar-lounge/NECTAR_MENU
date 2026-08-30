@@ -2181,3 +2181,40 @@ body.banquet-modal-open { overflow: hidden; }
     opacity: 1 !important;
   }
 }
+
+/* v1.8.1 — visual consistency fixes */
+/* Banquet subhero: photography is part of the card itself, without the green cast. */
+.banquet-hero {
+  background: #e9e4da;
+  box-shadow: 0 8px 28px rgba(27,48,34,.055);
+}
+.banquet-hero__image {
+  object-position: 50% 47%;
+  filter: none;
+  transform: scale(1.002);
+}
+.banquet-hero__veil {
+  background:
+    linear-gradient(90deg, rgba(18,18,16,.62) 0%, rgba(18,18,16,.38) 52%, rgba(18,18,16,.12) 100%),
+    linear-gradient(0deg, rgba(18,18,16,.16), rgba(18,18,16,.02) 60%);
+}
+
+/* Info rows share exactly the same layout rhythm, including Service. */
+.info-row--service {
+  display: grid !important;
+  grid-template-columns: 32px 1fr !important;
+  gap: 12px !important;
+  padding: 18px 2px !important;
+  min-height: 0 !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+}
+.info-row--service h2 { margin: 0 0 6px !important; }
+.info-service-value {
+  margin: 0 !important;
+  color: var(--muted) !important;
+  font-size: 12px !important;
+  line-height: 1.55 !important;
+  font-weight: 400 !important;
+}
+.info-divider--service { margin: 0 !important; }
