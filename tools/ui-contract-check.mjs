@@ -17,3 +17,6 @@ ok(app.includes("ALLOWED_BAR_CATEGORY_IDS") && !app.includes("BANQUET_MENU") ,'m
 ok(!html.includes('data-i18n="tap_hint"'),'obsolete tap hint must stay removed');
 ok(!html.includes('Обслуживание'),'Info service field must stay removed');
 console.log('UI contract OK: unified hero; persistent 3-way selector; singular Banquet label; search isolated; bottom nav preserved.');
+ok(app.includes('function scrollBanquetToFirstCategory()'),'Banquet must have a first-category landing helper');
+ok(app.includes("section === 'banquet' && previousSection === 'menu'"),'Menu -> Banquet must use menu-mode scroll parity instead of restoring Banquet scroll 0');
+ok(app.includes('!isMenuModeTransition'),'Menu <-> Banquet must not use whole-section enter animation');

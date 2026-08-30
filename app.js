@@ -1001,6 +1001,20 @@
     requestAnimationFrame(() => { root.style.scrollBehavior = previous; });
   }
 
+  function scrollBanquetToFirstCategory() {
+    const target = $('#banquetContainer .banquet-group');
+    if (!target) return;
+
+    const headerHeight = $('.site-header')?.getBoundingClientRect().height || 0;
+    const categoriesHeight = $('#banquetCategories')?.getBoundingClientRect().height || 0;
+    const top = Math.max(
+      0,
+      target.getBoundingClientRect().top + window.scrollY - headerHeight - categoriesHeight - 14
+    );
+
+    instantScrollTo(top);
+  }
+
   function switchSection(section) {
     if (
       !['menu', 'banquet', 'info'].includes(section) ||
@@ -1008,6 +1022,11 @@
       state.modal.open ||
       state.modal.closing
     ) return;
+
+    const previousSection = state.section;
+    const isMenuModeTransition =
+      ['menu', 'banquet'].includes(previousSection) &&
+      ['menu', 'banquet'].includes(section);
 
     rememberSectionScroll();
     state.section = section;
@@ -1023,10 +1042,15 @@
       node.classList.remove('nectar-section-enter');
     });
 
-    // Animate only the incoming content. The fixed bottom navigation never moves,
-    // so switching destinations feels app-like without adding artificial delay.
+    // Kitchen / Bar / Banquet are three modes of one Menu view.
+    // Do not animate the whole page shell when moving between those modes;
+    // it must feel like the existing Kitchen <-> Bar switch, not a new page.
     const incomingSection = sectionNodes[section];
-    if (incomingSection && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (
+      incomingSection &&
+      !isMenuModeTransition &&
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
       void incomingSection.offsetWidth;
       incomingSection.classList.add('nectar-section-enter');
       window.setTimeout(() => incomingSection.classList.remove('nectar-section-enter'), 260);
@@ -1044,7 +1068,15 @@
 
     const y = state.sectionScroll[section] || 0;
     requestAnimationFrame(() => {
-      instantScrollTo(y);
+      // Match Kitchen/Bar behavior: entering Banquet from another Menu mode
+      // lands at its first category, so a hero that is already above the viewport
+      // never re-enters from the top merely because Banquet used a separate section.
+      if (section === 'banquet' && previousSection === 'menu') {
+        scrollBanquetToFirstCategory();
+      } else {
+        instantScrollTo(y);
+      }
+
       if (section === 'menu') scheduleCategorySpy();
       document.dispatchEvent(new CustomEvent('nectar:sectionchange', { detail: { section } }));
     });
