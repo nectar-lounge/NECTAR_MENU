@@ -1765,15 +1765,6 @@ input:focus-visible {
 }
 
 /* === NECTAR v1.5 UX polish === */
-.menu-card-hint {
-  margin: 10px auto 22px;
-  padding: 0 18px;
-  max-width: 720px;
-  text-align: center;
-  color: var(--muted);
-  font: 500 12px/1.5 Manrope, sans-serif;
-  letter-spacing: .01em;
-}
 
 .featured-section {
   margin: 10px 0 34px;
@@ -1843,7 +1834,6 @@ input:focus-visible {
   border:1px solid rgba(129,93,83,.15); font:600 12px/1.35 Manrope,sans-serif;
 }
 .modal__ingredients p { font-size:15px !important; line-height:1.55 !important; }
-.info-service-value { color:var(--forest) !important; font-weight:700 !important; font-size:16px !important; }
 
 /* Language switches should feel instantaneous: no whole-menu entrance animation. */
 .menu-content.type-enter { animation-duration:.18s; }
@@ -1965,14 +1955,6 @@ body.banquet-modal-open { overflow: hidden; }
 .banquet-shell { padding-top: 18px; }
 .banquet-hero { padding-top: 22px; }
 
-/* Info: actionable contact blocks first, passive service detail last. */
-.info-divider--service { margin-top: 4px; }
-.info-row--service {
-  background: rgba(169,121,53,.045);
-  border-radius: 16px;
-  padding-top: 13px;
-  padding-bottom: 13px;
-}
 
 @media (max-width: 520px) {
   .menu-card__meta { min-height: 23px; margin-top: 7px; gap: 5px 7px; }
@@ -2085,29 +2067,6 @@ body.banquet-modal-open { overflow: hidden; }
   text-wrap: pretty;
 }
 
-/* Service is information, not a promotion: exactly the same row treatment as
-   address, phone and Instagram. */
-.info-row--service {
-  background: transparent !important;
-  border-radius: 0 !important;
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-}
-.info-service-value {
-  color: inherit !important;
-  font-size: inherit !important;
-  font-weight: inherit !important;
-  letter-spacing: inherit !important;
-}
-.info-divider--service { margin-top: 0 !important; }
-
-@media (max-width: 600px) {
-  .menu-shell,
-  .banquet-shell { padding-left: 14px; padding-right: 14px; }
-  .banquet-hero { min-height: 150px; border-radius: 20px; }
-  .banquet-hero__content { min-height: 150px; padding: 19px 20px; }
-  .banquet-hero h1 { font-size: clamp(31px, 9vw, 39px); }
-}
 
 @media (max-width: 340px) {
   .banquet-hero { min-height: 156px; }
@@ -2198,25 +2157,6 @@ body.banquet-modal-open { overflow: hidden; }
     linear-gradient(0deg, rgba(18,18,16,.16), rgba(18,18,16,.02) 60%);
 }
 
-/* Info rows share exactly the same layout rhythm, including Service. */
-.info-row--service {
-  display: grid !important;
-  grid-template-columns: 32px 1fr !important;
-  gap: 12px !important;
-  padding: 18px 2px !important;
-  min-height: 0 !important;
-  background: transparent !important;
-  border-radius: 0 !important;
-}
-.info-row--service h2 { margin: 0 0 6px !important; }
-.info-service-value {
-  margin: 0 !important;
-  color: var(--muted) !important;
-  font-size: 12px !important;
-  line-height: 1.55 !important;
-  font-weight: 400 !important;
-}
-.info-divider--service { margin: 0 !important; }
 
 
 /* ======================================================
@@ -2591,4 +2531,12 @@ body.banquet-modal-open { overflow: hidden; }
   .main-tabs__indicator {
     transition: none !important;
   }
+}
+
+
+/* v1.11.3 — same menu selector remains available inside Banquets.
+   No visual redesign: only local spacing in the banquet flow. */
+.banquet-main-tabs {
+  margin-top: 0;
+  margin-bottom: 14px;
 }

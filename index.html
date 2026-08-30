@@ -45,7 +45,7 @@
       <div class="menu-shell">
         <div class="menu-controls" id="menuControls">
           <div class="main-tabs" role="group" aria-label="Menu type">
-            <span class="main-tabs__indicator" id="mainTabsIndicator" aria-hidden="true"></span>
+            <span class="main-tabs__indicator" aria-hidden="true"></span>
             <button class="main-tab is-active" type="button" data-type="kitchen" aria-pressed="true" data-i18n="nav_kitchen">КУХНЯ</button>
             <button class="main-tab" type="button" data-type="bar" aria-pressed="false" data-i18n="nav_bar">БАР</button>
             <button class="main-tab" type="button" data-section-target="banquet" aria-pressed="false" data-banquet-i18n="nav">БАНКЕТЫ</button>
@@ -66,13 +66,18 @@
           <div class="search-mode-note" id="searchModeNote" hidden></div>
         </div>
 
-        <p class="menu-card-hint" data-i18n="card_hint">Нажмите на блюдо, чтобы посмотреть полный состав</p>
         <div class="menu-content" id="menuContainer" aria-live="polite"></div>
       </div>
     </section>
 
     <section class="spa-section banquet-section" id="banquet-section" aria-label="Banquet menu">
       <div class="banquet-shell">
+        <div class="main-tabs banquet-main-tabs" role="group" aria-label="Menu type">
+          <span class="main-tabs__indicator" aria-hidden="true"></span>
+          <button class="main-tab" type="button" data-type="kitchen" aria-pressed="false" data-i18n="nav_kitchen">КУХНЯ</button>
+          <button class="main-tab" type="button" data-type="bar" aria-pressed="false" data-i18n="nav_bar">БАР</button>
+          <button class="main-tab is-active" type="button" data-section-target="banquet" aria-pressed="true" data-banquet-i18n="nav">БАНКЕТЫ</button>
+        </div>
         <header class="banquet-hero">
           <img class="banquet-hero__image" src="assets/nectar-hero.jpg" alt="" width="1600" height="900" loading="eager" decoding="async">
           <span class="banquet-hero__veil" aria-hidden="true"></span>
@@ -125,14 +130,6 @@
           <div>
             <h2>Instagram</h2>
             <a href="https://www.instagram.com/nectar.lounge.almaty" target="_blank" rel="noopener noreferrer">@nectar.lounge.almaty</a>
-          </div>
-        </div>
-        <div class="info-divider info-divider--service"></div>
-        <div class="info-row info-row--service">
-          <span class="info-row__icon material-symbols-outlined" aria-hidden="true">percent</span>
-          <div>
-            <h2 data-i18n="info_service">Обслуживание</h2>
-            <p class="info-service-value" data-i18n="info_service_value">10%</p>
           </div>
         </div>
       </div>

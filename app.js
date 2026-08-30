@@ -359,11 +359,10 @@
       button.setAttribute('aria-pressed', String(active));
     });
 
-    const indicator = $('#mainTabsIndicator');
-    if (indicator) {
-      const index = banquetActive ? 2 : (state.type === 'bar' ? 1 : 0);
+    const index = banquetActive ? 2 : (state.type === 'bar' ? 1 : 0);
+    $$('.main-tabs__indicator').forEach(indicator => {
       indicator.style.transform = `translateX(${index * 100}%)`;
-    }
+    });
   }
 
   function setType(type) {
@@ -1036,7 +1035,9 @@
     updateMainTabs();
 
     $$('.bottom-nav__button').forEach(button => {
-      const active = button.dataset.path === section;
+      const active = button.dataset.path === 'menu'
+        ? section === 'menu' || section === 'banquet'
+        : button.dataset.path === section;
       button.classList.toggle('is-active', active);
       button.setAttribute('aria-current', active ? 'page' : 'false');
     });
