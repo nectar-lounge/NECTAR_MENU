@@ -16,7 +16,7 @@
 <body>
   <header class="site-header" id="siteHeader">
     <div class="site-header__inner">
-      <div class="header-balance" aria-hidden="true"></div>
+      <div class="header-signature" aria-hidden="true"><span>N</span></div>
 
       <a class="brand" href="#" id="brandHome" aria-label="NECTAR">
         <span class="brand__name">NECTAR</span>
@@ -43,6 +43,16 @@
       </section>
 
       <div class="menu-shell">
+        <button class="banquet-quick-entry" id="banquetQuickEntry" type="button" aria-label="Банкетное меню">
+          <span class="banquet-quick-entry__mark" aria-hidden="true">N</span>
+          <span class="banquet-quick-entry__copy">
+            <span class="banquet-quick-entry__eyebrow">PRIVATE DINING</span>
+            <strong data-i18n="banquet_cta_title">Банкетное меню</strong>
+            <small data-i18n="banquet_cta_subtitle">Для особых событий и больших компаний</small>
+          </span>
+          <span class="material-symbols-outlined banquet-quick-entry__arrow" aria-hidden="true">arrow_forward</span>
+        </button>
+
         <div class="menu-controls" id="menuControls">
           <label class="search-box" for="searchInput">
             <span class="material-symbols-outlined search-box__icon" aria-hidden="true">search</span>

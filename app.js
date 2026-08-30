@@ -1308,6 +1308,11 @@
       button.addEventListener('click', () => switchSection(button.dataset.path));
     });
 
+    $('#banquetQuickEntry')?.addEventListener('click', () => {
+      if (state.modal.open || state.modal.closing) return;
+      switchSection('banquet');
+    });
+
     $$('.accordion-trigger').forEach(button => {
       button.addEventListener('click', () => toggleAccordion(button));
     });
