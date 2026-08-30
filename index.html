@@ -16,7 +16,7 @@
 <body>
   <header class="site-header" id="siteHeader">
     <div class="site-header__inner">
-      <div class="header-signature" aria-hidden="true"><span>N</span></div>
+      <div class="header-balance" aria-hidden="true"></div>
 
       <a class="brand" href="#" id="brandHome" aria-label="NECTAR">
         <span class="brand__name">NECTAR</span>
@@ -43,17 +43,14 @@
       </section>
 
       <div class="menu-shell">
-        <button class="banquet-quick-entry" id="banquetQuickEntry" type="button" aria-label="Банкетное меню">
-          <span class="banquet-quick-entry__mark" aria-hidden="true">N</span>
-          <span class="banquet-quick-entry__copy">
-            <span class="banquet-quick-entry__eyebrow">PRIVATE DINING</span>
-            <strong data-i18n="banquet_cta_title">Банкетное меню</strong>
-            <small data-i18n="banquet_cta_subtitle">Для особых событий и больших компаний</small>
-          </span>
-          <span class="material-symbols-outlined banquet-quick-entry__arrow" aria-hidden="true">arrow_forward</span>
-        </button>
-
         <div class="menu-controls" id="menuControls">
+          <div class="main-tabs" role="group" aria-label="Menu type">
+            <span class="main-tabs__indicator" id="mainTabsIndicator" aria-hidden="true"></span>
+            <button class="main-tab is-active" type="button" data-type="kitchen" aria-pressed="true" data-i18n="nav_kitchen">КУХНЯ</button>
+            <button class="main-tab" type="button" data-type="bar" aria-pressed="false" data-i18n="nav_bar">БАР</button>
+            <button class="main-tab" type="button" data-section-target="banquet" aria-pressed="false" data-banquet-i18n="nav">БАНКЕТЫ</button>
+          </div>
+
           <label class="search-box" for="searchInput">
             <span class="material-symbols-outlined search-box__icon" aria-hidden="true">search</span>
             <input id="searchInput" type="search" autocomplete="off" spellcheck="false" inputmode="search" enterkeyhint="search" data-i18n-placeholder="search_placeholder" placeholder="Поиск блюд, напитков...">
@@ -61,12 +58,6 @@
               <span class="material-symbols-outlined" aria-hidden="true">close</span>
             </button>
           </label>
-
-          <div class="main-tabs" role="group" aria-label="Menu type">
-            <span class="main-tabs__indicator" id="mainTabsIndicator" aria-hidden="true"></span>
-            <button class="main-tab is-active" type="button" data-type="kitchen" aria-pressed="true" data-i18n="nav_kitchen">КУХНЯ</button>
-            <button class="main-tab" type="button" data-type="bar" aria-pressed="false" data-i18n="nav_bar">БАР</button>
-          </div>
 
           <div class="category-nav" id="categoryNav">
             <div class="category-strip" id="categoryStrip" role="group" aria-label="Категории меню"></div>
@@ -237,10 +228,6 @@
       <button class="bottom-nav__button is-active" type="button" data-path="menu" aria-current="page">
         <span class="material-symbols-outlined" aria-hidden="true">restaurant_menu</span>
         <span data-i18n="tab_menu">Меню</span>
-      </button>
-      <button class="bottom-nav__button" type="button" data-path="banquet" aria-current="false">
-        <span class="material-symbols-outlined" aria-hidden="true">celebration</span>
-        <span data-banquet-i18n="nav">Банкеты</span>
       </button>
       <button class="bottom-nav__button" type="button" data-path="info" aria-current="false">
         <span class="material-symbols-outlined" aria-hidden="true">info</span>

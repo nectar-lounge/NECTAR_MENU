@@ -350,15 +350,19 @@
   }
 
   function updateMainTabs() {
+    const banquetActive = state.section === 'banquet';
     $$('.main-tab').forEach(button => {
-      const active = button.dataset.type === state.type;
+      const active = button.dataset.sectionTarget === 'banquet'
+        ? banquetActive
+        : !banquetActive && button.dataset.type === state.type;
       button.classList.toggle('is-active', active);
       button.setAttribute('aria-pressed', String(active));
     });
 
     const indicator = $('#mainTabsIndicator');
     if (indicator) {
-      indicator.style.transform = state.type === 'bar' ? 'translateX(100%)' : 'translateX(0)';
+      const index = banquetActive ? 2 : (state.type === 'bar' ? 1 : 0);
+      indicator.style.transform = `translateX(${index * 100}%)`;
     }
   }
 
@@ -1029,6 +1033,8 @@
       window.setTimeout(() => incomingSection.classList.remove('nectar-section-enter'), 260);
     }
 
+    updateMainTabs();
+
     $$('.bottom-nav__button').forEach(button => {
       const active = button.dataset.path === section;
       button.classList.toggle('is-active', active);
@@ -1301,16 +1307,18 @@
     });
 
     $$('.main-tab').forEach(button => {
-      button.addEventListener('click', () => setType(button.dataset.type));
+      button.addEventListener('click', () => {
+        if (button.dataset.sectionTarget === 'banquet') {
+          switchSection('banquet');
+          return;
+        }
+        if (state.section !== 'menu') switchSection('menu');
+        setType(button.dataset.type);
+      });
     });
 
     $$('.bottom-nav__button').forEach(button => {
       button.addEventListener('click', () => switchSection(button.dataset.path));
-    });
-
-    $('#banquetQuickEntry')?.addEventListener('click', () => {
-      if (state.modal.open || state.modal.closing) return;
-      switchSection('banquet');
     });
 
     $$('.accordion-trigger').forEach(button => {
