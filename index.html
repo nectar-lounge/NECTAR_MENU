@@ -65,7 +65,29 @@
           <div class="search-mode-note" id="searchModeNote" hidden></div>
         </div>
 
+        <p class="menu-card-hint" data-i18n="card_hint">Нажмите на блюдо, чтобы посмотреть полный состав</p>
         <div class="menu-content" id="menuContainer" aria-live="polite"></div>
+      </div>
+        <section class="banquet-entry" aria-labelledby="banquetEntryTitle">
+          <span class="banquet-entry__ornament" aria-hidden="true">N</span>
+          <p class="banquet-entry__eyebrow" data-banquet-i18n="eyebrow">PRIVATE DINING</p>
+          <h2 id="banquetEntryTitle" data-banquet-i18n="title">Банкетное меню</h2>
+          <p data-banquet-i18n="subtitle">Для особых событий и больших компаний</p>
+          <button type="button" class="banquet-entry__button" id="openBanquet"><span data-banquet-i18n="open">Посмотреть</span><span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span></button>
+        </section>
+    </section>
+
+    <section class="spa-section banquet-section" id="banquet-section" aria-label="Banquet menu">
+      <div class="banquet-shell">
+        <button class="banquet-back" id="closeBanquet" type="button"><span class="material-symbols-outlined" aria-hidden="true">arrow_back</span><span data-banquet-i18n="back">Основное меню</span></button>
+        <header class="banquet-hero">
+          <span class="banquet-hero__ornament" aria-hidden="true">N</span>
+          <p class="banquet-hero__eyebrow" data-banquet-i18n="eyebrow">PRIVATE DINING</p>
+          <h1 data-banquet-i18n="title">Банкетное меню</h1>
+          <p data-banquet-i18n="subtitle">Для особых событий и больших компаний</p>
+        </header>
+        <nav class="banquet-categories" id="banquetCategories" aria-label="Banquet categories"></nav>
+        <div id="banquetContainer"></div>
       </div>
     </section>
 
@@ -81,7 +103,7 @@
           <div>
             <h2 data-i18n="info_address_label">Адрес</h2>
             <p data-i18n="info_address">Проспект Дулати 1а, мкр. Архат, Алматы</p>
-            <a href="https://go.2gis.com/iV3rq" target="_blank" rel="noopener noreferrer">
+            <a href="https://go.2gis.com/FBkm8" target="_blank" rel="noopener noreferrer">
               <span data-i18n="info_open_map">Открыть в 2GIS</span>
               <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
             </a>
@@ -94,8 +116,18 @@
           <span class="info-row__icon material-symbols-outlined" aria-hidden="true">call</span>
           <div>
             <h2 data-i18n="info_phone_label">Телефон</h2>
-            <a class="phone-link" href="tel:+77001234567">+7 (700) 123 45 67</a>
-            <p data-i18n="info_hours">Ежедневно, 14:00 - 01:00</p>
+            <a class="phone-link" href="tel:+77064273269">+7 706 427 32 69</a>
+            <p data-i18n="info_hours">Ежедневно · 14:00–01:00</p>
+          </div>
+        </div>
+
+        <div class="info-divider"></div>
+
+        <div class="info-row">
+          <span class="info-row__icon material-symbols-outlined" aria-hidden="true">percent</span>
+          <div>
+            <h2 data-i18n="info_service">Обслуживание</h2>
+            <p class="info-service-value" data-i18n="info_service_value">10%</p>
           </div>
         </div>
 
@@ -145,6 +177,20 @@
     </section>
   </main>
 
+
+  <div class="modal banquet-modal" id="banquetModal" hidden role="dialog" aria-modal="true" aria-labelledby="banquetModalTitle">
+    <div class="modal__backdrop" data-banquet-modal-close aria-hidden="true"></div>
+    <article class="modal__dialog">
+      <header class="modal__header"><h2 id="banquetModalTitle">—</h2><button class="modal__close" type="button" data-banquet-modal-close aria-label="Close"><span class="material-symbols-outlined" aria-hidden="true">close</span></button></header>
+      <div class="modal__body">
+        <div class="banquet-modal__price" id="banquetModalPrice">Цена уточняется</div>
+        <p class="banquet-modal__summary" id="banquetModalSummary" hidden></p>
+        <div class="banquet-modal__components" id="banquetModalComponents" hidden><h3 data-banquet-i18n="includes">В составе</h3><ul id="banquetModalComponentsList"></ul></div>
+      </div>
+      <footer class="modal__footer"><button class="modal__close-wide" type="button" data-banquet-modal-close data-banquet-i18n="close">ЗАКРЫТЬ</button></footer>
+    </article>
+  </div>
+
   <div class="modal" id="itemModal" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal__backdrop" data-modal-close aria-hidden="true"></div>
 
@@ -166,6 +212,9 @@
           <div class="modal__price" id="modalPrice">0 <small>₸</small></div>
           <div class="modal__weight"><span class="material-symbols-outlined" aria-hidden="true">scale</span><span id="modalWeight"></span></div>
         </div>
+
+        <div class="modal-tags" id="modalTags" hidden></div>
+        <div class="modal-unavailable" id="modalUnavailable" hidden>Временно недоступно</div>
 
         <div class="modal__ingredients" id="modalIngredientsContainer" hidden>
           <h3 data-i18n="modal_ingredients">Ингредиенты</h3>
@@ -193,6 +242,8 @@
   </nav>
 
   <script src="menu-data.js" defer></script>
+  <script src="banquet-data.js" defer></script>
+  <script src="banquet.js" defer></script>
   <script src="app.js" defer></script>
 </body>
 </html>
