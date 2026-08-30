@@ -975,9 +975,25 @@
     rememberSectionScroll();
     state.section = section;
 
-    $('#menu-section')?.classList.toggle('is-active', section === 'menu');
-    $('#banquet-section')?.classList.toggle('is-active', section === 'banquet');
-    $('#info-section')?.classList.toggle('is-active', section === 'info');
+    const sectionNodes = {
+      menu: $('#menu-section'),
+      banquet: $('#banquet-section'),
+      info: $('#info-section')
+    };
+    Object.entries(sectionNodes).forEach(([key, node]) => {
+      if (!node) return;
+      node.classList.toggle('is-active', key === section);
+      node.classList.remove('nectar-section-enter');
+    });
+
+    // Animate only the incoming content. The fixed bottom navigation never moves,
+    // so switching destinations feels app-like without adding artificial delay.
+    const incomingSection = sectionNodes[section];
+    if (incomingSection && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      void incomingSection.offsetWidth;
+      incomingSection.classList.add('nectar-section-enter');
+      window.setTimeout(() => incomingSection.classList.remove('nectar-section-enter'), 260);
+    }
 
     $$('.bottom-nav__button').forEach(button => {
       const active = button.dataset.path === section;

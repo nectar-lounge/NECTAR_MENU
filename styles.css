@@ -2116,3 +2116,68 @@ body.banquet-modal-open { overflow: hidden; }
   .banquet-hero h1 { font-size: 30px; }
   .banquet-hero__content > p:not(.banquet-hero__eyebrow) { font-size: 11px; max-width: 250px; }
 }
+
+/* ======================================================
+   NECTAR v1.8 — MOTION & SIGNATURE POLISH
+   Motion is intentionally restrained: navigation stays fixed,
+   content settles in quickly, and the ornament becomes a brand cue.
+   ====================================================== */
+
+.spa-section.is-active.nectar-section-enter {
+  animation: nectarSectionEnter .22s cubic-bezier(.22,.72,.28,1) both;
+}
+
+@keyframes nectarSectionEnter {
+  from { opacity: .01; transform: translateY(7px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Signature NECTAR category ornament: the existing gold rules reveal
+   from the title outward instead of appearing abruptly. */
+.category-heading > span {
+  transform: scaleX(0);
+  opacity: .25;
+  transition: transform .36s cubic-bezier(.22,.72,.28,1), opacity .3s ease;
+}
+.category-heading > span:first-child { transform-origin: right center; }
+.category-heading > span:last-child  { transform-origin: left center; }
+.category-section.is-revealed .category-heading > span,
+.category-section.category-tap-reveal .category-heading > span,
+.category-heading > span {
+  animation: nectarOrnamentReveal .38s .05s cubic-bezier(.22,.72,.28,1) forwards;
+}
+@keyframes nectarOrnamentReveal {
+  to { transform: scaleX(1); opacity: 1; }
+}
+
+/* A slightly more tactile but still quiet press state. */
+.menu-card:active { transform: scale(.985); }
+
+/* Modal uses the same calm motion language as section changes. */
+.modal__dialog {
+  transform: translateY(10px) scale(.98);
+  transition: opacity .24s ease, transform .32s cubic-bezier(.22,.72,.28,1);
+}
+.modal__backdrop { transition-duration: .24s, .3s, .3s; }
+
+/* Banquet carries the same signature ornament without adding another widget. */
+.banquet-hero__ornament {
+  transition: transform .32s cubic-bezier(.22,.72,.28,1), border-color .25s ease;
+}
+.banquet-section.nectar-section-enter .banquet-hero__ornament {
+  animation: nectarMarkIn .38s .06s cubic-bezier(.22,.72,.28,1) both;
+}
+@keyframes nectarMarkIn {
+  from { opacity: 0; transform: translateY(5px) scale(.94); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spa-section.is-active.nectar-section-enter,
+  .banquet-section.nectar-section-enter .banquet-hero__ornament,
+  .category-heading > span {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
