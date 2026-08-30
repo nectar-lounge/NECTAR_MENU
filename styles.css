@@ -2606,3 +2606,20 @@ body.banquet-modal-open { overflow: hidden; }
 }
 #menuControls > .banquet-categories .banquet-category:active { transform: scale(.97); }
 #banquetCategories[hidden] { display: none !important; }
+
+/* v1.11.9 — Banquet full behavior parity with Kitchen / Bar */
+#menuControls { overflow: visible; }
+html[data-menu-mode="banquet"] #menuControls {
+  position: sticky;
+  top: calc(var(--header-h) + env(safe-area-inset-top));
+  z-index: 80;
+}
+html[data-menu-mode="banquet"] #banquetCategories {
+  display: flex;
+  position: relative;
+  top: auto;
+  z-index: auto;
+  margin-bottom: 0;
+}
+html[data-menu-mode="banquet"] #banquetMode { padding-top: 0; }
+html[data-menu-mode="banquet"] #banquetContainer > .banquet-group:first-child { margin-top: 18px; }

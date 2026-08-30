@@ -407,9 +407,9 @@
     applyMenuModeVisibility();
     document.dispatchEvent(new CustomEvent('nectar:modechange', { detail: { mode: 'banquet' } }));
 
-    // Same contract as Kitchen <-> Bar: switch content in place and align
-    // the first category under the sticky chrome. The shared hero never re-enters.
-    requestAnimationFrame(() => scrollBanquetModeToFirstCategory());
+    // Kitchen / Bar parity: render synchronously, then align the first group
+    // immediately below the same sticky controls.
+    scrollBanquetModeToFirstCategory();
   }
 
   function setType(type) {

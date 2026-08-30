@@ -82,7 +82,7 @@
     nav.innerHTML = cs.map(c => `<button type="button" class="banquet-category ${c.id === activeCategory ? 'is-active' : ''}" data-bcat="${esc(c.id)}" aria-pressed="${c.id === activeCategory}">${esc(c.name)}</button>`).join('');
     box.innerHTML = cs.map(c => {
       const groupItems = items.filter(i => i.category_id === c.id);
-      return `<section class="banquet-group" id="banquet-${esc(c.id)}" data-bgroup="${esc(c.id)}"><h2 class="banquet-group__title">${esc(c.name)}</h2><div class="banquet-list">${groupItems.map(i => `<button type="button" class="banquet-card" data-bitem="${esc(i.id)}" aria-label="${esc(text(i,'name'))}"><span><span class="banquet-card__name">${esc(text(i,'name'))}</span>${text(i,'summary') ? `<span class="banquet-card__summary">${esc(text(i,'summary'))}</span>` : ''}<span class="banquet-card__price">${esc(price(i.price))}</span></span><span class="material-symbols-outlined banquet-card__chevron" aria-hidden="true">chevron_right</span></button>`).join('')}</div></section>`;
+      return `<section class="banquet-group" id="banquet-${esc(c.id)}" data-bgroup="${esc(c.id)}" data-banquet-category-section="${esc(c.id)}"><h2 class="banquet-group__title">${esc(c.name)}</h2><div class="banquet-list">${groupItems.map(i => `<button type="button" class="banquet-card" data-bitem="${esc(i.id)}" aria-label="${esc(text(i,'name'))}"><span><span class="banquet-card__name">${esc(text(i,'name'))}</span>${text(i,'summary') ? `<span class="banquet-card__summary">${esc(text(i,'summary'))}</span>` : ''}<span class="banquet-card__price">${esc(price(i.price))}</span></span><span class="material-symbols-outlined banquet-card__chevron" aria-hidden="true">chevron_right</span></button>`).join('')}</div></section>`;
     }).join('');
   }
 
