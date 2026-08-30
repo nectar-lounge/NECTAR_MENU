@@ -2540,3 +2540,4 @@ body.banquet-modal-open { overflow: hidden; }
   margin-top: 0;
   margin-bottom: 14px;
 }
+\n\n/* ======================================================\n   v1.11.4 — UX consistency + visual regression fix\n   - Selector labels stay typographically uniform in all languages.\n   - Banquets behaves as the third menu mode: no secondary photo hero/card.\n   - Existing palette, typography, moving pill, cards and bottom nav untouched.\n   ====================================================== */\n.banquet-main-tabs {\n  margin-bottom: 9px;\n}\n\n/* The banquet mode starts with its category navigation just like a content mode,\n   without a second branded hero competing with the main menu hierarchy. */\n.banquet-categories {\n  margin-top: 0;\n}\n
