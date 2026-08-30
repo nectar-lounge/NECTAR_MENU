@@ -158,7 +158,7 @@ a {
   font-size: 9px;
   font-weight: 800;
   letter-spacing: .14em;
-  transition: color .25s ease, background .32s var(--ease), transform .22s var(--ease);
+  transition: color .16s ease, background .18s ease, transform .12s ease;
 }
 
 .lang-btn.is-active {
@@ -168,7 +168,7 @@ a {
 }
 
 .lang-btn:active {
-  transform: scale(.94);
+  transform: scale(.98);
 }
 
 .spa-section {
@@ -569,6 +569,7 @@ a {
 
 .menu-content {
   padding-top: 3px;
+  overflow-anchor: none;
 }
 
 .menu-content.type-enter {
@@ -642,6 +643,7 @@ a {
    ====================================================== */
 
 .menu-card {
+  position: relative;
   width: 100%;
   min-height: 104px;
   padding: 10px 12px 10px 10px;
@@ -1761,4 +1763,130 @@ input:focus-visible {
     transition-duration: .001ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* === NECTAR v1.5 UX polish === */
+.menu-card-hint {
+  margin: 10px auto 22px;
+  padding: 0 18px;
+  max-width: 720px;
+  text-align: center;
+  color: var(--muted);
+  font: 500 12px/1.5 Manrope, sans-serif;
+  letter-spacing: .01em;
+}
+
+.featured-section {
+  margin: 10px 0 34px;
+  padding: 22px 16px 18px;
+  border: 1px solid rgba(169,121,53,.18);
+  border-radius: 22px;
+  background: linear-gradient(145deg, rgba(255,255,255,.94), rgba(251,249,246,.96));
+  box-shadow: 0 12px 36px rgba(23,63,43,.055);
+}
+.featured-heading { display:flex; align-items:center; gap:12px; margin:0 2px 16px; }
+.featured-heading__ornament {
+  display:grid; place-items:center; width:36px; height:36px; flex:0 0 36px;
+  border:1px solid rgba(169,121,53,.32); border-radius:50%; color:var(--gold);
+  font:600 19px/1 "Cormorant Garamond",serif;
+}
+.featured-heading h2 { margin:0; color:var(--forest); font:600 22px/1.05 "Cormorant Garamond",serif; }
+.featured-heading p { margin:3px 0 0; color:var(--muted); font:500 11px/1.35 Manrope,sans-serif; }
+.featured-list { display:grid; gap:8px; }
+.featured-list .menu-card { box-shadow:none; border-color:rgba(23,63,43,.09); }
+
+.menu-card__desc {
+  font-size: 13.5px !important;
+  line-height: 1.42 !important;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.menu-card__weight { font-size: 11.5px !important; }
+.menu-card__price { font-size: 20px !important; }
+.menu-card__title { font-size: 19px; line-height: 1.08; }
+
+.menu-card__tags { display:inline-flex; gap:5px; align-items:center; margin-left:6px; flex:0 0 auto; }
+.dish-tag-icon {
+  width:24px; height:24px; border-radius:999px; display:inline-grid; place-items:center;
+  border:1px solid currentColor; box-sizing:border-box;
+}
+.dish-tag-icon svg { width:14px; height:14px; fill:none; stroke:currentColor; stroke-width:1.65; stroke-linecap:round; stroke-linejoin:round; }
+.dish-tag-icon--spicy { color:#a34f38; background:#fbf0eb; border-color:rgba(163,79,56,.25); }
+.dish-tag-icon--vegetarian { color:#2f6a49; background:#edf5ef; border-color:rgba(47,106,73,.23); }
+
+.menu-card__chevron {
+  position:absolute; right:12px; bottom:10px; width:24px; height:24px; display:grid; place-items:center;
+  border-radius:50%; border:1px solid rgba(23,63,43,.13); color:var(--forest);
+  font:500 20px/1 Manrope,sans-serif; opacity:.58; transition:transform .18s ease, opacity .18s ease, border-color .18s ease;
+}
+.menu-card:hover .menu-card__chevron { transform:translateX(2px); opacity:.9; border-color:rgba(169,121,53,.35); }
+.menu-card__price { padding-right:31px; }
+.menu-card__unavailable {
+  position:absolute; left:104px; bottom:12px; max-width:calc(100% - 230px);
+  color:#8b665b; font:600 10px/1.25 Manrope,sans-serif; letter-spacing:.015em;
+}
+.menu-card.is-unavailable { opacity:.66; }
+.menu-card.is-unavailable .menu-card__media { filter:saturate(.45); }
+.menu-card.is-unavailable .menu-card__price { opacity:.68; }
+
+.modal-tags { display:flex; flex-wrap:wrap; gap:8px; margin:4px 0 16px; }
+.modal-tag {
+  display:inline-flex; align-items:center; gap:7px; min-height:32px; padding:6px 10px;
+  border-radius:999px; border:1px solid currentColor; font:600 11px/1 Manrope,sans-serif;
+}
+.modal-tag svg { width:15px; height:15px; fill:none; stroke:currentColor; stroke-width:1.65; stroke-linecap:round; stroke-linejoin:round; }
+.modal-tag--spicy { color:#964b37; background:#fbf0eb; border-color:rgba(150,75,55,.24); }
+.modal-tag--vegetarian { color:#2d6546; background:#edf5ef; border-color:rgba(45,101,70,.22); }
+.modal-unavailable {
+  margin:0 0 16px; padding:10px 12px; border-radius:12px; color:#815d53; background:#f7eeea;
+  border:1px solid rgba(129,93,83,.15); font:600 12px/1.35 Manrope,sans-serif;
+}
+.modal__ingredients p { font-size:15px !important; line-height:1.55 !important; }
+.info-service-value { color:var(--forest) !important; font-weight:700 !important; font-size:16px !important; }
+
+/* Language switches should feel instantaneous: no whole-menu entrance animation. */
+.menu-content.type-enter { animation-duration:.18s; }
+
+@media (max-width: 520px) {
+  .featured-section { margin-inline:4px; padding:18px 12px 14px; border-radius:18px; }
+  .featured-heading h2 { font-size:21px; }
+  .menu-card__title { font-size:18px; }
+  .menu-card__desc { font-size:13px !important; }
+  .menu-card__unavailable { left:96px; max-width:calc(100% - 205px); font-size:9.5px; }
+  .dish-tag-icon { width:23px; height:23px; }
+}
+
+/* ================= BANQUET / PRIVATE DINING ================= */
+.banquet-entry{width:min(calc(100% - 40px),880px);margin:30px auto calc(var(--bottom-nav-h) + 34px);padding:34px 24px 30px;text-align:center;border:1px solid rgba(169,121,53,.22);border-radius:28px;background:linear-gradient(145deg,#fffdf9,#f5efe5);box-shadow:0 16px 46px rgba(27,48,34,.055)}
+.banquet-entry__ornament,.banquet-hero__ornament{display:grid;place-items:center;width:38px;height:38px;margin:0 auto 12px;border:1px solid rgba(169,121,53,.42);border-radius:50%;color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:22px}
+.banquet-entry__eyebrow,.banquet-hero__eyebrow{margin:0 0 8px;color:var(--gold);font-size:9px;font-weight:800;letter-spacing:.22em}
+.banquet-entry h2,.banquet-hero h1{margin:0;color:var(--forest);font-family:'Cormorant Garamond',serif;font-size:clamp(34px,8vw,50px);font-weight:600;line-height:1}
+.banquet-entry>p:not(.banquet-entry__eyebrow),.banquet-hero>p:not(.banquet-hero__eyebrow){margin:10px auto 0;max-width:520px;color:var(--muted-2);font-size:13px;line-height:1.55}
+.banquet-entry__button{display:inline-flex;align-items:center;gap:8px;margin-top:22px;padding:12px 18px;border-radius:999px;background:var(--forest);color:#fffaf2;font-size:11px;font-weight:800;letter-spacing:.08em}.banquet-entry__button .material-symbols-outlined{font-size:17px}
+.banquet-section{min-height:100dvh;padding-bottom:calc(var(--bottom-nav-h) + env(safe-area-inset-bottom) + 36px)}
+.banquet-shell{width:min(100%,920px);margin:0 auto;padding:18px 20px 40px}.banquet-back{display:inline-flex;align-items:center;gap:7px;padding:10px 0;background:transparent;color:var(--forest);font-size:12px;font-weight:700}.banquet-back .material-symbols-outlined{font-size:18px}
+.banquet-hero{padding:28px 0 26px;text-align:center;border-bottom:1px solid var(--line)}
+.banquet-categories{position:sticky;top:calc(var(--header-h) + env(safe-area-inset-top));z-index:70;display:flex;gap:18px;overflow-x:auto;margin:0 -20px 20px;padding:13px 20px 11px;background:rgba(251,249,246,.96);border-bottom:1px solid var(--line);scrollbar-width:none}.banquet-categories::-webkit-scrollbar{display:none}.banquet-category{flex:0 0 auto;padding:7px 0;border-bottom:2px solid transparent;background:transparent;color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.07em;white-space:nowrap}.banquet-category.is-active{color:var(--forest);border-color:var(--gold)}
+.banquet-group{scroll-margin-top:170px;margin:28px 0 34px}.banquet-group__title{margin:0 0 14px;color:var(--forest);font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600}.banquet-list{display:grid;gap:10px}.banquet-card{width:100%;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:17px 18px;border:1px solid var(--line);border-radius:18px;background:var(--surface);text-align:left;box-shadow:0 5px 20px rgba(27,48,34,.025)}.banquet-card__name{display:block;color:var(--text);font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:600;line-height:1.08}.banquet-card__summary{display:block;margin-top:6px;color:var(--muted);font-size:12px;line-height:1.45}.banquet-card__price{display:block;margin-top:8px;color:var(--gold);font-size:11px;font-weight:800}.banquet-card__chevron{color:var(--gold);font-size:20px}
+.banquet-modal__price{color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600}.banquet-modal__summary{margin:14px 0 0;color:var(--muted-2);font-size:14px;line-height:1.55}.banquet-modal__components{margin-top:22px}.banquet-modal__components h3{margin:0 0 10px;color:var(--forest);font-size:10px;letter-spacing:.14em;text-transform:uppercase}.banquet-modal__components ul{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}.banquet-modal__components li{padding:10px 0;border-bottom:1px solid var(--line);font-size:13px;line-height:1.4}
+@media(max-width:600px){.banquet-entry{margin-top:22px;padding:28px 20px 25px}.banquet-shell{padding-top:10px}.banquet-card{padding:15px 16px}.banquet-card__name{font-size:20px}}
+
+
+/* === v1.6.1 QA hardening === */
+.banquet-card > span:first-child { min-width: 0; }
+.banquet-card__name, .banquet-card__summary { overflow-wrap: anywhere; }
+.banquet-category { touch-action: manipulation; }
+body.banquet-modal-open { overflow: hidden; }
+@media (max-width: 340px) {
+  .menu-card { grid-template-columns: 76px minmax(0,1fr) auto; gap: 10px; padding-left: 8px; padding-right: 9px; }
+  .menu-card__media { width: 76px; }
+  .menu-card__title { font-size: 17px; }
+  .menu-card__desc { font-size: 12.5px !important; }
+  .menu-card__price { font-size: 18px !important; padding-right: 27px; }
+  .menu-card__chevron { right: 8px; width: 22px; height: 22px; }
+  .menu-card__unavailable { left: 94px; max-width: calc(100% - 190px); }
+  .banquet-shell { padding-left: 14px; padding-right: 14px; }
+  .banquet-categories { margin-left: -14px; margin-right: -14px; padding-left: 14px; padding-right: 14px; }
 }
