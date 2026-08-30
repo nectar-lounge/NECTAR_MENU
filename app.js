@@ -5,7 +5,7 @@
   const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
 
   const state = {
-    lang: ['RU', 'KZ', 'EN'].includes(document.documentElement.dataset.nectarLang) ? document.documentElement.dataset.nectarLang : 'RU',
+    lang: 'RU',
     section: 'menu',
     type: 'kitchen',
     categoryId: null,
@@ -693,7 +693,7 @@
         ${!available ? `<span class="menu-card__unavailable">${escapeHtml(t('unavailable', 'Временно недоступно'))}</span>` : ''}
       </span>
       <span class="menu-card__price">
-        <span class="price__amount">${formatPrice(item?.price)}</span><span class="price__currency">₸</span>
+        ${formatPrice(item?.price)} <small>₸</small>
       </span>
       <span class="menu-card__chevron" aria-hidden="true">›</span>
     `;

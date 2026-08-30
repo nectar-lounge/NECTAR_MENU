@@ -2231,7 +2231,6 @@ body.banquet-modal-open { overflow: hidden; }
   --unavailable-border: #cbc8bd;
 }
 
-.menu-card__price,
 .modal__price,
 .banquet-card__price,
 .banquet-modal__price {
@@ -2240,12 +2239,6 @@ body.banquet-modal-open { overflow: hidden; }
   font-feature-settings: "tnum" 1, "lnum" 1;
   letter-spacing: -.025em;
   white-space: nowrap;
-}
-
-.menu-card__price {
-  font-size: 18px !important;
-  line-height: 1 !important;
-  font-weight: 700 !important;
 }
 
 .modal__price {
@@ -2320,7 +2313,6 @@ body.banquet-modal-open { overflow: hidden; }
 .modal-unavailable[hidden] { display: none !important; }
 
 @media (max-width: 340px) {
-  .menu-card__price { font-size: 17px !important; }
   .modal__price { font-size: 21px !important; }
   .menu-card__unavailable { font-size: 9px !important; padding: 4px 7px; }
 }
@@ -2359,4 +2351,8 @@ body.banquet-modal-open { overflow: hidden; }
   margin-left: 0 !important;
   vertical-align: baseline !important;
 }
-\n\n/* =========================================================\n   v1.9.4 — Typography + Init Fix\n   Restore NECTAR's original Cormorant price identity.\n   Modal keeps the same family, with stable currency spacing.\n   ========================================================= */\n.menu-card__price {\n  font-family: 'Cormorant Garamond', serif !important;\n  font-size: 21px !important;\n  line-height: 1 !important;\n  font-weight: 600 !important;\n  font-variant-numeric: lining-nums tabular-nums;\n  font-feature-settings: \"lnum\" 1, \"tnum\" 1;\n  letter-spacing: 0 !important;\n}\n\n.menu-card__price .price__amount {\n  font-family: inherit !important;\n  font-weight: inherit !important;\n  line-height: 1 !important;\n  letter-spacing: 0 !important;\n}\n\n.menu-card__price .price__currency {\n  font-family: Manrope, sans-serif !important;\n  font-size: .54em !important;\n  font-weight: 700 !important;\n  line-height: 1 !important;\n  margin-left: .30em !important;\n  letter-spacing: 0 !important;\n  vertical-align: .08em !important;\n}\n\n.modal__price {\n  display: inline-flex !important;\n  align-items: baseline !important;\n  gap: 0 !important;\n  font-family: 'Cormorant Garamond', serif !important;\n  font-size: 27px !important;\n  line-height: 1 !important;\n  font-weight: 600 !important;\n  font-variant-numeric: lining-nums tabular-nums;\n  font-feature-settings: \"lnum\" 1, \"tnum\" 1;\n  font-kerning: normal;\n  letter-spacing: 0 !important;\n}\n\n.modal__price .price__amount {\n  font-family: inherit !important;\n  font-size: 1em !important;\n  font-weight: inherit !important;\n  line-height: 1 !important;\n  letter-spacing: 0 !important;\n}\n\n.modal__price .price__currency {\n  font-family: Manrope, sans-serif !important;\n  font-size: .54em !important;\n  font-weight: 700 !important;\n  line-height: 1 !important;\n  margin-left: .32em !important;\n  letter-spacing: 0 !important;\n  vertical-align: .08em !important;\n}\n\n@media (max-width: 340px) {\n  .menu-card__price { font-size: 20px !important; }\n  .modal__price { font-size: 26px !important; }\n}\n
+
+
+/* v1.9.5 — Main menu price typography restored exactly to v1.8.1.
+   Card markup again uses the original Cormorant price + <small> currency model.
+   Modal-only optical fix remains isolated below/above and does not target cards. */
