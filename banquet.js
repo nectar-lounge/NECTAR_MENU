@@ -20,7 +20,7 @@
   const key = p => `${p}_${lang().toLowerCase()}`;
   const text = (item, p) => item?.[key(p)] || item?.[`${p}_ru`] || '';
   const esc = value => String(value ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
-  const isActive = () => $('#banquet-section')?.classList.contains('is-active') === true;
+  const isActive = () => document.documentElement.dataset.menuMode === 'banquet' && $('#menu-section')?.classList.contains('is-active') === true;
 
   function price(v) {
     if (v === null || v === undefined || v === '') return I18N[lang()].price;
@@ -210,8 +210,9 @@
     if (event.target.closest('.lang-btn')) requestAnimationFrame(apply);
   });
 
-  document.addEventListener('nectar:sectionchange', event => {
-    if (event.detail?.section !== 'banquet') return;
+  document.addEventListener('nectar:modechange', event => {
+    if (event.detail?.mode !== 'banquet') return;
+    render();
     requestAnimationFrame(() => {
       updateActiveFromScroll();
       centerActiveCategory('auto');

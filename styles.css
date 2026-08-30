@@ -2541,3 +2541,24 @@ body.banquet-modal-open { overflow: hidden; }
   margin-bottom: 14px;
 }
 \n\n/* ======================================================\n   v1.11.4 — UX consistency + visual regression fix\n   - Selector labels stay typographically uniform in all languages.\n   - Banquets behaves as the third menu mode: no secondary photo hero/card.\n   - Existing palette, typography, moving pill, cards and bottom nav untouched.\n   ====================================================== */\n.banquet-main-tabs {\n  margin-bottom: 9px;\n}\n\n/* The banquet mode starts with its category navigation just like a content mode,\n   without a second branded hero competing with the main menu hierarchy. */\n.banquet-categories {\n  margin-top: 0;\n}\n
+/* ======================================================
+   v1.11.7 — TRUE MENU MODE PARITY
+   Banquet is no longer a separate SPA section. It lives inside the same
+   menu shell as Kitchen / Bar and therefore shares hero, background,
+   selector geometry and page scroll. Visual design is intentionally unchanged.
+   ====================================================== */
+.banquet-mode[hidden],
+.menu-content[hidden],
+.search-box[hidden],
+.category-nav[hidden] { display: none !important; }
+
+.banquet-mode {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* banquet content now inherits menu-shell horizontal grid; prevent historical
+   banquet-shell rules from introducing a second layout context. */
+#banquetMode .banquet-categories {
+  margin-top: 0;
+}

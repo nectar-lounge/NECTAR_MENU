@@ -67,28 +67,14 @@
         </div>
 
         <div class="menu-content" id="menuContainer" aria-live="polite"></div>
-      </div>
-    </section>
 
-    <section class="spa-section banquet-section" id="banquet-section" aria-label="Banquet menu">
-      <section class="hero" aria-labelledby="banquetHeroTitle">
-        <img class="hero__image" src="assets/nectar-hero.jpg" alt="Интерьер NECTAR" width="1600" height="900">
-        <div class="hero__veil" aria-hidden="true"></div>
-        <div class="hero__content">
-          <p class="hero__eyebrow" data-i18n="hero_description">Кухня, мангал и напитки</p>
-          <h1 class="hero__title" id="banquetHeroTitle" data-i18n="hero_title">Меню</h1>
+        <!-- Banquet is the third mode of the SAME menu view.
+             It intentionally shares the hero, selector, page scroll and background
+             with Kitchen / Bar instead of behaving like a separate SPA section. -->
+        <div class="banquet-mode" id="banquetMode" hidden>
+          <nav class="banquet-categories" id="banquetCategories" aria-label="Banquet categories"></nav>
+          <div id="banquetContainer"></div>
         </div>
-      </section>
-
-      <div class="banquet-shell">
-        <div class="main-tabs banquet-main-tabs" role="group" aria-label="Menu type">
-          <span class="main-tabs__indicator" aria-hidden="true"></span>
-          <button class="main-tab" type="button" data-type="kitchen" aria-pressed="false" data-i18n="nav_kitchen">КУХНЯ</button>
-          <button class="main-tab" type="button" data-type="bar" aria-pressed="false" data-i18n="nav_bar">БАР</button>
-          <button class="main-tab is-active" type="button" data-section-target="banquet" aria-pressed="true" data-banquet-i18n="nav">БАНКЕТ</button>
-        </div>
-        <nav class="banquet-categories" id="banquetCategories" aria-label="Banquet categories"></nav>
-        <div id="banquetContainer"></div>
       </div>
     </section>
 

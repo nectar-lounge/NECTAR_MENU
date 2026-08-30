@@ -8,9 +8,10 @@
     lang: 'RU',
     section: 'menu',
     type: 'kitchen',
+    mode: 'kitchen',
     categoryId: null,
     query: '',
-    sectionScroll: { menu: 0, banquet: 0, info: 0 },
+    sectionScroll: { menu: 0, info: 0 },
     modal: {
       open: false,
       closing: false,
@@ -350,30 +351,76 @@
   }
 
   function updateMainTabs() {
-    const banquetActive = state.section === 'banquet';
     $$('.main-tab').forEach(button => {
-      const active = button.dataset.sectionTarget === 'banquet'
-        ? banquetActive
-        : !banquetActive && button.dataset.type === state.type;
+      const targetMode = button.dataset.sectionTarget === 'banquet' ? 'banquet' : button.dataset.type;
+      const active = targetMode === state.mode;
       button.classList.toggle('is-active', active);
       button.setAttribute('aria-pressed', String(active));
     });
 
-    const index = banquetActive ? 2 : (state.type === 'bar' ? 1 : 0);
+    const index = state.mode === 'banquet' ? 2 : (state.mode === 'bar' ? 1 : 0);
     $$('.main-tabs__indicator').forEach(indicator => {
       indicator.style.transform = `translateX(${index * 100}%)`;
     });
   }
 
+  function applyMenuModeVisibility() {
+    const banquet = state.mode === 'banquet';
+    const controls = $('#menuControls');
+    const search = $('.search-box', controls || document);
+    const categoryNav = $('#categoryNav');
+    const searchNote = $('#searchModeNote');
+    const menuContainer = $('#menuContainer');
+    const banquetMode = $('#banquetMode');
+
+    if (search) search.hidden = banquet;
+    if (categoryNav) categoryNav.hidden = banquet;
+    if (searchNote && banquet) searchNote.hidden = true;
+    if (menuContainer) menuContainer.hidden = banquet;
+    if (banquetMode) banquetMode.hidden = !banquet;
+
+    document.documentElement.dataset.menuMode = state.mode;
+  }
+
+  function scrollBanquetModeToFirstCategory() {
+    const target = $('#banquetContainer .banquet-group');
+    if (!target) return;
+    const headerHeight = $('.site-header')?.getBoundingClientRect().height || 0;
+    const categoriesHeight = $('#banquetCategories')?.getBoundingClientRect().height || 0;
+    const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - headerHeight - categoriesHeight - 14);
+    instantScrollTo(top);
+  }
+
+  function setBanquetMode() {
+    if (state.mode === 'banquet' || state.modal.open || state.modal.closing) return;
+
+    state.mode = 'banquet';
+    state.query = '';
+    clearTimeout(state.searchTimer);
+    const input = $('#searchInput');
+    if (input) input.value = '';
+    state.suppressCategorySpyUntil = Date.now() + 500;
+
+    updateSearchClear();
+    updateMainTabs();
+    applyMenuModeVisibility();
+    document.dispatchEvent(new CustomEvent('nectar:modechange', { detail: { mode: 'banquet' } }));
+
+    // Same contract as Kitchen <-> Bar: switch content in place and align
+    // the first category under the sticky chrome. The shared hero never re-enters.
+    requestAnimationFrame(() => scrollBanquetModeToFirstCategory());
+  }
+
   function setType(type) {
     if (
       !['kitchen', 'bar'].includes(type) ||
-      type === state.type ||
+      (type === state.type && state.mode === type) ||
       state.modal.open ||
       state.modal.closing
     ) return;
 
     state.type = type;
+    state.mode = type;
     state.query = '';
     clearTimeout(state.searchTimer);
 
@@ -389,8 +436,10 @@
 
     updateSearchClear();
     updateMainTabs();
+    applyMenuModeVisibility();
     renderCategories();
     renderMenu({ motion: 'type' });
+    document.dispatchEvent(new CustomEvent('nectar:modechange', { detail: { mode: type } }));
 
     // The new sections already exist synchronously after renderMenu().
     // Jump immediately to the first category; a smooth programmatic scroll here
@@ -1001,39 +1050,19 @@
     requestAnimationFrame(() => { root.style.scrollBehavior = previous; });
   }
 
-  function scrollBanquetToFirstCategory() {
-    const target = $('#banquetContainer .banquet-group');
-    if (!target) return;
-
-    const headerHeight = $('.site-header')?.getBoundingClientRect().height || 0;
-    const categoriesHeight = $('#banquetCategories')?.getBoundingClientRect().height || 0;
-    const top = Math.max(
-      0,
-      target.getBoundingClientRect().top + window.scrollY - headerHeight - categoriesHeight - 14
-    );
-
-    instantScrollTo(top);
-  }
-
   function switchSection(section) {
     if (
-      !['menu', 'banquet', 'info'].includes(section) ||
+      !['menu', 'info'].includes(section) ||
       section === state.section ||
       state.modal.open ||
       state.modal.closing
     ) return;
-
-    const previousSection = state.section;
-    const isMenuModeTransition =
-      ['menu', 'banquet'].includes(previousSection) &&
-      ['menu', 'banquet'].includes(section);
 
     rememberSectionScroll();
     state.section = section;
 
     const sectionNodes = {
       menu: $('#menu-section'),
-      banquet: $('#banquet-section'),
       info: $('#info-section')
     };
     Object.entries(sectionNodes).forEach(([key, node]) => {
@@ -1042,42 +1071,26 @@
       node.classList.remove('nectar-section-enter');
     });
 
-    // Kitchen / Bar / Banquet are three modes of one Menu view.
-    // Do not animate the whole page shell when moving between those modes;
-    // it must feel like the existing Kitchen <-> Bar switch, not a new page.
     const incomingSection = sectionNodes[section];
-    if (
-      incomingSection &&
-      !isMenuModeTransition &&
-      !window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    ) {
+    if (incomingSection && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       void incomingSection.offsetWidth;
       incomingSection.classList.add('nectar-section-enter');
       window.setTimeout(() => incomingSection.classList.remove('nectar-section-enter'), 260);
     }
 
     updateMainTabs();
+    applyMenuModeVisibility();
 
     $$('.bottom-nav__button').forEach(button => {
-      const active = button.dataset.path === 'menu'
-        ? section === 'menu' || section === 'banquet'
-        : button.dataset.path === section;
+      const active = button.dataset.path === section;
       button.classList.toggle('is-active', active);
       button.setAttribute('aria-current', active ? 'page' : 'false');
     });
 
     const y = state.sectionScroll[section] || 0;
     requestAnimationFrame(() => {
-      // Match Kitchen/Bar behavior: entering Banquet from another Menu mode
-      // lands at its first category, so a hero that is already above the viewport
-      // never re-enters from the top merely because Banquet used a separate section.
-      if (section === 'banquet' && previousSection === 'menu') {
-        scrollBanquetToFirstCategory();
-      } else {
-        instantScrollTo(y);
-      }
-
-      if (section === 'menu') scheduleCategorySpy();
+      instantScrollTo(y);
+      if (section === 'menu' && state.mode !== 'banquet') scheduleCategorySpy();
       document.dispatchEvent(new CustomEvent('nectar:sectionchange', { detail: { section } }));
     });
   }
@@ -1331,7 +1344,7 @@
   function onWindowScroll() {
     if (state.modal.open || state.modal.closing) return;
     state.sectionScroll[state.section] = window.scrollY;
-    if (state.section === 'menu') scheduleCategorySpy();
+    if (state.section === 'menu' && state.mode !== 'banquet') scheduleCategorySpy();
   }
 
   function initEvents() {
@@ -1341,11 +1354,11 @@
 
     $$('.main-tab').forEach(button => {
       button.addEventListener('click', () => {
+        if (state.section !== 'menu') switchSection('menu');
         if (button.dataset.sectionTarget === 'banquet') {
-          switchSection('banquet');
+          setBanquetMode();
           return;
         }
-        if (state.section !== 'menu') switchSection('menu');
         setType(button.dataset.type);
       });
     });
@@ -1496,6 +1509,7 @@
     restoreLanguage();
     applyTranslations();
     updateMainTabs();
+    applyMenuModeVisibility();
     renderCategories();
     renderMenu({ reveal: true });
     initEvents();
