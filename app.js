@@ -320,33 +320,53 @@
     state.lang = lang;
     state.query = '';
     clearTimeout(state.searchTimer);
-    state.suppressCategorySpyUntil = Date.now() + 450;
+    state.suppressCategorySpyUntil = Date.now() + 500;
 
     const input = $('#searchInput');
     if (input) input.value = '';
 
-    // Stable category IDs do not depend on language. Resolve destination before render.
-    const targetCategoryId = firstCategoryId(state.type);
-    state.categoryId = targetCategoryId;
-
     applyTranslations();
     updateSearchClear();
     updateMainTabs();
+    applyMenuModeVisibility();
+
+    /*
+      v1.12: language has ONE owner — app.js.
+      Banquet no longer listens to raw .lang-btn clicks. We publish one semantic
+      event after state + static translations are committed, so every secondary
+      renderer updates exactly once and in a deterministic order.
+    */
+    document.dispatchEvent(new CustomEvent('nectar:languagechange', {
+      detail: { lang: state.lang, mode: state.mode }
+    }));
+
+    if (state.mode === 'banquet') {
+      // Banquet renderer handles its own first-category reset + alignment from
+      // the semantic languagechange event. Never render hidden Kitchen/Bar DOM.
+      rememberLanguage(state.lang);
+      return;
+    }
+
+    // Kitchen / Bar: deterministic first category, same established behavior.
+    const targetCategoryId = firstCategoryId(state.type);
+    state.categoryId = targetCategoryId;
+
     renderCategories();
 
-    // Do not animate/reflow the entire 81-item menu for a language-only text change.
     const container = $('#menuContainer');
     container?.classList.remove('type-enter', 'search-results-enter');
     renderMenu();
 
-    // renderMenu() is synchronous, so the destination section already exists.
     scrollToCategory(targetCategoryId, 'auto');
     updateCategoryTabs(targetCategoryId, true);
+
+    rememberLanguage(state.lang);
 
     requestAnimationFrame(() => {
       if (token !== state.languageSwitchToken) return;
       setupCategoryObserver();
       updateCategoryEdgeFades();
+      enforceMenuChromeInvariant();
     });
   }
 
@@ -384,6 +404,44 @@
     document.documentElement.dataset.menuMode = state.mode;
   }
 
+  /*
+    Runtime UI invariant:
+    exactly ONE submenu is visible for the current menu mode.
+    This is intentionally idempotent and is called after language/mode renders.
+  */
+  function enforceMenuChromeInvariant() {
+    const banquet = state.mode === 'banquet';
+    const categoryNav = $('#categoryNav');
+    const banquetCategories = $('#banquetCategories');
+
+    if (categoryNav) {
+      categoryNav.hidden = banquet;
+      categoryNav.setAttribute('aria-hidden', String(banquet));
+    }
+    if (banquetCategories) {
+      banquetCategories.hidden = !banquet;
+      banquetCategories.setAttribute('aria-hidden', String(!banquet));
+    }
+
+    // Defensive cleanup: a renderer must never leave duplicate category controls.
+    const strip = $('#categoryStrip');
+    if (strip) {
+      const indicators = $$('.category-strip__indicator', strip);
+      indicators.slice(1).forEach(node => node.remove());
+    }
+
+    const controls = $('#menuControls');
+    if (controls) {
+      const visibleSubmenus = [categoryNav, banquetCategories].filter(
+        node => node && !node.hidden
+      );
+      if (visibleSubmenus.length !== 1) {
+        if (categoryNav) categoryNav.hidden = banquet;
+        if (banquetCategories) banquetCategories.hidden = !banquet;
+      }
+    }
+  }
+
   function scrollBanquetModeToFirstCategory() {
     const target = $('#banquetContainer .banquet-group');
     if (!target) return;
@@ -405,6 +463,7 @@
     updateSearchClear();
     updateMainTabs();
     applyMenuModeVisibility();
+    enforceMenuChromeInvariant();
     document.dispatchEvent(new CustomEvent('nectar:modechange', { detail: { mode: 'banquet' } }));
 
     // Kitchen / Bar parity: render synchronously, then align the first group
@@ -438,6 +497,7 @@
     updateSearchClear();
     updateMainTabs();
     applyMenuModeVisibility();
+    enforceMenuChromeInvariant();
     renderCategories();
     renderMenu({ motion: 'type' });
     document.dispatchEvent(new CustomEvent('nectar:modechange', { detail: { mode: type } }));
@@ -1511,6 +1571,7 @@
     applyTranslations();
     updateMainTabs();
     applyMenuModeVisibility();
+    enforceMenuChromeInvariant();
     renderCategories();
     renderMenu({ reveal: true });
     initEvents();

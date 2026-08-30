@@ -2623,3 +2623,20 @@ html[data-menu-mode="banquet"] #banquetCategories {
 }
 html[data-menu-mode="banquet"] #banquetMode { padding-top: 0; }
 html[data-menu-mode="banquet"] #banquetContainer > .banquet-group:first-child { margin-top: 18px; }
+
+
+/* ======================================================
+   v1.12 — SINGLE SUBMENU / LANGUAGE TRANSACTION CONTRACT
+   Exactly one submenu may be visible at a time.
+   ====================================================== */
+#categoryNav[hidden],
+#banquetCategories[hidden] {
+  display: none !important;
+}
+html[data-menu-mode="kitchen"] #banquetCategories,
+html[data-menu-mode="bar"] #banquetCategories {
+  display: none !important;
+}
+html[data-menu-mode="banquet"] #categoryNav {
+  display: none !important;
+}

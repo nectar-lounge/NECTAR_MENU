@@ -93,13 +93,20 @@
     });
     const close = $('#banquetModal .modal__close');
     if (close) close.setAttribute('aria-label', I18N[lang()].close);
-    if (isActive()) {
-      render();
-      requestAnimationFrame(() => {
-        updateActiveFromScroll();
-        centerActiveCategory('auto');
-      });
+  }
+
+  function resetAndRenderFirstCategory({ align = true } = {}) {
+    const first = categories()[0]?.id || null;
+    activeCategory = first;
+    render();
+    if (first) {
+      setActiveCategory(first, false);
+      if (align) scrollToBanquetCategory(first, 'auto');
     }
+    requestAnimationFrame(() => {
+      centerActiveCategory('auto');
+      updateActiveFromScroll();
+    });
   }
 
   function lockModalPage() {
@@ -217,17 +224,19 @@
       return;
     }
 
-    // app.js updates .lang-btn synchronously in its click handler; run after that.
-    if (event.target.closest('.lang-btn')) requestAnimationFrame(apply);
   });
 
   document.addEventListener('nectar:modechange', event => {
+    apply();
     if (event.detail?.mode !== 'banquet') return;
-    const first = categories()[0]?.id || null;
-    activeCategory = first;
-    render();
-    if (first) setActiveCategory(first, false);
-    requestAnimationFrame(() => centerActiveCategory('auto'));
+    resetAndRenderFirstCategory({ align: false });
+  });
+
+  // Semantic language event from app.js. This is the ONLY language update path.
+  document.addEventListener('nectar:languagechange', event => {
+    apply();
+    if (!isActive()) return;
+    resetAndRenderFirstCategory({ align: true });
   });
 
   document.addEventListener('keydown', event => {
@@ -236,5 +245,8 @@
 
   window.addEventListener('scroll', scheduleScrollSpy, { passive: true });
   window.addEventListener('resize', scheduleScrollSpy, { passive: true });
-  window.addEventListener('DOMContentLoaded', () => { apply(); render(); }, { once: true });
+  window.addEventListener('DOMContentLoaded', () => {
+    apply();
+    render();
+  }, { once: true });
 })();
