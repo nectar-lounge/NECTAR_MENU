@@ -2382,3 +2382,213 @@ body.banquet-modal-open { overflow: hidden; }
     letter-spacing: .11em;
   }
 }
+
+/* ======================================================
+   v1.11.1 — IA selector correction
+   - Three first-class destinations remain: Kitchen / Bar / Banquets.
+   - Remove the oversized two-tab green moving pill pattern.
+   - Restore Menu / Info to the outer columns of the original v1.10
+     bottom-navigation geometry.
+   ====================================================== */
+
+/* The old moving pill is a two-option pattern and is intentionally retired. */
+.main-tabs__indicator {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+.main-tabs {
+  width: min(100%, 390px);
+  min-height: 48px;
+  margin: 11px auto 9px;
+  padding: 3px 4px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  overflow: visible;
+  border: 1px solid rgba(27,48,34,.085);
+  border-radius: 18px;
+  background: rgba(255,255,255,.72);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.88),
+    0 5px 18px rgba(27,48,34,.03);
+}
+
+.main-tab {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  min-height: 40px;
+  padding: 0 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: transparent;
+  color: rgba(27,48,34,.53);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .13em;
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    color .22s ease,
+    background-color .22s ease,
+    transform .18s var(--ease);
+}
+
+/* Quiet editorial selection: no large dark slab. */
+.main-tab.is-active {
+  color: var(--forest);
+  background: rgba(23,63,43,.045);
+}
+
+.main-tab.is-active::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  width: 24px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--gold);
+  transform: translateX(-50%);
+}
+
+.main-tab:active {
+  transform: scale(.975);
+}
+
+/* Keep the v1.10 visual spacing of the two outer destinations.
+   The centre column is intentionally empty. */
+.bottom-nav__inner {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+.bottom-nav__button[data-path="menu"] {
+  grid-column: 1;
+}
+
+.bottom-nav__button[data-path="info"] {
+  grid-column: 3;
+}
+
+@media (max-width: 359px) {
+  .main-tabs {
+    width: 100%;
+    padding-inline: 3px;
+  }
+
+  .main-tab {
+    padding-inline: 3px;
+    font-size: 8.8px;
+    letter-spacing: .085em;
+  }
+}
+
+/* ======================================================
+   v1.11.2 — Premium three-way moving pill
+   Kitchen / Bar / Banquets are three equal independent
+   hit areas. The forest indicator is purely visual and
+   can never intercept taps.
+   ====================================================== */
+
+.main-tabs {
+  position: relative;
+  isolation: isolate;
+  width: min(100%, 390px);
+  min-height: 48px;
+  margin: 11px auto 9px;
+  padding: 4px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  overflow: hidden;
+  border: 1px solid rgba(27,48,34,.09);
+  border-radius: 18px;
+  background: rgba(255,255,255,.72);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.90),
+    0 5px 18px rgba(27,48,34,.035);
+}
+
+.main-tabs__indicator {
+  display: block !important;
+  position: absolute;
+  z-index: 0;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc((100% - 8px) / 3);
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--forest), var(--forest-deep));
+  box-shadow: 0 6px 16px rgba(23,63,43,.17);
+  pointer-events: none !important;
+  will-change: transform;
+  transform: translateX(0%);
+  transition: transform .28s cubic-bezier(.22,.72,.24,1);
+}
+
+.main-tab {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+  min-height: 40px;
+  padding: 0 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 14px;
+  background: transparent !important;
+  color: rgba(27,48,34,.55);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .13em;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: color .22s ease, transform .18s var(--ease);
+}
+
+.main-tab.is-active {
+  color: #fffaf2;
+  background: transparent !important;
+}
+
+.main-tab.is-active::after {
+  content: none !important;
+  display: none !important;
+}
+
+.main-tab:active {
+  transform: scale(.975);
+}
+
+.main-tab:focus-visible {
+  outline: 2px solid rgba(169,121,53,.78);
+  outline-offset: -3px;
+}
+
+@media (max-width: 359px) {
+  .main-tabs {
+    width: 100%;
+    padding: 4px;
+  }
+
+  .main-tab {
+    padding-inline: 2px;
+    font-size: 8.7px;
+    letter-spacing: .07em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main-tabs__indicator {
+    transition: none !important;
+  }
+}
