@@ -811,8 +811,7 @@ a {
   font-variant-numeric: lining-nums tabular-nums;
 }
 
-.menu-card__price small,
-.modal__price small {
+.menu-card__price small {
   color: rgba(169,121,53,.62);
   font-family: Manrope, sans-serif;
   font-size: .54em;
@@ -2353,6 +2352,3 @@ body.banquet-modal-open { overflow: hidden; }
 }
 
 
-/* v1.9.5 — Main menu price typography restored exactly to v1.8.1.
-   Card markup again uses the original Cormorant price + <small> currency model.
-   Modal-only optical fix remains isolated below/above and does not target cards. */

@@ -1428,6 +1428,17 @@
     if (duplicates.length) {
       console.warn('NECTAR: duplicate menu item keys detected:', [...new Set(duplicates)]);
     }
+
+    const required = ['id', 'type', 'category_id', 'category_ru', 'category_kz', 'category_en', 'name_ru', 'name_kz', 'name_en'];
+    const invalid = menu.filter(item => required.some(field => !String(item?.[field] ?? '').trim()));
+    if (invalid.length) {
+      console.warn('NECTAR: menu items with missing required fields:', invalid.map(itemKey));
+    }
+
+    const invalidPrices = menu.filter(item => item?.price != null && (!Number.isFinite(Number(item.price)) || Number(item.price) < 0));
+    if (invalidPrices.length) {
+      console.warn('NECTAR: menu items with invalid prices:', invalidPrices.map(itemKey));
+    }
   }
 
   function init() {
