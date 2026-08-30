@@ -2326,17 +2326,13 @@ body.banquet-modal-open { overflow: hidden; }
 }
 
 /* =========================================================
-   v1.9.2 — Optical price numerals
-   Keep the NECTAR UI typography, but use the native UI numeric
-   face for prices. This avoids optical size differences between
-   digits such as 1/2 and 7/8/9 without loading another webfont.
+   v1.9.3 — Modal-only optical price fix
+   Main menu prices intentionally remain exactly as in v1.9.1.
+   Only the main dish modal receives the optical numeral face and
+   a stable visual gap before the currency sign.
    ========================================================= */
-.menu-card__price,
-.modal__price,
-.banquet-card__price,
-.banquet-modal__price,
-.price__amount,
-.price__currency {
+.modal__price {
+  gap: .32em !important;
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
   font-variant-numeric: lining-nums tabular-nums;
   font-feature-settings: "lnum" 1, "tnum" 1;
@@ -2345,15 +2341,21 @@ body.banquet-modal-open { overflow: hidden; }
   font-synthesis: none;
 }
 
-.price__amount {
-  display: inline-block;
-  line-height: 1;
-  font-weight: 700;
+.modal__price .price__amount {
+  font-family: inherit !important;
+  font-variant-numeric: inherit;
+  font-feature-settings: inherit;
+  letter-spacing: 0 !important;
+  line-height: 1 !important;
+  font-weight: 700 !important;
 }
 
-.price__currency {
+.modal__price .price__currency {
+  font-family: inherit !important;
   font-size: .72em !important;
   line-height: 1 !important;
   font-weight: 700 !important;
-  margin-left: .04em;
+  letter-spacing: 0 !important;
+  margin-left: 0 !important;
+  vertical-align: baseline !important;
 }
