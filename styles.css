@@ -2324,3 +2324,36 @@ body.banquet-modal-open { overflow: hidden; }
   .modal__price { font-size: 21px !important; }
   .menu-card__unavailable { font-size: 9px !important; padding: 4px 7px; }
 }
+
+/* =========================================================
+   v1.9.2 — Optical price numerals
+   Keep the NECTAR UI typography, but use the native UI numeric
+   face for prices. This avoids optical size differences between
+   digits such as 1/2 and 7/8/9 without loading another webfont.
+   ========================================================= */
+.menu-card__price,
+.modal__price,
+.banquet-card__price,
+.banquet-modal__price,
+.price__amount,
+.price__currency {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
+  font-kerning: normal;
+  letter-spacing: 0 !important;
+  font-synthesis: none;
+}
+
+.price__amount {
+  display: inline-block;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.price__currency {
+  font-size: .72em !important;
+  line-height: 1 !important;
+  font-weight: 700 !important;
+  margin-left: .04em;
+}
