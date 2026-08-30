@@ -693,7 +693,7 @@
         ${!available ? `<span class="menu-card__unavailable">${escapeHtml(t('unavailable', 'Временно недоступно'))}</span>` : ''}
       </span>
       <span class="menu-card__price">
-        ${formatPrice(item?.price)} <small>₸</small>
+        <span class="price__amount">${formatPrice(item?.price)}</span><span class="price__currency">₸</span>
       </span>
       <span class="menu-card__chevron" aria-hidden="true">›</span>
     `;
@@ -1191,7 +1191,7 @@
       : null;
 
     $('#modalTitle').textContent = itemName(item) || '—';
-    $('#modalPrice').innerHTML = `${formatPrice(item?.price)} <small>₸</small>`;
+    $('#modalPrice').innerHTML = `<span class="price__amount">${formatPrice(item?.price)}</span><span class="price__currency">₸</span>`;
     $('#modalWeight').textContent = formatWeight(item?.weight);
 
     const composition = itemComposition(item);
