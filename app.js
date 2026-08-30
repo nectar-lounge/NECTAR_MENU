@@ -1375,10 +1375,10 @@
     });
 
 
-    $('.hero__image')?.addEventListener('error', event => {
+    $$('.hero__image').forEach(image => image.addEventListener('error', event => {
       event.currentTarget.classList.add('is-missing');
-      $('.hero')?.classList.add('hero--fallback');
-    });
+      event.currentTarget.closest('.hero')?.classList.add('hero--fallback');
+    }));
 
     document.addEventListener('keydown', event => {
       if (event.key === 'Escape' && state.modal.open) closeModal();

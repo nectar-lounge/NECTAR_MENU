@@ -2,9 +2,9 @@
   'use strict';
 
   const I18N = {
-    RU: { eyebrow:'PRIVATE DINING', title:'Банкетное меню', subtitle:'Для особых событий и больших компаний', nav:'БАНКЕТЫ', open:'Посмотреть', back:'Основное меню', price:'Цена уточняется', includes:'В составе', close:'ЗАКРЫТЬ' },
-    KZ: { eyebrow:'PRIVATE DINING', title:'Банкет мәзірі', subtitle:'Ерекше іс-шаралар мен үлкен компанияларға арналған', nav:'БАНКЕТТЕР', open:'Қарау', back:'Негізгі мәзір', price:'Бағасы нақтылануда', includes:'Құрамы', close:'ЖАБУ' },
-    EN: { eyebrow:'PRIVATE DINING', title:'Banquet Menu', subtitle:'For special occasions and large groups', nav:'BANQUETS', open:'View menu', back:'Main menu', price:'Price upon confirmation', includes:'Includes', close:'CLOSE' }
+    RU: { eyebrow:'PRIVATE DINING', title:'Банкетное меню', subtitle:'Для особых событий и больших компаний', nav:'БАНКЕТ', open:'Посмотреть', back:'Основное меню', price:'Цена уточняется', includes:'В составе', close:'ЗАКРЫТЬ' },
+    KZ: { eyebrow:'PRIVATE DINING', title:'Банкет мәзірі', subtitle:'Ерекше іс-шаралар мен үлкен компанияларға арналған', nav:'БАНКЕТ', open:'Қарау', back:'Негізгі мәзір', price:'Бағасы нақтылануда', includes:'Құрамы', close:'ЖАБУ' },
+    EN: { eyebrow:'PRIVATE DINING', title:'Banquet Menu', subtitle:'For special occasions and large groups', nav:'BANQUET', open:'View menu', back:'Main menu', price:'Price upon confirmation', includes:'Includes', close:'CLOSE' }
   };
 
   let activeCategory = null;
