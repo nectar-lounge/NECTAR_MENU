@@ -8,6 +8,19 @@
   <meta name="description" content="NECTAR — Lounge · Bar · Kitchen. Digital menu.">
   <title>NECTAR — Меню</title>
 
+  <!-- v1.9.4: resolve persisted language before first paint. -->
+  <script>
+    (function () {
+      var lang = 'RU';
+      try {
+        var saved = localStorage.getItem('nectar.lang');
+        if (saved === 'RU' || saved === 'KZ' || saved === 'EN') lang = saved;
+      } catch (e) {}
+      document.documentElement.dataset.nectarLang = lang;
+      document.documentElement.lang = lang === 'KZ' ? 'kk' : lang.toLowerCase();
+    }());
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&display=swap" rel="stylesheet">

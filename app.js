@@ -5,7 +5,7 @@
   const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
 
   const state = {
-    lang: 'RU',
+    lang: ['RU', 'KZ', 'EN'].includes(document.documentElement.dataset.nectarLang) ? document.documentElement.dataset.nectarLang : 'RU',
     section: 'menu',
     type: 'kitchen',
     categoryId: null,
