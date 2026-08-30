@@ -227,12 +227,25 @@
     return categoryNames.some(name => ALLOWED_BAR_CATEGORY_NAMES.has(name));
   }
 
+  // v1.9: build immutable indexes once. The menu data is static during a page session,
+  // so repeated filter/find passes only create avoidable work on low-end phones.
+  const menuIndex = (() => {
+    const visible = getMenu().filter(item => item?.type === 'kitchen' || isAllowedBarItem(item));
+    const byType = { kitchen: [], bar: [] };
+    const byKey = new Map();
+    for (const item of visible) {
+      if (byType[item.type]) byType[item.type].push(item);
+      byKey.set(itemKey(item), item);
+    }
+    return { visible, byType, byKey, search: new Map() };
+  })();
+
   function visibleMenu() {
-    return getMenu().filter(item => item?.type === 'kitchen' || isAllowedBarItem(item));
+    return menuIndex.visible;
   }
 
   function itemsForType(type = state.type) {
-    return visibleMenu().filter(item => item?.type === type);
+    return menuIndex.byType[type] || [];
   }
 
   function categoriesForType(type = state.type) {
@@ -255,6 +268,19 @@
 
   function typeLabel(type) {
     return type === 'bar' ? t('nav_bar', 'БАР') : t('nav_kitchen', 'КУХНЯ');
+  }
+
+  const LANGUAGE_STORAGE_KEY = 'nectar.lang';
+
+  function rememberLanguage(lang) {
+    try { localStorage.setItem(LANGUAGE_STORAGE_KEY, lang); } catch (_) {}
+  }
+
+  function restoreLanguage() {
+    try {
+      const saved = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+      if (['RU', 'KZ', 'EN'].includes(saved)) state.lang = saved;
+    } catch (_) {}
   }
 
   function applyTranslations() {
@@ -749,16 +775,21 @@
   }
 
   function searchableText(item) {
-    return normalizeSearch([
-      itemName(item),
-      itemComposition(item),
-      itemCategory(item),
+    const key = itemKey(item);
+    const cached = menuIndex.search.get(key);
+    if (cached) return cached;
+
+    // Include all locales so global search remains language-tolerant without rebuilding
+    // normalized strings on every keystroke.
+    const value = normalizeSearch([
       item?.name_ru, item?.name_kz, item?.name_en,
       item?.composition_ru, item?.composition_kz, item?.composition_en,
       item?.category_ru, item?.category_kz, item?.category_en,
       item?.note_ru, item?.note_kz, item?.note_en, item?.note,
       item?.weight
     ].filter(Boolean).join(' '));
+    menuIndex.search.set(key, value);
+    return value;
   }
 
   function matchesSearch(item, query) {
@@ -924,11 +955,14 @@
     const wasSearching = Boolean(normalizeSearch(state.query));
     state.query = value;
     state.suppressCategorySpyUntil = Date.now() + 350;
-    renderMenu();
 
-    // When search starts from deep inside Kitchen/Bar, the page height may shrink
-    // dramatically. Keep the input and the first results in the viewport.
-    keepSearchVisible({ force: !wasSearching && Boolean(normalizeSearch(value)) });
+    // v1.9: coalesce rapid keystrokes. 72 ms is below perceptible typing latency but
+    // avoids rebuilding the complete result DOM for every intermediate character.
+    clearTimeout(state.searchTimer);
+    state.searchTimer = setTimeout(() => {
+      renderMenu();
+      keepSearchVisible({ force: !wasSearching && Boolean(normalizeSearch(state.query)) });
+    }, 72);
   }
 
   function clearSearch({ focus = true } = {}) {
@@ -1293,7 +1327,7 @@
       const card = event.target.closest('.menu-card');
       if (!card) return;
 
-      const item = visibleMenu().find(entry => itemKey(entry) === card.dataset.itemKey);
+      const item = menuIndex.byKey.get(card.dataset.itemKey);
       if (item) openModal(item);
     });
 
@@ -1311,8 +1345,7 @@
       const value = event.currentTarget.value;
       updateSearchClear();
 
-      // This menu is small enough for immediate client-side filtering on every input.
-      // No debounce = premium "search as you type" behavior.
+      // Search remains visually instant while rapid input is batched into one render.
       setSearch(value);
     });
 
@@ -1403,6 +1436,7 @@
     state.categoryId = firstCategoryId('kitchen');
     state.sectionScroll.menu = window.scrollY;
 
+    restoreLanguage();
     applyTranslations();
     updateMainTabs();
     renderCategories();
