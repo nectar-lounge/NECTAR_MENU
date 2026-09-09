@@ -1,0 +1,74 @@
+PASS 390px/RU all modes and first-category alignment
+PASS 390px/RU rapid latest mode wins
+PASS 390px/RU search to banquet clears search layout
+PASS 390px/RU pending clear-search cannot override banquet navigation
+PASS 390px/RU banquet modal focus, repeated close, reopen and scroll
+PASS 390px/RU no horizontal page overflow
+PASS 390px/RU kitchen modal restores focus and scroll
+PASS 390px/KZ all modes and first-category alignment
+PASS 390px/KZ rapid latest mode wins
+PASS 390px/KZ search to banquet clears search layout
+PASS 390px/KZ pending clear-search cannot override banquet navigation
+PASS 390px/KZ banquet modal focus, repeated close, reopen and scroll
+PASS 390px/KZ no horizontal page overflow
+PASS 390px/KZ kitchen modal restores focus and scroll
+PASS 390px/EN all modes and first-category alignment
+PASS 390px/EN rapid latest mode wins
+PASS 390px/EN search to banquet clears search layout
+PASS 390px/EN pending clear-search cannot override banquet navigation
+PASS 390px/EN banquet modal focus, repeated close, reopen and scroll
+PASS 390px/EN no horizontal page overflow
+PASS 390px/EN kitchen modal restores focus and scroll
+PASS 390px menu data unchanged
+PASS 390px no runtime errors
+PASS 320px/RU all modes and first-category alignment
+PASS 320px/RU rapid latest mode wins
+PASS 320px/RU search to banquet clears search layout
+PASS 320px/RU pending clear-search cannot override banquet navigation
+PASS 320px/RU banquet modal focus, repeated close, reopen and scroll
+PASS 320px/RU no horizontal page overflow
+PASS 320px/RU kitchen modal restores focus and scroll
+PASS 320px/KZ all modes and first-category alignment
+PASS 320px/KZ rapid latest mode wins
+PASS 320px/KZ search to banquet clears search layout
+PASS 320px/KZ pending clear-search cannot override banquet navigation
+PASS 320px/KZ banquet modal focus, repeated close, reopen and scroll
+PASS 320px/KZ no horizontal page overflow
+PASS 320px/KZ kitchen modal restores focus and scroll
+PASS 320px/EN all modes and first-category alignment
+PASS 320px/EN rapid latest mode wins
+PASS 320px/EN search to banquet clears search layout
+PASS 320px/EN pending clear-search cannot override banquet navigation
+PASS 320px/EN banquet modal focus, repeated close, reopen and scroll
+PASS 320px/EN no horizontal page overflow
+PASS 320px/EN kitchen modal restores focus and scroll
+PASS 320px menu data unchanged
+PASS 320px no runtime errors
+PASS 1280px/RU all modes and first-category alignment
+PASS 1280px/RU rapid latest mode wins
+PASS 1280px/RU search to banquet clears search layout
+PASS 1280px/RU pending clear-search cannot override banquet navigation
+PASS 1280px/RU banquet modal focus, repeated close, reopen and scroll
+PASS 1280px/RU no horizontal page overflow
+PASS 1280px/RU kitchen modal restores focus and scroll
+PASS 1280px/KZ all modes and first-category alignment
+PASS 1280px/KZ rapid latest mode wins
+PASS 1280px/KZ search to banquet clears search layout
+PASS 1280px/KZ pending clear-search cannot override banquet navigation
+PASS 1280px/KZ banquet modal focus, repeated close, reopen and scroll
+PASS 1280px/KZ no horizontal page overflow
+PASS 1280px/KZ kitchen modal restores focus and scroll
+PASS 1280px/EN all modes and first-category alignment
+PASS 1280px/EN rapid latest mode wins
+PASS 1280px/EN search to banquet clears search layout
+PASS 1280px/EN pending clear-search cannot override banquet navigation
+PASS 1280px/EN banquet modal focus, repeated close, reopen and scroll
+PASS 1280px/EN no horizontal page overflow
+PASS 1280px/EN kitchen modal restores focus and scroll
+PASS 1280px menu data unchanged
+PASS 1280px no runtime errors
+{
+  "checks": 69,
+  "passed": 69,
+  "failures": []
+}

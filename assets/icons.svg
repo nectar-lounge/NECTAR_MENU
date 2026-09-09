@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg"><defs>
+<symbol id="search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></symbol>
+<symbol id="close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+<symbol id="chevron_right" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+<symbol id="expand_more" viewBox="0 0 24 24"><path d="m5 9 7 7 7-7"/></symbol>
+<symbol id="arrow_forward" viewBox="0 0 24 24"><path d="M4 12h16m-7-7 7 7-7 7"/></symbol>
+<symbol id="location_on" viewBox="0 0 24 24"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2"/></symbol>
+<symbol id="call" viewBox="0 0 24 24"><path d="m7 3 3 5-3 2c2 4 3 5 7 7l2-3 5 3-1 4C10 22 2 14 3 4Z"/></symbol>
+<symbol id="camera_alt" viewBox="0 0 24 24"><path d="M3 7h5l2-3h4l2 3h5v14H3Z"/><circle cx="12" cy="13" r="4"/></symbol>
+<symbol id="verified_user" viewBox="0 0 24 24"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6Zm-4 9 3 3 5-6"/></symbol>
+<symbol id="menu_book" viewBox="0 0 24 24"><path d="M12 5v16M12 5C9 3 5 3 2 4v15c3-1 7-1 10 2 3-3 7-3 10-2V4c-3-1-7-1-10 1Z"/></symbol>
+<symbol id="forum" viewBox="0 0 24 24"><path d="M3 3h15v12H8l-5 4Zm6 16h8l4 3V9"/></symbol>
+<symbol id="scale" viewBox="0 0 24 24"><path d="M12 3v18M5 21h14M3 7h18M6 7l-4 9h8Zm12 0-4 9h8Z"/></symbol>
+<symbol id="restaurant_menu" viewBox="0 0 24 24"><path d="M4 3v6c0 3 6 3 6 0V3M7 3v18M20 3c-5 0-6 9 0 10v8M20 3v10"/></symbol>
+<symbol id="info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v1"/></symbol>
+</defs></svg>

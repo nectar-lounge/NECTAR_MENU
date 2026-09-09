@@ -12,27 +12,19 @@
     categoryId: null,
     query: '',
     sectionScroll: { menu: 0, info: 0 },
-    modal: {
-      open: false,
-      closing: false,
-      scrollY: 0,
-      previousFocus: null,
-      closeTimer: 0,
-      restoreToken: 0
-    },
+    modal: window.NectarUI.modal,
+    navigationToken: 0,
+    renderRaf: 0,
     searchTimer: 0,
-    revealPlayed: false,
     scrollRaf: 0,
     suppressCategorySpyUntil: 0,
     categoryObserver: null,
     categoryRevealTimer: 0,
     interactionLockedUntil: 0,
-    languageSwitchToken: 0
   };
 
-  const MODAL_ANIMATION_MS = 280;
-  const SCROLL_RESTORE_TOLERANCE = 3;
-  const SCROLL_RESTORE_MAX_ATTEMPTS = 8;
+  const UI = window.NectarUI;
+  const menuCache = new Map();
 
   const ALLOWED_BAR_CATEGORY_IDS = new Set(['lemonades', 'tea', 'soft-drinks']);
   const ALLOWED_BAR_CATEGORY_NAMES = new Set([
@@ -122,6 +114,8 @@
       .replace(/'/g, '&#039;');
   }
 
+  const priceFormatters = Object.fromEntries(['RU', 'KZ', 'EN'].map(lang => [lang, new Intl.NumberFormat({ RU: 'ru-RU', KZ: 'kk-KZ', EN: 'en-US' }[lang])]));
+
   function formatPrice(value) {
     const number = Number(value);
     if (!Number.isFinite(number)) return escapeHtml(value);
@@ -132,7 +126,7 @@
         ? 'en-US'
         : 'ru-RU';
 
-    return new Intl.NumberFormat(locale).format(number);
+    return priceFormatters[state.lang].format(number);
   }
 
   function formatWeight(value) {
@@ -315,7 +309,7 @@
       state.modal.closing
     ) return;
 
-    const token = ++state.languageSwitchToken;
+    const token = ++state.navigationToken;
 
     state.lang = lang;
     state.query = '';
@@ -363,11 +357,10 @@
     rememberLanguage(state.lang);
 
     requestAnimationFrame(() => {
-      if (token !== state.languageSwitchToken) return;
+      if (token !== state.navigationToken) return;
       setupCategoryObserver();
       updateCategoryEdgeFades();
-      enforceMenuChromeInvariant();
-    });
+      });
   }
 
   function updateMainTabs() {
@@ -386,133 +379,49 @@
 
   function applyMenuModeVisibility() {
     const banquet = state.mode === 'banquet';
-    const controls = $('#menuControls');
-    const search = $('.search-box', controls || document);
-    const categoryNav = $('#categoryNav');
-    const searchNote = $('#searchModeNote');
-    const menuContainer = $('#menuContainer');
-    const banquetMode = $('#banquetMode');
-    const banquetCategories = $('#banquetCategories');
-
-    if (search) search.hidden = banquet;
-    if (categoryNav) categoryNav.hidden = banquet;
-    if (searchNote && banquet) searchNote.hidden = true;
-    if (menuContainer) menuContainer.hidden = banquet;
-    if (banquetMode) banquetMode.hidden = !banquet;
-    if (banquetCategories) banquetCategories.hidden = !banquet;
-
+    const searching = !banquet && Boolean(normalizeSearch(state.query));
+    $('.search-box').hidden = banquet;
+    $('#categoryNav').hidden = banquet || searching;
+    $('#banquetCategories').hidden = !banquet;
+    $('#menuContainer').hidden = banquet;
+    $('#banquetMode').hidden = !banquet;
+    $('#searchModeNote').hidden = !searching;
+    $('.menu-shell').classList.toggle('is-searching', searching);
+    $('#menuControls').classList.toggle('is-searching', searching);
     document.documentElement.dataset.menuMode = state.mode;
-  }
-
-  /*
-    Runtime UI invariant:
-    exactly ONE submenu is visible for the current menu mode.
-    This is intentionally idempotent and is called after language/mode renders.
-  */
-  function enforceMenuChromeInvariant() {
-    const banquet = state.mode === 'banquet';
-    const categoryNav = $('#categoryNav');
-    const banquetCategories = $('#banquetCategories');
-
-    if (categoryNav) {
-      categoryNav.hidden = banquet;
-      categoryNav.setAttribute('aria-hidden', String(banquet));
-    }
-    if (banquetCategories) {
-      banquetCategories.hidden = !banquet;
-      banquetCategories.setAttribute('aria-hidden', String(!banquet));
-    }
-
-    // Defensive cleanup: a renderer must never leave duplicate category controls.
-    const strip = $('#categoryStrip');
-    if (strip) {
-      const indicators = $$('.category-strip__indicator', strip);
-      indicators.slice(1).forEach(node => node.remove());
-    }
-
-    const controls = $('#menuControls');
-    if (controls) {
-      const visibleSubmenus = [categoryNav, banquetCategories].filter(
-        node => node && !node.hidden
-      );
-      if (visibleSubmenus.length !== 1) {
-        if (categoryNav) categoryNav.hidden = banquet;
-        if (banquetCategories) banquetCategories.hidden = !banquet;
-      }
-    }
   }
 
   function scrollBanquetModeToFirstCategory() {
     const target = $('#banquetContainer .banquet-group');
     if (!target) return;
-    const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - controlsOffset());
+    const top = UI.categoryTop(target, controlsOffset());
     state.suppressCategorySpyUntil = Date.now() + 180;
     instantScrollTo(top);
   }
 
-  function setBanquetMode() {
-    if (state.mode === 'banquet' || state.modal.open || state.modal.closing) return;
-
-    state.mode = 'banquet';
-    state.query = '';
+  function setMode(mode) {
+    if (!['kitchen', 'bar', 'banquet'].includes(mode) || mode === state.mode || state.modal.open) return;
+    state.navigationToken++;
     clearTimeout(state.searchTimer);
-    const input = $('#searchInput');
-    if (input) input.value = '';
-    state.suppressCategorySpyUntil = Date.now() + 500;
-
+    clearTimeout(state.categoryRevealTimer);
+    disconnectCategoryObserver();
+    state.mode = mode;
+    state.query = '';
+    $('#searchInput').value = '';
+    $('#searchInput').blur();
+    if (mode !== 'banquet') state.type = mode;
+    state.categoryId = firstCategoryId(state.type);
     updateSearchClear();
     updateMainTabs();
     applyMenuModeVisibility();
-    enforceMenuChromeInvariant();
-    document.dispatchEvent(new CustomEvent('nectar:modechange', { detail: { mode: 'banquet' } }));
-
-    // Kitchen / Bar parity: render synchronously, then align the first group
-    // immediately below the same sticky controls.
-    scrollBanquetModeToFirstCategory();
+    if (mode !== 'banquet') { renderCategories(); renderMenu(); }
+    document.dispatchEvent(new CustomEvent('nectar:modechange', { detail: { mode } }));
+    if (mode === 'banquet') scrollBanquetModeToFirstCategory();
+    else { scrollToCategory(state.categoryId, 'auto'); updateCategoryTabs(state.categoryId, false); }
   }
 
-  function setType(type) {
-    if (
-      !['kitchen', 'bar'].includes(type) ||
-      (type === state.type && state.mode === type) ||
-      state.modal.open ||
-      state.modal.closing
-    ) return;
-
-    state.type = type;
-    state.mode = type;
-    state.query = '';
-    clearTimeout(state.searchTimer);
-
-    const input = $('#searchInput');
-    if (input) input.value = '';
-
-    // Lock the intended destination before the DOM is replaced.
-    // Without this, the scroll spy can read the old deep scroll position against
-    // the newly rendered short Bar menu and change Lemonades -> Tea before our RAF.
-    const targetCategoryId = firstCategoryId(type);
-    state.categoryId = targetCategoryId;
-    state.suppressCategorySpyUntil = Date.now() + 500;
-
-    updateSearchClear();
-    updateMainTabs();
-    applyMenuModeVisibility();
-    enforceMenuChromeInvariant();
-    renderCategories();
-    renderMenu({ motion: 'type' });
-    document.dispatchEvent(new CustomEvent('nectar:modechange', { detail: { mode: type } }));
-
-    // The new sections already exist synchronously after renderMenu().
-    // Jump immediately to the first category; a smooth programmatic scroll here
-    // only makes the switch feel slower and gives observers time to compete.
-    scrollToCategory(targetCategoryId, 'auto');
-    updateCategoryTabs(targetCategoryId, true);
-
-    requestAnimationFrame(() => {
-      setupCategoryObserver();
-      updateCategoryEdgeFades();
-    });
-  }
+  const setBanquetMode = () => setMode('banquet');
+  const setType = type => setMode(type);
 
   function renderCategories() {
     const strip = $('#categoryStrip');
@@ -618,39 +527,15 @@
   }
 
   function scrollToCategory(categoryId, behavior = 'smooth') {
-    if (!categoryId || normalize(state.query, currentLocale())) return;
+    if (state.mode === 'banquet' || state.section !== 'menu' || !categoryId || normalizeSearch(state.query)) return;
 
     const target = categorySection(categoryId);
     if (!target) return;
 
-    const top = Math.max(
-      0,
-      target.getBoundingClientRect().top + window.scrollY - controlsOffset()
-    );
+    const top = UI.categoryTop(target, controlsOffset());
 
     state.suppressCategorySpyUntil = Date.now() + (behavior === 'smooth' ? 900 : 180);
-    window.scrollTo({ top, behavior: prefersReducedMotion() ? 'auto' : behavior });
-  }
-
-  function animateCategorySection(categoryId) {
-    if (prefersReducedMotion()) return;
-
-    const section = categorySection(categoryId);
-    if (!section) return;
-
-    section.classList.remove('category-tap-reveal');
-    void section.offsetWidth;
-
-    $$('.menu-card', section).forEach((card, index) => {
-      card.style.setProperty('--card-delay', `${Math.min(index * 32, 180)}ms`);
-    });
-
-    section.classList.add('category-tap-reveal');
-
-    window.setTimeout(() => {
-      section.classList.remove('category-tap-reveal');
-      $$('.menu-card', section).forEach(card => card.style.removeProperty('--card-delay'));
-    }, 720);
+    UI.scrollTo(top, behavior);
   }
 
   function selectCategory(categoryId) {
@@ -663,11 +548,6 @@
     updateCategoryTabs(categoryId, true);
     scrollToCategory(categoryId, 'smooth');
 
-    clearTimeout(state.categoryRevealTimer);
-    state.categoryRevealTimer = window.setTimeout(
-      () => animateCategorySection(categoryId),
-      prefersReducedMotion() ? 0 : 360
-    );
   }
 
   function disconnectCategoryObserver() {
@@ -679,6 +559,7 @@
     disconnectCategoryObserver();
 
     if (
+      state.mode === 'banquet' || state.section !== 'menu' ||
       !('IntersectionObserver' in window) ||
       normalize(state.query, currentLocale())
     ) return;
@@ -700,6 +581,7 @@
 
   function updateActiveCategoryFromScroll() {
     if (
+      state.mode === 'banquet' || UI.scrolling ||
       state.section !== 'menu' ||
       normalize(state.query, currentLocale()) ||
       state.modal.open ||
@@ -924,7 +806,7 @@
     return visibleMenu().filter(item => matchesSearch(item, query));
   }
 
-  function renderMenu({ reveal = false, motion = '' } = {}) {
+  function renderMenu() {
     const container = $('#menuContainer');
     const categoryNav = $('#categoryNav');
     const searchNote = $('#searchModeNote');
@@ -968,6 +850,12 @@
       return;
     }
 
+    const cacheKey = `${state.lang}:${state.type}`;
+    if (!query && menuCache.has(cacheKey)) {
+      container.replaceChildren(...menuCache.get(cacheKey));
+      scheduleMenuLayout();
+      return;
+    }
     const groups = query ? searchGroups(items) : normalGroups(items);
     const fragment = document.createDocumentFragment();
 
@@ -978,10 +866,7 @@
 
       if (!query) section.dataset.categorySection = group.categoryId;
 
-      if (reveal && !state.revealPlayed) {
-        section.classList.add('reveal-once');
-        section.style.setProperty('--reveal-delay', `${Math.min(groupIndex * 65, 280)}ms`);
-      }
+
 
       const heading = document.createElement('div');
       heading.className = 'category-heading';
@@ -997,37 +882,18 @@
 
     container.replaceChildren(fragment);
 
-    if (query) {
-      container.classList.remove('search-results-enter');
-      requestAnimationFrame(() => container.classList.add('search-results-enter'));
-    }
+    if (!query) menuCache.set(cacheKey, [...container.children]);
+    scheduleMenuLayout();
+  }
 
-    if (motion === 'type') {
-      container.classList.remove('type-enter');
-
-      // Restart the lightweight transition on the next frame without forcing
-      // a synchronous layout via offsetWidth.
-      requestAnimationFrame(() => {
-        container.classList.add('type-enter');
-        window.setTimeout(() => container.classList.remove('type-enter'), 360);
-      });
-    }
-
-    if (reveal && !state.revealPlayed) {
-      requestAnimationFrame(() => {
-        $$('.reveal-once', container).forEach(section => section.classList.add('is-revealed'));
-        state.revealPlayed = true;
-      });
-    }
-
-    if (!query) {
-      requestAnimationFrame(() => {
-        setupCategoryObserver();
-        if (Date.now() >= state.suppressCategorySpyUntil) {
-          updateActiveCategoryFromScroll();
-        }
-      });
-    }
+  function scheduleMenuLayout() {
+    cancelAnimationFrame(state.renderRaf);
+    const token = state.navigationToken;
+    state.renderRaf = requestAnimationFrame(() => {
+      if (token !== state.navigationToken || state.mode === 'banquet') return;
+      setupCategoryObserver();
+      updateCategoryEdgeFades();
+    });
   }
 
   function updateSearchClear() {
@@ -1042,11 +908,13 @@
   }
 
   function keepSearchVisible({ force = false } = {}) {
+    const token = state.navigationToken;
     const controls = $('#menuControls');
     const input = $('#searchInput');
     if (!controls || !input || !normalizeSearch(input.value)) return;
 
     requestAnimationFrame(() => {
+      if (token !== state.navigationToken || state.section !== 'menu' || state.mode === 'banquet' || !normalizeSearch(input.value)) return;
       const rect = controls.getBoundingClientRect();
       const desiredTop = searchStickyTop();
       const inputRect = input.getBoundingClientRect();
@@ -1072,13 +940,16 @@
     // v1.9: coalesce rapid keystrokes. 72 ms is below perceptible typing latency but
     // avoids rebuilding the complete result DOM for every intermediate character.
     clearTimeout(state.searchTimer);
+    const token = state.navigationToken;
     state.searchTimer = setTimeout(() => {
+      if (token !== state.navigationToken || state.mode === 'banquet') return;
       renderMenu();
       keepSearchVisible({ force: !wasSearching && Boolean(normalizeSearch(state.query)) });
     }, 72);
   }
 
   function clearSearch({ focus = true } = {}) {
+    const token = ++state.navigationToken;
     const input = $('#searchInput');
     if (input) input.value = '';
 
@@ -1091,6 +962,7 @@
     renderMenu();
 
     requestAnimationFrame(() => {
+      if (token !== state.navigationToken) return;
       scrollToCategory(state.categoryId, 'auto');
     });
 
@@ -1103,13 +975,7 @@
     state.sectionScroll[state.section] = window.scrollY;
   }
 
-  function instantScrollTo(y) {
-    const root = document.documentElement;
-    const previous = root.style.scrollBehavior;
-    root.style.scrollBehavior = 'auto';
-    window.scrollTo(0, Math.max(0, y));
-    requestAnimationFrame(() => { root.style.scrollBehavior = previous; });
-  }
+  const instantScrollTo = y => UI.scrollTo(y);
 
   function switchSection(section) {
     if (
@@ -1119,6 +985,7 @@
       state.modal.closing
     ) return;
 
+    const token = ++state.navigationToken;
     rememberSectionScroll();
     state.section = section;
 
@@ -1132,13 +999,6 @@
       node.classList.remove('nectar-section-enter');
     });
 
-    const incomingSection = sectionNodes[section];
-    if (incomingSection && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      void incomingSection.offsetWidth;
-      incomingSection.classList.add('nectar-section-enter');
-      window.setTimeout(() => incomingSection.classList.remove('nectar-section-enter'), 260);
-    }
-
     updateMainTabs();
     applyMenuModeVisibility();
 
@@ -1150,90 +1010,10 @@
 
     const y = state.sectionScroll[section] || 0;
     requestAnimationFrame(() => {
+      if (token !== state.navigationToken) return;
       instantScrollTo(y);
       if (section === 'menu' && state.mode !== 'banquet') scheduleCategorySpy();
       document.dispatchEvent(new CustomEvent('nectar:sectionchange', { detail: { section } }));
-    });
-  }
-
-  /* MODAL: надёжный lock + restore scroll, без swipe */
-  function lockPageAtCurrentScroll() {
-    const y = Math.max(0, window.scrollY || window.pageYOffset || 0);
-    state.modal.scrollY = y;
-    state.sectionScroll[state.section] = y;
-
-    const scrollbarWidth = Math.max(0, window.innerWidth - document.documentElement.clientWidth);
-    if (scrollbarWidth) document.body.style.paddingRight = `${scrollbarWidth}px`;
-
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${y}px`;
-    document.body.style.left = '0';
-    document.body.style.right = '0';
-    document.body.style.width = '100%';
-    document.body.classList.add('modal-open');
-
-    state.suppressCategorySpyUntil = Number.MAX_SAFE_INTEGER;
-  }
-
-  function releasePageLock() {
-    document.body.classList.remove('modal-open');
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.left = '';
-    document.body.style.right = '';
-    document.body.style.width = '';
-    document.body.style.paddingRight = '';
-  }
-
-  function restoreScrollPosition(targetY, callback) {
-    const token = ++state.modal.restoreToken;
-    const root = document.documentElement;
-    const oldScrollBehavior = root.style.scrollBehavior;
-    root.style.scrollBehavior = 'auto';
-
-    let attempt = 0;
-
-    const restore = () => {
-      if (token !== state.modal.restoreToken) return;
-      attempt += 1;
-      window.scrollTo(0, targetY);
-
-      requestAnimationFrame(() => {
-        if (token !== state.modal.restoreToken) return;
-
-        const actualY = window.scrollY || window.pageYOffset || 0;
-        const difference = Math.abs(actualY - targetY);
-        const done = difference <= SCROLL_RESTORE_TOLERANCE || attempt >= SCROLL_RESTORE_MAX_ATTEMPTS;
-
-        if (!done) {
-          restore();
-          return;
-        }
-
-        root.style.scrollBehavior = oldScrollBehavior;
-        state.sectionScroll[state.section] = targetY;
-        state.suppressCategorySpyUntil = Date.now() + 250;
-        callback?.();
-        requestAnimationFrame(scheduleCategorySpy);
-      });
-    };
-
-    requestAnimationFrame(restore);
-  }
-
-  function safelyRestoreFocus(element, expectedScrollY) {
-    if (!(element instanceof HTMLElement) || !document.contains(element)) return;
-
-    try {
-      element.focus({ preventScroll: true });
-    } catch {
-      return;
-    }
-
-    requestAnimationFrame(() => {
-      if (Math.abs(window.scrollY - expectedScrollY) > SCROLL_RESTORE_TOLERANCE) {
-        instantScrollTo(expectedScrollY);
-      }
     });
   }
 
@@ -1299,10 +1079,6 @@
     // Short interaction guard against rapid double taps / duplicate click dispatch.
     state.interactionLockedUntil = now + 300;
 
-    state.modal.previousFocus = document.activeElement instanceof HTMLElement
-      ? document.activeElement
-      : null;
-
     $('#modalTitle').textContent = itemName(item) || '—';
     $('#modalPrice').innerHTML = `<span class="price__amount">${formatPrice(item?.price)}</span><span class="price__currency">₸</span>`;
     $('#modalWeight').textContent = formatWeight(item?.weight);
@@ -1328,69 +1104,10 @@
 
     setModalImage(item);
 
-    // Mark as open before body lock so an intermediate scroll event
-    // cannot overwrite section scroll memory with 0.
-    state.modal.open = true;
-    state.modal.closing = false;
-
-    lockPageAtCurrentScroll();
-    modal.hidden = false;
-
-    requestAnimationFrame(() => {
-      modal.classList.add('is-open');
-      try { $('#modalCloseButton')?.focus({ preventScroll: true }); } catch {}
-    });
+    UI.open(modal);
   }
 
-  function closeModal() {
-    const modal = $('#itemModal');
-    if (!modal || !state.modal.open || state.modal.closing) return;
-
-    state.modal.closing = true;
-    const restoreY = state.modal.scrollY;
-    const previousFocus = state.modal.previousFocus;
-
-    modal.classList.remove('is-open');
-    clearTimeout(state.modal.closeTimer);
-
-    state.modal.closeTimer = window.setTimeout(() => {
-      modal.hidden = true;
-      releasePageLock();
-
-      state.modal.open = false;
-      state.modal.closing = false;
-      state.modal.previousFocus = null;
-
-      restoreScrollPosition(restoreY, () => {
-        safelyRestoreFocus(previousFocus, restoreY);
-      });
-    }, MODAL_ANIMATION_MS);
-  }
-
-  function trapModalFocus(event) {
-    if (!state.modal.open || event.key !== 'Tab') return;
-
-    const dialog = $('#modalDialog');
-    if (!dialog) return;
-
-    const focusables = $$(
-      'button:not([disabled]), [href], input:not([disabled]), [tabindex]:not([tabindex="-1"])',
-      dialog
-    ).filter(element => !element.hidden && element.offsetParent !== null);
-
-    if (!focusables.length) return;
-
-    const first = focusables[0];
-    const last = focusables[focusables.length - 1];
-
-    if (event.shiftKey && document.activeElement === first) {
-      event.preventDefault();
-      last.focus();
-    } else if (!event.shiftKey && document.activeElement === last) {
-      event.preventDefault();
-      first.focus();
-    }
-  }
+  const closeModal = () => UI.close();
 
   function toggleAccordion(button) {
     const panel = button?.nextElementSibling;
@@ -1458,6 +1175,7 @@
       if (state.modal.open || state.modal.closing) return;
 
       if (state.section !== 'menu') switchSection('menu');
+      state.navigationToken++;
       requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? 'auto' : 'smooth' }));
     });
 
@@ -1486,10 +1204,7 @@
       event.currentTarget.closest('.hero')?.classList.add('hero--fallback');
     }));
 
-    document.addEventListener('keydown', event => {
-      if (event.key === 'Escape' && state.modal.open) closeModal();
-      trapModalFocus(event);
-    });
+
 
     window.addEventListener('scroll', onWindowScroll, { passive: true });
 
@@ -1509,30 +1224,7 @@
     }, { passive: true });
 
     window.addEventListener('pageshow', event => {
-      if (!event.persisted) return;
-
-      clearTimeout(state.modal.closeTimer);
-      state.modal.closeTimer = 0;
-      state.modal.open = false;
-      state.modal.closing = false;
-      state.modal.previousFocus = null;
-      state.modal.restoreToken += 1;
-      state.suppressCategorySpyUntil = 0;
-      state.interactionLockedUntil = 0;
-      state.languageSwitchToken += 1;
-
-      const modal = $('#itemModal');
-      if (modal) {
-        modal.classList.remove('is-open');
-        modal.hidden = true;
-      }
-
-      releasePageLock();
-
-      requestAnimationFrame(() => {
-        setupCategoryObserver();
-        scheduleCategorySpy();
-      });
+      if (event.persisted) { state.navigationToken++; scheduleMenuLayout(); }
     });
   }
 
@@ -1571,9 +1263,8 @@
     applyTranslations();
     updateMainTabs();
     applyMenuModeVisibility();
-    enforceMenuChromeInvariant();
     renderCategories();
-    renderMenu({ reveal: true });
+    renderMenu();
     initEvents();
 
     requestAnimationFrame(() => {

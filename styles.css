@@ -33,7 +33,7 @@ html {
   width: 100%;
   min-height: 100%;
   background: var(--bg);
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
 }
 
 body {
@@ -2540,7 +2540,24 @@ body.banquet-modal-open { overflow: hidden; }
   margin-top: 0;
   margin-bottom: 14px;
 }
-\n\n/* ======================================================\n   v1.11.4 — UX consistency + visual regression fix\n   - Selector labels stay typographically uniform in all languages.\n   - Banquets behaves as the third menu mode: no secondary photo hero/card.\n   - Existing palette, typography, moving pill, cards and bottom nav untouched.\n   ====================================================== */\n.banquet-main-tabs {\n  margin-bottom: 9px;\n}\n\n/* The banquet mode starts with its category navigation just like a content mode,\n   without a second branded hero competing with the main menu hierarchy. */\n.banquet-categories {\n  margin-top: 0;\n}\n
+
+
+/* ======================================================
+   v1.11.4 — UX consistency + visual regression fix
+   - Selector labels stay typographically uniform in all languages.
+   - Banquets behaves as the third menu mode: no secondary photo hero/card.
+   - Existing palette, typography, moving pill, cards and bottom nav untouched.
+   ====================================================== */
+.banquet-main-tabs {
+  margin-bottom: 9px;
+}
+
+/* The banquet mode starts with its category navigation just like a content mode,
+   without a second branded hero competing with the main menu hierarchy. */
+.banquet-categories {
+  margin-top: 0;
+}
+
 /* ======================================================
    v1.11.7 — TRUE MENU MODE PARITY
    Banquet is no longer a separate SPA section. It lives inside the same
@@ -2639,4 +2656,32 @@ html[data-menu-mode="bar"] #banquetCategories {
 }
 html[data-menu-mode="banquet"] #categoryNav {
   display: none !important;
+}
+
+/* Local SVG icons occupy the same em box as the original icon font. */
+.material-symbols-outlined:has(> svg) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+}
+.material-symbols-outlined > svg {
+  display: block;
+  width: 1em;
+  height: 1em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Mouse drag supplements native touch scrolling without changing typography. */
+.category-strip.is-dragging,
+#menuControls > .banquet-categories.is-dragging {
+  scroll-snap-type: none;
+  user-select: none;
+  cursor: grabbing;
 }

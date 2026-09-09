@@ -8,9 +8,8 @@
   };
 
   let activeCategory = null;
-  let modalOpen = false;
-  let modalReturnY = 0;
-  let modalPreviousFocus = null;
+  const UI = window.NectarUI;
+  let renderedLanguage = null;
   let scrollRaf = 0;
 
   const $ = (s, r = document) => r.querySelector(s);
@@ -67,11 +66,13 @@
   function scrollToBanquetCategory(id, behavior = 'smooth') {
     const target = document.getElementById(`banquet-${id}`);
     if (!target) return;
-    const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - menuControlsOffset());
-    window.scrollTo({ top, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : behavior });
+    const top = UI.categoryTop(target, menuControlsOffset());
+    UI.scrollTo(top, behavior);
   }
 
   function render() {
+    if (renderedLanguage === lang()) return;
+    renderedLanguage = lang();
     const items = data();
     const cs = categories();
     activeCategory = activeCategory && cs.some(c => c.id === activeCategory) ? activeCategory : cs[0]?.id;
@@ -82,7 +83,7 @@
     nav.innerHTML = cs.map(c => `<button type="button" class="banquet-category ${c.id === activeCategory ? 'is-active' : ''}" data-bcat="${esc(c.id)}" aria-pressed="${c.id === activeCategory}">${esc(c.name)}</button>`).join('');
     box.innerHTML = cs.map(c => {
       const groupItems = items.filter(i => i.category_id === c.id);
-      return `<section class="banquet-group" id="banquet-${esc(c.id)}" data-bgroup="${esc(c.id)}" data-banquet-category-section="${esc(c.id)}"><h2 class="banquet-group__title">${esc(c.name)}</h2><div class="banquet-list">${groupItems.map(i => `<button type="button" class="banquet-card" data-bitem="${esc(i.id)}" aria-label="${esc(text(i,'name'))}"><span><span class="banquet-card__name">${esc(text(i,'name'))}</span>${text(i,'summary') ? `<span class="banquet-card__summary">${esc(text(i,'summary'))}</span>` : ''}<span class="banquet-card__price">${esc(price(i.price))}</span></span><span class="material-symbols-outlined banquet-card__chevron" aria-hidden="true">chevron_right</span></button>`).join('')}</div></section>`;
+      return `<section class="banquet-group" id="banquet-${esc(c.id)}" data-bgroup="${esc(c.id)}" data-banquet-category-section="${esc(c.id)}"><h2 class="banquet-group__title">${esc(c.name)}</h2><div class="banquet-list">${groupItems.map(i => `<button type="button" class="banquet-card" data-bitem="${esc(i.id)}" aria-label="${esc(text(i,'name'))}"><span><span class="banquet-card__name">${esc(text(i,'name'))}</span>${text(i,'summary') ? `<span class="banquet-card__summary">${esc(text(i,'summary'))}</span>` : ''}<span class="banquet-card__price">${esc(price(i.price))}</span></span><span class="material-symbols-outlined banquet-card__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="assets/icons.svg#chevron_right"></use></svg></span></button>`).join('')}</div></section>`;
     }).join('');
   }
 
@@ -109,32 +110,6 @@
     });
   }
 
-  function lockModalPage() {
-    modalReturnY = Math.max(0, window.scrollY || 0);
-    const scrollbar = Math.max(0, window.innerWidth - document.documentElement.clientWidth);
-    if (scrollbar) document.body.style.paddingRight = `${scrollbar}px`;
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${modalReturnY}px`;
-    document.body.style.left = '0';
-    document.body.style.right = '0';
-    document.body.style.width = '100%';
-    document.body.classList.add('banquet-modal-open');
-  }
-
-  function unlockModalPage() {
-    document.body.classList.remove('banquet-modal-open');
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.left = '';
-    document.body.style.right = '';
-    document.body.style.width = '';
-    document.body.style.paddingRight = '';
-    const old = document.documentElement.style.scrollBehavior;
-    document.documentElement.style.scrollBehavior = 'auto';
-    window.scrollTo(0, modalReturnY);
-    requestAnimationFrame(() => { document.documentElement.style.scrollBehavior = old; });
-  }
-
   function fillModal(item) {
     $('#banquetModalTitle').textContent = text(item, 'name');
     $('#banquetModalPrice').textContent = price(item.price);
@@ -154,36 +129,15 @@
   }
 
   function openModal(item) {
-    const modal = $('#banquetModal');
-    if (!modal || modalOpen || !item) return;
-    modalPreviousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    if (!item || UI.modal.open) return;
     fillModal(item);
-    lockModalPage();
-    modal.hidden = false;
-    modalOpen = true;
-    requestAnimationFrame(() => {
-      modal.classList.add('is-open');
-      modal.querySelector('.modal__close')?.focus({ preventScroll: true });
-    });
+    UI.open($('#banquetModal'));
   }
 
-  function closeModal({ immediate = false } = {}) {
-    const modal = $('#banquetModal');
-    if (!modal || !modalOpen) return;
-    modal.classList.remove('is-open');
-    const finish = () => {
-      modal.hidden = true;
-      modalOpen = false;
-      unlockModalPage();
-      try { modalPreviousFocus?.focus({ preventScroll: true }); } catch {}
-      modalPreviousFocus = null;
-    };
-    if (immediate) finish();
-    else window.setTimeout(finish, 280);
-  }
+  const closeModal = () => UI.close();
 
   function updateActiveFromScroll() {
-    if (!isActive() || modalOpen) return;
+    if (!isActive() || UI.modal.open || UI.scrolling) return;
     const groups = $$('.banquet-group');
     if (!groups.length) return;
     const marker = menuControlsOffset() + 10;
@@ -240,13 +194,12 @@
   });
 
   document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && modalOpen) closeModal();
+    // Escape and focus containment are owned by ui-core.js.
   });
 
   window.addEventListener('scroll', scheduleScrollSpy, { passive: true });
   window.addEventListener('resize', scheduleScrollSpy, { passive: true });
   window.addEventListener('DOMContentLoaded', () => {
     apply();
-    render();
   }, { once: true });
 })();
