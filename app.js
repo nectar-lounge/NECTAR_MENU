@@ -21,6 +21,7 @@
     categoryObserver: null,
     categoryRevealTimer: 0,
     interactionLockedUntil: 0,
+    loaderTimer: 0,
   };
 
   const UI = window.NectarUI;
@@ -559,7 +560,22 @@
     state.categoryId = categoryId;
     updateCategoryTabs(categoryId, true);
     scrollToCategory(categoryId, 'smooth');
+    revealSelectedCategory(categoryId);
+  }
 
+  function revealSelectedCategory(categoryId) {
+    if (prefersReducedMotion()) return;
+    const section = categorySection(categoryId);
+    if (!section) return;
+    clearTimeout(state.categoryRevealTimer);
+    $$('.category-tap-reveal', $('#menuContainer')).forEach(node => node.classList.remove('category-tap-reveal'));
+    $$('.menu-card', section).slice(0, 6).forEach((card, index) => {
+      card.style.setProperty('--card-delay', `${Math.min(index * 22, 110)}ms`);
+    });
+    // Restarting the class is intentional when the same chapter is tapped twice.
+    void section.offsetWidth;
+    section.classList.add('category-tap-reveal');
+    state.categoryRevealTimer = setTimeout(() => section.classList.remove('category-tap-reveal'), 520);
   }
 
   function disconnectCategoryObserver() {
@@ -1102,7 +1118,7 @@
     tryCandidate();
   }
 
-  function openModal(item) {
+  function openModal(item, sourceCard = null) {
     const now = performance.now();
 
     if (
@@ -1143,7 +1159,7 @@
 
     setModalImage(item);
 
-    UI.open(modal);
+    UI.open(modal, { origin: sourceCard });
   }
 
   const closeModal = () => UI.close();
@@ -1211,7 +1227,7 @@
       if (!card) return;
 
       const item = menuIndex.byKey.get(card.dataset.itemKey);
-      if (item) openModal(item);
+      if (item) openModal(item, card);
     });
 
     $('#clearSearchBtn')?.addEventListener('click', () => clearSearch());
@@ -1300,6 +1316,68 @@
     }
   }
 
+  function hideAppLoader() {
+    const loader = $('#appLoader');
+    if (!loader || loader.hidden) return;
+    loader.classList.add('is-ready');
+    clearTimeout(state.loaderTimer);
+    state.loaderTimer = setTimeout(() => { loader.hidden = true; }, prefersReducedMotion() ? 0 : 320);
+  }
+
+  function offlineTimestamp() {
+    try {
+      const saved = Number(localStorage.getItem('nectar:last-online'));
+      if (!Number.isFinite(saved) || saved <= 0) return '';
+      return new Intl.DateTimeFormat(currentLocale(), { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }).format(saved);
+    } catch { return ''; }
+  }
+
+  function updateConnectivity(forcedOffline = null) {
+    const banner = $('#connectivityBanner');
+    const time = $('#offlineUpdatedAt');
+    if (!banner) return;
+    const offline = forcedOffline === null ? navigator.onLine === false : forcedOffline;
+    banner.hidden = !offline;
+    document.documentElement.classList.toggle('is-offline', offline);
+    if (time) {
+      const value = offlineTimestamp();
+      time.textContent = value ? `· ${value}` : '';
+      if (value) {
+        try { time.dateTime = new Date(Number(localStorage.getItem('nectar:last-online'))).toISOString(); }
+        catch { time.removeAttribute('datetime'); }
+      }
+      else time.removeAttribute('datetime');
+    }
+    if (!offline) {
+      try { localStorage.setItem('nectar:last-online', String(Date.now())); } catch {}
+    }
+  }
+
+  async function probeConnectivity() {
+    if (navigator.onLine === false) {
+      updateConnectivity(true);
+      return;
+    }
+    try {
+      const response = await fetch(location.href, { method: 'HEAD', cache: 'no-store' });
+      updateConnectivity(!response.ok);
+    } catch {
+      updateConnectivity(true);
+    }
+  }
+
+  function enableOfflineMenu() {
+    updateConnectivity();
+    probeConnectivity();
+    window.addEventListener('online', probeConnectivity);
+    window.addEventListener('offline', () => updateConnectivity(true));
+    if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+      navigator.serviceWorker.register('./service-worker.js').catch(error => {
+        console.warn('NECTAR: offline menu registration failed.', error);
+      });
+    }
+  }
+
   function init() {
     validateData();
 
@@ -1313,11 +1391,13 @@
     renderCategories();
     renderMenu();
     initEvents();
+    enableOfflineMenu();
 
     requestAnimationFrame(() => {
       setupCategoryObserver();
       updateActiveCategoryFromScroll();
       updateCategoryEdgeFades();
+      hideAppLoader();
     });
 
     document.fonts?.ready

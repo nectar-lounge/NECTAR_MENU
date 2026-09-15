@@ -72,11 +72,13 @@ try {
           badGlassWine: wines.filter(item => item.category_id === 'wine_glass' && item.weight !== '150ml').map(item => item.name_ru),
           badBottleWine: wines.filter(item => item.category_id === 'wine_bottle' && item.weight !== (/b-0041[01]-/.test(item.id) ? '200ml' : '750ml')).map(item => item.name_ru),
           cocktails: MENU.filter(item => item.category_id === 'cocktails').map(item => ({ name: item.name_en, composition: item.composition_en })),
+          lambSeeds: MENU.filter(item => item.name_ru === 'Бараньи семечки').map(item => ({ price: item.price, category: item.category_id })),
+          dietaryTags: MENU.filter(item => item.tags?.length).map(item => ({ name: item.name_ru, tags: item.tags })),
           missingTranslations: MENU.filter(item => !item.name_ru || !item.name_kz || !item.name_en || !item.composition_ru || !item.composition_kz || !item.composition_en).map(item => item.id),
         };
       });
-      assert.equal(contract.total, 159);
-      assert.equal(contract.kitchen, 80);
+      assert.equal(contract.total, 160);
+      assert.equal(contract.kitchen, 81);
       assert.equal(contract.bar, 79);
       assert.deepEqual(contract.kitchenOrder, ['cold', 'salads', 'hot_starters', 'soups', 'mains', 'pasta', 'pizza_bakery', 'beer_snacks', 'grill', 'sharing', 'sides_sauces', 'desserts_fruit']);
       assert.deepEqual(contract.barOrder, ['cocktails', 'wine_glass', 'wine_bottle', 'beer', 'vodka', 'whisky_cognac', 'gin_rum_tequila', 'lemonades', 'soft_drinks', 'tea', 'tea_addons']);
@@ -86,6 +88,11 @@ try {
       assert.deepEqual(contract.cocktails, [
         { name: 'Gimlet', composition: 'Gin and lime cordial' },
         { name: 'Margarita', composition: 'Tequila, orange liqueur and lime' }
+      ]);
+      assert.deepEqual(contract.lambSeeds, [{ price: 2490, category: 'grill' }]);
+      assert.deepEqual(contract.dietaryTags, [
+        { name: 'Хрустящие баклажаны', tags: ['vegetarian'] },
+        { name: 'Том Ям', tags: ['spicy'] }
       ]);
       assert.deepEqual(contract.missingTranslations, []);
     });

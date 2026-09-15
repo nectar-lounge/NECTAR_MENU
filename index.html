@@ -15,8 +15,19 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&display=swap" rel="stylesheet"></noscript>
   <link rel="stylesheet" href="styles.min.css">
+  <noscript><style>.app-loader{display:none!important}</style></noscript>
 </head>
 <body>
+  <div class="app-loader" id="appLoader" role="status" aria-live="polite" aria-label="Загрузка меню">
+    <div class="app-loader__mark" aria-hidden="true">
+      <span class="app-loader__monogram">N</span>
+      <span class="app-loader__orbit"></span>
+    </div>
+    <span class="app-loader__brand">NECTAR</span>
+    <span class="app-loader__message" data-i18n="loading_menu">Готовим меню</span>
+    <span class="app-loader__line" aria-hidden="true"></span>
+  </div>
+
   <header class="site-header" id="siteHeader">
     <div class="site-header__inner">
       <div class="header-balance" aria-hidden="true"></div>
@@ -33,6 +44,12 @@
       </div>
     </div>
   </header>
+
+  <div class="connectivity-banner" id="connectivityBanner" role="status" aria-live="polite" aria-atomic="true" hidden>
+    <span class="connectivity-banner__dot" aria-hidden="true"></span>
+    <span data-i18n="offline_message">Офлайн · сохранённое меню</span>
+    <time id="offlineUpdatedAt"></time>
+  </div>
 
   <main>
     <section class="spa-section is-active" id="menu-section" aria-label="Menu">

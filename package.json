@@ -5,7 +5,8 @@
   "scripts": {
     "build": "node tools/build.mjs",
     "test": "node tools/qa.mjs",
-    "test:perf": "node tools/perf-qa.mjs"
+    "test:perf": "node tools/perf-qa.mjs",
+    "test:stage-a": "node tools/stage-a-qa.mjs"
   },
   "devDependencies": {
     "esbuild": "^0.28.2",

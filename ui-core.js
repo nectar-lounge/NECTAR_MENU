@@ -10,7 +10,21 @@
   let scrollTimer = 0;
   let scrolling = false;
   const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const background = () => document.querySelectorAll('body > header, body > main, body > nav');
+  const background = () => document.querySelectorAll('body > header, body > main, body > nav, .connectivity-banner');
+  function setModalOrigin(element, source) {
+    const panel = element?.querySelector('.modal__dialog');
+    element?.classList.remove('has-card-origin');
+    if (!panel || !source?.isConnected || reduced()) return;
+    const from = source.getBoundingClientRect();
+    const targetWidth = Math.min(window.innerWidth * .92, 520);
+    const x = from.left + from.width / 2 - window.innerWidth / 2;
+    const y = from.top + from.height / 2 - window.innerHeight / 2;
+    const scale = Math.max(.76, Math.min(.94, from.width / targetWidth));
+    panel.style.setProperty('--modal-from-x', `${Math.round(x)}px`);
+    panel.style.setProperty('--modal-from-y', `${Math.round(y)}px`);
+    panel.style.setProperty('--modal-from-scale', scale.toFixed(3));
+    element.classList.add('has-card-origin');
+  }
   function endScroll() { scrolling = false; clearTimeout(scrollTimer); }
   function scrollTo(top, behavior = 'auto') {
     endScroll();
@@ -19,7 +33,7 @@
     window.scrollTo({ top: Math.max(0, top), behavior: smooth ? 'smooth' : 'instant' });
     if (smooth) scrollTimer = setTimeout(endScroll, 1200);
   }
-  function open(element) {
+  function open(element, { origin = null } = {}) {
     if (!element || modal.open) return false;
     endScroll();
     const token = ++revision;
@@ -31,6 +45,7 @@
     const gap = window.innerWidth - document.documentElement.clientWidth;
     Object.assign(document.body.style, { position: 'fixed', top: `-${returnY}px`, left: '0', right: '0', width: '100%', paddingRight: gap ? `${gap}px` : '' });
     background().forEach(node => { node.inert = true; });
+    setModalOrigin(element, origin);
     element.hidden = false;
     requestAnimationFrame(() => {
       if (token !== revision || modal.closing) return;
@@ -44,6 +59,10 @@
     revision++;
     dialog?.classList.remove('is-open');
     if (dialog) dialog.hidden = true;
+    dialog?.classList.remove('has-card-origin');
+    dialog?.querySelector('.modal__dialog')?.style.removeProperty('--modal-from-x');
+    dialog?.querySelector('.modal__dialog')?.style.removeProperty('--modal-from-y');
+    dialog?.querySelector('.modal__dialog')?.style.removeProperty('--modal-from-scale');
     Object.assign(document.body.style, { position: '', top: '', left: '', right: '', width: '', paddingRight: '' });
     background().forEach(node => { node.inert = false; });
     scrollTo(returnY);

@@ -128,10 +128,10 @@
     wrap.hidden = !components.length;
   }
 
-  function openModal(item) {
+  function openModal(item, sourceCard = null) {
     if (!item || UI.modal.open) return;
     fillModal(item);
-    UI.open($('#banquetModal'));
+    UI.open($('#banquetModal'), { origin: sourceCard });
   }
 
   const closeModal = () => UI.close();
@@ -169,7 +169,7 @@
     const card = event.target.closest('[data-bitem]');
     if (card) {
       const item = data().find(i => i.id === card.dataset.bitem);
-      if (item) openModal(item);
+      if (item) openModal(item, card);
       return;
     }
 

@@ -2685,3 +2685,181 @@ html[data-menu-mode="banquet"] #categoryNav {
   user-select: none;
   cursor: grabbing;
 }
+
+/* ======================================================
+   v2.2 — APPROVED SAFE DESIGN STAGE A
+   Motion, branded loading and resilient offline reading.
+   Existing palette and typefaces are deliberately reused.
+   ====================================================== */
+
+.app-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 8px;
+  padding: 24px;
+  background: var(--bg);
+  color: var(--forest);
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .28s ease, visibility .28s ease;
+}
+
+.app-loader.is-ready {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.app-loader__mark {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 5px;
+}
+
+.app-loader__monogram {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 46px;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: -.07em;
+}
+
+.app-loader__orbit {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(23,63,43,.13);
+  border-radius: 50%;
+}
+
+.app-loader__orbit::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  margin-left: -2.5px;
+  border-radius: 50%;
+  background: var(--gold);
+  transform-origin: 2.5px 36px;
+  animation: nectarLoaderOrbit 1.8s linear infinite;
+}
+
+.app-loader__brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 25px;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+
+.app-loader__message {
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.app-loader__line {
+  width: 74px;
+  height: 1px;
+  margin-top: 7px;
+  overflow: hidden;
+  background: rgba(23,63,43,.1);
+}
+
+.app-loader__line::after {
+  content: '';
+  display: block;
+  width: 42%;
+  height: 100%;
+  background: var(--gold);
+  animation: nectarLoaderLine 1.35s var(--ease-soft) infinite;
+}
+
+@keyframes nectarLoaderOrbit { to { transform: rotate(360deg); } }
+@keyframes nectarLoaderLine {
+  0% { transform: translateX(-115%); }
+  58%, 100% { transform: translateX(270%); }
+}
+
+.connectivity-banner {
+  position: fixed;
+  bottom: calc(var(--bottom-nav-h) + env(safe-area-inset-bottom) + 10px);
+  left: 50%;
+  z-index: 190;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  max-width: calc(100vw - 28px);
+  min-height: 34px;
+  padding: 8px 13px;
+  border: 1px solid rgba(169,121,53,.24);
+  border-radius: 999px;
+  background: rgba(251,249,246,.96);
+  color: var(--forest);
+  box-shadow: 0 8px 26px rgba(14,22,16,.12);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+.connectivity-banner__dot {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+.connectivity-banner time {
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+@media (max-width: 520px) {
+  .connectivity-banner time { display: none; }
+}
+
+.modal.has-card-origin .modal__dialog {
+  transform:
+    translate(var(--modal-from-x, 0), var(--modal-from-y, 10px))
+    scale(var(--modal-from-scale, .98));
+  transform-origin: center;
+}
+
+.modal.has-card-origin.is-open .modal__dialog {
+  transform: translate(0, 0) scale(1);
+}
+
+/* Only the first six visible cards take part in the chapter transition.
+   Remaining items stay still to keep long categories inexpensive to render. */
+.category-section.category-tap-reveal .menu-card:nth-child(n+7) {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-loader,
+  .modal.has-card-origin .modal__dialog {
+    transition: none !important;
+  }
+  .app-loader__orbit::after,
+  .app-loader__line::after,
+  .category-section.category-tap-reveal .category-heading,
+  .category-section.category-tap-reveal .menu-card {
+    animation: none !important;
+  }
+}

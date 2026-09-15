@@ -33,18 +33,23 @@ async function buildMenuData() {
       item.name_ru, item.name_kz, item.name_en,
       item.price, item.weight || '',
       item.composition_ru || '', item.composition_kz || '', item.composition_en || '',
-      item.thumb_image || '', item.full_image || '', item.image || ''
+      item.thumb_image || '', item.full_image || '', item.image || '',
+      item.tags || [], item.featured ? 1 : 0, item.note || '', item.available === false ? 0 : 1,
     ];
   });
   const hydrated = `
     const MENU_CATEGORIES=${JSON.stringify(categoryData)};
     const MENU=${JSON.stringify(rows)}.map(row=>{
-      const [id,type,category_id,name_ru,name_kz,name_en,price,weight,composition_ru,composition_kz,composition_en,thumb_image,full_image,image]=row;
+      const [id,type,category_id,name_ru,name_kz,name_en,price,weight,composition_ru,composition_kz,composition_en,thumb_image,full_image,image,tags,featured,note,available]=row;
       const item={...MENU_CATEGORIES[category_id],id,type,category_id,name_ru,name_kz,name_en,price,composition_ru,composition_kz,composition_en};
       if(weight)item.weight=weight;
       if(thumb_image)item.thumb_image=thumb_image;
       if(full_image)item.full_image=full_image;
       if(image)item.image=image;
+      if(tags.length)item.tags=tags;
+      if(featured)item.featured=true;
+      if(note)item.note=note;
+      if(!available)item.available=false;
       return item;
     });
     const TRANSLATIONS=${JSON.stringify(TRANSLATIONS)};
