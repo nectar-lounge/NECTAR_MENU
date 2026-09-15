@@ -56,10 +56,56 @@ try {
     page.on('pageerror', error => errors.push(error.message));
     await page.goto(baseURL, { waitUntil: 'networkidle' });
     await page.locator('.menu-card').first().waitFor();
-    const originalData = await page.evaluate(() => JSON.stringify([MENU, BANQUET_MENU]));
+    const originalData = await page.evaluate(() => JSON.stringify(MENU));
+    await check(`${width}px classic menu source contract`, async () => {
+      const contract = await page.evaluate(() => {
+        const kitchenOrder = [...new Set(MENU.filter(item => item.type === 'kitchen').map(item => item.category_id))];
+        const barOrder = [...new Set(MENU.filter(item => item.type === 'bar').map(item => item.category_id))];
+        const wines = MENU.filter(item => item.category_id === 'wine_glass' || item.category_id === 'wine_bottle');
+        return {
+          total: MENU.length,
+          kitchen: MENU.filter(item => item.type === 'kitchen').length,
+          bar: MENU.filter(item => item.type === 'bar').length,
+          kitchenOrder,
+          barOrder,
+          hookah: MENU.filter(item => /кальян|hookah|shisha/i.test(`${item.name_ru} ${item.name_kz} ${item.name_en}`)).length,
+          badGlassWine: wines.filter(item => item.category_id === 'wine_glass' && item.weight !== '150ml').map(item => item.name_ru),
+          badBottleWine: wines.filter(item => item.category_id === 'wine_bottle' && item.weight !== (/b-0041[01]-/.test(item.id) ? '200ml' : '750ml')).map(item => item.name_ru),
+          cocktails: MENU.filter(item => item.category_id === 'cocktails').map(item => ({ name: item.name_en, composition: item.composition_en })),
+          missingTranslations: MENU.filter(item => !item.name_ru || !item.name_kz || !item.name_en || !item.composition_ru || !item.composition_kz || !item.composition_en).map(item => item.id),
+        };
+      });
+      assert.equal(contract.total, 159);
+      assert.equal(contract.kitchen, 80);
+      assert.equal(contract.bar, 79);
+      assert.deepEqual(contract.kitchenOrder, ['cold', 'salads', 'hot_starters', 'soups', 'mains', 'pasta', 'pizza_bakery', 'beer_snacks', 'grill', 'sharing', 'sides_sauces', 'desserts_fruit']);
+      assert.deepEqual(contract.barOrder, ['cocktails', 'wine_glass', 'wine_bottle', 'beer', 'vodka', 'whisky_cognac', 'gin_rum_tequila', 'lemonades', 'soft_drinks', 'tea', 'tea_addons']);
+      assert.equal(contract.hookah, 0);
+      assert.deepEqual(contract.badGlassWine, []);
+      assert.deepEqual(contract.badBottleWine, []);
+      assert.deepEqual(contract.cocktails, [
+        { name: 'Gimlet', composition: 'Gin and lime cordial' },
+        { name: 'Margarita', composition: 'Tequila, orange liqueur and lime' }
+      ]);
+      assert.deepEqual(contract.missingTranslations, []);
+    });
+    await check(`${width}px banquet code is lazy before first use`, async () => {
+      assert.equal(await page.evaluate(() => typeof BANQUET_MENU), 'undefined');
+      assert.equal(await page.locator('script[src="banquet.min.js"]').count(), 0);
+    });
     for (const lang of ['RU', 'KZ', 'EN']) {
       const prefix = `${width}px/${lang}`;
       await page.locator(`.lang-btn[data-lang="${lang}"]`).click();
+      await check(`${prefix} accessible names expose menu details and localized search`, async () => {
+        const details = await page.locator('.menu-card').first().evaluate(element => ({
+          explicitLabel: element.getAttribute('aria-label'),
+          text: element.innerText.replace(/\s+/g, ' ').trim()
+        }));
+        assert.equal(details.explicitLabel, null);
+        assert.ok(/₸/.test(details.text), `price is missing from the card's accessible contents: ${details.text}`);
+        const expectedSearchLabel = { RU: 'Поиск по меню', KZ: 'Мәзірден іздеу', EN: 'Search the menu' }[lang];
+        assert.equal(await page.locator('#searchInput').getAttribute('aria-label'), expectedSearchLabel);
+      });
       await check(`${prefix} all modes and first-category alignment`, async () => {
         for (const value of ['bar', 'banquet', 'kitchen']) {
           await page.evaluate(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' }));
@@ -148,9 +194,39 @@ try {
       await page.keyboard.press('Escape');
       await settle(page);
     }
-    await check(`${width}px menu data unchanged`, async () => assert.equal(await page.evaluate(() => JSON.stringify([MENU, BANQUET_MENU])), originalData));
+    await check(`${width}px menu data unchanged`, async () => assert.equal(await page.evaluate(() => JSON.stringify(MENU)), originalData));
     await check(`${width}px no runtime errors`, async () => assert.deepEqual(errors, []));
     await context.close();
+  }
+
+  await check('Google Fonts stylesheet is non-blocking with a no-script fallback', async () => {
+    const html = await fetch(baseURL).then(response => response.text());
+    assert.match(html, /rel="preload" as="style" href="https:\/\/fonts\.googleapis\.com\/css2\?/);
+    assert.match(html, /rel="stylesheet" media="print" onload="this\.media='all'"/);
+    assert.match(html, /<noscript><link href="https:\/\/fonts\.googleapis\.com\/css2\?.+rel="stylesheet"><\/noscript>/);
+  });
+
+  for (const profile of [
+    { name: 'iPhone 13', portrait: [390, 664], landscape: [664, 390] },
+    { name: 'Pixel 5', portrait: [393, 727], landscape: [727, 393] }
+  ]) {
+    await check(`${profile.name} rotation keeps sticky controls above bottom navigation`, async () => {
+      const page = await browser.newPage({ viewport: { width: profile.portrait[0], height: profile.portrait[1] } });
+      await page.goto(baseURL, { waitUntil: 'domcontentloaded' });
+      await page.locator('.menu-card').first().waitFor();
+      await page.evaluate(() => window.scrollTo({ top: 310, behavior: 'instant' }));
+      await page.setViewportSize({ width: profile.landscape[0], height: profile.landscape[1] });
+      await page.waitForTimeout(300);
+      const geometry = await page.evaluate(() => {
+        const controls = document.querySelector('#menuControls').getBoundingClientRect();
+        const header = document.querySelector('#siteHeader').getBoundingClientRect();
+        const bottomNav = document.querySelector('.bottom-nav').getBoundingClientRect();
+        return { controlsTop: controls.top, controlsBottom: controls.bottom, headerBottom: header.bottom, bottomNavTop: bottomNav.top };
+      });
+      assert.ok(geometry.controlsTop >= geometry.headerBottom - 1, JSON.stringify(geometry));
+      assert.ok(geometry.controlsBottom <= geometry.bottomNavTop + 1, JSON.stringify(geometry));
+      await page.close();
+    });
   }
 } finally { await browser.close(); }
 console.log(JSON.stringify({ checks, passed: checks - failures.length, failures }, null, 2));

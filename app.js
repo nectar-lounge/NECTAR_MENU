@@ -25,13 +25,9 @@
 
   const UI = window.NectarUI;
   const menuCache = new Map();
+  let banquetLoadPromise = null;
 
-  const ALLOWED_BAR_CATEGORY_IDS = new Set(['lemonades', 'tea', 'soft-drinks']);
-  const ALLOWED_BAR_CATEGORY_NAMES = new Set([
-    'лимонады', 'лимонадтар', 'lemonades',
-    'чай', 'шай', 'tea',
-    'безалкогольные напитки', 'алкогольсіз сусындар', 'soft drinks'
-  ]);
+  const BLOCKED_BAR_CATEGORY_IDS = new Set(['hookah']);
 
   /*
     Демонстрационные изображения.
@@ -211,15 +207,9 @@
 
   function isAllowedBarItem(item) {
     if (item?.type !== 'bar') return false;
-
-    const explicitId = normalize(item.category_id, 'en');
-    if (ALLOWED_BAR_CATEGORY_IDS.has(explicitId)) return true;
-
-    const categoryNames = [item.category_ru, item.category_kz, item.category_en]
-      .map(value => normalize(value, 'ru'))
-      .filter(Boolean);
-
-    return categoryNames.some(name => ALLOWED_BAR_CATEGORY_NAMES.has(name));
+    if (BLOCKED_BAR_CATEGORY_IDS.has(normalize(item.category_id, 'en'))) return false;
+    return ![item.category_ru, item.category_kz, item.category_en, item.name_ru, item.name_kz, item.name_en]
+      .some(value => /кальян|hookah|shisha/i.test(String(value || '')));
   }
 
   // v1.9: build immutable indexes once. The menu data is static during a page session,
@@ -289,6 +279,11 @@
     $$('[data-i18n-placeholder]').forEach(element => {
       const value = t(element.dataset.i18nPlaceholder);
       if (value) element.setAttribute('placeholder', value);
+    });
+
+    $$('[data-i18n-aria-label]').forEach(element => {
+      const value = t(element.dataset.i18nAriaLabel);
+      if (value) element.setAttribute('aria-label', value);
     });
 
     $$('.lang-btn').forEach(button => {
@@ -422,6 +417,23 @@
 
   const setBanquetMode = () => setMode('banquet');
   const setType = type => setMode(type);
+
+  function loadBanquet() {
+    if (typeof BANQUET_MENU !== 'undefined') return Promise.resolve();
+    if (banquetLoadPromise) return banquetLoadPromise;
+
+    banquetLoadPromise = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'banquet.min.js';
+      script.onload = resolve;
+      script.onerror = () => {
+        banquetLoadPromise = null;
+        reject(new Error('NECTAR: banquet menu failed to load.'));
+      };
+      document.head.appendChild(script);
+    });
+    return banquetLoadPromise;
+  }
 
   function renderCategories() {
     const strip = $('#categoryStrip');
@@ -663,8 +675,6 @@
     button.className = 'menu-card';
     if (item?.available === false) button.classList.add('is-unavailable');
     button.dataset.itemKey = itemKey(item);
-    button.setAttribute('aria-label', itemName(item) || 'Menu item');
-
     const image = itemImage(item);
     const description = itemDescription(item);
     const available = item?.available !== false;
@@ -932,6 +942,35 @@
     });
   }
 
+  function resolveLandscapeFixedLayerOverlap() {
+    if (
+      state.section !== 'menu' ||
+      !window.matchMedia?.('(orientation: landscape) and (max-height: 500px)').matches
+    ) return;
+
+    const controls = $('#menuControls');
+    const header = $('#siteHeader');
+    const bottomNav = $('.bottom-nav');
+    if (!controls || !header || !bottomNav) return;
+
+    const controlsRect = controls.getBoundingClientRect();
+    const headerBottom = header.getBoundingClientRect().bottom;
+    const bottomNavTop = bottomNav.getBoundingClientRect().top;
+    const availableHeight = bottomNavTop - headerBottom;
+
+    // The controls fit between both fixed layers, but after a portrait-to-landscape
+    // rotation the retained scroll offset may leave them halfway through the lower
+    // layer. Align the existing sticky panel to the header in one instant scroll.
+    if (
+      controlsRect.height <= availableHeight &&
+      controlsRect.bottom > bottomNavTop &&
+      controlsRect.top > headerBottom + 1
+    ) {
+      state.suppressCategorySpyUntil = Date.now() + 250;
+      instantScrollTo(window.scrollY + controlsRect.top - headerBottom);
+    }
+  }
+
   function setSearch(value) {
     const wasSearching = Boolean(normalizeSearch(state.query));
     state.query = value;
@@ -1131,10 +1170,17 @@
     });
 
     $$('.main-tab').forEach(button => {
-      button.addEventListener('click', () => {
+      button.addEventListener('click', async () => {
         if (state.section !== 'menu') switchSection('menu');
         if (button.dataset.sectionTarget === 'banquet') {
-          setBanquetMode();
+          const token = ++state.navigationToken;
+          try {
+            await loadBanquet();
+            if (token !== state.navigationToken) return;
+            setBanquetMode();
+          } catch (error) {
+            console.error(error);
+          }
           return;
         }
         setType(button.dataset.type);
@@ -1216,6 +1262,7 @@
       if (state.modal.open || state.modal.closing) return;
 
       requestAnimationFrame(() => {
+        resolveLandscapeFixedLayerOverlap();
         setupCategoryObserver();
         updateActiveCategoryFromScroll();
         updateCategoryTabs(state.categoryId, false);
