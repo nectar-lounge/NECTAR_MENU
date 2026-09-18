@@ -1042,19 +1042,6 @@ const MENU = [
     "source_article": "00083"
   },
   {
-    "id": "k-00102-103",
-    "type": "kitchen",
-    "category_id": "sharing",
-    "name_ru": "Канапе",
-    "name_kz": "Канапе",
-    "name_en": "Canapés",
-    "price": 5000,
-    "composition_ru": "Ассорти канапе для компании",
-    "composition_kz": "Компанияға арналған канапе ассортиі",
-    "composition_en": "Assorted canapés for sharing",
-    "source_article": "00102"
-  },
-  {
     "id": "k-00103-128",
     "type": "kitchen",
     "category_id": "sharing",
@@ -1259,32 +1246,6 @@ const MENU = [
     "composition_kz": "Маусымдық жемістер мен жидектер",
     "composition_en": "Seasonal fruit and berries",
     "source_article": "00101"
-  },
-  {
-    "type": "bar",
-    "category_id": "cocktails",
-    "price": 3490,
-    "source_article": "00139",
-    "id": "b-00139-gimlet",
-    "name_ru": "Gimlet",
-    "name_kz": "Gimlet",
-    "name_en": "Gimlet",
-    "composition_ru": "Джин и лаймовый кордиал",
-    "composition_kz": "Джин және лайм кордиалы",
-    "composition_en": "Gin and lime cordial"
-  },
-  {
-    "type": "bar",
-    "category_id": "cocktails",
-    "price": 3490,
-    "source_article": "00139",
-    "id": "b-00139-margarita",
-    "name_ru": "Margarita",
-    "name_kz": "Margarita",
-    "name_en": "Margarita",
-    "composition_ru": "Текила, апельсиновый ликёр и лайм",
-    "composition_kz": "Текила, апельсин ликері және лайм",
-    "composition_en": "Tequila, orange liqueur and lime"
   },
   {
     "id": "b-00416-1",
