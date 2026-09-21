@@ -1,12 +1,13 @@
-const CACHE_NAME = 'nectar-menu-v2.2-a';
+const CACHE_NAME = 'nectar-menu-v2.3-source';
 const CORE = [
   './',
   './index.html',
   './styles.min.css',
-  './ui-core.min.js',
-  './menu-data.min.js',
-  './app.min.js',
-  './banquet.min.js',
+  './ui-core.js',
+  './menu-data.js',
+  './app.js',
+  './banquet-data.js',
+  './banquet.js',
   './assets/icons.svg',
   './assets/nectar.svg',
   './assets/nectar-hero.jpg'
