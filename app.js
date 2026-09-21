@@ -1310,7 +1310,11 @@
       console.warn('NECTAR: menu items with missing required fields:', invalid.map(itemKey));
     }
 
-    const invalidPrices = menu.filter(item => item?.price != null && (!Number.isFinite(Number(item.price)) || Number(item.price) < 0));
+    const validPrice = value => {
+      if (Number.isFinite(Number(value))) return Number(value) >= 0;
+      return String(value).split('/').every(part => Number.isFinite(Number(part.trim())) && Number(part.trim()) >= 0);
+    };
+    const invalidPrices = menu.filter(item => item?.price != null && !validPrice(item.price));
     if (invalidPrices.length) {
       console.warn('NECTAR: menu items with invalid prices:', invalidPrices.map(itemKey));
     }
