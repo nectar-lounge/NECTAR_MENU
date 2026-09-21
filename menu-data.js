@@ -64,6 +64,11 @@ const MENU_CATEGORIES = {
     "category_kz": "Десерттер мен жемістер",
     "category_en": "Desserts & Fruit"
   },
+  "cocktails": {
+    "category_ru": "Коктейли",
+    "category_kz": "Коктейльдер",
+    "category_en": "Cocktails"
+  },
   "white_wine_glass": {
     "category_ru": "Белое по бокалам",
     "category_kz": "Бокалмен ақ шарап",
@@ -1592,6 +1597,40 @@ const MENU = [
     "composition_en": "Fresh watermelon and melon",
     "source_article": "00112",
     "weight": ""
+  },
+  {
+    "id": "b-00139-gimlet",
+    "type": "bar",
+    "category_id": "cocktails",
+    "name_ru": "Gimlet",
+    "name_kz": "Gimlet",
+    "name_en": "Gimlet",
+    "price": 3490,
+    "weight": "",
+    "composition_ru": "Джин и лаймовый кордиал",
+    "composition_kz": "Джин және лайм кордиалы",
+    "composition_en": "Gin and lime cordial",
+    "source_article": "00139",
+    "category_ru": "Коктейли",
+    "category_kz": "Коктейльдер",
+    "category_en": "Cocktails"
+  },
+  {
+    "id": "b-00139-margarita",
+    "type": "bar",
+    "category_id": "cocktails",
+    "name_ru": "Margarita",
+    "name_kz": "Margarita",
+    "name_en": "Margarita",
+    "price": 3490,
+    "weight": "",
+    "composition_ru": "Текила, апельсиновый ликёр и лайм",
+    "composition_kz": "Текила, апельсин ликері және лайм",
+    "composition_en": "Tequila, orange liqueur and lime",
+    "source_article": "00139",
+    "category_ru": "Коктейли",
+    "category_kz": "Коктейльдер",
+    "category_en": "Cocktails"
   },
   {
     "category_ru": "Белое по бокалам",

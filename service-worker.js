@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nectar-menu-v2.3-source';
+const CACHE_NAME = 'nectar-menu-v2.4-source-fix';
 const CORE = [
   './',
   './index.html',
