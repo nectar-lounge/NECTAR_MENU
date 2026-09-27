@@ -34,6 +34,8 @@ html {
   min-height: 100%;
   background: var(--bg);
   scroll-behavior: auto;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -2861,5 +2863,135 @@ html[data-menu-mode="banquet"] #categoryNav {
   .category-section.category-tap-reveal .category-heading,
   .category-section.category-tap-reveal .menu-card {
     animation: none !important;
+  }
+}
+
+/* ======================================================
+   MOBILE LANDSCAPE STABILITY
+   Keep the same visual system while preventing the two fixed navigation
+   layers and the sticky menu controls from consuming the whole viewport.
+   Explicit text sizing also prevents iOS from inflating accordion copy after
+   several panels are opened in landscape.
+   ====================================================== */
+@media (orientation: landscape) and (max-height: 500px) {
+  :root {
+    --header-h: 54px;
+    --bottom-nav-h: 52px;
+  }
+
+  .site-header__inner {
+    padding-inline: 14px;
+  }
+
+  .header-balance {
+    min-width: 76px;
+  }
+
+  .brand__name {
+    font-size: 25px;
+  }
+
+  .brand__subtitle {
+    display: none;
+  }
+
+  .language-switcher {
+    padding: 2px;
+  }
+
+  .lang-btn {
+    min-width: 30px;
+    min-height: 28px;
+    padding-inline: 6px;
+    font-size: 8px;
+  }
+
+  .hero {
+    height: min(230px, 62vh);
+  }
+
+  .hero__content {
+    bottom: 20px;
+  }
+
+  .hero__title {
+    font-size: 52px;
+  }
+
+  .menu-shell {
+    padding-inline: 14px;
+  }
+
+  .menu-controls {
+    margin-inline: -14px;
+    padding: 5px 14px 4px;
+  }
+
+  .main-tabs {
+    min-height: 42px;
+    margin: 3px auto 5px;
+    padding: 3px;
+    border-radius: 15px;
+  }
+
+  .main-tabs__indicator {
+    top: 3px;
+    bottom: 3px;
+    left: 3px;
+    width: calc((100% - 6px) / 3);
+    border-radius: 12px;
+  }
+
+  .main-tab {
+    min-height: 36px;
+    font-size: 9px;
+  }
+
+  .search-box {
+    min-height: 42px;
+    border-radius: 14px;
+  }
+
+  .category-strip,
+  #menuControls > .banquet-categories {
+    gap: 16px;
+    padding-top: 3px;
+    padding-bottom: 4px;
+  }
+
+  .category-tab,
+  #menuControls > .banquet-categories .banquet-category {
+    min-height: 29px;
+    padding-bottom: 5px;
+  }
+
+  .category-strip__indicator {
+    bottom: 2px;
+  }
+
+  .bottom-nav__button {
+    flex-direction: row;
+    gap: 7px;
+  }
+
+  .bottom-nav__button > .material-symbols-outlined {
+    font-size: 19px;
+  }
+
+  .info-section {
+    padding-top: 20px;
+  }
+
+  .accordion-trigger strong,
+  .accordion-panel {
+    font-size: 12px;
+  }
+
+  .modal {
+    padding: 10px 14px;
+  }
+
+  .modal__dialog {
+    max-height: calc(100dvh - 20px);
   }
 }

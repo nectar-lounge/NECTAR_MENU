@@ -30,7 +30,7 @@
     endScroll();
     const smooth = behavior === 'smooth' && !reduced();
     scrolling = smooth;
-    window.scrollTo({ top: Math.max(0, top), behavior: smooth ? 'smooth' : 'instant' });
+    window.scrollTo({ top: Math.max(0, top), behavior: smooth ? 'smooth' : 'auto' });
     if (smooth) scrollTimer = setTimeout(endScroll, 1200);
   }
   function open(element, { origin = null } = {}) {
@@ -111,7 +111,7 @@
       const max = strip.scrollWidth - strip.clientWidth;
       if (max <= 1 || (delta < 0 && strip.scrollLeft <= 1) || (delta > 0 && strip.scrollLeft >= max - 1)) return;
       event.preventDefault();
-      strip.scrollBy({ left: delta, behavior: 'instant' });
+      strip.scrollBy({ left: delta, behavior: 'auto' });
     }, { passive: false });
     strip.addEventListener('pointerdown', event => {
       if (event.pointerType !== 'mouse' || event.button !== 0) return;
@@ -155,7 +155,7 @@
       event.preventDefault();
       const next = event.key === 'Home' ? 0 : event.key === 'End' ? buttons.length - 1 : Math.max(0, Math.min(buttons.length - 1, index + (event.key === 'ArrowRight' ? 1 : -1)));
       buttons[next].focus({ preventScroll: true });
-      strip.scrollTo({ left: buttons[next].offsetLeft - (strip.clientWidth - buttons[next].offsetWidth) / 2, behavior: 'instant' });
+      strip.scrollTo({ left: buttons[next].offsetLeft - (strip.clientWidth - buttons[next].offsetWidth) / 2, behavior: 'auto' });
     });
   }
   document.addEventListener('DOMContentLoaded', () => {

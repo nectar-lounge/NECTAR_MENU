@@ -419,25 +419,19 @@
   const setBanquetMode = () => setMode('banquet');
   const setType = type => setMode(type);
 
-  function loadScript(src) {
-    return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = src;
-      script.onload = resolve;
-      script.onerror = () => reject(new Error(`NECTAR: ${src} failed to load.`));
-      document.head.appendChild(script);
-    });
-  }
-
   function loadBanquet() {
+    if (typeof BANQUET_MENU !== 'undefined') return Promise.resolve();
     if (banquetLoadPromise) return banquetLoadPromise;
 
-    banquetLoadPromise = (async () => {
-      if (typeof BANQUET_MENU === 'undefined') await loadScript('banquet-data.js');
-      await loadScript('banquet.js');
-    })().catch(error => {
-      banquetLoadPromise = null;
-      throw error;
+    banquetLoadPromise = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'banquet.min.js';
+      script.onload = resolve;
+      script.onerror = () => {
+        banquetLoadPromise = null;
+        reject(new Error('NECTAR: banquet menu failed to load.'));
+      };
+      document.head.appendChild(script);
     });
     return banquetLoadPromise;
   }
@@ -934,36 +928,6 @@
     button.hidden = !normalize($('#searchInput')?.value, currentLocale());
   }
 
-  function searchStickyTop() {
-    const header = $('.site-header');
-    return Math.max(0, Math.round(header?.getBoundingClientRect().bottom || 0));
-  }
-
-  function keepSearchVisible({ force = false } = {}) {
-    const token = state.navigationToken;
-    const controls = $('#menuControls');
-    const input = $('#searchInput');
-    if (!controls || !input || !normalizeSearch(input.value)) return;
-
-    requestAnimationFrame(() => {
-      if (token !== state.navigationToken || state.section !== 'menu' || state.mode === 'banquet' || !normalizeSearch(input.value)) return;
-      const rect = controls.getBoundingClientRect();
-      const desiredTop = searchStickyTop();
-      const inputRect = input.getBoundingClientRect();
-
-      const inputVisible =
-        inputRect.top >= desiredTop - 2 &&
-        inputRect.bottom <= window.innerHeight - 8;
-
-      if (force || !inputVisible || rect.top > desiredTop + 6) {
-        const delta = rect.top - desiredTop;
-        if (Math.abs(delta) > 2) {
-          window.scrollBy({ top: delta, left: 0, behavior: 'auto' });
-        }
-      }
-    });
-  }
-
   function resolveLandscapeFixedLayerOverlap() {
     if (
       state.section !== 'menu' ||
@@ -994,7 +958,6 @@
   }
 
   function setSearch(value) {
-    const wasSearching = Boolean(normalizeSearch(state.query));
     state.query = value;
     state.suppressCategorySpyUntil = Date.now() + 350;
 
@@ -1005,7 +968,6 @@
     state.searchTimer = setTimeout(() => {
       if (token !== state.navigationToken || state.mode === 'banquet') return;
       renderMenu();
-      keepSearchVisible({ force: !wasSearching && Boolean(normalizeSearch(state.query)) });
     }, 72);
   }
 
@@ -1276,10 +1238,6 @@
 
     window.addEventListener('scroll', onWindowScroll, { passive: true });
 
-    window.visualViewport?.addEventListener('resize', () => {
-      if (normalizeSearch($('#searchInput')?.value)) keepSearchVisible();
-    }, { passive: true });
-
     window.addEventListener('resize', () => {
       if (state.modal.open || state.modal.closing) return;
 
@@ -1316,11 +1274,7 @@
       console.warn('NECTAR: menu items with missing required fields:', invalid.map(itemKey));
     }
 
-    const validPrice = value => {
-      if (Number.isFinite(Number(value))) return Number(value) >= 0;
-      return String(value).split('/').every(part => Number.isFinite(Number(part.trim())) && Number(part.trim()) >= 0);
-    };
-    const invalidPrices = menu.filter(item => item?.price != null && !validPrice(item.price));
+    const invalidPrices = menu.filter(item => item?.price != null && (!Number.isFinite(Number(item.price)) || Number(item.price) < 0));
     if (invalidPrices.length) {
       console.warn('NECTAR: menu items with invalid prices:', invalidPrices.map(itemKey));
     }
