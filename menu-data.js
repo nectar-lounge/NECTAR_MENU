@@ -1695,7 +1695,7 @@ const MENU = [
     "name_ru": "Mont Blanc",
     "name_kz": "Mont Blanc",
     "name_en": "Mont Blanc",
-    "price": 2490,
+    "price": 2690,
     "weight": "50ml",
     "composition_ru": "Водка",
     "composition_kz": "Арақ",
